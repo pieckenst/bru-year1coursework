@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>MattEqualsCoder.DynamicForms.Core</PackageId>
+        <Version>1.1.2</Version>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>Dynamic Forms Core</Title>
+        <Description>Library to dynamically generate forms for user input based on attributes.</Description>
+       
+        <RepositoryUrl>https://github.com/MattEqualsCoder/DynamicForms</RepositoryUrl>
+        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    </PropertyGroup>
+
+</Project>

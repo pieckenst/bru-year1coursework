@@ -1,0 +1,6 @@
+@TicketSalesApp.AdminServer_HostAddress = http://localhost:5167
+
+GET {{TicketSalesApp.AdminServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

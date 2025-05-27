@@ -1,0 +1,105 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:TicketSalesApp.UI.Avalonia.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="TicketSalesApp.UI.Avalonia.Views.Pages.TicketSearchView"
+             x:DataType="vm:TicketSearchViewModel">
+    
+    <Grid RowDefinitions="Auto,*,Auto" Margin="20">
+        <!-- Search Panel -->
+        <StackPanel Grid.Row="0" Spacing="10">
+            <TextBlock Text="Поиск билетов" Theme="{StaticResource HeaderText}"/>
+            <TextBlock Text="Найдите и забронируйте билеты на нужный маршрут" 
+                     Foreground="{DynamicResource SecondaryColor}"/>
+            
+            <!-- Search Controls -->
+            <Grid ColumnDefinitions="*,*,Auto" Margin="0,20,0,0">
+                <ComboBox Grid.Column="0" 
+                         ItemsSource="{Binding StartPoints}"
+                         SelectedItem="{Binding SelectedStartPoint}"
+                         PlaceholderText="Откуда"
+                         HorizontalAlignment="Stretch"
+                         Margin="0,0,10,0"/>
+                
+                <ComboBox Grid.Column="1" 
+                         ItemsSource="{Binding EndPoints}"
+                         SelectedItem="{Binding SelectedEndPoint}"
+                         PlaceholderText="Куда"
+                         HorizontalAlignment="Stretch"
+                         Margin="0,0,10,0"/>
+                
+                <CalendarDatePicker Grid.Column="2"
+                                  SelectedDate="{Binding SelectedDate.Date}"
+                                  Watermark="Дата поездки"
+                                  HorizontalAlignment="Stretch"/>
+            </Grid>
+            
+            <Button Content="Найти билеты"
+                    Command="{Binding SearchCommand}"
+                    Theme="{StaticResource AccentButtonTheme}"
+                    HorizontalAlignment="Right"
+                    Margin="0,10,0,0"/>
+        </StackPanel>
+        
+        <!-- Results Grid -->
+        <DataGrid Grid.Row="1" 
+                  ItemsSource="{Binding AvailableTickets}"
+                  SelectedItem="{Binding SelectedTicket}"
+                  IsReadOnly="True"
+                  Margin="0,20,0,0"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Маршрут" 
+                                  Binding="{Binding Marshut.StartPoint}" 
+                                  Width="*"/>
+                <DataGridTextColumn Header="Пункт назначения" 
+                                  Binding="{Binding Marshut.EndPoint}" 
+                                  Width="*"/>
+                <DataGridTextColumn Header="Время в пути" 
+                                  Binding="{Binding Marshut.TravelTime}" 
+                                  Width="Auto"/>
+                <DataGridTextColumn Header="Цена" 
+                                  Binding="{Binding TicketPrice, StringFormat={}{0:C}}" 
+                                  Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Action Buttons -->
+        <Button Grid.Row="2"
+                Content="Купить билет"
+                Command="{Binding BuyTicketCommand}"
+                CommandParameter="{Binding SelectedTicket}"
+                IsEnabled="{Binding SelectedTicket, Converter={x:Static ObjectConverters.IsNotNull}}"
+                HorizontalAlignment="Right"
+                Margin="0,10,0,0"/>
+
+		<!-- Loading Overlay -->
+		<Panel Grid.RowSpan="3"
+              Background="#80000000"
+              IsVisible="{Binding IsBusy}">
+			<StackPanel HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Spacing="20">
+				<ProgressRing IsIndeterminate="True"
+                             Width="60"
+                             Height="60"
+                             Foreground="White"/>
+				<TextBlock Text="Загрузка..."
+                         Classes="loading-text light dark"
+                         HorizontalAlignment="Center"/>
+			</StackPanel>
+		</Panel>
+
+        <!-- Error Message -->
+        <TextBlock Grid.Row="1" 
+                   Text="{Binding ErrorMessage}"
+                   Foreground="Red"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   IsVisible="{Binding HasError}"/>
+    </Grid>
+</UserControl> 

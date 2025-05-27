@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "TicketSalesApp.UI.LegacyForms.DX.Windows": {
+      "commandName": "Project"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net8.0-windows;net9.0-windows</TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <PackageId>MattEqualsCoder.DynamicForms.WPF</PackageId>
+        <Version>1.1.2</Version>
+        <Title>Dynamic Forms WPF</Title>
+        <Description>Library to dynamically generate forms for user input based on attributes.</Description>
+       
+        <RepositoryUrl>https://github.com/MattEqualsCoder/DynamicForms</RepositoryUrl>
+        
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DynamicForms.Library.Core\DynamicForms.Library.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Update="Fields\DynamicFormSliderControl.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
+    </ItemGroup>
+
+</Project>

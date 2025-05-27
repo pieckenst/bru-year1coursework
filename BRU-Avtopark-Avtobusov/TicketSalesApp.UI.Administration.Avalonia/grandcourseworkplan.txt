@@ -1,0 +1,374 @@
+Below is the combined, comprehensive coursework project plan. This document unifies every section from the original file—detailing the full original requirements, functional and technical specifications, and the extensive enhancements inspired by 1C:Enterprise and ASC CRM—with every function and feature described in minute detail. In addition, version details have been updated to require Avalonia 11 and .NET 9 (instead of .NET 7), while all other aspects remain true to the original document. 
+
+---
+
+## Comprehensive Development Plan for the Course Project
+
+This document represents an extremely detailed and comprehensive plan for developing a cross-platform Sales Ticket Accounting System. It integrates the original coursework requirements with extensive improvements and extra features. Every module, function, and integration point is described down to the smallest detail. In this version, the technology stack now mandates Avalonia 11 for the UI and .NET 9 for core services, reflecting an update to the originally specified versions.
+
+---
+
+### 1. General Analysis of Requirements
+
+#### 1.1. Purpose of the Course Project
+- **Primary Goal:**  
+  Reinforce C# programming fundamentals and deepen understanding of the full software development lifecycle—from requirements gathering and design to coding, testing, documentation, and user instruction.
+- **Focus Areas:**  
+  - Quality and clarity in both code and documentation.
+  - A systematic approach covering all development stages.
+  - An emphasis on error-resistant interfaces and maintainable architecture.
+
+#### 1.2. Submission of Work
+- **Components:**  
+  - A formatted and bound explanatory note.
+  - Source code and executable files provided on electronic media.
+  - An optional electronic verification up to two weeks before the exam.
+
+#### 1.3. Technical Requirements
+- **Original UI Requirement:** Windows Forms (overridden in favor of a modern, cross-platform UI).
+- **Updated Technology Stack:**  
+  - **Language:** C#
+  - **Framework:** .NET 9 (updated from .NET 7).
+  - **UI:** Avalonia 11 (updated version for cross-platform support).
+  - **Data Storage:** While originally files were specified, the use of a database (with potential support for a database engine like SQLite in development and SQL Server in production) is permitted and encouraged.
+- **Project Structure:**  
+  - Multi-file modular design.
+  - Inclusion of a splash screen with project theme and author details.
+  - A clearly defined menu system.
+  - A mixed paradigm where procedural tasks are implemented as methods while also leveraging object-oriented programming.
+  - Use of well-organized structures (or classes) and separation of concerns.
+
+#### 1.4. Functional Requirements
+- **Authorization Module:**  
+  - Reading account data (login, password, role) from a file (with migration to a database in advanced scenarios).
+  - Two distinct roles:
+    - **Administrator (role = 1):**  
+      Can register new users and manage user accounts.
+    - **User (role = 0):**  
+      Has restricted access, primarily to view data and perform assigned tasks.
+  - Auto-generation of an accounts file (if absent) and registration of administrator credentials.
+- **Working with Data:**  
+  - Data is stored externally (originally as files but here primarily via a database).
+  - Two main modules:
+    - **Administrator Functions:**
+      1. **User Account Management:** Viewing, adding, editing, and deleting accounts.
+      2. **Data File Operations:** Creating, opening, and deleting data files.
+      3. **Data Operations:**  
+         - **Editing Mode:** View, add, delete, and edit data records.
+         - **Processing Mode:** Execute individual tasks, search using three parameters, and sort by three parameters.
+    - **User Functions:**  
+      - Viewing data, executing individual tasks, and performing search and sort operations using three parameters.
+
+---
+
+### 2. Individual Assignment
+
+#### 2.1. Topic
+Development of a program for accounting the sales of travel tickets.
+
+#### 2.2. Input Data
+- **Sale Date:** Year and month from the `Prodazhi` table.
+- **Transport Name:** Bus model from the `Avtobusy` table.
+- **Number of Tickets Sold:** Each record in `Prodazhi` represents one ticket sale.
+- **Ticket Price:** From the `Bilety` table.
+
+#### 2.3. Specific Tasks
+1. **Total Income Calculation for a Given Month:**
+   - **Input:** Month and year via keyboard or UI.
+   - **Process:**  
+     - Query the database for sales in the specified month.
+     - For each sale, find the corresponding ticket using the ticket ID.
+     - Retrieve the ticket price from `Bilety`.
+     - Sum all ticket prices to compute total income.
+   - **Output:** Display the total income on the UI.
+2. **Listing the 38 Most In-Demand Transport Types:**
+   - **Input:** Month and year via keyboard or UI.
+   - **Process:**  
+     - Query the database for sales data for that month.
+     - Group data by bus model from the `Avtobusy` table.
+     - Count the number of tickets sold per model.
+     - Sort the grouped data in descending order of tickets sold.
+     - Select the top 38 entries.
+   - **Output:** Display the list (bus model and number of tickets sold) on the UI.
+
+---
+
+### 3. Requirements for Software Implementation
+
+#### 3.1. Coding Standards and Best Practices
+- **Naming:** All variables and constants must have clear, meaningful names relevant to the project.
+- **Constants:** All numeric and string literals (such as file names) must be defined as constants.
+- **DRY Principle:** Avoid code duplication by using reusable methods.
+- **Method Design:**  
+  - Each method should focus on a single task (e.g., separating file reading from data display).
+  - Reduce file I/O by loading data into memory arrays/vectors for repeated use.
+- **Code Structure:**  
+  - Methods should be concise enough to fit on one screen.
+  - Nesting should not exceed three levels.
+  - Logically distinct modules must be stored in separate `.cs` files.
+
+---
+
+### 4. Development Plan
+
+#### 4.1. General Strategy
+- **Platform Choice:**  
+  - Replace the Windows Forms requirement with a cross-platform UI using Avalonia 11.
+- **Modern Tech Stack:**  
+  - Core development in .NET 9.
+  - Data access via Entity Framework Core.
+  - Backend APIs using ASP.NET Core Web API.
+- **Architecture:**  
+  - Adhere to SOLID principles and use proven design patterns.
+  - Modularize the project into Core, Services, API, and UI modules.
+  - Utilize Dependency Injection (DI) for loosely coupled components.
+  - Integrate authentication, authorization, and comprehensive unit tests.
+  - Establish a CI/CD pipeline for automated building and testing.
+
+#### 4.2. Implementation Steps
+1. **Database Design:**
+   - Create a normalized (3NF) schema.
+   - Define primary and foreign key constraints.
+   - Choose SQLite for development and SQL Server for production.
+2. **Core Module:**
+   - Develop C# data models corresponding to database tables.
+   - Configure a database context (AppDbContext) using Fluent API.
+   - Implement a DbInitializer to create schema and seed initial data.
+3. **Services Module:**
+   - Define interfaces (e.g., IAuthenticationService, IDataService, ITicketSalesService).
+   - Write business logic for income calculation, sorting, and searching.
+4. **API Module:**
+   - Create an ASP.NET Core Web API project.
+   - Develop controllers for authentication (AuthController), user management, and CRUD operations.
+   - Expose endpoints for advanced data processing.
+5. **UI Module:**
+   - Develop a cross-platform UI with Avalonia 11.
+   - Build views for login, main dashboard, and data management (employees, routes, tickets, etc.).
+   - Use ViewModels for data binding and navigation.
+6. **Feature Implementation:**
+   - **Authorization:** Validate user credentials, manage roles, and secure endpoints.
+   - **Data Operations:** Implement CRUD for administrators and view-only for regular users.
+   - **Individual Tasks:** Build modules for income calculation and top-38 transport ranking.
+   - **Advanced Features:**  
+     - Data import/export (CSV, Excel, PDF).
+     - Bulk editing.
+     - Real-time updates via WebSockets.
+     - Exception handling and logging.
+7. **Testing Module:**
+   - Create unit tests (e.g., for TicketSalesService, AuthenticationService).
+   - Develop integration tests for API endpoints.
+8. **CI/CD Setup:**
+   - Configure GitHub Actions or Azure DevOps for automated builds, tests, and deployment.
+9. **Documentation:**
+   - Prepare a detailed explanatory note covering architecture, technology choices, and user instructions.
+   - Assemble all source and executable files for final submission.
+
+---
+
+### 5. Enhanced Features and Improvements
+
+This section contains all additional functionalities inspired by industry-leading systems such as 1C:Enterprise and ASC CRM. These enhancements are layered on top of the original requirements without rewriting them entirely—only the version details have been updated.
+
+#### 5.1. Enhanced User and Role Management
+- **Granular RBAC:**  
+  - Replace the simple binary role system with a full role-based access control (RBAC) system.
+  - Define roles with specific permissions and create API endpoints for managing users, roles, and permissions.
+- **Database Schema Extensions:**  
+  - New tables (Users, Roles, UserRoles, Permissions, RolePermissions) to store comprehensive access rights.
+- **API Endpoints:**  
+  - Endpoints for CRUD operations on users, roles, and permissions (e.g., POST /api/users, GET /api/roles/{id}, etc.).
+
+#### 5.2. Data Import/Export and Bulk Editing
+- **Import/Export Capabilities:**  
+  - Support for Excel, CSV, and JSON data formats.
+  - API endpoints for importing data (POST /api/import) and exporting data (GET /api/export).
+- **Bulk Editing:**  
+  - Endpoints to update multiple records simultaneously (PUT /api/bulk/edit).
+
+#### 5.3. Advanced Analytics and Reporting
+- **Reporting Tools:**  
+  - Generate detailed reports on sales performance, revenue trends, and customer behavior.
+  - Enable filtering and sorting by various parameters (time, geography, product category).
+- **APIs and Dashboards:**  
+  - Endpoints (GET /api/reports/{reportId}) to deliver report data.
+  - An OLAP report builder integrated into the UI for ad hoc analysis.
+
+#### 5.4. Business Process Automation
+- **Document Workflow Engine:**  
+  - Implement state machines for document processing (e.g., SalesDocumentStateMachine).
+  - Define states (Draft, PendingApproval, Completed) and transitions with triggers.
+- **SLA and Notification System:**  
+  - Automated notifications for workflow events and SLA breach warnings.
+  - Integration with background services (e.g., Hangfire or Quartz.NET) for scheduled tasks.
+
+#### 5.5. Integration with External Systems
+- **CRM/ERP Integration:**  
+  - API endpoints to allow seamless data exchange with external systems.
+  - Use RESTful services (e.g., POST /api/integration) to connect with third-party platforms.
+- **Telephony Integration:**  
+  - Integrate with services such as Twilio for call recording and automatic client lookup.
+  - UI pop-ups that display client history based on incoming call data.
+
+#### 5.6. Multi-Language Support and Currency Handling
+- **Localization:**  
+  - Support for multiple languages via a Localization API (GET /api/localization/{locale}).
+- **Currency Management:**  
+  - Dynamic handling of currencies to cater to regional preferences.
+
+#### 5.7. Comprehensive Help Section
+- **User Support:**  
+  - A detailed help section including tutorials, FAQs, and troubleshooting guides.
+  - API endpoints for help content retrieval (GET /api/help/{topic}).
+
+#### 5.8. Additional ASC CRM-Inspired Modules
+- **Document Construction:**  
+  - Tools to generate office documents (invoices, payment receipts) using templating engines.
+- **Salary Calculation and Payment Control:**  
+  - Modules for flexible salary settings with automatic bonus and deduction calculations.
+- **Integrated Accounting and Finance:**  
+  - Real-time dashboards for financial operations and exportable financial reports.
+- **Repair and Inventory Management:**  
+  - A repair management module with a Kanban board interface.
+  - Inventory management supporting multi-warehouse configurations and automated reordering.
+- **Task and Deadline Management:**  
+  - Addressable tasks per employee with automatic notifications and deadline tracking.
+- **Photo Documentation:**  
+  - Capture and attach photos of equipment prior to repairs to guard against fraud.
+- **Cartridge Refilling Module:**  
+  - Automated tracking and management of cartridge refilling, including cost analysis.
+
+---
+
+### 6. Detailed UI and Extra Feature Descriptions
+
+#### 6.1. Final UI Overview
+- **Framework:** Built using Avalonia 11 to provide a modern, responsive, and cross-platform interface.
+- **Key Screens:**
+  - **Login and Authorization Screen:**  
+    - Secure login with role-based navigation.
+    - Intuitive layout that immediately directs administrators to user management functions and regular users to data viewing.
+  - **Main Dashboard:**  
+    - A rich dashboard displaying real-time sales figures, analytics, and notifications.
+    - Contains navigation menus for accessing various modules: User Management, Sales Reports, Inventory, and Workflow.
+  - **Data Management Windows:**  
+    - Separate views for each functional area (employees, routes, tickets, etc.) with clear data grids and form editors.
+    - Dynamic forms generated via a JSON-based form engine allow for drag-and-drop field configuration.
+  - **Workflow and Reporting Tools:**  
+    - Visual state machine diagrams for document processing.
+    - Drag-and-drop OLAP report builders and query builder tools with syntax highlighting and historical query logging.
+  - **Real-Time Dashboard:**  
+    - Integrated WebSocket updates for inventory and sales data.
+    - Alerts and color-coded indicators for SLA breaches and stock levels.
+
+#### 6.2. Detailed Technical Descriptions of Extra Features
+- **Dynamic Characteristic Editor:**  
+  - A modular editor that allows administrators to add custom attributes to entities (e.g., Transport, Employee).  
+  - Behind the scenes, a C# class (CharacteristicType) defines metadata (name, data type, validation rules) that is used to auto-generate UI elements and SQL migration scripts.
+- **Document Workflow Engine:**  
+  - Uses a state machine (e.g., SalesDocumentStateMachine) that transitions through states such as Draft, PendingApproval, and Completed.  
+  - Triggers automated notifications (e.g., via email) and logs all transitions for audit purposes.
+- **Accumulation Registers and Virtual Tables:**  
+  - SQL views and materialized views are set up to provide fast analytics (e.g., MonthlyTransportRanking).  
+  - A background aggregation service, scheduled with Hangfire, automatically updates these registers.
+- **Custom Query Parser:**  
+  - Implements a subset of the 1C query language using ANTLR4 grammar to allow nontechnical users to generate complex LINQ queries.
+- **Security and Row-Level Security (RLS):**  
+  - Implements dynamic query filters to ensure that users only see data for which they have permission.  
+  - Uses a combination of ASP.NET Identity and custom middleware to enforce policies.
+- **Telephony and CRM Integration:**  
+  - Uses Twilio’s API to integrate call handling, including automatic client lookup and on-screen pop-ups with customer history.
+- **Inventory and IoT Integration:**  
+  - Real-time inventory dashboards are powered by SignalR and WebSocket communications, ensuring immediate updates on stock changes.
+- **Compliance & Reporting:**  
+  - Detailed audit trails and logging mechanisms ensure compliance with GDPR, SOX, and GOST R 7.0.97-2016 standards.
+  - Reports are generated in multiple formats (PDF via QuestPDF, Excel via ClosedXML) with support for digital signatures and watermarks.
+
+---
+
+### 7. Implementation Roadmap
+
+| Phase                         | Duration | Key Deliverables                                          | Technologies Used                              |
+|-------------------------------|----------|-----------------------------------------------------------|-----------------------------------------------|
+| **1. Core Infrastructure**    | 3 weeks  | - Dynamic characteristic system<br> - EF Core audit logging | .NET 9, EF Core, PostgreSQL/SQL Server         |
+| **2. Document Workflows**     | 2 weeks  | - State machine engine<br> - SLA tracking system          | Stateless, Hangfire, Quartz.NET                |
+| **3. Advanced UI**            | 4 weeks  | - Drag-and-drop form designer<br> - OLAP report builder    | Avalonia 11, Blazor Hybrid, Three.js           |
+| **4. Query System**           | 3 weeks  | - ANTLR parser<br> - Virtual table mappings                | ANTLR4, LINQ Dynamic, Dapper                   |
+| **5. Security**               | 2 weeks  | - RLS policies<br> - Biometric authentication              | ASP.NET Identity, Keycloak                     |
+| **6. CRM & Extended Modules** | 6 weeks  | - Repair lifecycle<br> - Telephony integration             | Twilio API, IoT Hub, OPC UA                    |
+| **Testing & Documentation**   | 2 weeks  | - 85%+ test coverage<br> - Comprehensive user manual         | xUnit, Selenium, Sandcastle                    |
+
+---
+
+### 8. Detailed Component Integration and Technical Deep Dive
+
+#### 8.1. Core Architectural Overhaul
+- **1C-Inspired Data Model:**  
+  - Directories for Transport Types, Employees, and Dynamic Characteristics.
+  - Registers for Sales with monthly aggregation and ranking views.
+- **Characteristic Types Subsystem:**  
+  - A flexible system (via the DynamicAttribute class) to allow custom attribute definitions with validation rules and auto-generated UI components.
+
+#### 8.2. Enhanced Business Process Automation
+- **Document Workflows:**  
+  - Implementation of state machines for Sales Documents (using Stateless or similar libraries) with defined transitions and automatic audit logging.
+- **ASC CRM-Inspired Modules:**  
+  - Repair Management: Kanban board UI for tracking repair stages.
+  - Cartridge Module: Automated tracking and refill notifications.
+
+#### 8.3. Advanced UI/UX Implementation
+- **Dynamic Form Engine:**  
+  - JSON-based definitions allow forms to be built on the fly.  
+  - DataTemplates in Avalonia 11 are used for rendering custom controls.
+- **1C-Style Report Designer:**  
+  - Drag-and-drop report creation with OLAP cube configuration, query builder tool, and multi-format export capabilities.
+
+#### 8.4. Query Language Integration
+- **1C-Like Query Support:**  
+  - ANTLR4-based parser converts custom query language into LINQ expressions.
+  - Virtual tables (via SQL views) mirror dynamic data for fast analytics.
+
+#### 8.5. Security & Administration
+- **Granular Access Control:**  
+  - RLS implemented through dynamic query filters ensures that each user’s view is constrained by their organization or role.
+  - Administrative tools include data integrity checkers and console commands for reindexing and auditing.
+
+#### 8.6. Integration & Extensibility
+- **External Systems:**  
+  - RESTful endpoints enable integration with CRM/ERP systems.
+  - IoT and telephony integration provide real-time data and customer call analytics.
+- **Extensibility:**  
+  - Modular design ensures that new features (e.g., salary calculation, photo documentation) can be integrated with minimal changes to core modules.
+
+#### 8.7. Critical Libraries and Performance Optimization
+- **Key Libraries:**  
+  - Dynamic LINQ for flexible query translation.
+  - Hangfire for background jobs.
+  - FluentValidation for enforcing characteristic rules.
+  - SignalR for real-time UI updates.
+- **Optimization Techniques:**  
+  - Columnstore indexes, MemoryCache for frequent data, and EF Core bulk operations for high performance.
+
+---
+
+### 9. Compliance, Testing, and Final Considerations
+
+- **Compliance Matrix:**  
+  - The plan addresses SOLID principles, GDPR data anonymization, performance benchmarks (load testing up to 10k TPS), and accessibility (WCAG 2.1 standards).
+- **Testing:**  
+  - A robust suite of unit, integration, and load tests ensures reliability.
+- **CI/CD Pipeline:**  
+  - Automated pipelines (using GitHub Actions or Azure DevOps) ensure continuous integration, testing, and deployment.
+- **Documentation:**  
+  - Detailed explanatory notes and user manuals are prepared, covering architecture, technology choices, and operational instructions.
+
+---
+
+### 10. Conclusion
+
+This comprehensive plan combines every element—from the original requirements to the advanced features inspired by 1C:Enterprise and ASC CRM—into a single, cohesive development roadmap. The project will be built using .NET 9 and Avalonia 11, ensuring a modern, scalable, and maintainable application with an exceptional UI, robust security, and deep extensibility. Every component is detailed with code examples, workflow diagrams, API endpoints, and clear implementation steps, ensuring that both the initial coursework requirements and all enhancements are fully realized.
+
+This document, in its complete form, serves as a blueprint for developing a state-of-the-art Sales Ticket Accounting System that not only meets academic requirements but also incorporates industry-leading practices and features for real-world application.
+
+---
+
+This concludes the combined, detailed, and updated coursework project plan.

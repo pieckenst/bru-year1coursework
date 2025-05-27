@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>MattEqualsCoder.DynamicForms.Avalonia</id>
+    <version>1.1.2</version>
+    <title>Dynamic Forms Avalonia</title>
+    <authors>MattEqualsCoder</authors>
+    <description>Library to dynamically generate forms for user input based on attributes.</description>
+    <repository type="git" url="https://github.com/MattEqualsCoder/DynamicForms" />
+    <dependencies>
+      <group targetFramework="net8.0">
+        <dependency id="MattEqualsCoder.DynamicForms.Core" version="1.1.2" exclude="Build,Analyzers" />
+        <dependency id="MattEqualsCoder.AvaloniaControls" version="1.5.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net9.0">
+        <dependency id="MattEqualsCoder.DynamicForms.Core" version="1.1.2" exclude="Build,Analyzers" />
+        <dependency id="MattEqualsCoder.AvaloniaControls" version="1.5.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="G:\codesecondfolder\BRU-Avtopark-Avtobusov\DynamicForms.Library.Avalonia\bin\Debug\net8.0\DynamicForms.Library.Avalonia.dll" target="lib\net8.0\DynamicForms.Library.Avalonia.dll" />
+    <file src="G:\codesecondfolder\BRU-Avtopark-Avtobusov\DynamicForms.Library.Avalonia\bin\Debug\net9.0\DynamicForms.Library.Avalonia.dll" target="lib\net9.0\DynamicForms.Library.Avalonia.dll" />
+  </files>
+</package>

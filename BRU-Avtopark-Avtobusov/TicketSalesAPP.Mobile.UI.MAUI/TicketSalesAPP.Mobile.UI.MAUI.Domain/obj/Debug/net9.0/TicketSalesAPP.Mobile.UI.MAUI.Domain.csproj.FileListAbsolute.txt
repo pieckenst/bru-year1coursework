@@ -1,0 +1,12 @@
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Domain\bin\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Domain.deps.json
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Domain\bin\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Domain.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Domain\bin\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Domain.pdb
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Domain\obj\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Domain.csproj.AssemblyReference.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Domain\obj\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Domain.GeneratedMSBuildEditorConfig.editorconfig
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Domain\obj\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Domain.AssemblyInfoInputs.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Domain\obj\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Domain.AssemblyInfo.cs
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Domain\obj\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Domain.csproj.CoreCompileInputs.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Domain\obj\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Domain.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Domain\obj\Debug\net9.0\refint\TicketSalesAPP.Mobile.UI.MAUI.Domain.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Domain\obj\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Domain.pdb
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Domain\obj\Debug\net9.0\ref\TicketSalesAPP.Mobile.UI.MAUI.Domain.dll

@@ -1,0 +1,67 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net9.0-android;net9.0-ios</TargetFrameworks>
+    <OutputType>Exe</OutputType>
+    <UseMaui>true</UseMaui>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <SingleProject>true</SingleProject>
+    <Nullable>enable</Nullable>
+    <RootNamespace>TicketSalesAPP.Mobile.UI.MAUI</RootNamespace>
+
+    <!-- Display name -->
+    <ApplicationTitle>TicketSalesAPP.Mobile.UI.MAUI</ApplicationTitle>
+
+    <!-- App Identifier -->
+    <ApplicationId>com.companyname.TicketSalesAPP.Mobile.UI.MAUI</ApplicationId>
+    <ApplicationIdGuid>6D12553D-4276-4A59-8C76-D39FD0AC79E9</ApplicationIdGuid>
+    <!-- Versions -->
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
+
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- App Icon -->
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#6750A4" />
+
+    <!-- Splash Screen -->
+    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#6750A4" BaseSize="128,128" />
+
+    <!-- Images -->
+    <MauiImage Include="Resources\Images\*" />
+
+    <!-- Custom Fonts -->
+    <MauiFont Include="Resources\Fonts\*" />
+
+    <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+    <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.10" />
+    <PackageReference Include="DevExpress.Data" Version="24.2.*" />
+    <PackageReference Include="DevExpress.Maui.Controls" Version="24.2.*" />
+    <PackageReference Include="DevExpress.Maui.CollectionView" Version="24.2.*" />
+    <PackageReference Include="DevExpress.Maui.Editors" Version="24.2.*" />
+    <PackageReference Include="DevExpress.Maui.DataGrid" Version="24.2.*" />
+    <PackageReference Include="DevExpress.Maui.TreeView" Version="24.2.*" />
+    <PackageReference Include="DevExpress.Maui.Scheduler" Version="24.2.*" />
+    <PackageReference Include="DevExpress.Maui.Gauges" Version="24.2.*" />
+    <PackageReference Include="DevExpress.Maui.Charts" Version="24.2.*" />
+    <PackageReference Include="Serilog" Version="4.2.1-dev-02337" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.1-dev-02317" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.4.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+    <PackageReference Include="ZXing.Net.Maui" Version="0.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetMeteor.HotReload.Plugin" Version="3.*" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="9.1.1" />
+  </ItemGroup>
+</Project>

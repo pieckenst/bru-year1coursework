@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Common properties -->
+  <PropertyGroup>
+    <TargetFramework>net40</TargetFramework>
+    <Configurations>Debug;Release</Configurations>
+    <LangVersion>4</LangVersion>
+    <DefineConstants>WINDOWSXP</DefineConstants>
+  </PropertyGroup>
+
+  <!-- Windows XP compatible packages -->
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="6.0.8" />
+    <!-- Entity Framework 6 for .NET Framework 4.0 -->
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <!-- SQLite for Entity Framework 6 -->
+    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.118" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
+  </ItemGroup>
+
+  <!-- Assembly info -->
+  <PropertyGroup>
+    <AssemblyTitle>TicketSalesApp.Core.Legacy</AssemblyTitle>
+    <Company>TicketSalesApp</Company>
+    <Product>TicketSalesApp</Product>
+    <Description>Legacy core library for TicketSalesApp compatible with Windows XP</Description>
+    <Copyright>Copyright © 2024</Copyright>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+  </PropertyGroup>
+
+</Project>

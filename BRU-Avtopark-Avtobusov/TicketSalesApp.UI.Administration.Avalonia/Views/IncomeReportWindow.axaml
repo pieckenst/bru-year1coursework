@@ -1,0 +1,154 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:TicketSalesApp.UI.Administration.Avalonia.ViewModels"
+        xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+        xmlns:icons="using:Material.Icons.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+        x:Class="TicketSalesApp.UI.Administration.Avalonia.Views.IncomeReportWindow"
+        x:DataType="vm:IncomeReportViewModel"
+        Title="Отчет по доходам"
+        Width="1200" Height="800"
+        WindowStartupLocation="CenterOwner"
+        Background="#F8F9FA">
+
+    <Design.DataContext>
+        <vm:IncomeReportViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,*" Margin="20">
+        <!-- Header Section -->
+        <Grid Grid.Row="0" RowDefinitions="Auto,Auto" Margin="0,0,0,20">
+            <!-- Title and Date Range -->
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,20">
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Отчет по доходам" Theme="{StaticResource HeaderText}"/>
+                    <TextBlock Text="Анализ продаж и доходов по периодам" Foreground="{DynamicResource SecondaryColor}"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                    <DatePicker SelectedDate="{Binding StartDate}" />
+                    <TextBlock Text="-" VerticalAlignment="Center"/>
+                    <DatePicker SelectedDate="{Binding EndDate}" />
+                </StackPanel>
+            </Grid>
+
+            <!-- Summary Cards -->
+            <Grid Grid.Row="1" ColumnDefinitions="*,*,*" Margin="0,0,0,20">
+                <!-- Total Income Card -->
+                <Border Grid.Column="0" Theme="{StaticResource ModernCard}" Margin="0,0,10,0">
+                    <Grid RowDefinitions="Auto,*">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <icons:MaterialIcon Kind="CurrencyRub" Width="24" Height="24" 
+                                              Foreground="{DynamicResource PrimaryColor}"/>
+                            <TextBlock Text="Общий доход" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <TextBlock Grid.Row="1" Text="{Binding TotalIncome, StringFormat={}{0:C}}" 
+                                 FontSize="24" FontWeight="Bold" Foreground="{DynamicResource SuccessColor}"
+                                 Margin="0,10,0,0"/>
+                    </Grid>
+                </Border>
+
+                <!-- Tickets Sold Card -->
+                <Border Grid.Column="1" Theme="{StaticResource ModernCard}" Margin="5,0,5,0">
+                    <Grid RowDefinitions="Auto,*">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <icons:MaterialIcon Kind="Ticket" Width="24" Height="24" 
+                                              Foreground="{DynamicResource InfoColor}"/>
+                            <TextBlock Text="Продано билетов" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <TextBlock Grid.Row="1" Text="{Binding TotalTicketsSold}" 
+                                 FontSize="24" FontWeight="Bold"
+                                 Margin="0,10,0,0"/>
+                    </Grid>
+                </Border>
+
+                <!-- Average Price Card -->
+                <Border Grid.Column="2" Theme="{StaticResource ModernCard}" Margin="10,0,0,0">
+                    <Grid RowDefinitions="Auto,*">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <icons:MaterialIcon Kind="ChartLineVariant" Width="24" Height="24" 
+                                              Foreground="{DynamicResource WarningColor}"/>
+                            <TextBlock Text="Средняя цена" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <TextBlock Grid.Row="1" Text="{Binding AverageTicketPrice, StringFormat={}{0:C}}" 
+                                 FontSize="24" FontWeight="Bold"
+                                 Margin="0,10,0,0"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- Content Section -->
+        <Grid Grid.Row="1" RowDefinitions="*,*">
+            <!-- Charts Section -->
+            <Grid Grid.Row="0" ColumnDefinitions="*,*" Margin="0,0,0,20">
+                <!-- Monthly Sales Chart -->
+                <Border Grid.Column="0" Theme="{StaticResource ModernCard}" Margin="0,0,10,0">
+                    <Grid RowDefinitions="Auto,*">
+                        <TextBlock Text="Динамика продаж" Theme="{StaticResource SubHeaderText}"/>
+                        <lvc:CartesianChart Grid.Row="1"
+                                          Series="{Binding MonthlySalesChart}"
+                                          XAxes="{Binding XAxes}"
+                                          YAxes="{Binding YAxes}"
+                                          Height="300"/>
+                    </Grid>
+                </Border>
+
+                <!-- Route Distribution Chart -->
+                <Border Grid.Column="1" Theme="{StaticResource ModernCard}" Margin="10,0,0,0">
+                    <Grid RowDefinitions="Auto,*">
+                        <TextBlock Text="Распределение по маршрутам" Theme="{StaticResource SubHeaderText}"/>
+                        <lvc:PieChart Grid.Row="1"
+                                    Series="{Binding RouteDistributionChart}"
+                                    MaxWidth="250"
+                                    MaxHeight="250"
+                                    MinHeight="200"
+                                    MinWidth="200"/>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Data Tables Section -->
+            <Grid Grid.Row="1" ColumnDefinitions="*,*">
+                <!-- Monthly Income Table -->
+                <Border Grid.Column="0" Theme="{StaticResource ModernCard}" Margin="0,0,10,0">
+                    <Grid RowDefinitions="Auto,*">
+                        <TextBlock Text="Доход по месяцам" Theme="{StaticResource SubHeaderText}"/>
+                        <DataGrid Grid.Row="1" 
+                                ItemsSource="{Binding MonthlyIncomes}"
+                                AutoGenerateColumns="False"
+                                IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Месяц" Binding="{Binding Month}"/>
+                                <DataGridTextColumn Header="Год" Binding="{Binding Year}"/>
+                                <DataGridTextColumn Header="Доход" Binding="{Binding TotalIncome, StringFormat={}{0:C}}"/>
+                                <DataGridTextColumn Header="Билетов" Binding="{Binding TicketsSold}"/>
+                                <DataGridTextColumn Header="Средняя цена" Binding="{Binding AverageTicketPrice, StringFormat={}{0:C}}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+
+                <!-- Route Income Table -->
+                <Border Grid.Column="1" Theme="{StaticResource ModernCard}" Margin="10,0,0,0">
+                    <Grid RowDefinitions="Auto,*">
+                        <TextBlock Text="Доход по маршрутам" Theme="{StaticResource SubHeaderText}"/>
+                        <DataGrid Grid.Row="1" 
+                                ItemsSource="{Binding RouteIncomes}"
+                                AutoGenerateColumns="False"
+                                IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Маршрут" Binding="{Binding RouteName}"/>
+                                <DataGridTextColumn Header="Доход" Binding="{Binding TotalIncome, StringFormat={}{0:C}}"/>
+                                <DataGridTextColumn Header="Билетов" Binding="{Binding TicketsSold}"/>
+                                <DataGridTextColumn Header="Средняя цена" Binding="{Binding AverageTicketPrice, StringFormat={}{0:C}}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window> 

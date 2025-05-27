@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:TicketSalesApp.UI.Avalonia.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="TicketSalesApp.UI.Avalonia.Views.Pages.ScheduleView"
+             x:DataType="vm:ScheduleViewModel">
+    
+    <Grid RowDefinitions="Auto,*,Auto" Margin="20">
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Spacing="10">
+            <TextBlock Text="Расписание" Theme="{StaticResource HeaderText}"/>
+            <TextBlock Text="Расписание автобусов по маршрутам" 
+                     Foreground="{DynamicResource SecondaryColor}"/>
+            
+            <!-- Filter Controls -->
+            <Grid ColumnDefinitions="*,*,Auto,Auto" Margin="0,20,0,0">
+                <ComboBox Grid.Column="0" 
+                         ItemsSource="{Binding Routes}"
+                         SelectedItem="{Binding SelectedRoute}"
+                         DisplayMemberBinding="{Binding StartPoint}"
+                         PlaceholderText="Выберите маршрут"
+                         HorizontalAlignment="Stretch"
+                         Margin="0,0,10,0"/>
+                
+                <CalendarDatePicker Grid.Column="1"
+                                  SelectedDate="{Binding SelectedDate.Date}"
+                                  Watermark="Выберите дату"
+                                  HorizontalAlignment="Stretch"
+                                  Margin="0,0,10,0"/>
+                
+                <ToggleButton Grid.Column="2"
+                            IsChecked="{Binding IsMonthlyView}"
+                            Content="Месяц"
+                            Margin="0,0,10,0"/>
+                
+                <Button Grid.Column="3"
+                        Content="Показать"
+                        Command="{Binding ShowScheduleCommand}"/>
+            </Grid>
+        </StackPanel>
+        
+        <!-- Schedule Grid -->
+        <DataGrid Grid.Row="1" 
+                  ItemsSource="{Binding ScheduleItems}"
+                  SelectedItem="{Binding SelectedScheduleItem}"
+                  IsReadOnly="True"
+                  Margin="0,20,0,0"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Маршрут" 
+                                  Binding="{Binding StartPoint}" 
+                                  Width="*"/>
+                <DataGridTextColumn Header="Пункт назначения" 
+                                  Binding="{Binding EndPoint}" 
+                                  Width="*"/>
+                <DataGridTextColumn Header="Время отправления" 
+                                  Binding="{Binding DepartureTime, StringFormat={}{0:HH:mm}}" 
+                                  Width="Auto"/>
+                <DataGridTextColumn Header="Время прибытия" 
+                                  Binding="{Binding ArrivalTime, StringFormat={}{0:HH:mm}}" 
+                                  Width="Auto"/>
+                <DataGridTextColumn Header="Цена" 
+                                  Binding="{Binding Price, StringFormat={}{0:C}}" 
+                                  Width="Auto"/>
+                <DataGridTextColumn Header="Свободных мест" 
+                                  Binding="{Binding AvailableSeats}" 
+                                  Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Action Buttons -->
+        <Button Grid.Row="2"
+                Content="Купить билет"
+                Command="{Binding BuyTicketCommand}"
+                CommandParameter="{Binding SelectedScheduleItem}"
+                IsEnabled="{Binding SelectedScheduleItem, Converter={x:Static ObjectConverters.IsNotNull}}"
+                HorizontalAlignment="Right"
+                Classes="primary light dark"
+                Margin="0,10,0,0"/>
+
+        <!-- Loading Overlay -->
+        <Panel Grid.RowSpan="3" 
+              Background="#80000000" 
+              IsVisible="{Binding IsBusy}">
+            <StackPanel HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"
+                       Spacing="20">
+                <ProgressRing IsIndeterminate="True" 
+                             Width="60" 
+                             Height="60"
+                             Foreground="White"/>
+                <TextBlock Text="Загрузка..."
+                         Classes="loading-text light dark"
+                         HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Panel>
+
+        <!-- Error Message -->
+        <TextBlock Grid.Row="1" 
+                   Text="{Binding ErrorMessage}"
+                   Foreground="Red"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   IsVisible="{Binding HasError}"/>
+    </Grid>
+</UserControl> 

@@ -1,0 +1,2041 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.adminserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|solutionrelative:ticketsalesapp.adminserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.adminserver\\controllers\\ticketsalescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|solutionrelative:ticketsalesapp.adminserver\\controllers\\ticketsalescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.adminserver\\controllers\\routeschedulescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|solutionrelative:ticketsalesapp.adminserver\\controllers\\routeschedulescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\frmticketmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\frmticketmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\frmsalesstatistics.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\frmsalesstatistics.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.adminserver\\controllers\\routescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|solutionrelative:ticketsalesapp.adminserver\\controllers\\routescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\frmsalesstatistics.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\frmsalesstatistics.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\incomereportviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\incomereportviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\salesstatisticsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\salesstatisticsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\studio\\MSBuild\\Microsoft\\VisualStudio\\v17.0\\Fakes\\Microsoft.QualityTools.Testing.Fakes.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.adminserver\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|solutionrelative:ticketsalesapp.adminserver\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.adminserver\\controllers\\ticketscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|solutionrelative:ticketsalesapp.adminserver\\controllers\\ticketscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.adminserver\\controllers\\rolescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|solutionrelative:ticketsalesapp.adminserver\\controllers\\rolescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.adminserver\\controllers\\permissionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|solutionrelative:ticketsalesapp.adminserver\\controllers\\permissionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.adminserver\\controllers\\maintenancecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|solutionrelative:ticketsalesapp.adminserver\\controllers\\maintenancecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.adminserver\\controllers\\jobscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|solutionrelative:ticketsalesapp.adminserver\\controllers\\jobscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.adminserver\\controllers\\employeescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|solutionrelative:ticketsalesapp.adminserver\\controllers\\employeescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.adminserver\\controllers\\busescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|solutionrelative:ticketsalesapp.adminserver\\controllers\\busescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.adminserver\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|solutionrelative:ticketsalesapp.adminserver\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\andrej\\AppData\\Local\\Temp\\24wh3phf.dgml||{295A0962-5A59-4F4F-9E12-6BC670C15C3B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\andrej\\AppData\\Local\\Temp\\32v5eieb.dgml||{295A0962-5A59-4F4F-9E12-6BC670C15C3B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\andrej\\AppData\\Local\\Temp\\bkk22ocw.dgml||{295A0962-5A59-4F4F-9E12-6BC670C15C3B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\andrej\\AppData\\Local\\Temp\\z5uoqowp.dgml||{295A0962-5A59-4F4F-9E12-6BC670C15C3B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\andrej\\AppData\\Local\\Temp\\lnbzfjsj.dgml||{295A0962-5A59-4F4F-9E12-6BC670C15C3B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\andrej\\AppData\\Local\\Temp\\nuh05yuc.dgml||{295A0962-5A59-4F4F-9E12-6BC670C15C3B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\samplecode.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\samplecode.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\underconstructionwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\underconstructionwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\splashscreen.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\splashscreen.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\toolwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\toolwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\modaldialog.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\modaldialog.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\mainwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\mainwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\helpwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\helpwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\authwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\authwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\aboutwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\aboutwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\usermanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\usermanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\ticketmanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\ticketmanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\salesstatisticstoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\salesstatisticstoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\salesmanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\salesmanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\routeschedulesmanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\routeschedulesmanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\routemanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\routemanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\maintenancemanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\maintenancemanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\jobmanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\jobmanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\incomereporttoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\incomereporttoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\employeemanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\employeemanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\busmanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\views\\managementtoolwindowsviews\\busmanagementtoolwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\usermanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\usermanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\toolwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\toolwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\ticketmanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\ticketmanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\searchviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\searchviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\salesmanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\salesmanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\routeschedulesmanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\routeschedulesmanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\routemanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\routemanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\propertiesviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\propertiesviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\problemviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\problemviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\notificationsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\notificationsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\modaldialogviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\modaldialogviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\modaldialogtype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\modaldialogtype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\maintenancemanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\maintenancemanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\jobmanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\jobmanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\explorerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\explorerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\employeemanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\employeemanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\debugviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\debugviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\busmanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\busmanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\viewmodels\\authviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\viewmodels\\authviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.administration.avalonia\\services\\apiclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54375997-44B5-4CE0-AE45-D3DC6037E727}|TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.administration.avalonia\\services\\apiclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBEEF00C-C72D-4A35-AF76-689A3C7BC1B1}|TicketSalesApp.Services\\TicketSalesApp.Services.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.services\\implementations\\ticketsalesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBEEF00C-C72D-4A35-AF76-689A3C7BC1B1}|TicketSalesApp.Services\\TicketSalesApp.Services.csproj|solutionrelative:ticketsalesapp.services\\implementations\\ticketsalesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBEEF00C-C72D-4A35-AF76-689A3C7BC1B1}|TicketSalesApp.Services\\TicketSalesApp.Services.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.services\\implementations\\roleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBEEF00C-C72D-4A35-AF76-689A3C7BC1B1}|TicketSalesApp.Services\\TicketSalesApp.Services.csproj|solutionrelative:ticketsalesapp.services\\implementations\\roleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBEEF00C-C72D-4A35-AF76-689A3C7BC1B1}|TicketSalesApp.Services\\TicketSalesApp.Services.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.services\\implementations\\qrauthenticationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBEEF00C-C72D-4A35-AF76-689A3C7BC1B1}|TicketSalesApp.Services\\TicketSalesApp.Services.csproj|solutionrelative:ticketsalesapp.services\\implementations\\qrauthenticationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBEEF00C-C72D-4A35-AF76-689A3C7BC1B1}|TicketSalesApp.Services\\TicketSalesApp.Services.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.services\\implementations\\exportservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBEEF00C-C72D-4A35-AF76-689A3C7BC1B1}|TicketSalesApp.Services\\TicketSalesApp.Services.csproj|solutionrelative:ticketsalesapp.services\\implementations\\exportservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBEEF00C-C72D-4A35-AF76-689A3C7BC1B1}|TicketSalesApp.Services\\TicketSalesApp.Services.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.services\\implementations\\dataservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBEEF00C-C72D-4A35-AF76-689A3C7BC1B1}|TicketSalesApp.Services\\TicketSalesApp.Services.csproj|solutionrelative:ticketsalesapp.services\\implementations\\dataservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBEEF00C-C72D-4A35-AF76-689A3C7BC1B1}|TicketSalesApp.Services\\TicketSalesApp.Services.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.services\\implementations\\authenticationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBEEF00C-C72D-4A35-AF76-689A3C7BC1B1}|TicketSalesApp.Services\\TicketSalesApp.Services.csproj|solutionrelative:ticketsalesapp.services\\implementations\\authenticationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBEEF00C-C72D-4A35-AF76-689A3C7BC1B1}|TicketSalesApp.Services\\TicketSalesApp.Services.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.services\\implementations\\adminactionlogger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBEEF00C-C72D-4A35-AF76-689A3C7BC1B1}|TicketSalesApp.Services\\TicketSalesApp.Services.csproj|solutionrelative:ticketsalesapp.services\\implementations\\adminactionlogger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\models\\skladorders.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\models\\skladorders.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\models\\routeschedules.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\models\\routeschedules.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\models\\roles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\models\\roles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\models\\qrloginpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\models\\qrloginpayload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\models\\prodazha.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\models\\prodazha.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\models\\permissions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\models\\permissions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\models\\obsluzhivanie.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\models\\obsluzhivanie.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\models\\marshut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\models\\marshut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\models\\job.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\models\\job.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\models\\form.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\models\\form.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\models\\employee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\models\\employee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\models\\bilet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\models\\bilet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\models\\avtobus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\models\\avtobus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\models\\adminactionlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\models\\adminactionlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\data\\dbinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\data\\dbinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3048B295-F660-42D4-829E-2A920D0BB0B4}|TicketSalesApp.Core\\TicketSalesApp.Core.csproj|solutionrelative:ticketsalesapp.core\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.adminserver\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|solutionrelative:ticketsalesapp.adminserver\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\frmrouteschedulesmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\frmrouteschedulesmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\frmroutemanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\frmroutemanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B334C1DD-62C8-64BF-2554-8A7FF500B772}|TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core.legacy\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B334C1DD-62C8-64BF-2554-8A7FF500B772}|TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj|solutionrelative:ticketsalesapp.core.legacy\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B334C1DD-62C8-64BF-2554-8A7FF500B772}|TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core.legacy\\models\\bilet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B334C1DD-62C8-64BF-2554-8A7FF500B772}|TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj|solutionrelative:ticketsalesapp.core.legacy\\models\\bilet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B334C1DD-62C8-64BF-2554-8A7FF500B772}|TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core.legacy\\models\\permissions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B334C1DD-62C8-64BF-2554-8A7FF500B772}|TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj|solutionrelative:ticketsalesapp.core.legacy\\models\\permissions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B334C1DD-62C8-64BF-2554-8A7FF500B772}|TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core.legacy\\models\\avtobus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B334C1DD-62C8-64BF-2554-8A7FF500B772}|TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj|solutionrelative:ticketsalesapp.core.legacy\\models\\avtobus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B334C1DD-62C8-64BF-2554-8A7FF500B772}|TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core.legacy\\models\\prodazha.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B334C1DD-62C8-64BF-2554-8A7FF500B772}|TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj|solutionrelative:ticketsalesapp.core.legacy\\models\\prodazha.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B334C1DD-62C8-64BF-2554-8A7FF500B772}|TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core.legacy\\models\\marshut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B334C1DD-62C8-64BF-2554-8A7FF500B772}|TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj|solutionrelative:ticketsalesapp.core.legacy\\models\\marshut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B334C1DD-62C8-64BF-2554-8A7FF500B772}|TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core.legacy\\models\\employee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B334C1DD-62C8-64BF-2554-8A7FF500B772}|TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj|solutionrelative:ticketsalesapp.core.legacy\\models\\employee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B334C1DD-62C8-64BF-2554-8A7FF500B772}|TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.core.legacy\\models\\routeschedules.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B334C1DD-62C8-64BF-2554-8A7FF500B772}|TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj|solutionrelative:ticketsalesapp.core.legacy\\models\\routeschedules.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\ticketsalesapp.ui.legacyforms.dx.windows.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\ticketsalesapp.ui.legacyforms.dx.windows.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\10.0.100-preview.1.25120.13\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.RuntimeIdentifierInference.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\10.0.100-preview.1.25120.13\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.adminserver\\ticketsalesapp.adminserver.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{BA7308AF-1506-4369-8F7F-32E3574B5313}|TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj|solutionrelative:ticketsalesapp.adminserver\\ticketsalesapp.adminserver.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBEEF00C-C72D-4A35-AF76-689A3C7BC1B1}|TicketSalesApp.Services\\TicketSalesApp.Services.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.services\\ticketsalesapp.services.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{EBEEF00C-C72D-4A35-AF76-689A3C7BC1B1}|TicketSalesApp.Services\\TicketSalesApp.Services.csproj|solutionrelative:ticketsalesapp.services\\ticketsalesapp.services.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\10.0.100-preview.1.25120.13\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\frmsalesmanagement.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\frmsalesmanagement.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\frmticketmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\frmticketmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\frmincomereport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\frmincomereport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\frmmaintenancemanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\frmmaintenancemanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\frmrouteschedulesmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\frmrouteschedulesmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\frmbusmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\frmbusmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\frmlogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\frmlogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\frmlogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\frmlogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4B6D79E-E105-415D-9C0F-1E22A39B4428}|TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.avalonia\\views\\authwindow.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{C4B6D79E-E105-415D-9C0F-1E22A39B4428}|TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.avalonia\\views\\authwindow.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4B6D79E-E105-415D-9C0F-1E22A39B4428}|TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.avalonia\\viewmodels\\authviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4B6D79E-E105-415D-9C0F-1E22A39B4428}|TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.avalonia\\viewmodels\\authviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4B6D79E-E105-415D-9C0F-1E22A39B4428}|TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.avalonia\\viewmodels\\searchresultsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4B6D79E-E105-415D-9C0F-1E22A39B4428}|TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.avalonia\\viewmodels\\searchresultsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4B6D79E-E105-415D-9C0F-1E22A39B4428}|TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.avalonia\\viewmodels\\myticketsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4B6D79E-E105-415D-9C0F-1E22A39B4428}|TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.avalonia\\viewmodels\\myticketsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4B6D79E-E105-415D-9C0F-1E22A39B4428}|TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.avalonia\\viewmodels\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4B6D79E-E105-415D-9C0F-1E22A39B4428}|TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.avalonia\\viewmodels\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4B6D79E-E105-415D-9C0F-1E22A39B4428}|TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.avalonia\\viewmodels\\helpviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4B6D79E-E105-415D-9C0F-1E22A39B4428}|TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.avalonia\\viewmodels\\helpviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4B6D79E-E105-415D-9C0F-1E22A39B4428}|TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.avalonia\\viewmodels\\aboutviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4B6D79E-E105-415D-9C0F-1E22A39B4428}|TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.avalonia\\viewmodels\\aboutviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4B6D79E-E105-415D-9C0F-1E22A39B4428}|TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.avalonia\\views\\pages\\aboutview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{C4B6D79E-E105-415D-9C0F-1E22A39B4428}|TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj|solutionrelative:ticketsalesapp.ui.avalonia\\views\\pages\\aboutview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\apiclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\apiclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|e:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\bru-avtopark-avtobusov\\ticketsalesapp.ui.legacyforms.dx.windows\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{69725F72-088D-42CC-A87B-6A493A31EB92}|TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj|solutionrelative:ticketsalesapp.ui.legacyforms.dx.windows\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Form1.cs [Design]",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\Form1.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\Form1.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\Form1.cs [Design]",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\Form1.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-06T17:38:11.531Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "frmTicketManagement.cs [Design]",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmTicketManagement.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmTicketManagement.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmTicketManagement.cs [Design]",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmTicketManagement.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-15T07:07:13.586Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "RouteSchedulesController.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\RouteSchedulesController.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.AdminServer\\Controllers\\RouteSchedulesController.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\RouteSchedulesController.cs",
+              "RelativeToolTip": "TicketSalesApp.AdminServer\\Controllers\\RouteSchedulesController.cs",
+              "ViewState": "AgIAAI0CAAAAAAAAAAA0wKUCAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T13:57:19.685Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TicketSalesController.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\TicketSalesController.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.AdminServer\\Controllers\\TicketSalesController.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\TicketSalesController.cs",
+              "RelativeToolTip": "TicketSalesApp.AdminServer\\Controllers\\TicketSalesController.cs",
+              "ViewState": "AgIAAD0BAAAAAAAAAAAqwF4BAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T19:38:39.974Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\Program.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\Program.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\Program.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\Program.cs",
+              "ViewState": "AgIAANsAAAAAAAAAAAAQwFkBAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T12:19:33.139Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Program.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.AdminServer\\Program.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Program.cs",
+              "RelativeToolTip": "TicketSalesApp.AdminServer\\Program.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAmwEYAAABMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:40:22.753Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "RoutesController.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\RoutesController.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.AdminServer\\Controllers\\RoutesController.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\RoutesController.cs",
+              "RelativeToolTip": "TicketSalesApp.AdminServer\\Controllers\\RoutesController.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAArwCsAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T19:38:33.829Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "frmSalesStatistics.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmSalesStatistics.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmSalesStatistics.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmSalesStatistics.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmSalesStatistics.cs",
+              "ViewState": "AgIAAMYBAAAAAAAAAAArwNwBAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-14T19:35:36.573Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "frmSalesStatistics.Designer.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmSalesStatistics.Designer.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmSalesStatistics.Designer.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmSalesStatistics.Designer.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmSalesStatistics.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T11:30:03.751Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "IncomeReportViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\IncomeReportViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\IncomeReportViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\IncomeReportViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\IncomeReportViewModel.cs",
+              "ViewState": "AgIAAEkBAAAAAAAAAAAcwHIBAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:43:15.29Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "RolesController.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\RolesController.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.AdminServer\\Controllers\\RolesController.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\RolesController.cs",
+              "RelativeToolTip": "TicketSalesApp.AdminServer\\Controllers\\RolesController.cs",
+              "ViewState": "AgIAALwAAAAAAAAAAAAqwN0AAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T19:38:19.726Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Microsoft.QualityTools.Testing.Fakes.targets",
+              "DocumentMoniker": "D:\\studio\\MSBuild\\Microsoft\\VisualStudio\\v17.0\\Fakes\\Microsoft.QualityTools.Testing.Fakes.targets",
+              "ToolTip": "D:\\studio\\MSBuild\\Microsoft\\VisualStudio\\v17.0\\Fakes\\Microsoft.QualityTools.Testing.Fakes.targets",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2025-05-01T17:21:04.917Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "SalesStatisticsViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\SalesStatisticsViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\SalesStatisticsViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\SalesStatisticsViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\SalesStatisticsViewModel.cs",
+              "ViewState": "AgIAAD8BAAAAAAAAAAAYwGgBAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:44:09.599Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "PermissionsController.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\PermissionsController.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.AdminServer\\Controllers\\PermissionsController.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\PermissionsController.cs",
+              "RelativeToolTip": "TicketSalesApp.AdminServer\\Controllers\\PermissionsController.cs",
+              "ViewState": "AgIAAKwAAAAAAAAAAEBdwNMAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T19:38:12.615Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "MaintenanceController.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\MaintenanceController.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.AdminServer\\Controllers\\MaintenanceController.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\MaintenanceController.cs",
+              "RelativeToolTip": "TicketSalesApp.AdminServer\\Controllers\\MaintenanceController.cs",
+              "ViewState": "AgIAAO8AAAAAAAAAAAAswA0BAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T19:38:05.143Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "TicketsController.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\TicketsController.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.AdminServer\\Controllers\\TicketsController.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\TicketsController.cs",
+              "RelativeToolTip": "TicketSalesApp.AdminServer\\Controllers\\TicketsController.cs",
+              "ViewState": "AgIAANUAAAAAAAAAAAAgwPgAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T19:38:51.398Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.AdminServer\\Controllers\\UsersController.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "TicketSalesApp.AdminServer\\Controllers\\UsersController.cs",
+              "ViewState": "AgIAAMkBAAAAAAAAAAAkwNsBAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T19:38:57.625Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "JobsController.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\JobsController.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.AdminServer\\Controllers\\JobsController.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\JobsController.cs",
+              "RelativeToolTip": "TicketSalesApp.AdminServer\\Controllers\\JobsController.cs",
+              "ViewState": "AgIAAIUAAAAAAAAAAAAuwK0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T19:37:56.433Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "EmployeesController.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\EmployeesController.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.AdminServer\\Controllers\\EmployeesController.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\EmployeesController.cs",
+              "RelativeToolTip": "TicketSalesApp.AdminServer\\Controllers\\EmployeesController.cs",
+              "ViewState": "AgIAAKMAAAAAAAAAAAAuwMsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T19:37:50.496Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "BusesController.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\BusesController.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.AdminServer\\Controllers\\BusesController.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\BusesController.cs",
+              "RelativeToolTip": "TicketSalesApp.AdminServer\\Controllers\\BusesController.cs",
+              "ViewState": "AgIAAK0AAAAAAAAAAAAIwNIAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T19:37:36.889Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.AdminServer\\Controllers\\AuthController.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "TicketSalesApp.AdminServer\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAB4FAAAAAAAAAAAswDwFAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T19:37:31.302Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "24wh3phf.dgml",
+              "DocumentMoniker": "C:\\Users\\andrej\\AppData\\Local\\Temp\\24wh3phf.dgml",
+              "ToolTip": "C:\\Users\\andrej\\AppData\\Local\\Temp\\24wh3phf.dgml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000968|",
+              "WhenOpened": "2025-05-01T16:07:25.971Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "32v5eieb.dgml",
+              "DocumentMoniker": "C:\\Users\\andrej\\AppData\\Local\\Temp\\32v5eieb.dgml",
+              "ToolTip": "C:\\Users\\andrej\\AppData\\Local\\Temp\\32v5eieb.dgml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000968|",
+              "WhenOpened": "2025-05-01T16:06:51.611Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "bkk22ocw.dgml",
+              "DocumentMoniker": "C:\\Users\\andrej\\AppData\\Local\\Temp\\bkk22ocw.dgml",
+              "ToolTip": "C:\\Users\\andrej\\AppData\\Local\\Temp\\bkk22ocw.dgml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000968|",
+              "WhenOpened": "2025-05-01T16:05:14.735Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "z5uoqowp.dgml",
+              "DocumentMoniker": "C:\\Users\\andrej\\AppData\\Local\\Temp\\z5uoqowp.dgml",
+              "ToolTip": "C:\\Users\\andrej\\AppData\\Local\\Temp\\z5uoqowp.dgml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000968|",
+              "WhenOpened": "2025-05-01T16:04:49.459Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "lnbzfjsj.dgml",
+              "DocumentMoniker": "C:\\Users\\andrej\\AppData\\Local\\Temp\\lnbzfjsj.dgml",
+              "ToolTip": "C:\\Users\\andrej\\AppData\\Local\\Temp\\lnbzfjsj.dgml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000968|",
+              "WhenOpened": "2025-05-01T16:04:04.683Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "nuh05yuc.dgml",
+              "DocumentMoniker": "C:\\Users\\andrej\\AppData\\Local\\Temp\\nuh05yuc.dgml",
+              "ToolTip": "C:\\Users\\andrej\\AppData\\Local\\Temp\\nuh05yuc.dgml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000968|",
+              "WhenOpened": "2025-05-01T15:55:57.336Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Program.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Program.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Program.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Program.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAuwBoAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:46:44.983Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "UnderConstructionWindow.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\UnderConstructionWindow.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\UnderConstructionWindow.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\UnderConstructionWindow.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\UnderConstructionWindow.axaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:46:39.383Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "samplecode.txt",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\samplecode.txt",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\samplecode.txt",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\samplecode.txt",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\samplecode.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2025-05-01T15:46:44.436Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "SplashScreen.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\SplashScreen.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\SplashScreen.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\SplashScreen.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\SplashScreen.axaml.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAqwDYAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:46:33.587Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "ToolWindow.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ToolWindow.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ToolWindow.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ToolWindow.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ToolWindow.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAIwCwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:46:24.353Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "ModalDialog.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ModalDialog.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ModalDialog.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ModalDialog.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ModalDialog.axaml.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAcwEkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:46:10.041Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "MainWindow.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\MainWindow.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\MainWindow.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\MainWindow.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\MainWindow.axaml.cs",
+              "ViewState": "AgIAABEBAAAAAAAAAAAmwDgBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:46:04.848Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "HelpWindow.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\HelpWindow.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\HelpWindow.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\HelpWindow.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\HelpWindow.axaml.cs",
+              "ViewState": "AgIAADICAAAAAAAAAAAmwFkCAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:45:58.256Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "AuthWindow.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\AuthWindow.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\AuthWindow.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\AuthWindow.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\AuthWindow.axaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:45:45.326Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "AboutWindow.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\AboutWindow.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\AboutWindow.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\AboutWindow.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\AboutWindow.axaml.cs",
+              "ViewState": "AgIAAE0AAAAAAAAAAAAuwHUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:45:40.856Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "UserManagementToolWindow.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\UserManagementToolWindow.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\UserManagementToolWindow.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\UserManagementToolWindow.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\UserManagementToolWindow.axaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:45:33.889Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "TicketManagementToolWindow.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\TicketManagementToolWindow.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\TicketManagementToolWindow.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\TicketManagementToolWindow.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\TicketManagementToolWindow.axaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:45:28.059Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "SalesStatisticsToolWindow.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\SalesStatisticsToolWindow.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\SalesStatisticsToolWindow.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\SalesStatisticsToolWindow.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\SalesStatisticsToolWindow.axaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:45:23.498Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "SalesManagementToolWindow.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\SalesManagementToolWindow.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\SalesManagementToolWindow.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\SalesManagementToolWindow.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\SalesManagementToolWindow.axaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:45:16.861Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "RouteSchedulesManagementToolWindow.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\RouteSchedulesManagementToolWindow.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\RouteSchedulesManagementToolWindow.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\RouteSchedulesManagementToolWindow.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\RouteSchedulesManagementToolWindow.axaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:45:11.203Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "RouteManagementToolWindow.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\RouteManagementToolWindow.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\RouteManagementToolWindow.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\RouteManagementToolWindow.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\RouteManagementToolWindow.axaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:45:06.572Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "MaintenanceManagementToolWindow.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\MaintenanceManagementToolWindow.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\MaintenanceManagementToolWindow.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\MaintenanceManagementToolWindow.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\MaintenanceManagementToolWindow.axaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:45:02.29Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "JobManagementToolWindow.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\JobManagementToolWindow.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\JobManagementToolWindow.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\JobManagementToolWindow.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\JobManagementToolWindow.axaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:44:56.964Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "IncomeReportToolWindow.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\IncomeReportToolWindow.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\IncomeReportToolWindow.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\IncomeReportToolWindow.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\IncomeReportToolWindow.axaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:44:51.614Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "EmployeeManagementToolWindow.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\EmployeeManagementToolWindow.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\EmployeeManagementToolWindow.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\EmployeeManagementToolWindow.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\EmployeeManagementToolWindow.axaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:44:45.574Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
+              "Title": "BusManagementToolWindow.axaml.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\BusManagementToolWindow.axaml.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\BusManagementToolWindow.axaml.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\BusManagementToolWindow.axaml.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Views\\ManagementToolWindowsViews\\BusManagementToolWindow.axaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:44:39.357Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 48,
+              "Title": "ViewModelBase.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ViewModelBase.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ViewModelBase.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ViewModelBase.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ViewModelBase.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:44:30.109Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "UserManagementViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\UserManagementViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\UserManagementViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\UserManagementViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\UserManagementViewModel.cs",
+              "ViewState": "AgIAAC4DAAAAAAAAAAAAwFYDAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:44:26.23Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 50,
+              "Title": "ToolWindowViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ToolWindowViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ToolWindowViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ToolWindowViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ToolWindowViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:44:22.614Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 51,
+              "Title": "TicketManagementViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\TicketManagementViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\TicketManagementViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\TicketManagementViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\TicketManagementViewModel.cs",
+              "ViewState": "AgIAAKUBAAAAAAAAAAAYwM4BAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:44:18.013Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 52,
+              "Title": "SearchViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\SearchViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\SearchViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\SearchViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\SearchViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:44:15.912Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 53,
+              "Title": "SalesManagementViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\SalesManagementViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\SalesManagementViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\SalesManagementViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\SalesManagementViewModel.cs",
+              "ViewState": "AgIAAAgCAAAAAAAAAAAYwDECAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:44:05.071Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 54,
+              "Title": "RouteSchedulesManagementViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\RouteSchedulesManagementViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\RouteSchedulesManagementViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\RouteSchedulesManagementViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\RouteSchedulesManagementViewModel.cs",
+              "ViewState": "AgIAAPQCAAAAAAAAAAAAwBwDAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:43:57.233Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 55,
+              "Title": "RouteManagementViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\RouteManagementViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\RouteManagementViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\RouteManagementViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\RouteManagementViewModel.cs",
+              "ViewState": "AgIAAAkCAAAAAAAAAAAAwDECAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:43:49.141Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 56,
+              "Title": "PropertiesViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\PropertiesViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\PropertiesViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\PropertiesViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\PropertiesViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:43:47.598Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 57,
+              "Title": "ProblemViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ProblemViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ProblemViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ProblemViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ProblemViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:43:43.228Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 58,
+              "Title": "NotificationsViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\NotificationsViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\NotificationsViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\NotificationsViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\NotificationsViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:43:39.673Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 59,
+              "Title": "ModalDialogViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ModalDialogViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ModalDialogViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ModalDialogViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ModalDialogViewModel.cs",
+              "ViewState": "AgIAAEcAAAAAAAAAAAAIwGwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:43:35.7Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 60,
+              "Title": "ModalDialogType.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ModalDialogType.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ModalDialogType.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ModalDialogType.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ModalDialogType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:43:31.934Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 61,
+              "Title": "MainWindowViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\MainWindowViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\MainWindowViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\MainWindowViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\MainWindowViewModel.cs",
+              "ViewState": "AgIAAGAAAAAAAAAAAAAiwIAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:43:28.172Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 62,
+              "Title": "MaintenanceManagementViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\MaintenanceManagementViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\MaintenanceManagementViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\MaintenanceManagementViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\MaintenanceManagementViewModel.cs",
+              "ViewState": "AgIAANkBAAAAAAAAAAAAwAECAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:43:24.428Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 63,
+              "Title": "JobManagementViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\JobManagementViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\JobManagementViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\JobManagementViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\JobManagementViewModel.cs",
+              "ViewState": "AgIAAJ8BAAAAAAAAAAAAwMcBAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:43:19.485Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 64,
+              "Title": "ExplorerViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ExplorerViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ExplorerViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ExplorerViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\ExplorerViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:43:11.523Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 65,
+              "Title": "EmployeeManagementViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\EmployeeManagementViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\EmployeeManagementViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\EmployeeManagementViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\EmployeeManagementViewModel.cs",
+              "ViewState": "AgIAANYBAAAAAAAAAAAAwP4BAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:43:03.598Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 66,
+              "Title": "DebugViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\DebugViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\DebugViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\DebugViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\DebugViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:42:59.029Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 67,
+              "Title": "BusManagementViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\BusManagementViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\BusManagementViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\BusManagementViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\BusManagementViewModel.cs",
+              "ViewState": "AgIAAKkBAAAAAAAAAAAAwNEBAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:42:55.216Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 68,
+              "Title": "AuthViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\AuthViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\AuthViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\AuthViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\ViewModels\\AuthViewModel.cs",
+              "ViewState": "AgIAAGgAAAAAAAAAAAAuwJAAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:42:51.397Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 69,
+              "Title": "ApiClientService.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Services\\ApiClientService.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Administration.Avalonia\\Services\\ApiClientService.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\Services\\ApiClientService.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Administration.Avalonia\\Services\\ApiClientService.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAmwDsAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:42:43.349Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 70,
+              "Title": "TicketSalesService.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\Implementations\\TicketSalesService.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Services\\Implementations\\TicketSalesService.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\Implementations\\TicketSalesService.cs",
+              "RelativeToolTip": "TicketSalesApp.Services\\Implementations\\TicketSalesService.cs",
+              "ViewState": "AgIAAOkAAAAAAAAAAAAYwBIBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:42:36.26Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 71,
+              "Title": "RoleService.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\Implementations\\RoleService.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Services\\Implementations\\RoleService.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\Implementations\\RoleService.cs",
+              "RelativeToolTip": "TicketSalesApp.Services\\Implementations\\RoleService.cs",
+              "ViewState": "AgIAANoAAAAAAAAAAAAmwAEBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:42:30.814Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 72,
+              "Title": "QRAuthenticationService.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\Implementations\\QRAuthenticationService.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Services\\Implementations\\QRAuthenticationService.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\Implementations\\QRAuthenticationService.cs",
+              "RelativeToolTip": "TicketSalesApp.Services\\Implementations\\QRAuthenticationService.cs",
+              "ViewState": "AgIAAIYBAAAAAAAAAAAAwK4BAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:42:25.518Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 73,
+              "Title": "ExportService.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\Implementations\\ExportService.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Services\\Implementations\\ExportService.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\Implementations\\ExportService.cs",
+              "RelativeToolTip": "TicketSalesApp.Services\\Implementations\\ExportService.cs",
+              "ViewState": "AgIAAIIAAAAAAAAAAAAAwKoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:42:20.924Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 74,
+              "Title": "DataService.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\Implementations\\DataService.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Services\\Implementations\\DataService.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\Implementations\\DataService.cs",
+              "RelativeToolTip": "TicketSalesApp.Services\\Implementations\\DataService.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAADwvzYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:42:12.537Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 76,
+              "Title": "AdminActionLogger.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\Implementations\\AdminActionLogger.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Services\\Implementations\\AdminActionLogger.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\Implementations\\AdminActionLogger.cs",
+              "RelativeToolTip": "TicketSalesApp.Services\\Implementations\\AdminActionLogger.cs",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAAwHsAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:42:03.704Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 78,
+              "Title": "SkladOrders.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\SkladOrders.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Models\\SkladOrders.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\SkladOrders.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Models\\SkladOrders.cs",
+              "ViewState": "AgIAADMAAAAAAAAAAAAgwFYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:41:41.571Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 79,
+              "Title": "RouteSchedules.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\RouteSchedules.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Models\\RouteSchedules.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\RouteSchedules.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Models\\RouteSchedules.cs",
+              "ViewState": "AgIAAFoAAAAAAAAAAAAowH4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:41:37.545Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 81,
+              "Title": "QRLoginPayload.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\QRLoginPayload.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Models\\QRLoginPayload.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\QRLoginPayload.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Models\\QRLoginPayload.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:41:29.662Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 82,
+              "Title": "Prodazha.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Prodazha.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Models\\Prodazha.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Prodazha.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Models\\Prodazha.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:41:25.315Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 84,
+              "Title": "Obsluzhivanie.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Obsluzhivanie.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Models\\Obsluzhivanie.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Obsluzhivanie.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Models\\Obsluzhivanie.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:41:17.307Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 85,
+              "Title": "Marshut.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Marshut.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Models\\Marshut.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Marshut.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Models\\Marshut.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:41:13.504Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 86,
+              "Title": "Job.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Job.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Models\\Job.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Job.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Models\\Job.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:41:09.131Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 87,
+              "Title": "Form.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Form.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Models\\Form.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Form.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Models\\Form.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:41:03.937Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 75,
+              "Title": "AuthenticationService.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\Implementations\\AuthenticationService.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Services\\Implementations\\AuthenticationService.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\Implementations\\AuthenticationService.cs",
+              "RelativeToolTip": "TicketSalesApp.Services\\Implementations\\AuthenticationService.cs",
+              "ViewState": "AgIAAJEAAAAAAAAAAAAYwLoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T10:24:35.492Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 88,
+              "Title": "Employee.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Employee.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Models\\Employee.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Employee.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Models\\Employee.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:40:59.68Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 90,
+              "Title": "Avtobus.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Avtobus.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Models\\Avtobus.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Avtobus.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Models\\Avtobus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:40:52.185Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 77,
+              "Title": "User.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\User.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Models\\User.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\User.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Models\\User.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAYwD4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T15:08:58.013Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 91,
+              "Title": "AdminActionLog.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\AdminActionLog.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Models\\AdminActionLog.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\AdminActionLog.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Models\\AdminActionLog.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:40:47.925Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 92,
+              "Title": "DbInitializer.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Data\\DbInitializer.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Data\\DbInitializer.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Data\\DbInitializer.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Data\\DbInitializer.cs",
+              "ViewState": "AgIAALsEAAAAAAAAAAAAwOMEAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:40:43.43Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 80,
+              "Title": "Roles.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Roles.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Models\\Roles.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Roles.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Models\\Roles.cs",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAgwGgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T15:08:51.694Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 94,
+              "Title": "Startup.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Startup.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.AdminServer\\Startup.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\Startup.cs",
+              "RelativeToolTip": "TicketSalesApp.AdminServer\\Startup.cs",
+              "ViewState": "AgIAAKwBAAAAAAAAAAAYwNUBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:40:26.788Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 83,
+              "Title": "Permissions.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Permissions.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Models\\Permissions.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Permissions.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Models\\Permissions.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAgwEsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T15:08:55.333Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 89,
+              "Title": "Bilet.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Bilet.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Models\\Bilet.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Models\\Bilet.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Models\\Bilet.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T18:28:13.885Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 93,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core\\Data\\AppDbContext.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "TicketSalesApp.Core\\Data\\AppDbContext.cs",
+              "ViewState": "AgIAAJcAAAAAAAAAAAAYwMAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T18:23:15.621Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 95,
+              "Title": "frmRouteSchedulesManagement.cs [Design]",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmRouteSchedulesManagement.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmRouteSchedulesManagement.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmRouteSchedulesManagement.cs [Design]",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmRouteSchedulesManagement.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T15:37:51.674Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 97,
+              "Title": "User.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\Models\\User.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core.Legacy\\Models\\User.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\Models\\User.cs",
+              "RelativeToolTip": "TicketSalesApp.Core.Legacy\\Models\\User.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAowBUAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T19:07:07.944Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 99,
+              "Title": "Permissions.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\Models\\Permissions.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core.Legacy\\Models\\Permissions.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\Models\\Permissions.cs",
+              "RelativeToolTip": "TicketSalesApp.Core.Legacy\\Models\\Permissions.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAmwBMAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T19:06:37.211Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 101,
+              "Title": "Prodazha.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\Models\\Prodazha.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core.Legacy\\Models\\Prodazha.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\Models\\Prodazha.cs",
+              "RelativeToolTip": "TicketSalesApp.Core.Legacy\\Models\\Prodazha.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T18:59:45.797Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 103,
+              "Title": "Employee.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\Models\\Employee.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core.Legacy\\Models\\Employee.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\Models\\Employee.cs",
+              "RelativeToolTip": "TicketSalesApp.Core.Legacy\\Models\\Employee.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T18:59:23.057Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 100,
+              "Title": "Avtobus.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\Models\\Avtobus.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core.Legacy\\Models\\Avtobus.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\Models\\Avtobus.cs",
+              "RelativeToolTip": "TicketSalesApp.Core.Legacy\\Models\\Avtobus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAxwBIAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T18:59:12.139Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 98,
+              "Title": "Bilet.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\Models\\Bilet.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core.Legacy\\Models\\Bilet.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\Models\\Bilet.cs",
+              "RelativeToolTip": "TicketSalesApp.Core.Legacy\\Models\\Bilet.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAiwBQAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T18:59:00.354Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 102,
+              "Title": "Marshut.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\Models\\Marshut.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core.Legacy\\Models\\Marshut.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\Models\\Marshut.cs",
+              "RelativeToolTip": "TicketSalesApp.Core.Legacy\\Models\\Marshut.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAIwBsAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T18:58:51.21Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 104,
+              "Title": "RouteSchedules.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\Models\\RouteSchedules.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.Core.Legacy\\Models\\RouteSchedules.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\Models\\RouteSchedules.cs",
+              "RelativeToolTip": "TicketSalesApp.Core.Legacy\\Models\\RouteSchedules.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAewCYAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T18:53:16.444Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 106,
+              "Title": "Microsoft.NET.RuntimeIdentifierInference.targets",
+              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\10.0.100-preview.1.25120.13\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.RuntimeIdentifierInference.targets",
+              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\10.0.100-preview.1.25120.13\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.RuntimeIdentifierInference.targets",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2025-04-22T15:18:46.4Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 105,
+              "Title": "TicketSalesApp.UI.LegacyForms.DX.Windows.csproj",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-04-22T15:16:26.586Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 107,
+              "Title": "Microsoft.NET.TargetFrameworkInference.targets",
+              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\10.0.100-preview.1.25120.13\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets",
+              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\10.0.100-preview.1.25120.13\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2025-04-22T15:05:47.098Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 108,
+              "Title": "TicketSalesApp.AdminServer.csproj",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj",
+              "RelativeDocumentMoniker": "TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj",
+              "RelativeToolTip": "TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-04-22T15:05:23.266Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 109,
+              "Title": "TicketSalesApp.Services.csproj",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj",
+              "RelativeDocumentMoniker": "TicketSalesApp.Services\\TicketSalesApp.Services.csproj",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj",
+              "RelativeToolTip": "TicketSalesApp.Services\\TicketSalesApp.Services.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-04-22T15:05:19.989Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 110,
+              "Title": "Microsoft.PackageDependencyResolution.targets",
+              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\10.0.100-preview.1.25120.13\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
+              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\10.0.100-preview.1.25120.13\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2025-04-22T14:37:38.652Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 111,
+              "Title": "frmSalesManagement.Designer.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmSalesManagement.Designer.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmSalesManagement.Designer.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmSalesManagement.Designer.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmSalesManagement.Designer.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAwwCEAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T11:31:19.885Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 112,
+              "Title": "frmTicketManagement.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmTicketManagement.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmTicketManagement.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmTicketManagement.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmTicketManagement.cs",
+              "ViewState": "AgIAAAsBAAAAAAAAAAAswBkBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-20T10:47:54.866Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 113,
+              "Title": "frmIncomeReport.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmIncomeReport.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmIncomeReport.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmIncomeReport.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmIncomeReport.cs",
+              "ViewState": "AgIAALoAAAAAAAAAAAAqwM4AAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-20T10:47:39.217Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 114,
+              "Title": "frmMaintenanceManagement.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmMaintenanceManagement.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmMaintenanceManagement.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmMaintenanceManagement.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmMaintenanceManagement.cs",
+              "ViewState": "AgIAAPQAAAAAAAAAAAAUwAMBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T12:53:19.903Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 115,
+              "Title": "frmRouteSchedulesManagement.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmRouteSchedulesManagement.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmRouteSchedulesManagement.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmRouteSchedulesManagement.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmRouteSchedulesManagement.cs",
+              "ViewState": "AgIAAHwAAAAAAAAAAAAWwOUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T12:48:04.536Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 116,
+              "Title": "frmBusManagement.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmBusManagement.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmBusManagement.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmBusManagement.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmBusManagement.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAgwA4AAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T11:31:23.518Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 96,
+              "Title": "frmRouteManagement.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmRouteManagement.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmRouteManagement.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmRouteManagement.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmRouteManagement.cs",
+              "ViewState": "AgIAADIBAAAAAAAAAAAmwDkBAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T11:31:12.413Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 118,
+              "Title": "frmLogin.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmLogin.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmLogin.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmLogin.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmLogin.cs",
+              "ViewState": "AgIAAEoAAAAAAAAAACBjwGMAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T10:43:04.438Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 117,
+              "Title": "frmLogin.cs [Design]",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmLogin.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmLogin.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\frmLogin.cs [Design]",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\frmLogin.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T10:31:35.175Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 121,
+              "Title": "SearchResultsViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Avalonia\\ViewModels\\SearchResultsViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Avalonia\\ViewModels\\SearchResultsViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Avalonia\\ViewModels\\SearchResultsViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Avalonia\\ViewModels\\SearchResultsViewModel.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAACBjwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T10:21:45.238Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 122,
+              "Title": "MyTicketsViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Avalonia\\ViewModels\\MyTicketsViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Avalonia\\ViewModels\\MyTicketsViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Avalonia\\ViewModels\\MyTicketsViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Avalonia\\ViewModels\\MyTicketsViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T10:21:44.013Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 119,
+              "Title": "AuthWindow.axaml",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Avalonia\\Views\\AuthWindow.axaml",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Avalonia\\Views\\AuthWindow.axaml",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Avalonia\\Views\\AuthWindow.axaml",
+              "RelativeToolTip": "TicketSalesApp.UI.Avalonia\\Views\\AuthWindow.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-04-19T10:20:59.418Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 126,
+              "Title": "AboutView.axaml",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Avalonia\\Views\\Pages\\AboutView.axaml",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Avalonia\\Views\\Pages\\AboutView.axaml",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Avalonia\\Views\\Pages\\AboutView.axaml",
+              "RelativeToolTip": "TicketSalesApp.UI.Avalonia\\Views\\Pages\\AboutView.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-04-19T10:20:55.514Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 123,
+              "Title": "MainWindowViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Avalonia\\ViewModels\\MainWindowViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Avalonia\\ViewModels\\MainWindowViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Avalonia\\ViewModels\\MainWindowViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Avalonia\\ViewModels\\MainWindowViewModel.cs",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T10:20:50.875Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 124,
+              "Title": "HelpViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Avalonia\\ViewModels\\HelpViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Avalonia\\ViewModels\\HelpViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Avalonia\\ViewModels\\HelpViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Avalonia\\ViewModels\\HelpViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T10:20:50.088Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 125,
+              "Title": "AboutViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Avalonia\\ViewModels\\AboutViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Avalonia\\ViewModels\\AboutViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Avalonia\\ViewModels\\AboutViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Avalonia\\ViewModels\\AboutViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T10:20:47.914Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 120,
+              "Title": "AuthViewModel.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Avalonia\\ViewModels\\AuthViewModel.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.Avalonia\\ViewModels\\AuthViewModel.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Avalonia\\ViewModels\\AuthViewModel.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.Avalonia\\ViewModels\\AuthViewModel.cs",
+              "ViewState": "AgIAAAsBAAAAAAAAAAAYwCEBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T10:20:14.969Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 128,
+              "Title": "Form1.Designer.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\Form1.Designer.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\Form1.Designer.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\Form1.Designer.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\Form1.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T10:19:40.023Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 127,
+              "Title": "ApiClientService.cs",
+              "DocumentMoniker": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\ApiClientService.cs",
+              "RelativeDocumentMoniker": "TicketSalesApp.UI.LegacyForms.DX.Windows\\ApiClientService.cs",
+              "ToolTip": "E:\\\u0431\u0440\u0443 \u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.LegacyForms.DX.Windows\\ApiClientService.cs",
+              "RelativeToolTip": "TicketSalesApp.UI.LegacyForms.DX.Windows\\ApiClientService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T10:19:36.02Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TicketSalesAPP.Mobile.UI.MAUI.Views.LoginForm2Page"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dx="http://schemas.devexpress.com/maui"
+    xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+    xmlns:viewModels="clr-namespace:TicketSalesAPP.Mobile.UI.MAUI.ViewModels;assembly=TicketSalesAPP.Mobile.UI.MAUI"
+    x:DataType="viewModels:LoginForm2ViewModel"
+    ios:Page.UseSafeArea="True"
+    HideSoftInputOnTapped="True"
+    Title="Sign In">
+
+    <ContentPage.BindingContext>
+        <viewModels:LoginForm2ViewModel />
+    </ContentPage.BindingContext>
+
+    <dx:DXScrollView>
+        <Grid Margin="16,24" VerticalOptions="Center">
+            <dx:DXStackLayout ItemSpacing="8" Margin="0,0,0,152">
+                <Label
+                    FontAttributes="Bold"
+                    FontFamily="Roboto Medium"
+                    FontSize="24"
+                    HorizontalTextAlignment="Center"
+                    Text="Access Your Account"
+                    TextColor="{dx:ThemeColor Key=Primary}" />
+                <Label
+                    Text="Enter your login and password"
+                    FontFamily="Roboto"
+                    FontSize="16"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,0,0,16"
+                    TextColor="{dx:ThemeColor Key=OnSurface}" />
+
+                <dx:TextEdit
+                    LabelText="Login"
+                    StartIcon="user"
+                    Text="{Binding UserName}"
+                    AutofillContentType="Username" />
+                <dx:PasswordEdit
+                    LabelText="Password"
+                    StartIcon="lock"
+                    AutofillContentType="Password"
+                    HasError="{Binding HasError}"
+                    Text="{Binding Password}"
+                    PasswordIconVisibility="Auto"
+                    IsErrorIconVisible="False"
+                    ErrorText="Password is incorrect" />
+
+                <ActivityIndicator
+                    Grid.Row="2"
+                    HeightRequest="44"
+                    IsRunning="{Binding IsBusy}" />
+
+                <dx:DXButton
+                    Grid.Row="4"
+                    Content="Sign In"
+                    Padding="0,12"
+                    Command="{Binding LoginCommand}" />
+            </dx:DXStackLayout>
+        </Grid>
+    </dx:DXScrollView>
+</ContentPage>

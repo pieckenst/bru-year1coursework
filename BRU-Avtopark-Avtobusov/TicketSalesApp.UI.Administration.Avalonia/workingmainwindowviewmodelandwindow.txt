@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:TicketSalesApp.UI.Administration.Avalonia.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:icons="using:Material.Icons.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+        x:Class="TicketSalesApp.UI.Administration.Avalonia.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Административный модуль - Автопарк автобусов"
+        WindowStartupLocation="CenterScreen"
+        Background="#1E1E1E"
+        MinWidth="1200" MinHeight="800"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1">
+
+    <!-- Main Border with Rounded Corners -->
+    <Border CornerRadius="8" BorderThickness="1" BorderBrush="#3C3C3C" ClipToBounds="True">
+        <Grid RowDefinitions="32,*">
+            <!-- Custom Title Bar -->
+            <Grid Grid.Row="0" Background="#252526">
+                <Grid ColumnDefinitions="Auto,*,Auto" Name="TitleBarDragArea">
+                    <!-- Window Controls (Left) -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="4" Margin="12,0,0,0">
+                        <Button Name="CloseButton" Classes="TitleBarButton" Width="12" Height="12" Background="#FF5F57">
+                            <ToolTip.Tip>Закрыть</ToolTip.Tip>
+                        </Button>
+                        <Button Name="MinimizeButton" Classes="TitleBarButton" Width="12" Height="12" Background="#FEBC2E">
+                            <ToolTip.Tip>Свернуть</ToolTip.Tip>
+                        </Button>
+                        <Button Name="MaximizeButton" Classes="TitleBarButton" Width="12" Height="12" Background="#28C840">
+                            <ToolTip.Tip>Развернуть</ToolTip.Tip>
+                            <Path Name="MaximizeIcon"  Width="6" Height="6" 
+                                  Data="M2048 2048v-2048h-2048v2048h2048zM1843 1843h-1638v-1638h1638v1638z"/>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- Title -->
+                    <TextBlock Grid.Column="1" Text="Автопарк автобусов - Административный модуль" 
+                             Foreground="#CCCCCC" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                    <!-- Additional Controls (Right) -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" Margin="0,0,12,0">
+                        <Button Classes="IconButton">
+                            <icons:MaterialIcon Kind="Cog" />
+                            <ToolTip.Tip>Настройки</ToolTip.Tip>
+                        </Button>
+                        <Button Classes="IconButton">
+                            <icons:MaterialIcon Kind="Help" />
+                            <ToolTip.Tip>Справка</ToolTip.Tip>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+            <!-- Main Content -->
+            <Grid Grid.Row="1" Margin="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>  <!-- Tools Sidebar -->
+                    <ColumnDefinition Width="250"/> <!-- Navigation Sidebar -->
+                    <ColumnDefinition Width="*"/>   <!-- Content Area -->
+                </Grid.ColumnDefinitions>
+
+                <!-- Tools Sidebar -->
+                <Border Grid.Column="0" Classes="IslandCard" Margin="4,4,2,4">
+                    <StackPanel Spacing="8" Margin="0,8">
+                        <Button Classes="ToolButton" Command="{Binding OpenUsersCommand}">
+                            <StackPanel>
+                                <icons:MaterialIcon Kind="AccountMultiple" />
+                                <TextBlock Text="Users" FontSize="10"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="ToolButton" Command="{Binding OpenEmployeesCommand}">
+                            <StackPanel>
+                                <icons:MaterialIcon Kind="AccountTie" />
+                                <TextBlock Text="Сотрудники" Classes="ToolButtonText"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="ToolButton" Command="{Binding OpenBusesCommand}">
+                            <StackPanel>
+                                <icons:MaterialIcon Kind="Bus" />
+                                <TextBlock Text="Автобусы" Classes="ToolButtonText"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="ToolButton" Command="{Binding OpenMaintenanceCommand}">
+                            <StackPanel>
+                                <icons:MaterialIcon Kind="Tools" />
+                                <TextBlock Text="Обслуживание" Classes="ToolButtonText"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="ToolButton" Command="{Binding OpenRoutesCommand}">
+                            <StackPanel>
+                                <icons:MaterialIcon Kind="MapMarker" />
+                                <TextBlock Text="Маршруты" Classes="ToolButtonText"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="ToolButton" Command="{Binding OpenTicketsCommand}">
+                            <StackPanel>
+                                <icons:MaterialIcon Kind="Ticket" />
+                                <TextBlock Text="Билеты" Classes="ToolButtonText"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="ToolButton" Command="{Binding OpenSalesStatisticsCommand}">
+                            <StackPanel>
+                                <icons:MaterialIcon Kind="ChartBar" />
+                                <TextBlock Text="Статистика" Classes="ToolButtonText"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+                <!-- Navigation Sidebar -->
+                <Border Grid.Column="1" Classes="IslandCard" Margin="2,4,4,4">
+                    <Grid RowDefinitions="Auto,*">
+                        <!-- Search Box -->
+                        <Border Grid.Row="0" Margin="12,8" Classes="SearchBoxContainer">
+                            <Grid ColumnDefinitions="Auto,*">
+                                <icons:MaterialIcon Grid.Column="0" Kind="Search" 
+                                                  Width="16" Height="16" Margin="8,0,0,0" 
+                                                  Foreground="{StaticResource TextSecondaryBrush}"/>
+                                <TextBox Grid.Column="1" Classes="SearchBox"
+                                        Watermark="Search..." 
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Navigation Tree -->
+                        <TreeView Grid.Row="1" Background="Transparent" BorderThickness="0" Margin="4,8,4,4">
+                            <!-- Management Section -->
+                            <TreeViewItem Header="Управление" Classes="NavTreeHeader">
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Button Command="{Binding OpenUsersCommand}" 
+                                                Classes="TreeViewButton" 
+                                                Content="Пользователи"/>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Button Command="{Binding OpenEmployeesCommand}" 
+                                                Classes="TreeViewButton" 
+                                                Content="Сотрудники"/>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Button Command="{Binding OpenJobsCommand}" 
+                                                Classes="TreeViewButton" 
+                                                Content="Должности"/>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                            </TreeViewItem>
+
+                            <!-- Transport Section -->
+                            <TreeViewItem Header="Транспорт">
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Button Command="{Binding OpenBusesCommand}" 
+                                                Classes="TreeViewButton" 
+                                                Content="Автобусы"/>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Button Command="{Binding OpenMaintenanceCommand}" 
+                                                Classes="TreeViewButton" 
+                                                Content="Техобслуживание"/>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                            </TreeViewItem>
+
+                            <!-- Routes and Tickets Section -->
+                            <TreeViewItem Header="Маршруты и билеты">
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Button Command="{Binding OpenRoutesCommand}" 
+                                                Classes="TreeViewButton" 
+                                                Content="Маршруты"/>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Button Command="{Binding OpenTicketsCommand}" 
+                                                Classes="TreeViewButton" 
+                                                Content="Билеты"/>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Button Command="{Binding OpenSalesCommand}" 
+                                                Classes="TreeViewButton" 
+                                                Content="Продажи билетов"/>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                            </TreeViewItem>
+
+                            <!-- Reports Section -->
+                            <TreeViewItem Header="Отчеты">
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Button Command="{Binding OpenIncomeReportCommand}" 
+                                                Classes="TreeViewButton" 
+                                                Content="Статистика доходов"/>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Button Command="{Binding OpenSalesStatisticsCommand}" 
+                                                Classes="TreeViewButton" 
+                                                Content="Статистика продаж"/>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                            </TreeViewItem>
+                        </TreeView>
+                    </Grid>
+                </Border>
+
+                <!-- Content Area -->
+                <Border Grid.Column="2" Classes="IslandCard" Margin="4,4,4,4">
+                    <Grid>
+                        <!-- Default Content -->
+                        <StackPanel HorizontalAlignment="Center" 
+                                   VerticalAlignment="Center" 
+                                   Spacing="20">
+                            <icons:MaterialIcon Kind="Bus" 
+                                              Width="64" Height="64" 
+                                              Foreground="{StaticResource TextSecondaryBrush}"/>
+                            <TextBlock Text="Выберите пункт меню для начала работы" 
+                                     Foreground="{StaticResource TextSecondaryBrush}" 
+                                     FontSize="18" 
+                                     HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+
+    <Window.Styles>
+        <!-- Base Colors -->
+        <Style>
+            <Style.Resources>
+                <!-- Dark Theme Colors -->
+                <Color x:Key="WindowBackgroundColor">#1E1F22</Color>
+                <Color x:Key="SidebarBackgroundColor">#2B2D30</Color>
+                <Color x:Key="BorderColor">#393B40</Color>
+                <Color x:Key="TextPrimaryColor">#DFE1E5</Color>
+                <Color x:Key="TextSecondaryColor">#A8ADBD</Color>
+                <Color x:Key="AccentColor">#4A9BFF</Color>
+                <Color x:Key="HoverOverlayColor">#FFFFFF0F</Color>
+                
+                <!-- Brushes -->
+                <SolidColorBrush x:Key="WindowBackgroundBrush" Color="{StaticResource WindowBackgroundColor}"/>
+                <SolidColorBrush x:Key="SidebarBackgroundBrush" Color="{StaticResource SidebarBackgroundColor}"/>
+                <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}"/>
+                <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimaryColor}"/>
+                <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondaryColor}"/>
+                <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}"/>
+            </Style.Resources>
+        </Style>
+
+        <!-- Island Card Style -->
+        <Style Selector="Border.IslandCard">
+            <Setter Property="Background" Value="{StaticResource SidebarBackgroundBrush}"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="BoxShadow" Value="0 2 8 0 #15000000"/>
+        </Style>
+
+        <!-- Navigation Button Style -->
+        <Style Selector="Button.NavButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontFamily" Value="Inter"/>
+        </Style>
+
+        <Style Selector="Button.NavButton:pointerover">
+            <Setter Property="Background" Value="{DynamicResource HoverOverlayColor}"/>
+        </Style>
+
+        <!-- Keep existing TitleBarButton style but update colors -->
+        <Style Selector="Button.TitleBarButton">
+            <Setter Property="Width" Value="12"/>
+            <Setter Property="Height" Value="12"/>
+            <Setter Property="Margin" Value="4,0"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderThickness="0"
+                            CornerRadius="6">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <!-- Keep existing TreeViewButton style but update colors -->
+        <Style Selector="Button.TreeViewButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="4,2"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontFamily" Value="Inter"/>
+        </Style>
+
+        <Style Selector="Button.TreeViewButton:pointerover">
+            <Setter Property="Background" Value="{DynamicResource HoverOverlayColor}"/>
+        </Style>
+
+        <!-- Icon Button Styles -->
+        <Style Selector="Button.IconButton">
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+
+        <Style Selector="Button.IconButton:pointerover">
+            <Setter Property="Background" Value="#3D3D3D"/>
+        </Style>
+
+        <Style Selector="Button.IconButton > icons|MaterialIcon">
+            <Setter Property="Width" Value="16"/>
+            <Setter Property="Height" Value="16"/>
+            <Setter Property="Foreground" Value="#CCCCCC"/>
+        </Style>
+
+        <!-- Tool Button Styles -->
+        <Style Selector="Button.ToolButton">
+            <Setter Property="Width" Value="48"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="4"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style Selector="Button.ToolButton:pointerover">
+            <Setter Property="Background" Value="#3D3D3D"/>
+        </Style>
+
+        <Style Selector="Button.ToolButton > StackPanel">
+            <Setter Property="Spacing" Value="4"/>
+        </Style>
+
+        <Style Selector="Button.ToolButton icons|MaterialIcon">
+            <Setter Property="Width" Value="24"/>
+            <Setter Property="Height" Value="24"/>
+            <Setter Property="Foreground" Value="#CCCCCC"/>
+        </Style>
+
+        <Style Selector="Button.ToolButton TextBlock">
+            <Setter Property="Foreground" Value="#CCCCCC"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+        <!-- Search Box Styles -->
+        <Style Selector="TextBox.SearchBox">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#CCCCCC"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- TreeView Styles -->
+        <Style Selector="TreeViewItem">
+            <Setter Property="IsExpanded" Value="True"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Foreground" Value="#CCCCCC"/>
+        </Style>
+
+        <Style Selector="TreeViewItem /template/ Border#PART_LayoutRoot">
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+
+        <Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="#007ACC"/>
+        </Style>
+
+        <Style Selector="TreeViewItem:pointerover /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="#2D2D2D"/>
+        </Style>
+
+        <!-- Add to Window.Styles -->
+        <Style Selector="Border.SearchBoxContainer">
+            <Setter Property="Background" Value="#32333A"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="4"/>
+        </Style>
+
+        <Style Selector="TreeViewItem.NavTreeHeader">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+        </Style>
+
+        <Style Selector="TreeViewItem.NavTreeItem">
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="0,2"/>
+        </Style>
+
+        <Style Selector="TreeViewItem.NavTreeItem:selected /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="{StaticResource AccentColor}"/>
+            <Setter Property="Opacity" Value="0.2"/>
+        </Style>
+
+        <Style Selector="TreeViewItem.NavTreeItem:pointerover /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="{StaticResource HoverOverlayColor}"/>
+        </Style>
+    </Window.Styles>
+</Window>
+
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
+using Avalonia.Media;
+using System;
+using Material.Icons;
+
+namespace TicketSalesApp.UI.Administration.Avalonia.Views
+{
+    public partial class MainWindow : Window
+    {
+        private Button? _minimizeButton;
+        private Button? _maximizeButton;
+        private Path? _maximizeIcon;
+        private Button? _closeButton;
+        private Grid? _titleBarDragArea;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+#if DEBUG
+            this.AttachDevTools();
+#endif
+            SetupTitleBar();
+            SubscribeToWindowState();
+            AddHandler(DragDrop.DropEvent, Drop);
+            AddHandler(DragDrop.DragOverEvent, DragOver);
+        }
+
+        private void InitializeComponent()
+        {
+            AvaloniaXamlLoader.Load(this);
+        }
+
+        private void SetupTitleBar()
+        {
+            _minimizeButton = this.FindControl<Button>("MinimizeButton");
+            _maximizeButton = this.FindControl<Button>("MaximizeButton");
+            _maximizeIcon = this.FindControl<Path>("MaximizeIcon");
+            _closeButton = this.FindControl<Button>("CloseButton");
+            _titleBarDragArea = this.FindControl<Grid>("TitleBarDragArea");
+
+            if (_minimizeButton != null)
+                _minimizeButton.Click += (_, _) => WindowState = WindowState.Minimized;
+
+            if (_maximizeButton != null)
+                _maximizeButton.Click += (_, _) => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+
+            if (_closeButton != null)
+                _closeButton.Click += (_, _) => Close();
+
+            if (_titleBarDragArea != null)
+            {
+                _titleBarDragArea.PointerPressed += TitleBarDragArea_PointerPressed;
+                _titleBarDragArea.DoubleTapped += TitleBarDragArea_DoubleTapped;
+            }
+        }
+
+        private void TitleBarDragArea_PointerPressed(object? sender, PointerPressedEventArgs e)
+        {
+            if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+            {
+                BeginMoveDrag(e);
+            }
+        }
+
+        private void TitleBarDragArea_DoubleTapped(object? sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
+
+        private void SubscribeToWindowState()
+        {
+            this.GetObservable(WindowStateProperty).Subscribe(s =>
+            {
+                if (s != WindowState.Maximized)
+                {
+                    if (_maximizeIcon != null)
+                        _maximizeIcon.Data = Geometry.Parse("M2048 2048v-2048h-2048v2048h2048zM1843 1843h-1638v-1638h1638v1638z");
+                    
+                    if (_maximizeButton != null)
+                        _maximizeButton.SetValue(ToolTip.TipProperty, "Развернуть");
+                        
+                    Padding = new Thickness(0, 0, 0, 0);
+                }
+                if (s == WindowState.Maximized)
+                {
+                    if (_maximizeIcon != null)
+                        _maximizeIcon.Data = Geometry.Parse("M2048 1638h-410v410h-1638v-1638h410v-410h1638v1638zm-614-1024h-1229v1229h1229v-1229zm409-409h-1229v205h1024v1024h205v-1229z");
+                    
+                    if (_maximizeButton != null)
+                        _maximizeButton.SetValue(ToolTip.TipProperty, "Восстановить");
+                        
+                    Padding = new Thickness(7, 7, 7, 7);
+                }
+            });
+        }
+
+        private void DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.Contains(DataFormats.Text))
+            {
+                e.DragEffects = DragDropEffects.Move;
+            }
+        }
+
+        private void Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.Contains(DataFormats.Text))
+            {
+                var window = e.Data.Get(DataFormats.Text) as Window;
+                if (window != null)
+                {
+                    var vm = DataContext as ViewModels.MainWindowViewModel;
+                    if (vm != null)
+                    {
+                        // Extract content and create tab
+                        var content = window.Content as Control;
+                        window.Content = null;
+                        window.Hide();
+                        
+                        vm.AddTab(
+                            window.Title,
+                            MaterialIconKind.Window,
+                            content,
+                            window
+                        );
+                    }
+                }
+            }
+        }
+    }
+}
+
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
+using Avalonia.Media;
+using System;
+using Material.Icons;
+
+namespace TicketSalesApp.UI.Administration.Avalonia.Views
+{
+    public partial class MainWindow : Window
+    {
+        private Button? _minimizeButton;
+        private Button? _maximizeButton;
+        private Path? _maximizeIcon;
+        private Button? _closeButton;
+        private Grid? _titleBarDragArea;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+#if DEBUG
+            this.AttachDevTools();
+#endif
+            SetupTitleBar();
+            SubscribeToWindowState();
+            AddHandler(DragDrop.DropEvent, Drop);
+            AddHandler(DragDrop.DragOverEvent, DragOver);
+        }
+
+        private void InitializeComponent()
+        {
+            AvaloniaXamlLoader.Load(this);
+        }
+
+        private void SetupTitleBar()
+        {
+            _minimizeButton = this.FindControl<Button>("MinimizeButton");
+            _maximizeButton = this.FindControl<Button>("MaximizeButton");
+            _maximizeIcon = this.FindControl<Path>("MaximizeIcon");
+            _closeButton = this.FindControl<Button>("CloseButton");
+            _titleBarDragArea = this.FindControl<Grid>("TitleBarDragArea");
+
+            if (_minimizeButton != null)
+                _minimizeButton.Click += (_, _) => WindowState = WindowState.Minimized;
+
+            if (_maximizeButton != null)
+                _maximizeButton.Click += (_, _) => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+
+            if (_closeButton != null)
+                _closeButton.Click += (_, _) => Close();
+
+            if (_titleBarDragArea != null)
+            {
+                _titleBarDragArea.PointerPressed += TitleBarDragArea_PointerPressed;
+                _titleBarDragArea.DoubleTapped += TitleBarDragArea_DoubleTapped;
+            }
+        }
+
+        private void TitleBarDragArea_PointerPressed(object? sender, PointerPressedEventArgs e)
+        {
+            if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+            {
+                BeginMoveDrag(e);
+            }
+        }
+
+        private void TitleBarDragArea_DoubleTapped(object? sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
+
+        private void SubscribeToWindowState()
+        {
+            this.GetObservable(WindowStateProperty).Subscribe(s =>
+            {
+                if (s != WindowState.Maximized)
+                {
+                    if (_maximizeIcon != null)
+                        _maximizeIcon.Data = Geometry.Parse("M2048 2048v-2048h-2048v2048h2048zM1843 1843h-1638v-1638h1638v1638z");
+                    
+                    if (_maximizeButton != null)
+                        _maximizeButton.SetValue(ToolTip.TipProperty, "Развернуть");
+                        
+                    Padding = new Thickness(0, 0, 0, 0);
+                }
+                if (s == WindowState.Maximized)
+                {
+                    if (_maximizeIcon != null)
+                        _maximizeIcon.Data = Geometry.Parse("M2048 1638h-410v410h-1638v-1638h410v-410h1638v1638zm-614-1024h-1229v1229h1229v-1229zm409-409h-1229v205h1024v1024h205v-1229z");
+                    
+                    if (_maximizeButton != null)
+                        _maximizeButton.SetValue(ToolTip.TipProperty, "Восстановить");
+                        
+                    Padding = new Thickness(7, 7, 7, 7);
+                }
+            });
+        }
+
+        private void DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.Contains(DataFormats.Text))
+            {
+                e.DragEffects = DragDropEffects.Move;
+            }
+        }
+
+        private void Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.Contains(DataFormats.Text))
+            {
+                var window = e.Data.Get(DataFormats.Text) as Window;
+                if (window != null)
+                {
+                    var vm = DataContext as ViewModels.MainWindowViewModel;
+                    if (vm != null)
+                    {
+                        // Extract content and create tab
+                        var content = window.Content as Control;
+                        window.Content = null;
+                        window.Hide();
+                        
+                        vm.AddTab(
+                            window.Title,
+                            MaterialIconKind.Window,
+                            content,
+                            window
+                        );
+                    }
+                }
+            }
+        }
+    }
+}

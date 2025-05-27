@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TicketSalesAPP.Mobile.UI.MAUI.Views.ItemEditing3Page"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dx="http://schemas.devexpress.com/maui"
+    xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+    Title="Edit Product"
+    ios:Page.UseSafeArea="True"
+    HideSoftInputOnTapped="True">
+
+    <ContentPage.Resources>
+        <Style x:Key="HeaderText" TargetType="Label">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontFamily" Value="Roboto Medium" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="{dx:ThemeColor Key=OnSurface}" />
+        </Style>
+    </ContentPage.Resources>
+
+    <dx:DXScrollView>
+        <dx:DXStackLayout Margin="16,0" ItemSpacing="16">
+            <Label
+                Margin="0,16,0,0"
+                Style="{StaticResource HeaderText}"
+                Text="Name and Description" />
+            <dx:TextEdit Text="Product name" />
+            <dx:MultilineEdit MinLineCount="4" PlaceholderText="Description" />
+
+            <Label
+                Margin="0,16,0,0"
+                Style="{StaticResource HeaderText}"
+                Text="Add a Tag" />
+            <dx:ChipGroup
+                Padding="0"
+                BoxMode="Filled"
+                HorizontalSpacing="12"
+                VerticalSpacing="12">
+                <dx:ChipGroup.ItemsSource>
+                    <x:Array Type="{x:Type TypeName=x:String}">
+                        <x:String>Perfume</x:String>
+                        <x:String>Aroma</x:String>
+                        <x:String>Bergamot</x:String>
+                        <x:String>Lavender</x:String>
+                        <x:String>Special</x:String>
+                        <x:String>Sale</x:String>
+                    </x:Array>
+                </dx:ChipGroup.ItemsSource>
+            </dx:ChipGroup>
+            <dx:TextEdit EndIcon="add" PlaceholderText="Add New Tag" />
+
+            <Label
+                Margin="0,16,0,0"
+                Style="{StaticResource HeaderText}"
+                Text="Price" />
+            <dx:TextEdit Keyboard="Numeric" PlaceholderText="Retail Price" />
+            <dx:TextEdit Keyboard="Numeric" PlaceholderText="Sale Price" />
+
+            <dx:DXButton
+                Margin="0,8"
+                ButtonType="Accent"
+                Content="Save" />
+        </dx:DXStackLayout>
+    </dx:DXScrollView>
+</ContentPage>

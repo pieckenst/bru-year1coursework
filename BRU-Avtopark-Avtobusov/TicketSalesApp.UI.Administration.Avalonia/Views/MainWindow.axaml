@@ -1,0 +1,301 @@
+<Window x:Class="TicketSalesApp.UI.Administration.Avalonia.Views.MainWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dock="using:ReDocking"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+        xmlns:viewModels="clr-namespace:TicketSalesApp.UI.Administration.Avalonia.ViewModels"
+        Title="TicketSalesApp.UI.Administration.Avalonia"
+		xmlns:icons="using:Material.Icons.Avalonia"
+		xmlns:wnd="clr-namespace:FluentAvalonia.UI.Windowing;assembly=FluentAvalonia"
+		xmlns:commonControls="clr-namespace:Classic.CommonControls;assembly=Classic.CommonControls.Avalonia"
+        d:DesignHeight="850"
+        d:DesignWidth="1350"
+        x:DataType="viewModels:MainWindowViewModel"
+        mc:Ignorable="d"
+		ExtendClientAreaChromeHints="NoChrome">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ControlTheme x:Key="SettingsButton"
+                         
+                          TargetType="Button">
+                <Setter Property="Width" Value="32" />
+                <Setter Property="Height" Value="32" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+            </ControlTheme>
+            <DataTemplate x:Key="LeftSideBarButtonDataTemplate" x:DataType="viewModels:ToolWindowViewModel">
+                <dock:SideBarButton DisplayMode="{Binding DisplayMode.Value}"
+                                    IsChecked="{Binding IsSelected.Value}"
+                                    ToolTip.Placement="Right"
+                                    ToolTip.ShowDelay="200"
+                                    ToolTip.Tip="{Binding Name.Value}"
+                                    ToolTip.VerticalOffset="0">
+                    <ui:FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="{Binding Icon.Value}" />
+                </dock:SideBarButton>
+            </DataTemplate>
+            <DataTemplate x:Key="RightSideBarButtonDataTemplate" x:DataType="viewModels:ToolWindowViewModel">
+                <dock:SideBarButton DisplayMode="{Binding DisplayMode.Value}"
+                                    IsChecked="{Binding IsSelected.Value}"
+                                    ToolTip.Placement="Left"
+                                    ToolTip.ShowDelay="200"
+                                    ToolTip.Tip="{Binding Name.Value}"
+                                    ToolTip.VerticalOffset="0">
+                    <ui:FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="{Binding Icon.Value}" />
+                </dock:SideBarButton>
+            </DataTemplate>
+            <DataTemplate x:Key="ToolContentDataTemplate" x:DataType="viewModels:ToolWindowViewModel">
+                <ContentControl Content="{Binding Content.Value}" />
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.Styles>
+        <Style Selector="ui|TabView">
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style Selector="Button.TitleBarButton">
+            <Setter Property="Width" Value="46" />
+            <Setter Property="Height" Value="35" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        </Style>
+        <Style Selector="Button.TitleBarButton:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+        </Style>
+        <Style Selector="Button.TitleBarButton:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}" />
+        </Style>
+        <Style Selector="Button.TitleBarButton[IsEnabled=false] /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
+        
+    </Window.Styles>
+    <Grid RowDefinitions="45,1,*">
+		<!-- Custom Title Bar -->
+		<Grid Name="TitleBar" Grid.Row="0" Background="#252526">
+			<Grid ColumnDefinitions="Auto,*,Auto" Name="TitleBarDragArea">
+				<!-- Left Section: Window Controls -->
+				<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="4" Margin="5,0,0,0">
+					
+					
+
+					<!-- Hamburger Menu -->
+					<Button Name="HamburgerButton" Classes="TitleBarButton" Width="32" Height="32"
+							Background="Transparent" Margin="10,0,5,0">
+						<icons:MaterialIcon Kind="Menu" Width="16" Height="16" Foreground="#CCCCCC"/>
+						<Button.Flyout>
+							<Flyout Placement="BottomEdgeAlignedLeft" ShowMode="TransientWithDismissOnPointerMoveAway">
+								<StackPanel Width="200" Height="250" Spacing="8"> 
+									<!-- Main Actions -->
+									<Button Classes="MenuButton" Name="NewProjectButton">
+										<StackPanel Orientation="Horizontal" >
+											<icons:MaterialIcon Kind="Plus" Margin="0,0,8,0"/>
+											<TextBlock Text="Новый проект"/>
+										</StackPanel>
+									</Button>
+									<Button Classes="MenuButton" Name="OpenProjectButton">
+										<StackPanel Orientation="Horizontal">
+											<icons:MaterialIcon Kind="FolderOpen" Margin="0,0,8,0"/>
+											<TextBlock Text="Открыть проект"/>
+										</StackPanel>
+									</Button>
+									<Separator Margin="0,8"/>
+									<!-- Settings & Help -->
+									<Button Classes="MenuButton" Name="SettingsButton" Margin="0,8,0,0">
+										<StackPanel Orientation="Horizontal">
+											<icons:MaterialIcon Kind="Cog" Margin="0,0,8,0"/>
+											<TextBlock Text="Настройки"/>
+										</StackPanel>
+									</Button>
+									<Button Classes="MenuButton" Name="HelpButton" Margin="0,8,0,0">
+										<StackPanel Orientation="Horizontal">
+											<icons:MaterialIcon Kind="Help" Margin="0,0,8,0"/>
+											<TextBlock Text="Справка"/>
+										</StackPanel>
+									</Button>
+									<Button Classes="MenuButton" Name="AboutButton" Margin="0,8,0,0">
+										<StackPanel Orientation="Horizontal">
+											<icons:MaterialIcon Kind="Information" Margin="0,0,8,0"/>
+											<TextBlock Text="О программе"/>
+										</StackPanel>
+									</Button>
+								</StackPanel>
+							</Flyout>
+							
+						</Button.Flyout>
+					</Button>
+
+					<Button Classes="IconButton" Name="QuickNewButton">
+						<icons:MaterialIcon Kind="Plus" />
+						<ToolTip.Tip>Новый проект</ToolTip.Tip>
+					</Button>
+					<Button Classes="IconButton" Name="QuickSearchButton">
+						<icons:MaterialIcon Kind="Search" />
+						<ToolTip.Tip>Поиск</ToolTip.Tip>
+					</Button>
+				</StackPanel>
+
+				<!-- Center: Title -->
+				<TextBlock Grid.Column="1" Text="Автопарк автобусов - Административный модуль"
+						 Foreground="#CCCCCC" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+				<!-- Right: Quick Actions -->
+				<StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" Margin="0,0,12,0">
+					
+
+					<!-- Window Control Buttons -->
+					
+					<Button Name="MinimizeButton" Classes="TitleBarButton" Width="15" Height="15" Background="#FEBC2E">
+						<ToolTip.Tip>Свернуть</ToolTip.Tip>
+					</Button>
+					<Button Name="MaximizeButton" Classes="TitleBarButton" Width="15" Height="15" Background="#28C840">
+						<ToolTip.Tip>Развернуть</ToolTip.Tip>
+						<Path Name="MaximizeIcon" Width="6" Height="6"
+							  Data="M2048 2048v-2048h-2048v2048h2048zM1843 1843h-1638v-1638h1638v1638z"/>
+					</Button>
+					<Button Name="CloseButton" Classes="TitleBarButton" Width="15" Height="15" Background="#FF5F57">
+						<ToolTip.Tip>Закрыть</ToolTip.Tip>
+					</Button>
+				</StackPanel>
+			</Grid>
+		</Grid>
+        <Border Grid.Row="1" Background="{DynamicResource TicketSalesApp.UI.Administration.AvaloniaDividerBrush}" />
+		
+		
+		<dock:ReDockHost Grid.Row="2"
+                         ButtonDisplayModeChanged="OnSideBarButtonDisplayModeChanged"
+                         ButtonFlyoutRequested="OnButtonFlyoutRequested"
+                         ButtonMove="OnSideBarButtonDrop"
+                         IsFloatingEnabled="True">
+            <dock:ReDockHost.DockAreas>
+                <dock:DockArea LocalizedName="Left"
+                               Location="LeftUpperBottom"
+                               SideBar="LeftSideBar"
+                               Target="TopContent"
+                               View="LeftTopBottomArea" />
+                <dock:DockArea LocalizedName="Left Bottom"
+                               Location="LeftLowerTop"
+                               SideBar="LeftSideBar"
+                               Target="BottomContent"
+                               View="LeftTopBottomArea" />
+
+                <dock:DockArea LocalizedName="Right"
+                               Location="RightUpperBottom"
+                               SideBar="RightSideBar"
+                               Target="TopContent"
+                               View="RightTopBottomArea" />
+
+                <dock:DockArea LocalizedName="Right Bottom"
+                               Location="RightLowerTop"
+                               SideBar="RightSideBar"
+                               Target="BottomContent"
+                               View="RightTopBottomArea" />
+
+                <dock:DockArea LocalizedName="TopLeft"
+                               Location="LeftUpperTop"
+                               SideBar="LeftSideBar"
+                               Target="LeftContent"
+                               View="TopLeftRightArea" />
+                <dock:DockArea LocalizedName="TopRight"
+                               Location="RightUpperTop"
+                               SideBar="RightSideBar"
+                               Target="RightContent"
+                               View="TopLeftRightArea" />
+                <dock:DockArea LocalizedName="BottomLeft"
+                               Location="LeftLowerBottom"
+                               SideBar="LeftSideBar"
+                               Target="LeftContent"
+                               View="BottomLeftRightArea" />
+                <dock:DockArea LocalizedName="BottomRight"
+                               Location="RightLowerBottom"
+                               SideBar="RightSideBar"
+                               Target="RightContent"
+                               View="BottomLeftRightArea" />
+            </dock:ReDockHost.DockAreas>
+            <Grid ColumnDefinitions="40,*,40">
+                <dock:SideBar Name="LeftSideBar"
+                              BorderBrush="{DynamicResource TicketSalesApp.UI.Administration.AvaloniaDividerBrush}"
+                              BorderThickness="0,0,1,0"
+                              ItemTemplate="{StaticResource LeftSideBarButtonDataTemplate}"
+                              Location="Left"
+                              LowerBottomToolsSource="{Binding LeftLowerBottomTools}"
+                              LowerTopToolsSource="{Binding LeftLowerTopTools}"
+                              UpperBottomToolsSource="{Binding LeftUpperBottomTools}"
+                              UpperTopToolsSource="{Binding LeftUpperTopTools}" />
+
+                <dock:ReDock Name="LeftRightArea" Grid.Column="1">
+                    <dock:ReDock.LeftContent>
+                        <dock:VerticallySplittedView Name="LeftTopBottomArea"
+                                                     BottomContent="{Binding SelectedLeftLowerTopTool.Value}"
+                                                     BottomContentTemplate="{StaticResource ToolContentDataTemplate}"
+                                                     TopContent="{Binding SelectedLeftUpperBottomTool.Value}"
+                                                     TopContentTemplate="{StaticResource ToolContentDataTemplate}" />
+                    </dock:ReDock.LeftContent>
+                    <dock:ReDock.RightContent>
+                        <dock:VerticallySplittedView Name="RightTopBottomArea"
+                                                     BottomContent="{Binding SelectedRightLowerTopTool.Value}"
+                                                     BottomContentTemplate="{StaticResource ToolContentDataTemplate}"
+                                                     TopContent="{Binding SelectedRightUpperBottomTool.Value}"
+                                                     TopContentTemplate="{StaticResource ToolContentDataTemplate}" />
+                    </dock:ReDock.RightContent>
+                    <dock:VerticallySplittedView>
+                        <dock:VerticallySplittedView.TopContent>
+                            <dock:ReDock Name="TopLeftRightArea"
+                                         LeftContent="{Binding SelectedLeftUpperTopTool.Value}"
+                                         RightContent="{Binding SelectedRightUpperTopTool.Value}">
+                                <dock:ReDock.LeftContentTemplate>
+                                    <DataTemplate x:DataType="viewModels:ToolWindowViewModel">
+                                        <ContentControl Content="{Binding Content.Value}" />
+                                    </DataTemplate>
+                                </dock:ReDock.LeftContentTemplate>
+                                <dock:ReDock.RightContentTemplate>
+                                    <DataTemplate x:DataType="viewModels:ToolWindowViewModel">
+                                        <ContentControl Content="{Binding Content.Value}" />
+                                    </DataTemplate>
+                                </dock:ReDock.RightContentTemplate>
+                                <ui:TabView Name="MainTabView">
+                                    <ui:TabViewItem Header="Добро пожаловать">
+										
+                                        <TextBlock Text="Нажмите на одну из боковых панелей чтобы начать работу"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+                                    </ui:TabViewItem>
+                                </ui:TabView>
+                            </dock:ReDock>
+                        </dock:VerticallySplittedView.TopContent>
+                        <dock:VerticallySplittedView.BottomContent>
+                            <dock:HorizontallySplittedView Name="BottomLeftRightArea"
+                                                           LeftContent="{Binding SelectedLeftLowerBottomTool.Value}"
+                                                           RightContent="{Binding SelectedRightLowerBottomTool.Value}">
+                                <dock:HorizontallySplittedView.LeftContentTemplate>
+                                    <DataTemplate x:DataType="viewModels:ToolWindowViewModel">
+                                        <ContentControl Content="{Binding Content.Value}" />
+                                    </DataTemplate>
+                                </dock:HorizontallySplittedView.LeftContentTemplate>
+                                <dock:HorizontallySplittedView.RightContentTemplate>
+                                    <DataTemplate x:DataType="viewModels:ToolWindowViewModel">
+                                        <ContentControl Content="{Binding Content.Value}" />
+                                    </DataTemplate>
+                                </dock:HorizontallySplittedView.RightContentTemplate>
+                            </dock:HorizontallySplittedView>
+                        </dock:VerticallySplittedView.BottomContent>
+                    </dock:VerticallySplittedView>
+                </dock:ReDock>
+                <dock:SideBar Name="RightSideBar"
+                              Grid.Column="2"
+                              BorderBrush="{DynamicResource TicketSalesApp.UI.Administration.AvaloniaDividerBrush}"
+                              BorderThickness="1,0,0,0"
+                              ItemTemplate="{StaticResource RightSideBarButtonDataTemplate}"
+                              Location="Right"
+                              LowerBottomToolsSource="{Binding RightLowerBottomTools}"
+                              LowerTopToolsSource="{Binding RightLowerTopTools}"
+                              UpperBottomToolsSource="{Binding RightUpperBottomTools}"
+                              UpperTopToolsSource="{Binding RightUpperTopTools}" />
+            </Grid>
+        </dock:ReDockHost>
+    </Grid>
+</Window>

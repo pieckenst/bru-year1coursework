@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TicketSalesAPP.Mobile.UI.MAUI.Views.WebApiEditPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dx="http://schemas.devexpress.com/maui"
+    xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+    ios:Page.UseSafeArea="true"
+    Title="Edit Page">
+
+    <dx:DXScrollView>
+        <dx:DXStackLayout ItemSpacing="24" Margin="16">
+            <dx:DXStackLayout ItemSpacing="8">
+                <dx:DateEdit LabelText="Date" Date="{Binding Item.OrderDate}" />
+                <dx:MultilineEdit LabelText="Comment" Text="{Binding Item.Comment}" />
+                <dx:NumericEdit
+                    LabelText="Price"
+                    Value="{Binding Item.Price}"
+                    StepValue="100"
+                    IsUpDownIconVisible="True" />
+            </dx:DXStackLayout>
+
+            <dx:DXButton Content="Save" Command="{Binding SaveCommand}" />
+        </dx:DXStackLayout>
+    </dx:DXScrollView>
+</ContentPage>

@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "DynamicForms.Library.Core/1.1.2": {
+        "runtime": {
+          "DynamicForms.Library.Core.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "DynamicForms.Library.Core/1.1.2": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

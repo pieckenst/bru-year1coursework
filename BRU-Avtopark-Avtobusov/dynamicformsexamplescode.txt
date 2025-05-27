@@ -1,0 +1,2989 @@
+2
+
+Is there a way to create a WPF UI using a JSON Schema? I am aware that it is possible to convert it into a HTML form with the help of AngularJS and others. But looking for a way to create WPF out of the same has not been fruitful.
+
+There exists a Source by Rico Suter on how to create a Visual Json Editor. My requirement is slightly different from what is given here. In my case, I want to create WPF controls based on the schema and the properties mentioned within the schema. And, with the help of the UI, I want to be able to create as many JSON objects by entering the values into the UI controls.
+
+For example, let's consider the below JSON schema as a sample.
+
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {},
+  "id": "http://example.com/example.json",
+  "properties": {
+    "checked": {
+      "default": false,
+      "description": "An explanation about the purpose of this instance.",
+      "id": "/properties/checked",
+      "title": "The Checked Schema",
+      "type": "boolean"
+    },
+    "dimensions": {
+      "id": "/properties/dimensions",
+      "properties": {
+        "height": {
+          "default": 10,
+          "description": "An explanation about the purpose of this instance.",
+          "id": "/properties/dimensions/properties/height",
+          "title": "The Height Schema",
+          "type": "integer"
+        },
+        "width": {
+          "default": 5,
+          "description": "An explanation about the purpose of this instance.",
+          "id": "/properties/dimensions/properties/width",
+          "title": "The Width Schema",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "id": {
+      "default": 1,
+      "description": "An explanation about the purpose of this instance.",
+      "id": "/properties/id",
+      "title": "The Id Schema",
+      "type": "integer"
+    },
+    "name": {
+      "default": "A green door",
+      "description": "An explanation about the purpose of this instance.",
+      "id": "/properties/name",
+      "title": "The Name Schema",
+      "type": "string"
+    },
+    "price": {
+      "default": 12.5,
+      "description": "An explanation about the purpose of this instance.",
+      "id": "/properties/price",
+      "title": "The Price Schema",
+      "type": "number"
+    },
+    "tags": {
+      "id": "/properties/tags",
+      "items": {
+        "default": "home",
+        "description": "An explanation about the purpose of this instance.",
+        "id": "/properties/tags/items",
+        "title": "The Empty Schema",
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "type": "object"
+}
+I want to be able to display a checkbox for the checked property. Similarly, a GroupBox or something with 2 TextBox controls within to enter the dimensions(height and width). This UI should enable the user to enter desired values based on which a JSON object can be generated. Something like,
+
+{
+  "checked": false,
+  "dimensions": {
+    "width": 5,
+    "height": 10
+  },
+  "id": 1,
+  "name": "A green door",
+  "price": 12.5,
+  "tags": [
+    "home",
+    "green"
+  ]
+}
+Currently, I am creating a list of JSchema objects and and deserializing every property into type JSchema and then adding it to the list. And thereafter, I am trying to create controls for the same. This is just messy and I have not completely reached my goal. Yet I do not feel that I will be satisfied with the end result. If you could suggest a way to achieve the same it would be of great help. Thanks.
+
+Samples taken from
+
+here.
+
+c#jsonwpfjsonschema
+Share
+Improve this question
+Follow
+edited Sep 19, 2017 at 12:55
+dymanoid's user avatar
+dymanoid
+15.2k44 gold badges4040 silver badges6767 bronze badges
+asked Sep 19, 2017 at 12:53
+Akshatha's user avatar
+Akshatha
+64211 gold badge1212 silver badges2929 bronze badges
+2
+"I want to be able to display a checkbox for the checked property" - cool idea, how far are you with implementing it? – 
+Sinatr
+ CommentedSep 19, 2017 at 12:55
+1
+Why don't you use any library to convert the json data to normal model class that you will use to make your view model. e.g. Newtonsoft.json – 
+Mahesh Malpani
+ CommentedSep 19, 2017 at 12:59
+1
+It is certainly possible to do this, but there is nothing built in, and it won't be simple to implement. The basic idea would be to recursively walk through the JSON, and programatically instantiate controls, set properties on them, then add them to whatever the parent item currently is. It could be done with some creative use of MVVM and data binding too. – 
+Bradley Uffner
+ CommentedSep 19, 2017 at 13:02
+@MaheshMalpani I do not have any json data . All I have is the schema. – 
+Akshatha
+ CommentedSep 19, 2017 at 23:50
+@BradleyUffner At the moment, I am recursively going through the json and creating the controls. It is just that it is making everything including the UI quite messy. Which is why I needed to know if there is anything already existing. – 
+Akshatha
+ CommentedSep 19, 2017 at 23:52
+Add a comment
+2 Answers
+Sorted by:
+
+Highest score (default)
+Не нашли ответ? Задайте вопрос на Stack Overflow на русском.
+
+2
+
+So, it is certainly possible. What you would need to do is define the deserialization routine to make List<T>/ObservableCollection<T> objects that implement INotifyPropeertyChanged. You could do this via Newtonsoft Json or write a JSchema to ViewModel converter
+
+Next, you can make a ContentControl or even a Listbox/StackPanel bound to this enumerable, like a Master Detail view, and the details view can implement a Property Grid on a selected object. Example of Property grid.
+
+Make sure all your bindings are TwoWay to preserve changes you make. Additionally, you could implement the OnSelectionChanged event on your StackPanel to serialize the changes.
+
+Resources
+Master detail view
+
+Property grid source
+
+Share
+Improve this answer
+Follow
+answered Sep 19, 2017 at 13:15
+Suhas Anjaria's user avatar
+Suhas Anjaria
+12011 silver badge1111 bronze badges
+Add a comment
+1
+
+I wanted to do same thing for UWP, but didn't find a working solution that I could use. Besides PropertyGrid mentioned above I also found DataGrid from Windows Community Toolkit and DataForm from Telerik. Using those still would require converting Json to Object model and back. As it turned out Newtonsoft.Json is built with databinding in mind, so it is pretty easy to generate controls from Json that would bind to Json properties. Here is a code snippet to do that:
+
+private void RenderForm(JArray jArray)
+{
+    StackPanel stackPanel = new StackPanel() { Orientation = Orientation.Vertical };
+    this.Content = stackPanel;
+    stackPanel.Height = this.Height;
+    stackPanel.Width = this.Width;
+    stackPanel.Children.Add(button);
+    foreach (JObject element in jArray)
+    {
+        String type = element["type"].ToString();
+        TextBlock textBlock = new TextBlock() { Text = element["name"].ToString() };
+        textBlock.Padding = new Thickness() { Top = 5 };
+        switch (type)
+        {
+            case "hiddendata":
+                break;
+            case "bool":
+                CheckBox checkBox = new CheckBox();
+                checkBox.DataContext = element;
+                Binding checkBoxBinding = new Binding() { Path = new PropertyPath("[value].Value"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
+                checkBoxBinding.Source = element;
+                checkBox.SetBinding(CheckBox.IsCheckedProperty, checkBoxBinding);
+                stackPanel.Children.Add(textBlock);
+                stackPanel.Children.Add(checkBox);
+                break;
+            case "image":
+                if (!String.IsNullOrEmpty(element["value"].Value<String>()))
+                {
+                    Image image = new Image();
+                    image.MaxHeight = 200;
+                    image.MaxWidth = 200;
+                    var ignore = SetImageSource(element["value"].Value<String>(), image);
+                    stackPanel.Children.Add(textBlock);
+                    stackPanel.Children.Add(image);
+                }
+                break;
+            case "info":
+                if (!String.IsNullOrEmpty(element["value"].Value<String>()))
+                {
+                    TextBlock displayTextBlock = new TextBlock();
+                    displayTextBlock.DataContext = element;
+                    Binding displayTextBlockBinding = new Binding() { Path = new PropertyPath("[value].Value"), Mode = BindingMode.OneWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
+                    displayTextBlockBinding.Source = element;
+                    displayTextBlock.SetBinding(TextBlock.TextProperty, displayTextBlockBinding);
+                    stackPanel.Children.Add(textBlock);
+                    stackPanel.Children.Add(displayTextBlock);
+                }
+                break;
+            case "password":
+                PasswordBox passwordBox = new PasswordBox();
+                passwordBox.DataContext = element;
+                Binding passwordBoxBinding = new Binding() { Path = new PropertyPath("[value].Value"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
+                passwordBoxBinding.Source = element;
+                passwordBox.SetBinding(PasswordBox.PasswordProperty, passwordBoxBinding);
+                stackPanel.Children.Add(textBlock);
+                stackPanel.Children.Add(passwordBox);
+                break;
+            case "string":
+            default:
+                TextBox textBox = new TextBox();
+                textBox.DataContext = element;
+                Binding textBoxBinding = new Binding() { Path = new PropertyPath("[value].Value"), Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
+                textBoxBinding.Source = element;
+                textBox.SetBinding(TextBox.TextProperty, textBoxBinding);
+                stackPanel.Children.Add(textBlock);
+                stackPanel.Children.Add(textBox);
+                break;
+        }
+    }
+}
+
+-1
+
+I'm creating C# WPF .xaml form. The element I display has: Name, Metadata, Number of records. The problem is, is that metadata is .json string that can consist of pretty much anything and I need it to be displayed and changed (later if needed). One time it can be: {"name":"jeff","lastname":"Jefferson","notes":"cool guy"}
+
+and on the other object it can be something like:
+
+{"Id":"jeff","surname":"Jefferson","description":"cool guy","firstTimeSeen":"2020-03-25"}
+
+What would be the suggested way of doing something like this?
+
+c#jsonwpf
+Share
+Improve this question
+Follow
+asked Mar 23, 2020 at 7:40
+Simas Paškauskas's user avatar
+Simas Paškauskas
+62311 gold badge1010 silver badges2424 bronze badges
+Add a comment
+1 Answer
+Sorted by:
+
+Highest score (default)
+Не нашли ответ? Задайте вопрос на Stack Overflow на русском.
+
+1
+
+Loop throught the key-value pairs that represent yet another JSON object and manually create, let say, TextBlock for each one. That's the simplest approach I can imagine.
+
+Share
+Improve this answer
+Follow
+answered Mar 23, 2020 at 7:42
+Zazaeil's user avatar
+Zazaeil
+4,11922 gold badges1717 silver badges3636 bronze badges
+So: deserialize .json into something like -> List<Key, Value> then create ListBox with TextBlock for Key and TextBlock for Value in it and then just loop the pairs till the List ends. Yeah, it seems like the simplest approach indeed. Ty man. – 
+Simas Paškauskas
+ CommentedMar 23, 2020 at 7:54
+@SimasPaškauskas, don't forget to add your list as a child to a parent Panel. You have to reference it by name from the code-behind xaml.cs file. – 
+Zazaeil
+ CommentedMar 23, 2020 at 7:56 
+
+ I was trying create some UI elements in my WPF application. I took this example: WPF: How to dynamically Add Controls in dynamically created WPF Window as reference. But, my interface was a mess. You can see by image below:
+
+Actual FORM
+
+This is the code that got the JSON:
+
+        public MainWindow()
+    {
+        InitializeComponent();
+        db = new DbItens("DBItens");
+
+        using (var webClient = new WebClient())
+        {
+            var get = JsonConvert.DeserializeObject<RootJson>(Encoding.UTF8.GetString(webClient.DownloadData(url)));
+            foreach (var item in get.Itens)
+            {
+
+                buildForm(item, prox);
+                prox++;
+            }
+        }
+    }
+And this is my buildForm method:
+
+ private void buildForm(Item item, int prox)
+    {
+        stkSPanel.Orientation = Orientation.Vertical;
+
+        stkSPanel.Children.Add(new Label
+        {
+            Content = item.Nome,
+        });
+        stkSPanel.Children.Add(new TextBlock
+        {
+            Text = item.Descricao,
+        });
+
+        Image img = new Image
+        {
+            Height = 100,
+            Width = 100
+
+        };
+        img.Source = new BitmapImage(new Uri(item.Foto));
+        StackPanel panel = new StackPanel();
+        panel.Orientation = Orientation.Horizontal;
+        panel.Margin = new Thickness(10);
+        panel.Children.Add(img);
+
+
+        stkSPanel.Children.Add(new Button {Content = panel });
+    }
+How i can format this elements?
+
+Note: My code need to be that way (not directly implemented in XAML), because i will get new items from database too (I only have the stackPanel in XAML), and i need show then by heapsort algorithm.
+
+XAML Code:
+
+<Window x:Class="BlueGearAPP.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:BlueGearAPP"
+    mc:Ignorable="d"
+    Title="MainWindow" Height="350" Width="525" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+
+    <StackPanel x:Name="stkSPanel"></StackPanel>
+</ScrollViewer>
+I want something like this:
+
+Expected Form
+
+ANSWER
+
+Talking with sumodh-s i've been changed my panels orientation to vertival, and my UI controls to horizontal with alignment in center. And now it's worked fine.
+
+c#jsonwpfxaml
+Share
+Improve this question
+Follow
+edited May 23, 2017 at 12:16
+Community's user avatar
+CommunityBot
+111 silver badge
+asked Jun 24, 2016 at 2:11
+Fábio Carvalho's user avatar
+Fábio Carvalho
+10311 silver badge1515 bronze badges
+I would like to know why you have set the orientation of stack panel to horizontal when you want the elements to stack vertically? – 
+Sumodh S
+ CommentedJun 24, 2016 at 4:21
+I was trying something and forgot to go back to the previous code. Thanks, I'll edit it. – 
+Fábio Carvalho
+ CommentedJun 24, 2016 at 5:22
+Now also you are getting the same problem? – 
+Sumodh S
+ CommentedJun 24, 2016 at 6:39
+Well, I do not understand why my previous work even putting as vertical was getting confused. It seems that now it's worked. My changes are have put the two panels as vertically and my UI elements horizontally aligned to the center. – 
+Fábio Carvalho
+ CommentedJun 24, 2016 at 13:08 
+
+ I want to add a WPF Input Box in my Project in C#. I got a WinForm one from InputBox in C# but it has Winform look and feel. So i was recreating it in WPF. I have created all the controls (Label, Button, Textbox) but i am unable to add them to my window.
+
+static Window winInputDialog
+The Window is showing through ShowDialog but without controls.
+
+c#wpf
+Share
+Improve this question
+Follow
+edited Jun 22, 2020 at 15:00
+GEOCHET's user avatar
+GEOCHET
+21.3k1515 gold badges7777 silver badges9999 bronze badges
+asked Oct 25, 2011 at 2:52
+Nikhil Agrawal's user avatar
+Nikhil Agrawal
+48.6k2424 gold badges130130 silver badges212212 bronze badges
+How are you calling this window to show itself? Window.ShowDialog()? – 
+Vinit Sankhe
+ CommentedOct 25, 2011 at 5:21
+Add a comment
+1 Answer
+Sorted by:
+
+Highest score (default)
+91
+
+There are two ways to get controls in your window:
+
+Do the whole designing stuff in the Designer of VisualStudio
+Add the controls by code. Here is a short, simple sample of creating a window and putting controls in it:
+
+var window = new Window();
+var stackPanel = new StackPanel { Orientation = Orientation.Vertical };
+stackPanel.Children.Add(new Label { Content = "Label" });
+stackPanel.Children.Add(new Button { Content = "Button" });
+window.Content = stackPanel;
+
+To handle dynamic views and data storage in .NET Core for your sports-related project, where the fields and controls vary based on user selections, you need a flexible and scalable approach. Here’s a detailed guide on how to achieve this.
+
+1. Define a Flexible Data Model
+Since the number of fields and their types can vary based on the selected sport, you'll need a data model that can accommodate dynamic attributes. Consider using a key-value pair model to store attributes for different sports.
+
+Example Data Models
+Sport Entity
+public class Sport
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public ICollection<SportItem> Items { get; set; }
+}
+C#
+SportItem Entity
+public class SportItem
+{
+    public int Id { get; set; }
+    public int SportId { get; set; }
+    public string Name { get; set; }
+    public Sport Sport { get; set; }
+    public ICollection<SportItemAttribute> Attributes { get; set; }
+}
+C#
+SportItemAttribute Entity
+public class SportItemAttribute
+{
+    public int Id { get; set; }
+    public int SportItemId { get; set; }
+    public string AttributeName { get; set; }
+    public string AttributeValue { get; set; }
+    public SportItem SportItem { get; set; }
+}
+C#
+2. Create a Dynamic form Generation system
+To dynamically generate forms based on the selected sport and its items, you can use a combination of reflection and model binding.
+
+Steps
+Fetch Dynamic Attributes: Retrieve the attributes for the selected sport and sport item from the database.
+public async Task<IActionResult> GetDynamicForm(int sportId, int itemId)
+{
+    var sportItem = await _context.SportItems
+        .Include(si => si.Attributes)
+        .FirstOrDefaultAsync(si => si.Id == itemId && si.SportId == sportId);
+    if (sportItem == null)
+        return NotFound();
+    return View(sportItem);
+}
+C#
+Render Form Dynamically: Use a view to dynamically generate the form based on the attributes retrieved.
+@model SportItem
+
+<form asp-action="SaveAttributes">
+    @foreach (var attribute in Model.Attributes)
+    {
+        <div class="form-group">
+            <label asp-for="@attribute.AttributeName">@attribute.AttributeName</label>
+            @if (attribute.AttributeName == "Color")
+            {
+                <input type="text" name="attributes[@attribute.Id].AttributeValue" class="form-control" />
+            }
+            else if (attribute.AttributeName == "Bat Size")
+            {
+                <select name="attributes[@attribute.Id].AttributeValue" class="form-control">
+                    <option value="Small">Small</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Large">Large</option>
+                </select>
+            }
+            <!-- Add more controls as needed -->
+        </div>
+    }
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+Markup
+Handle Form Submission: Process the submitted form data and save it to the database.
+[HttpPost]
+public async Task<IActionResult> SaveAttributes(int sportId, int itemId, List<SportItemAttribute> attributes)
+{
+    var sportItem = await _context.SportItems
+        .Include(si => si.Attributes)
+        .FirstOrDefaultAsync(si => si.Id == itemId && si.SportId == sportId);
+    if (sportItem == null)
+        return NotFound();
+    // Clear existing attributes
+    _context.SportItemAttributes.RemoveRange(sportItem.Attributes);
+    // Add new attributes
+    foreach (var attribute in attributes)
+    {
+        _context.SportItemAttributes.Add(new SportItemAttribute
+        {
+            SportItemId = itemId,
+            AttributeName = attribute.AttributeName,
+            AttributeValue = attribute.AttributeValue
+        });
+    }
+    await _context.SaveChangesAsync();
+    return RedirectToAction("Index");
+}
+C#
+3. Database Design
+To handle varying numbers of columns, use a flexible schema. You could use a normalized approach with separate tables for sports, items, and attributes (as described above), or a more dynamic approach with a JSON column to store attributes if your database supports it.
+
+Example Table Design
+Sport Table: Stores sports.
+SportItem Table: Stores items related to each sport.
+SportItemAttribute Table: Stores attributes related to each sport item.
+4. Consider Using JSON for Dynamic Attributes
+If you prefer a more flexible schema, consider using JSON columns to store dynamic attributes. This approach allows you to store a variable number of attributes without needing to alter the database schema frequently.
+
+Example JSON Column Usage
+Add a JSON column to store attributes
+ALTER TABLE SportItemAttributes ADD Attributes JSON;
+SQL
+Store and retrieve JSON data in .NET Core
+public class SportItemAttribute
+{
+    public int Id { get; set; }
+    public int SportItemId { get; set; }
+    public string Attributes { get; set; }
+}
+C#
+[HttpPost]
+public async Task<IActionResult> SaveAttributes(int sportId, int itemId, string attributesJson)
+{
+    var sportItem = await _context.SportItems
+        .FirstOrDefaultAsync(si => si.Id == itemId && si.SportId == sportId);
+    if (sportItem == null)
+        return NotFound();
+    var attribute = new SportItemAttribute
+    {
+        SportItemId = itemId,
+        Attributes = attributesJson
+    };
+    _context.SportItemAttributes.Add(attribute);
+    await _context.SaveChangesAsync();
+    return RedirectToAction("Index");
+}
+C#
+Summary
+To dynamically handle varying sports and their attributes in a .NET Core application.
+
+Use flexible data models that can accommodate dynamic attributes.
+Dynamically generate forms based on the selected sport and its items.
+Use a normalized database schema or JSON columns to store dynamic attributes.
+Process and save the form data dynamically.
+By following these guidelines, you can create a scalable and adaptable system that effectively manages various sports and their attributes without hardcoding or rigid structures.
+
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using VitML.JsonVM.Schema;
+
+namespace VitML.JsonVM.Common
+{
+    public class PropertyStyle
+    {
+        #region properties
+
+        public Double Height { get; set; }
+        public Double MinHeight { get; set; }
+        public Double MaxHeight { get; set; }
+
+        public Double Width { get; set; }
+        public Double MinWidth { get; set; }
+        public Double MaxWidth { get; set; }
+
+        public bool? ShowCount { get; set; }
+
+        public string DisplayMemberPath { get; set; }
+
+        #endregion properties
+
+        public static PropertyStyle Parse(JToken data)
+        {
+            if (!(data is JObject)) throw new Exception("Style should be an object");
+
+            JObject style = data as JObject;
+            PropertyStyleReader reader = new PropertyStyleReader(style);
+            return reader.Read();           
+        }
+
+        private static string GetValue(string key, JToken data)
+        {
+            JToken t = data.SelectToken(key);
+            if (t == null) return null;
+            return t.Value<string>();
+        }
+
+        private static GridLength GetLength(string key, JToken data)
+        {
+            string val = GetValue(key, data);
+            if (val == null) return GridLength.Auto;
+            return (GridLength)new GridLengthConverter().ConvertFromString(val);
+        }
+
+        private static Double GetDouble(string key, JToken data)
+        {
+            string val = GetValue(key, data);
+            if (val == null) return Double.NaN;
+            return Double.Parse((new LengthConverter()).ConvertFromString(val).ToString());
+        }
+
+        private static bool? GetBool(string key, JToken data)
+        {
+            string val = GetValue(key, data);
+            if (val == null) return null;
+            return bool.Parse(val);
+        }
+    }    
+}
+
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using VitML.JsonVM.Schema;
+
+namespace VitML.JsonVM.Common
+{
+    public class PropertyStyleReader
+    {
+
+        private JObject data;
+
+        public PropertyStyleReader(JObject styleData)
+        {
+            if (styleData == null) throw new ArgumentNullException(nameof(styleData));
+
+            this.data = styleData;
+        }
+
+        public PropertyStyle Read()
+        {
+            PropertyStyle style = new PropertyStyle();
+            foreach (var prop in data.Properties())
+            {
+                var value = prop.Value;
+                switch (prop.Name)
+                {
+                    case (JSchemaExtendedKeywords.Style.Height):
+                        style.Height = ReadDouble(value);
+                        break;
+                    case (JSchemaExtendedKeywords.Style.MinHeight):
+                        style.MinHeight = ReadDouble(value);
+                        break;
+                    case (JSchemaExtendedKeywords.Style.MaxHeight):
+                        style.MaxHeight = ReadDouble(value);
+                        break;
+                    case (JSchemaExtendedKeywords.Style.Width):
+                        style.Width = ReadDouble(value);
+                        break;
+                    case (JSchemaExtendedKeywords.Style.MinWidth):
+                        style.MinWidth = ReadDouble(value);
+                        break;
+                    case (JSchemaExtendedKeywords.Style.MaxWidth):
+                        style.MaxWidth = ReadDouble(value);
+                        break;
+
+                    case (JSchemaExtendedKeywords.Style.ShowCount):
+                        style.ShowCount = ReadBool(value);
+                        break;
+                    case (JSchemaExtendedKeywords.Style.DisplayMemberPath):
+                        style.DisplayMemberPath = ReadString(value);
+                        break;
+                }
+            }
+            return style;
+        }
+
+        private string ReadString(JToken value)
+        {
+            if (!(value.Type == JTokenType.String))
+                throw new Exception("String expected");
+
+            return value.Value<string>();
+        }
+
+        private Double ReadDouble(JToken value)
+        {
+            if (!(value.Type == JTokenType.Float
+                || value.Type == JTokenType.Integer))
+                throw new Exception("Number expected");
+
+            return value.Value<double>();
+        }
+
+        private bool? ReadBool(JToken value)
+        {
+            if (!(value.Type == JTokenType.Boolean))
+                throw new Exception("Boolean expected");
+
+            return value.Value<bool>();
+        }
+
+        private GridLength ReadLength(JToken value)
+        {
+            if (!(value.Type == JTokenType.Float
+                || value.Type == JTokenType.Integer
+                || value.Type == JTokenType.String))
+                throw new Exception("Number or string expected");
+
+            string length = value.ToString();
+            return (GridLength)new GridLengthConverter().ConvertFromString(length);
+        }
+    }
+}   
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace VitML.JsonVM.Generation
+{
+    public class DataGenerationSettings
+    {
+
+        public ForceLevel Force { get; set; }
+        public bool RequiredOnly { get; set; }
+        public bool CreateMinItems { get; set; }    
+
+        public DataGenerationSettings()
+        {
+            Force = ForceLevel.None;            
+            RequiredOnly = true;
+            CreateMinItems = true;
+        }
+    }
+}
+
+
+using My.Json.Schema;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+
+namespace VitML.JsonVM.Generation
+{
+    public class DataGenerator
+    {
+
+        private JSchema schema;
+
+        public DataGenerator(JSchema schema)
+        {
+            if (schema == null) throw new ArgumentNullException(nameof(schema));
+
+            this.schema = schema;
+        }
+
+        public JToken Generate(DataGenerationSettings settings)
+        {
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
+
+            JSchema sh = schema;
+
+            var def = sh.Default;
+            if (def != null)
+            {
+                if (def is JToken)
+                    return def as JToken;
+                else
+                    return new JValue(def);
+            }
+
+            if (sh.Enum.Count > 0)
+            {
+                return sh.Enum.First();
+            }
+
+            JSchemaType type = sh.Type;
+
+            if (sh.Type.HasFlag(JSchemaType.Null))
+            {
+                if (settings.Force == ForceLevel.None)
+                    return JValue.CreateNull();
+                else
+                {
+                    type &= ~JSchemaType.Null;
+                    if (settings.Force == ForceLevel.ForceFirst)
+                        settings.Force = ForceLevel.None;
+                }
+            }
+
+            if (sh.OneOf.Count > 0)
+            {
+                JSchema first = sh.OneOf.First();
+                var gen = new DataGenerator(first);
+                JToken token = gen.Generate(settings);
+                return token;
+            }
+
+            if (sh.AnyOf.Count > 0)
+            {
+                JSchema first = sh.AnyOf.First();
+                var gen = new DataGenerator(first);
+                JToken token = gen.Generate(settings);
+                return token;
+            }
+
+            if (sh.AllOf.Count > 0)
+            {
+                JSchema composite = sh.MergeSchemaAllOf();
+                var gen = new DataGenerator(composite);
+                JToken token = gen.Generate(settings);
+                return token;
+            }
+
+            switch (type)
+            {
+                case (JSchemaType.Object):
+                    {
+                        JObject obj = new JObject();
+                        if (settings.RequiredOnly)
+                        {
+                            foreach (string req in sh.Required)
+                            {
+                                if (!sh.Properties.ContainsKey(req)) continue;
+                                var gen = new DataGenerator(sh.Properties[req]);
+                                JToken token = gen.Generate(settings);
+                                obj.Add(new JProperty(req, token));
+                            }
+                        }
+                        else
+                        {
+                            foreach (var prop in sh.Properties)
+                            {
+                                var gen = new DataGenerator(prop.Value);
+                                JToken token = gen.Generate(settings);
+                                obj.Add(new JProperty(prop.Key, token));                                
+                            }
+                        }
+                        return obj;
+                    }
+                case (JSchemaType.Array):
+                    {
+                        JArray arr = new JArray();
+                        if (settings.CreateMinItems)
+                        {
+                            if (sh.MinItems != null)
+                            {
+                                if (sh.ItemsArray.Count > 0)
+                                {
+                                    for (int i = 0; i < sh.MinItems; i++)
+                                    {
+                                        JSchema itemSchema;
+                                        if (i < sh.ItemsArray.Count)
+                                            itemSchema = sh.ItemsArray[i];
+                                        else
+                                        {
+                                            if (!sh.AllowAdditionalItems)
+                                                break;
+                                            itemSchema = sh.AdditionalItems;
+                                        }
+                                        var gen = new DataGenerator(itemSchema);
+                                        JToken token = gen.Generate(settings);
+                                        arr.Add(token);
+                                    }
+                                }
+                                else if (sh.ItemsSchema != null)
+                                {
+                                    for (int i = 0; i < sh.MinItems; i++)
+                                    {
+                                        var gen = new DataGenerator(sh.ItemsSchema);
+                                        JToken token = gen.Generate(settings);
+                                        arr.Add(token);
+                                    }
+                                }
+                            }
+                        }
+                        return arr;
+                    }
+                case (JSchemaType.Boolean):
+                    return new JValue(false);
+                case (JSchemaType.Number):
+                    return new JValue(0F);
+                case (JSchemaType.Integer):
+                    return new JValue(0);
+                case (JSchemaType.String):
+                    if (sh.Format == "date-time") return new JValue(new DateTime());
+                    if (sh.Format == "date") return new JValue((new DateTime()).ToString("yyyy-MM-dd"));
+                    if (sh.Format == "time") return new JValue(new TimeSpan());
+                    if (sh.Format == "ipv4") return new JValue(IPAddress.None.ToString());
+                    if (sh.Format == "ipv6") return new JValue("::");
+                    if (sh.Format == "email") return new JValue("mail@mail");
+                    if (sh.Format == "uri") return new JValue("uri:");
+                    if (sh.Format == "hostname") return new JValue("host");
+                    return JValue.CreateString(String.Empty);
+                case (JSchemaType.Null):
+                    return JValue.CreateNull();
+                default:
+                    return null;
+            }
+        }
+
+        public JToken Generate()
+        {
+            return Generate(new DataGenerationSettings());
+        }
+    }
+}
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace VitML.JsonVM.Generation
+{
+    public enum ForceLevel
+    {
+        None,
+        ForceFirst,
+        ForceAll
+    }
+}
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace VitML.JsonVM.ViewModels
+{
+    public class ObservableDictionary : IDictionary<string, object>, INotifyCollectionChanged, INotifyPropertyChanged
+    {
+
+        private Dictionary<string, object> dict = new Dictionary<string, object>();
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        public void Add(string key, object value)
+        {
+            dict.Add(key, value);
+            OnCollectionChanged(NotifyCollectionChangedAction.Add, new KeyValuePair<string, object>(key, value));
+        }
+
+        public bool ContainsKey(string key)
+        {
+            return dict.ContainsKey(key);
+        }
+
+        public ICollection<string> Keys
+        {
+            get { return dict.Keys; }
+        }
+
+        public bool Remove(string key)
+        {
+            if(!this.ContainsKey(key)) return false;
+            object val = dict[key];
+            bool removed = dict.Remove(key);
+            if (removed)
+                OnCollectionChanged(NotifyCollectionChangedAction.Remove, new KeyValuePair<string, object>(key, val));
+            return removed;
+        }
+
+        public bool TryGetValue(string key, out object value)
+        {
+            return dict.TryGetValue(key, out value);
+        }
+
+        public ICollection<object> Values
+        {
+            get { return dict.Values; }
+        }
+
+        public object this[string key]
+        {
+            get
+            {
+                return dict[key];
+            }
+            set
+            {
+                if (!dict.ContainsKey(key))
+                {
+                    dict[key] = value;
+                    OnCollectionChanged(NotifyCollectionChangedAction.Add, new KeyValuePair<string, object>(key, value));
+                }
+                else
+                {
+                    KeyValuePair<string, object> oldItem = new KeyValuePair<string, object>(key, dict[key]);
+                    dict[key] = value;
+                    OnCollectionChanged(NotifyCollectionChangedAction.Replace, new KeyValuePair<string, object>(key, value), oldItem);
+                    OnPropertyChanged(key);
+                    OnPropertyChanged("[" + key + "]");
+                }
+            }
+        }
+
+        public void Add(KeyValuePair<string, object> item)
+        {
+            dict.Add(item.Key, item.Value);
+        }
+
+        public void Clear()
+        {
+            dict.Clear();
+            OnCollectionChanged(NotifyCollectionChangedAction.Reset);
+        }
+
+        public bool Contains(KeyValuePair<string, object> item)
+        {
+            return dict.ContainsKey(item.Key) && dict[item.Key].Equals(item.Value);
+        }
+
+        public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Count
+        {
+            get { return dict.Count; }
+        }
+
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
+
+        public bool Remove(KeyValuePair<string, object> item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
+        {
+            return dict.GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        protected void OnCollectionChanged(
+           NotifyCollectionChangedAction action,
+           object item
+           )
+        {
+            if (this.CollectionChanged != null)
+            {
+                var args = new NotifyCollectionChangedEventArgs(action, item);
+                CollectionChanged.Invoke(this, args);
+            }
+        }
+
+        protected void OnCollectionChanged(
+           NotifyCollectionChangedAction action
+           )
+        {
+            if (this.CollectionChanged != null)
+            {
+                CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(action));
+            }
+        }
+
+        protected void OnCollectionChanged(
+            NotifyCollectionChangedAction action,
+            IList newItems, 
+            IList oldItems
+            )
+        {
+            if (this.CollectionChanged != null)
+            {
+                var args = new NotifyCollectionChangedEventArgs(action, newItems, oldItems);
+                CollectionChanged.Invoke(this, args);
+            }
+        }
+
+        protected void OnCollectionChanged(
+            NotifyCollectionChangedAction action,
+            object newItem,
+            object oldItem
+            )
+        {
+            if (this.CollectionChanged != null)
+            {
+                int index = Keys.ToList().IndexOf(((KeyValuePair<string, object>)newItem).Key);
+                var args = new NotifyCollectionChangedEventArgs( action, newItem, oldItem, index);
+                CollectionChanged.Invoke(this, args);
+            }
+        }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (this.PropertyChanged != null)
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}
+
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace VitML.JsonVM.ViewModels
+{
+    public class ObservableObject : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        {
+            var result = false;
+            if (!EqualityComparer<T>.Default.Equals(field, newValue))
+            {
+                field = newValue;
+                OnPropertyChanged(propertyName);
+                result = true;
+            }
+
+            return result;
+        }
+    }
+}using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace VitML.JsonVM.ViewModels
+{
+    public class ObservableObject : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        {
+            var result = false;
+            if (!EqualityComparer<T>.Default.Equals(field, newValue))
+            {
+                field = newValue;
+                OnPropertyChanged(propertyName);
+                result = true;
+            }
+
+            return result;
+        }
+    }
+}using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using VitML.JsonVM.Linq;
+
+namespace VitML.JsonVM.ViewModels
+{
+    public class PropertyDictionary : IDictionary<string, JTokenVM>, INotifyCollectionChanged, INotifyPropertyChanged
+    {
+
+        private Dictionary<string, JTokenVM> dict = new Dictionary<string, JTokenVM>();
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        public void Add(string key, JTokenVM value)
+        {
+            dict.Add(key, value);
+            OnCollectionChanged(NotifyCollectionChangedAction.Add, new KeyValuePair<string, JTokenVM>(key, value));
+        }
+
+        public bool ContainsKey(string key)
+        {
+            return dict.ContainsKey(key);
+        }
+
+        public ICollection<string> Keys
+        {
+            get { return dict.Keys; }
+        }
+
+        public bool Remove(string key)
+        {
+            if (!this.ContainsKey(key)) return false;
+            JTokenVM val = dict[key];
+            bool removed = dict.Remove(key);
+            if (removed)
+                OnCollectionChanged(NotifyCollectionChangedAction.Remove, new KeyValuePair<string, JTokenVM>(key, val));
+            return removed;
+        }
+
+        public bool TryGetValue(string key, out JTokenVM value)
+        {
+            return dict.TryGetValue(key, out value);
+        }
+
+        public ICollection<JTokenVM> Values
+        {
+            get { return dict.Values; }
+        }
+
+        public JTokenVM this[string key]
+        {
+            get
+            {
+                return dict[key];
+            }
+            set
+            {
+                if (!dict.ContainsKey(key))
+                {
+                    dict[key] = value;
+                    OnCollectionChanged(NotifyCollectionChangedAction.Add, new KeyValuePair<string, JTokenVM>(key, value));
+                }
+                else
+                {
+                    KeyValuePair<string, JTokenVM> oldItem = new KeyValuePair<string, JTokenVM>(key, dict[key]);
+                    dict[key] = value;
+                    OnCollectionChanged(NotifyCollectionChangedAction.Replace, new KeyValuePair<string, JTokenVM>(key, value), oldItem);
+                    OnPropertyChanged(key);
+                    OnPropertyChanged("[" + key + "]");
+                }
+            }
+        }
+
+        public void Add(KeyValuePair<string, JTokenVM> item)
+        {
+            dict.Add(item.Key, item.Value);
+        }
+
+        public void Clear()
+        {
+            dict.Clear();
+            OnCollectionChanged(NotifyCollectionChangedAction.Reset);
+        }
+
+        public bool Contains(KeyValuePair<string, JTokenVM> item)
+        {
+            return dict.ContainsKey(item.Key) && dict[item.Key].Equals(item.Value);
+        }
+
+        public void CopyTo(KeyValuePair<string, JTokenVM>[] array, int arrayIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Count
+        {
+            get { return dict.Count; }
+        }
+
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
+
+        public bool Remove(KeyValuePair<string, JTokenVM> item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator<KeyValuePair<string, JTokenVM>> GetEnumerator()
+        {
+            return dict.GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        protected void OnCollectionChanged(
+           NotifyCollectionChangedAction action,
+           KeyValuePair<string, JTokenVM> item
+           )
+        {
+            if (this.CollectionChanged != null)
+            {
+                var args = new NotifyCollectionChangedEventArgs(action, item);
+                CollectionChanged.Invoke(this, args);
+            }
+        }
+
+        protected void OnCollectionChanged(
+           NotifyCollectionChangedAction action
+           )
+        {
+            if (this.CollectionChanged != null)
+            {
+                CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(action));
+            }
+        }
+
+        protected void OnCollectionChanged(
+            NotifyCollectionChangedAction action,
+            IList newItems,
+            IList oldItems
+            )
+        {
+            if (this.CollectionChanged != null)
+            {
+                var args = new NotifyCollectionChangedEventArgs(action, newItems, oldItems);
+                CollectionChanged.Invoke(this, args);
+            }
+        }
+
+        protected void OnCollectionChanged(
+            NotifyCollectionChangedAction action,
+            KeyValuePair<string, JTokenVM> newItem,
+            KeyValuePair<string, JTokenVM> oldItem
+            )
+        {
+            if (this.CollectionChanged != null)
+            {
+                int index = Keys.ToList().IndexOf(((KeyValuePair<string, JTokenVM>)newItem).Key);
+                var args = new NotifyCollectionChangedEventArgs(action, newItem, oldItem, index);
+                CollectionChanged.Invoke(this, args);
+            }
+        }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (this.PropertyChanged != null)
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}get this type of JSON data from Web API:
+
+Data: {
+  FromDate: "2016-03-01",
+  Comment: "Bla bla",
+  ...
+},
+FieldInfo: {
+  Items: [
+  {
+    Id: "FromDate",
+    Required: true,
+    DataType: "date"
+  },
+  {
+    Id: "Comment",
+    Required: true,
+    DataType: "string"
+  },
+  ...
+  ]
+}
+I need to serialize it to C# object and transform it to different representaion which should look something like this:
+
+  {
+    FieldInfo: {
+      Items: [
+      {
+        Id: "FromDate",
+        Required: true,
+        DataType: "date",
+        Value: "2016-03-01"
+      },
+      {
+        Id: "Comment",
+        Required: true,
+        DataType: "string"
+        Value: "Bla bla"
+      },
+      ...
+      ]
+   }
+Basically map field values to its schema so it will not be separated. Of course easiest way its just write a lot of if's for each field, which will not be very elegant solution and even not doable if we take into account that field schema and fields are dynamic so they can change. Property which I can rely on is Id in FieldInfo Item schema which should be a property name in Data object. One of the solution might be to use reflection in order to map Id value to property name in C# object representation. My question maybe there is another solution(s) to this problem or some tools which can help me in achieving this goal?
+
+c#jsondynamicmapping
+Share
+Improve this question
+Follow
+edited Mar 24, 2016 at 16:44
+dbc's user avatar
+dbc
+117k2626 gold badges263263 silver badges387387 bronze badges
+asked Mar 24, 2016 at 15:47
+Andrius Cepaitis's user avatar
+Andrius Cepaitis
+14211 silver badge66 bronze badges
+1) Are the inputs and outputs supposed to be JSON? Because they are invalid JSON according to jsonformatter.curiousconcept.com. 2) What have you tried so far? If JSON, what are you using to parse / deserialize the incoming JSON and then later serialize after conversion? – 
+dbc
+ CommentedMar 24, 2016 at 16:21
+Yes basically I have web API which calls another web API and I need to parse it transform and output transformed version of data. JSON which I provided is just for better understanding what I am trying to achieve. It is not valid as I added "..." in order to represent that you can have different field types, sorry if it added extra confusion. – 
+Andrius Cepaitis
+ CommentedMar 24, 2016 at 16:29
+1) It's not just the missing quotes, the initial JSON is missing outer braces. 2) What framework and serializer are you using? If you're using ASP.NET Web API them are you already using Json.NET? – 
+dbc
+ CommentedMar 24, 2016 at 16:32
+Yes it is ASP.NET Web API and Json.NET. – 
+Andrius Cepaitis
+ CommentedMar 24, 2016 at 16:36
+Add a comment
+2 Answers
+Sorted by:
+
+Highest score (default)
+Не нашли ответ? Задайте вопрос на Stack Overflow на русском.
+
+3
+
+Using JSON.NET, you can parse the JSON into a JObject and manipulate it like so:
+
+// Parse your json string into a JObject
+JObject o = JObject.Parse(json);
+
+// Retrieve the "Data" part of the json, i.e, 
+// the object that contains the values
+var data = o["Data"];
+
+// Retrieve the "FieldInfo" part. We will add values to this part.
+var fieldInfo = o["FieldInfo"];
+
+foreach (var token in fieldInfo["Items"])
+{
+    var item = (JObject) token;
+
+    // Add the Value property to each item, get the value from the
+    // corresponding field
+    item["Value"] = data[(string)item["Id"]];
+}
+The variable fieldInfo will contain the information you wanted. Of course, it would be cleaner to create a new JObject to contain the information. But the example shows how you can retrieve and map the values you require.
+
+Share
+Improve this answer
+Follow
+edited Mar 24, 2016 at 16:50
+answered Mar 24, 2016 at 16:43
+lenkan's user avatar
+lenkan
+4,41511 gold badge1616 silver badges1212 bronze badges
+Add a comment
+1
+
+You will have to implement some form of custom json converter to get the required output you desire to your new class structure. JSON.NET Custom JsonConverter:
+
+http://www.newtonsoft.com/json/help/html/CustomJsonConverter.htm
+
+Here is a nice beginners tutorial on how this is achieved:
+
+http://geekswithblogs.net/DavidHoerster/archive/2011/07/26/json.net-custom-convertersndasha-quick-tour.aspx
+
+In this article you will learn how to generate WPF forms dynamically from property fields. Suppose we have a requirement to create a WPF form. First, we'll begin with how to create a form in XAML.
+
+Creating forms at Design Time in XAML
+
+The following form shows how to create form in XAML:
+
+<Grid Margin="10">
+
+    <Grid.ColumnDefinitions>
+
+        <ColumnDefinition Width="100" />
+
+        <ColumnDefinition Width="*" />
+
+    </Grid.ColumnDefinitions>
+
+             
+
+    <Grid.RowDefinitions>
+
+        <RowDefinition Height="Auto" />
+
+        <RowDefinition Height="Auto" />
+
+        <RowDefinition Height="Auto" />
+
+        <RowDefinition Height="*" />
+
+    </Grid.RowDefinitions>
+
+ 
+
+    <TextBlock Text="First Name" Height="19"  Margin="0,7,31,4" />           
+
+    <TextBox x:Name="FirstName" Margin="3"  Grid.Row="0" Grid.Column="1" />
+
+             
+
+    <TextBlock Text="Last Name" Margin="0,7,6,3" Grid.Row="1" Height="20" />
+
+    <TextBox x:Name="LastName" Margin="3" Grid.Row="1" Grid.Column="1" />  
+
+ 
+
+    <TextBlock Text="EmailId" Grid.Row="2" Margin="0,9,0,0" Height="21" />
+
+<TextBox x:Name=" EmailId " Margin="3" Grid.Row="1" Grid.Column="1" />  
+
+ 
+
+    <Button x:Name="Save" Grid.Row="3" Grid.Column="3" HorizontalAlignment="Right"
+
+            VerticalAlignment="Top" Margin="3" Width="80" Height="25" Content="Save" />
+
+</Grid>
+
+The following diagram shows how the form looks.
+
+Clipboard01.jpg
+
+Creating forms at runtime using XAML strings
+
+The following example shows how to create a form at runtime by using the property class.
+
+Create a person class with 10 properties.  
+
+public class Person
+{
+
+    public string FirstName { get; set; }
+
+    public string LastName { get; set; }
+
+    public bool isDefault { get; set; }
+
+    public string EmailId { get; set; }
+
+    public string EmployeeNo { get; set; }
+
+    public string Age { get; set; }
+
+ 
+
+    public string EmailId2 { get; set; }
+
+    public bool isMale { get; set; }
+
+    public string MobileNo { get; set; }
+
+    public string TelephoneNo { get; set; }
+
+}
+
+Creating Controls at runtime
+
+We created the following functions for a creating textbox, textblock, row definition and for checkbox. Here the functions CreateCheckBox() creates a checkbox at runtime. 
+
+And the following code will create a text block.
+
+private TextBlock CreateTextBlock(string text, int row, int column)
+{
+    string[] aa = BreakUpperCB(text);
+    string prop = "";
+    for (int i = 0; i < aa.Length; i++)
+    {
+        prop = prop +" "+ aa[i];
+    }
+    TextBlock tb = new TextBlock() { Text = prop, Margin = new Thickness(5, 8, 0, 5) };
+    tb.MinWidth = 90;
+    tb.FontWeight = FontWeights.Bold;              
+    tb.Margin = new Thickness(5);
+    var bc = new BrushConverter();
+    tb.Foreground = Brush)bc.ConvertFrom("#FF2D72BC");
+    Grid.SetColumn(tb, column);
+    Grid.SetRow(tb, row);          
+    return tb;
+}
+
+Handling Events Dynamically
+
+void button_Click(object sender, RoutedEventArgs e)
+{
+    MessageBox.Show("Saved Successfully");
+}
+private Button CreateButton(string text, int row, int column )
+{
+    Button tb = new Button() { Content = text, VerticalAlignment =VerticalAlignment.Top, 
+    HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(5, 8, 0, 5) };
+    tb.Width = 90;
+    tb.Height = 25;
+    tb.Margin = new Thickness(5);
+    Grid.SetColumn(tb, column);
+    Grid.SetRow(tb, row);           
+    return tb;
+}
+
+private TextBox CreateTextBox( int row, int column)
+{
+    TextBox tb = new TextBox();
+    tb.Margin = new Thickness(5);
+    tb.Height = 22;
+    tb.Width = 150;
+    Grid.SetColumn(tb, column);
+    Grid.SetRow(tb, row);
+    return tb;
+}
+
+// this will break the property text by upper
+public string[] BreakUpperCB(string sInput)
+
+{
+
+    StringBuilder[] sReturn = new StringBuilder[1];
+
+    sReturn[0] = new StringBuilder(sInput.Length);
+
+    const string CUPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    int iArrayCount = 0;
+
+    for (int iIndex = 0; iIndex < sInput.Length; iIndex++)
+
+    {
+
+        string sChar = sInput.Substring(iIndex, 1); // get a char
+
+        if ((CUPPER.Contains(sChar)) && (iIndex > 0))
+
+        {
+
+            iArrayCount++;
+
+            System.Text.StringBuilder[] sTemp = new System.Text.StringBuilder[iArrayCount + 1];
+
+            Array.Copy(sReturn, 0, sTemp, 0, iArrayCount);
+
+            sTemp[iArrayCount] = new StringBuilder(sInput.Length);
+
+            sReturn = sTemp;
+
+        }
+
+        sReturn[iArrayCount].Append(sChar);
+
+    }
+
+    string[] sReturnString = new string[iArrayCount + 1];
+
+    for (int iIndex = 0; iIndex < sReturn.Length; iIndex++)
+
+    {
+
+        sReturnString[iIndex] = sReturn[iIndex].ToString();
+
+    }
+
+    return sReturnString;
+
+}
+
+ 
+
+public partial class MainWindow : Window
+
+{
+
+    public MainWindow()
+
+    {
+
+        InitializeComponent();
+
+    }
+
+ 
+
+    private void Grid_Loaded(object sender, RoutedEventArgs e)
+
+    {
+
+        Person obj = new Person();
+
+        obj.FirstName = "sujeet";
+
+        CreateControls (obj);
+
+    }
+
+}
+
+Create Controls
+
+In the following example we create a function CreateControlsUsingObjects(Person obj) that creates a dynamic form.
+
+This method creates controls dynamically based on the properties. 
+
+In the following example we have read the properties from the Person Class and we add controls to the form:
+
+private void CreateControls(Person obj)
+{
+     List<Person> objList=new List<Person>();
+     objList.Add(obj);
+     Grid rootGrid = new Grid();
+     rootGrid.Margin = new Thickness(10.0);
+     rootGrid.ColumnDefinitions.Add(
+        new ColumnDefinition() { Width = new GridLength(100.0) });
+     rootGrid.ColumnDefinitions.Add(
+          new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+     rootGrid.ColumnDefinitions.Add(
+         new ColumnDefinition() { Width = new GridLength(100.0) });
+     rootGrid.ColumnDefinitions.Add(
+         new ColumnDefinition() { Width = new GridLength(100.0) });
+     PropertyInfo[] propertyInfos;
+     propertyInfos = typeof(Person).GetProperties();
+     rootGrid.RowDefinitions.Add(CreateRowDefinition());
+     int j = 1;
+     foreach (PropertyInfo propertyInfo in propertyInfos)
+     {
+         if (propertyInfo.PropertyType.Name == "String")
+         {
+             rootGrid.RowDefinitions.Add(CreateRowDefinition());
+             var Label = CreateTextBlock(propertyInfo.Name, j, 0);
+             rootGrid.Children.Add(Label);
+             var Textbox = CreateTextBox(j, 1);
+             rootGrid.Children.Add(Textbox);
+             j++;
+        }
+        if (propertyInfo.PropertyType.Name == "Boolean")
+        {
+            rootGrid.RowDefinitions.Add(CreateRowDefinition());
+            var Label = CreateTextBlock(propertyInfo.Name, j, 0);
+            rootGrid.Children.Add(Label);
+            var Textbox =  CreateCheckBox(j, 1);
+            rootGrid.Children.Add(Textbox);
+            j++;
+        }
+    }
+    rootGrid.RowDefinitions.Add(CreateRowDefinition());
+    var Button = CreateButton("Save",j + 1, 1);
+    Button.Click += new RoutedEventHandler(button_Click);
+    rootGrid.Children.Add(Button);
+    LayoutRoot.Children.Add(rootGrid)
+}
+
+In the above example we have shown how to create a WPF form dynamically.
+
+Output
+
+Clipboard02.jpg
+
+Summary
+
+In this way we have shown how to create dynamic forms in WPF or Silverlight.
+import deepmerge from 'deepmerge';
+import isPlainObject from 'lodash/isPlainObject';
+import cloneDeep from 'lodash/cloneDeep';
+import * as React from 'react';
+import isEqual from 'react-fast-compare';
+import invariant from 'tiny-warning';
+import { FieldConfig } from './Field';
+import { FormikProvider } from './FormikContext';
+import {
+  FieldHelperProps,
+  FieldInputProps,
+  FieldMetaProps,
+  FormikConfig,
+  FormikErrors,
+  FormikHandlers,
+  FormikHelpers,
+  FormikProps,
+  FormikState,
+  FormikTouched,
+  FormikValues,
+} from './types';
+import {
+  getActiveElement,
+  getIn,
+  isEmptyChildren,
+  isFunction,
+  isObject,
+  isPromise,
+  isString,
+  setIn,
+  setNestedObjectValues,
+} from './utils';
+
+type FormikMessage<Values> =
+  | { type: 'SUBMIT_ATTEMPT' }
+  | { type: 'SUBMIT_FAILURE' }
+  | { type: 'SUBMIT_SUCCESS' }
+  | { type: 'SET_ISVALIDATING'; payload: boolean }
+  | { type: 'SET_ISSUBMITTING'; payload: boolean }
+  | { type: 'SET_VALUES'; payload: Values }
+  | { type: 'SET_FIELD_VALUE'; payload: { field: string; value?: any } }
+  | { type: 'SET_FIELD_TOUCHED'; payload: { field: string; value?: boolean } }
+  | { type: 'SET_FIELD_ERROR'; payload: { field: string; value?: string } }
+  | { type: 'SET_TOUCHED'; payload: FormikTouched<Values> }
+  | { type: 'SET_ERRORS'; payload: FormikErrors<Values> }
+  | { type: 'SET_STATUS'; payload: any }
+  | {
+      type: 'SET_FORMIK_STATE';
+      payload: (s: FormikState<Values>) => FormikState<Values>;
+    }
+  | {
+      type: 'RESET_FORM';
+      payload: FormikState<Values>;
+    };
+
+// State reducer
+function formikReducer<Values>(
+  state: FormikState<Values>,
+  msg: FormikMessage<Values>
+) {
+  switch (msg.type) {
+    case 'SET_VALUES':
+      return { ...state, values: msg.payload };
+    case 'SET_TOUCHED':
+      return { ...state, touched: msg.payload };
+    case 'SET_ERRORS':
+      if (isEqual(state.errors, msg.payload)) {
+        return state;
+      }
+
+      return { ...state, errors: msg.payload };
+    case 'SET_STATUS':
+      return { ...state, status: msg.payload };
+    case 'SET_ISSUBMITTING':
+      return { ...state, isSubmitting: msg.payload };
+    case 'SET_ISVALIDATING':
+      return { ...state, isValidating: msg.payload };
+    case 'SET_FIELD_VALUE':
+      return {
+        ...state,
+        values: setIn(state.values, msg.payload.field, msg.payload.value),
+      };
+    case 'SET_FIELD_TOUCHED':
+      return {
+        ...state,
+        touched: setIn(state.touched, msg.payload.field, msg.payload.value),
+      };
+    case 'SET_FIELD_ERROR':
+      return {
+        ...state,
+        errors: setIn(state.errors, msg.payload.field, msg.payload.value),
+      };
+    case 'RESET_FORM':
+      return { ...state, ...msg.payload };
+    case 'SET_FORMIK_STATE':
+      return msg.payload(state);
+    case 'SUBMIT_ATTEMPT':
+      return {
+        ...state,
+        touched: setNestedObjectValues<FormikTouched<Values>>(
+          state.values,
+          true
+        ),
+        isSubmitting: true,
+        submitCount: state.submitCount + 1,
+      };
+    case 'SUBMIT_FAILURE':
+      return {
+        ...state,
+        isSubmitting: false,
+      };
+    case 'SUBMIT_SUCCESS':
+      return {
+        ...state,
+        isSubmitting: false,
+      };
+    default:
+      return state;
+  }
+}
+
+// Initial empty states // objects
+const emptyErrors: FormikErrors<unknown> = {};
+const emptyTouched: FormikTouched<unknown> = {};
+
+// This is an object that contains a map of all registered fields
+// and their validate functions
+interface FieldRegistry {
+  [field: string]: {
+    validate: (value: any) => string | Promise<string> | undefined;
+  };
+}
+
+export function useFormik<Values extends FormikValues = FormikValues>({
+  validateOnChange = true,
+  validateOnBlur = true,
+  validateOnMount = false,
+  isInitialValid,
+  enableReinitialize = false,
+  onSubmit,
+  ...rest
+}: FormikConfig<Values>) {
+  const props = {
+    validateOnChange,
+    validateOnBlur,
+    validateOnMount,
+    onSubmit,
+    ...rest,
+  };
+  const initialValues = React.useRef(props.initialValues);
+  const initialErrors = React.useRef(props.initialErrors || emptyErrors);
+  const initialTouched = React.useRef(props.initialTouched || emptyTouched);
+  const initialStatus = React.useRef(props.initialStatus);
+  const isMounted = React.useRef<boolean>(false);
+  const fieldRegistry = React.useRef<FieldRegistry>({});
+  if (__DEV__) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    React.useEffect(() => {
+      invariant(
+        typeof isInitialValid === 'undefined',
+        'isInitialValid has been deprecated and will be removed in future versions of Formik. Please use initialErrors or validateOnMount instead.'
+      );
+      // eslint-disable-next-line
+    }, []);
+  }
+
+  React.useEffect(() => {
+    isMounted.current = true;
+
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  const [, setIteration] = React.useState(0);
+  const stateRef = React.useRef<FormikState<Values>>({
+    values: cloneDeep(props.initialValues),
+    errors: cloneDeep(props.initialErrors) || emptyErrors,
+    touched: cloneDeep(props.initialTouched) || emptyTouched,
+    status: cloneDeep(props.initialStatus),
+    isSubmitting: false,
+    isValidating: false,
+    submitCount: 0,
+  });
+
+  const state = stateRef.current;
+
+  const dispatch = React.useCallback((action: FormikMessage<Values>) => {
+    const prev = stateRef.current;
+
+    stateRef.current = formikReducer(prev, action);
+
+    // force rerender
+    if (prev !== stateRef.current) setIteration(x => x + 1);
+  }, []);
+
+  const runValidateHandler = React.useCallback(
+    (values: Values, field?: string): Promise<FormikErrors<Values>> => {
+      return new Promise((resolve, reject) => {
+        const maybePromisedErrors = (props.validate as any)(values, field);
+        if (maybePromisedErrors == null) {
+          // use loose null check here on purpose
+          resolve(emptyErrors);
+        } else if (isPromise(maybePromisedErrors)) {
+          (maybePromisedErrors as Promise<any>).then(
+            errors => {
+              resolve(errors || emptyErrors);
+            },
+            actualException => {
+              if (process.env.NODE_ENV !== 'production') {
+                console.warn(
+                  `Warning: An unhandled error was caught during validation in <Formik validate />`,
+                  actualException
+                );
+              }
+
+              reject(actualException);
+            }
+          );
+        } else {
+          resolve(maybePromisedErrors);
+        }
+      });
+    },
+    [props.validate]
+  );
+
+  /**
+   * Run validation against a Yup schema and optionally run a function if successful
+   */
+  const runValidationSchema = React.useCallback(
+    (values: Values, field?: string): Promise<FormikErrors<Values>> => {
+      const validationSchema = props.validationSchema;
+      const schema = isFunction(validationSchema)
+        ? validationSchema(field)
+        : validationSchema;
+      const promise =
+        field && schema.validateAt
+          ? schema.validateAt(field, values)
+          : validateYupSchema(values, schema);
+      return new Promise((resolve, reject) => {
+        promise.then(
+          () => {
+            resolve(emptyErrors);
+          },
+          (err: any) => {
+            // Yup will throw a validation error if validation fails. We catch those and
+            // resolve them into Formik errors. We can sniff if something is a Yup error
+            // by checking error.name.
+            // @see https://github.com/jquense/yup#validationerrorerrors-string--arraystring-value-any-path-string
+            if (err.name === 'ValidationError') {
+              resolve(yupToFormErrors(err));
+            } else {
+              // We throw any other errors
+              if (process.env.NODE_ENV !== 'production') {
+                console.warn(
+                  `Warning: An unhandled error was caught during validation in <Formik validationSchema />`,
+                  err
+                );
+              }
+
+              reject(err);
+            }
+          }
+        );
+      });
+    },
+    [props.validationSchema]
+  );
+
+  const runSingleFieldLevelValidation = React.useCallback(
+    (field: string, value: void | string): Promise<string> => {
+      return new Promise(resolve =>
+        resolve(fieldRegistry.current[field].validate(value) as string)
+      );
+    },
+    []
+  );
+
+  const runFieldLevelValidations = React.useCallback(
+    (values: Values): Promise<FormikErrors<Values>> => {
+      const fieldKeysWithValidation: string[] = Object.keys(
+        fieldRegistry.current
+      ).filter(f => isFunction(fieldRegistry.current[f].validate));
+
+      // Construct an array with all of the field validation functions
+      const fieldValidations: Promise<string>[] =
+        fieldKeysWithValidation.length > 0
+          ? fieldKeysWithValidation.map(f =>
+              runSingleFieldLevelValidation(f, getIn(values, f))
+            )
+          : [Promise.resolve('DO_NOT_DELETE_YOU_WILL_BE_FIRED')]; // use special case ;)
+
+      return Promise.all(fieldValidations).then((fieldErrorsList: string[]) =>
+        fieldErrorsList.reduce((prev, curr, index) => {
+          if (curr === 'DO_NOT_DELETE_YOU_WILL_BE_FIRED') {
+            return prev;
+          }
+          if (curr) {
+            prev = setIn(prev, fieldKeysWithValidation[index], curr);
+          }
+          return prev;
+        }, {})
+      );
+    },
+    [runSingleFieldLevelValidation]
+  );
+
+  // Run all validations and return the result
+  const runAllValidations = React.useCallback(
+    (values: Values) => {
+      return Promise.all([
+        runFieldLevelValidations(values),
+        props.validationSchema ? runValidationSchema(values) : {},
+        props.validate ? runValidateHandler(values) : {},
+      ]).then(([fieldErrors, schemaErrors, validateErrors]) => {
+        const combinedErrors = deepmerge.all<FormikErrors<Values>>(
+          [fieldErrors, schemaErrors, validateErrors],
+          { arrayMerge }
+        );
+        return combinedErrors;
+      });
+    },
+    [
+      props.validate,
+      props.validationSchema,
+      runFieldLevelValidations,
+      runValidateHandler,
+      runValidationSchema,
+    ]
+  );
+
+  // Run all validations methods and update state accordingly
+  const validateFormWithHighPriority = useEventCallback(
+    (values: Values = state.values) => {
+      dispatch({ type: 'SET_ISVALIDATING', payload: true });
+      return runAllValidations(values).then(combinedErrors => {
+        if (!!isMounted.current) {
+          dispatch({ type: 'SET_ISVALIDATING', payload: false });
+          dispatch({ type: 'SET_ERRORS', payload: combinedErrors });
+        }
+        return combinedErrors;
+      });
+    }
+  );
+
+  React.useEffect(() => {
+    if (
+      validateOnMount &&
+      isMounted.current === true &&
+      isEqual(initialValues.current, props.initialValues)
+    ) {
+      validateFormWithHighPriority(initialValues.current);
+    }
+  }, [validateOnMount, validateFormWithHighPriority]);
+
+  const resetForm = React.useCallback(
+    (nextState?: Partial<FormikState<Values>>) => {
+      const values =
+        nextState && nextState.values
+          ? nextState.values
+          : initialValues.current;
+      const errors =
+        nextState && nextState.errors
+          ? nextState.errors
+          : initialErrors.current
+          ? initialErrors.current
+          : props.initialErrors || {};
+      const touched =
+        nextState && nextState.touched
+          ? nextState.touched
+          : initialTouched.current
+          ? initialTouched.current
+          : props.initialTouched || {};
+      const status =
+        nextState && nextState.status
+          ? nextState.status
+          : initialStatus.current
+          ? initialStatus.current
+          : props.initialStatus;
+      initialValues.current = values;
+      initialErrors.current = errors;
+      initialTouched.current = touched;
+      initialStatus.current = status;
+
+      const dispatchFn = () => {
+        dispatch({
+          type: 'RESET_FORM',
+          payload: {
+            isSubmitting: !!nextState && !!nextState.isSubmitting,
+            errors,
+            touched,
+            status,
+            values,
+            isValidating: !!nextState && !!nextState.isValidating,
+            submitCount:
+              !!nextState &&
+              !!nextState.submitCount &&
+              typeof nextState.submitCount === 'number'
+                ? nextState.submitCount
+                : 0,
+          },
+        });
+      };
+
+      if (props.onReset) {
+        const maybePromisedOnReset = (props.onReset as any)(
+          state.values,
+          imperativeMethods
+        );
+
+        if (isPromise(maybePromisedOnReset)) {
+          (maybePromisedOnReset as Promise<any>).then(dispatchFn);
+        } else {
+          dispatchFn();
+        }
+      } else {
+        dispatchFn();
+      }
+    },
+    [props.initialErrors, props.initialStatus, props.initialTouched, props.onReset]
+  );
+
+  React.useEffect(() => {
+    if (
+      isMounted.current === true &&
+      !isEqual(initialValues.current, props.initialValues)
+    ) {
+      if (enableReinitialize) {
+        initialValues.current = props.initialValues;
+        resetForm();
+        if (validateOnMount) {
+          validateFormWithHighPriority(initialValues.current);
+        }
+      }
+    }
+  }, [
+    enableReinitialize,
+    props.initialValues,
+    resetForm,
+    validateOnMount,
+    validateFormWithHighPriority,
+  ]);
+
+  React.useEffect(() => {
+    if (
+      enableReinitialize &&
+      isMounted.current === true &&
+      !isEqual(initialErrors.current, props.initialErrors)
+    ) {
+      initialErrors.current = props.initialErrors || emptyErrors;
+      dispatch({
+        type: 'SET_ERRORS',
+        payload: props.initialErrors || emptyErrors,
+      });
+    }
+  }, [enableReinitialize, props.initialErrors]);
+
+  React.useEffect(() => {
+    if (
+      enableReinitialize &&
+      isMounted.current === true &&
+      !isEqual(initialTouched.current, props.initialTouched)
+    ) {
+      initialTouched.current = props.initialTouched || emptyTouched;
+      dispatch({
+        type: 'SET_TOUCHED',
+        payload: props.initialTouched || emptyTouched,
+      });
+    }
+  }, [enableReinitialize, props.initialTouched]);
+
+  React.useEffect(() => {
+    if (
+      enableReinitialize &&
+      isMounted.current === true &&
+      !isEqual(initialStatus.current, props.initialStatus)
+    ) {
+      initialStatus.current = props.initialStatus;
+      dispatch({
+        type: 'SET_STATUS',
+        payload: props.initialStatus,
+      });
+    }
+  }, [enableReinitialize, props.initialStatus, props.initialTouched]);
+
+  const validateField = useEventCallback((name: string) => {
+    // This will efficiently validate a single field by avoiding state
+    // changes if the validation function is synchronous. It's different from
+    // what is called when using validateForm.
+
+    if (
+      fieldRegistry.current[name] &&
+      isFunction(fieldRegistry.current[name].validate)
+    ) {
+      const value = getIn(state.values, name);
+      const maybePromise = fieldRegistry.current[name].validate(value);
+      if (isPromise(maybePromise)) {
+        // Only flip isValidating if the function is async.
+        dispatch({ type: 'SET_ISVALIDATING', payload: true });
+        return maybePromise
+          .then((x: any) => x)
+          .then((error: string) => {
+            dispatch({
+              type: 'SET_FIELD_ERROR',
+              payload: { field: name, value: error },
+            });
+            dispatch({ type: 'SET_ISVALIDATING', payload: false });
+          });
+      } else {
+        dispatch({
+          type: 'SET_FIELD_ERROR',
+          payload: {
+            field: name,
+            value: maybePromise as string | undefined,
+          },
+        });
+        return Promise.resolve(maybePromise as string | undefined);
+      }
+    } else if (props.validationSchema) {
+      dispatch({ type: 'SET_ISVALIDATING', payload: true });
+      return runValidationSchema(state.values, name)
+        .then((x: any) => x)
+        .then((error: any) => {
+          dispatch({
+            type: 'SET_FIELD_ERROR',
+            payload: { field: name, value: getIn(error, name) },
+          });
+          dispatch({ type: 'SET_ISVALIDATING', payload: false });
+        });
+    }
+
+    return Promise.resolve();
+  });
+
+  const registerField = React.useCallback((name: string, { validate }: any) => {
+    fieldRegistry.current[name] = {
+      validate,
+    };
+  }, []);
+
+  const unregisterField = React.useCallback((name: string) => {
+    delete fieldRegistry.current[name];
+  }, []);
+
+  const setTouched = useEventCallback(
+    (touched: FormikTouched<Values>, shouldValidate?: boolean) => {
+      dispatch({ type: 'SET_TOUCHED', payload: touched });
+      const willValidate =
+        shouldValidate === undefined ? validateOnBlur : shouldValidate;
+      return willValidate
+        ? validateFormWithHighPriority(state.values)
+        : Promise.resolve();
+    }
+  );
+
+  const setErrors = React.useCallback((errors: FormikErrors<Values>) => {
+    dispatch({ type: 'SET_ERRORS', payload: errors });
+  }, []);
+
+  const setValues = useEventCallback(
+    (values: React.SetStateAction<Values>, shouldValidate?: boolean) => {
+      const resolvedValues = isFunction(values) ? values(state.values) : values;
+
+      dispatch({ type: 'SET_VALUES', payload: resolvedValues });
+      const willValidate =
+        shouldValidate === undefined ? validateOnChange : shouldValidate;
+      return willValidate
+        ? validateFormWithHighPriority(resolvedValues)
+        : Promise.resolve();
+    }
+  );
+
+  const setFieldError = React.useCallback(
+    (field: string, value: string | undefined) => {
+      dispatch({
+        type: 'SET_FIELD_ERROR',
+        payload: { field, value },
+      });
+    },
+    []
+  );
+
+  const setFieldValue = useEventCallback(
+    (field: string, value: React.SetStateAction<any>, shouldValidate?: boolean) => {
+      const resolvedValue = isFunction(value) ? value(getIn(state.values, field)) : value;
+
+      dispatch({
+        type: 'SET_FIELD_VALUE',
+        payload: {
+          field,
+          value: resolvedValue,
+        },
+      });
+      const willValidate =
+        shouldValidate === undefined ? validateOnChange : shouldValidate;
+      return willValidate
+        ? validateFormWithHighPriority(setIn(state.values, field, resolvedValue))
+        : Promise.resolve();
+    }
+  );
+
+  const executeChange = React.useCallback(
+    (eventOrTextValue: string | React.ChangeEvent<any>, maybePath?: string) => {
+      // By default, assume that the first argument is a string. This allows us to use
+      // handleChange with React Native and React Native Web's onChangeText prop which
+      // provides just the value of the input.
+      let field = maybePath;
+      let val = eventOrTextValue;
+      let parsed;
+      // If the first argument is not a string though, it has to be a synthetic React Event (or a fake one),
+      // so we handle like we would a normal HTML change event.
+      if (!isString(eventOrTextValue)) {
+        // If we can, persist the event
+        // @see https://reactjs.org/docs/events.html#event-pooling
+        if ((eventOrTextValue as any).persist) {
+          (eventOrTextValue as React.ChangeEvent<any>).persist();
+        }
+        const target = eventOrTextValue.target
+          ? (eventOrTextValue as React.ChangeEvent<any>).target
+          : (eventOrTextValue as React.ChangeEvent<any>).currentTarget;
+
+        const {
+          type,
+          name,
+          id,
+          value,
+          checked,
+          outerHTML,
+          options,
+          multiple,
+        } = target;
+
+        field = maybePath ? maybePath : name ? name : id;
+        if (!field && __DEV__) {
+          warnAboutMissingIdentifier({
+            htmlContent: outerHTML,
+            documentationAnchorLink: 'handlechange-e-reactchangeeventany--void',
+            handlerName: 'handleChange',
+          });
+        }
+        val = /number|range/.test(type)
+          ? ((parsed = parseFloat(value)), isNaN(parsed) ? '' : parsed)
+          : /checkbox/.test(type) // checkboxes
+          ? getValueForCheckbox(getIn(state.values, field!), checked, value)
+          : options && multiple // <select multiple>
+          ? getSelectedValues(options)
+          : value;
+      }
+
+      if (field) {
+        // Set form fields by name
+        setFieldValue(field, val);
+      }
+    },
+    [setFieldValue, state.values]
+  );
+
+  const handleChange = useEventCallback<FormikHandlers['handleChange']>(
+    (
+      eventOrPath: string | React.ChangeEvent<any>
+    ): void | ((eventOrTextValue: string | React.ChangeEvent<any>) => void) => {
+      if (isString(eventOrPath)) {
+        return event => executeChange(event, eventOrPath);
+      } else {
+        executeChange(eventOrPath);
+      }
+    }
+  );
+
+  const setFieldTouched = useEventCallback(
+    (field: string, touched: boolean = true, shouldValidate?: boolean) => {
+      dispatch({
+        type: 'SET_FIELD_TOUCHED',
+        payload: {
+          field,
+          value: touched,
+        },
+      });
+      const willValidate =
+        shouldValidate === undefined ? validateOnBlur : shouldValidate;
+      return willValidate
+        ? validateFormWithHighPriority(state.values)
+        : Promise.resolve();
+    }
+  );
+
+  const executeBlur = React.useCallback(
+    (e: any, path?: string) => {
+      if (e.persist) {
+        e.persist();
+      }
+      const { name, id, outerHTML } = e.target;
+      const field = path ? path : name ? name : id;
+
+      if (!field && __DEV__) {
+        warnAboutMissingIdentifier({
+          htmlContent: outerHTML,
+          documentationAnchorLink: 'handleblur-e-any--void',
+          handlerName: 'handleBlur',
+        });
+      }
+
+      setFieldTouched(field, true);
+    },
+    [setFieldTouched]
+  );
+
+  const handleBlur = useEventCallback<FormikHandlers['handleBlur']>(
+    (eventOrString: any): void | ((e: any) => void) => {
+      if (isString(eventOrString)) {
+        return event => executeBlur(event, eventOrString);
+      } else {
+        executeBlur(eventOrString);
+      }
+    }
+  );
+
+  const setFormikState = React.useCallback(
+    (
+      stateOrCb:
+        | FormikState<Values>
+        | ((state: FormikState<Values>) => FormikState<Values>)
+    ): void => {
+      if (isFunction(stateOrCb)) {
+        dispatch({ type: 'SET_FORMIK_STATE', payload: stateOrCb });
+      } else {
+        dispatch({ type: 'SET_FORMIK_STATE', payload: () => stateOrCb });
+      }
+    },
+    []
+  );
+
+  const setStatus = React.useCallback((status: any) => {
+    dispatch({ type: 'SET_STATUS', payload: status });
+  }, []);
+
+  const setSubmitting = React.useCallback((isSubmitting: boolean) => {
+    dispatch({ type: 'SET_ISSUBMITTING', payload: isSubmitting });
+  }, []);
+
+  const submitForm = useEventCallback(() => {
+    dispatch({ type: 'SUBMIT_ATTEMPT' });
+    return validateFormWithHighPriority().then(
+      (combinedErrors: FormikErrors<Values>) => {
+        // In case an error was thrown and passed to the resolved Promise,
+        // `combinedErrors` can be an instance of an Error. We need to check
+        // that and abort the submit.
+        // If we don't do that, calling `Object.keys(new Error())` yields an
+        // empty array, which causes the validation to pass and the form
+        // to be submitted.
+
+        const isInstanceOfError = combinedErrors instanceof Error;
+        const isActuallyValid =
+          !isInstanceOfError && Object.keys(combinedErrors).length === 0;
+        if (isActuallyValid) {
+          // Proceed with submit...
+          //
+          // To respect sync submit fns, we can't simply wrap executeSubmit in a promise and
+          // _always_ dispatch SUBMIT_SUCCESS because isSubmitting would then always be false.
+          // This would be fine in simple cases, but make it impossible to disable submit
+          // buttons where people use callbacks or promises as side effects (which is basically
+          // all of v1 Formik code). Instead, recall that we are inside of a promise chain already,
+          //  so we can try/catch executeSubmit(), if it returns undefined, then just bail.
+          // If there are errors, throw em. Otherwise, wrap executeSubmit in a promise and handle
+          // cleanup of isSubmitting on behalf of the consumer.
+          let promiseOrUndefined;
+          try {
+            promiseOrUndefined = executeSubmit();
+            // Bail if it's sync, consumer is responsible for cleaning up
+            // via setSubmitting(false)
+            if (promiseOrUndefined === undefined) {
+              return;
+            }
+          } catch (error) {
+            throw error;
+          }
+
+          return Promise.resolve(promiseOrUndefined)
+            .then(result => {
+              if (!!isMounted.current) {
+                dispatch({ type: 'SUBMIT_SUCCESS' });
+              }
+              return result;
+            })
+            .catch(_errors => {
+              if (!!isMounted.current) {
+                dispatch({ type: 'SUBMIT_FAILURE' });
+                // This is a legit error rejected by the onSubmit fn
+                // so we don't want to break the promise chain
+                throw _errors;
+              }
+            });
+        } else if (!!isMounted.current) {
+          // ^^^ Make sure Formik is still mounted before updating state
+          dispatch({ type: 'SUBMIT_FAILURE' });
+          // throw combinedErrors;
+          if (isInstanceOfError) {
+            throw combinedErrors;
+          }
+        }
+        return;
+      }
+    );
+  });
+
+  const handleSubmit = useEventCallback(
+    (e?: React.FormEvent<HTMLFormElement>) => {
+      if (e && e.preventDefault && isFunction(e.preventDefault)) {
+        e.preventDefault();
+      }
+
+      if (e && e.stopPropagation && isFunction(e.stopPropagation)) {
+        e.stopPropagation();
+      }
+
+      // Warn if form submission is triggered by a <button> without a
+      // specified `type` attribute during development. This mitigates
+      // a common gotcha in forms with both reset and submit buttons,
+      // where the dev forgets to add type="button" to the reset button.
+      if (__DEV__ && typeof document !== 'undefined') {
+        // Safely get the active element (works with IE)
+        const activeElement = getActiveElement();
+        if (
+          activeElement !== null &&
+          activeElement instanceof HTMLButtonElement
+        ) {
+          invariant(
+            activeElement.attributes &&
+              activeElement.attributes.getNamedItem('type'),
+            'You submitted a Formik form using a button with an unspecified `type` attribute.  Most browsers default button elements to `type="submit"`. If this is not a submit button, please add `type="button"`.'
+          );
+        }
+      }
+
+      submitForm().catch(reason => {
+        console.warn(
+          `Warning: An unhandled error was caught from submitForm()`,
+          reason
+        );
+      });
+    }
+  );
+
+  const imperativeMethods: FormikHelpers<Values> = {
+    resetForm,
+    validateForm: validateFormWithHighPriority,
+    validateField,
+    setErrors,
+    setFieldError,
+    setFieldTouched,
+    setFieldValue,
+    setStatus,
+    setSubmitting,
+    setTouched,
+    setValues,
+    setFormikState,
+    submitForm,
+  };
+
+  const executeSubmit = useEventCallback(() => {
+    return onSubmit(state.values, imperativeMethods);
+  });
+
+  const handleReset = useEventCallback(e => {
+    if (e && e.preventDefault && isFunction(e.preventDefault)) {
+      e.preventDefault();
+    }
+
+    if (e && e.stopPropagation && isFunction(e.stopPropagation)) {
+      e.stopPropagation();
+    }
+
+    resetForm();
+  });
+
+  const getFieldMeta = React.useCallback(
+    (name: string): FieldMetaProps<any> => {
+      return {
+        value: getIn(state.values, name),
+        error: getIn(state.errors, name),
+        touched: !!getIn(state.touched, name),
+        initialValue: getIn(initialValues.current, name),
+        initialTouched: !!getIn(initialTouched.current, name),
+        initialError: getIn(initialErrors.current, name),
+      };
+    },
+    [state.errors, state.touched, state.values]
+  );
+
+  const getFieldHelpers = React.useCallback(
+    (name: string): FieldHelperProps<any> => {
+      return {
+        setValue: (value: any, shouldValidate?: boolean) =>
+          setFieldValue(name, value, shouldValidate),
+        setTouched: (value: boolean, shouldValidate?: boolean) =>
+          setFieldTouched(name, value, shouldValidate),
+        setError: (value: any) => setFieldError(name, value),
+      };
+    },
+    [setFieldValue, setFieldTouched, setFieldError]
+  );
+
+  const getFieldProps = React.useCallback(
+    (nameOrOptions: string | FieldConfig<any>): FieldInputProps<any> => {
+      const isAnObject = isObject(nameOrOptions);
+      const name = isAnObject
+        ? (nameOrOptions as FieldConfig<any>).name
+        : nameOrOptions;
+      const valueState = getIn(state.values, name);
+
+      const field: FieldInputProps<any> = {
+        name,
+        value: valueState,
+        onChange: handleChange,
+        onBlur: handleBlur,
+      };
+      if (isAnObject) {
+        const {
+          type,
+          value: valueProp, // value is special for checkboxes
+          as: is,
+          multiple,
+        } = nameOrOptions as FieldConfig<any>;
+
+        if (type === 'checkbox') {
+          if (valueProp === undefined) {
+            field.checked = !!valueState;
+          } else {
+            field.checked = !!(
+              Array.isArray(valueState) && ~valueState.indexOf(valueProp)
+            );
+            field.value = valueProp;
+          }
+        } else if (type === 'radio') {
+          field.checked = valueState === valueProp;
+          field.value = valueProp;
+        } else if (is === 'select' && multiple) {
+          field.value = field.value || [];
+          field.multiple = true;
+        }
+      }
+      return field;
+    },
+    [handleBlur, handleChange, state.values]
+  );
+
+  const dirty = React.useMemo(
+    () => !isEqual(initialValues.current, state.values),
+    [initialValues.current, state.values]
+  );
+
+  const isValid = React.useMemo(
+    () =>
+      typeof isInitialValid !== 'undefined'
+        ? dirty
+          ? state.errors && Object.keys(state.errors).length === 0
+          : isInitialValid !== false && isFunction(isInitialValid)
+          ? (isInitialValid as (props: FormikConfig<Values>) => boolean)(props)
+          : (isInitialValid as boolean)
+        : state.errors && Object.keys(state.errors).length === 0,
+    [isInitialValid, dirty, state.errors, props]
+  );
+
+  const ctx = {
+    ...state,
+    initialValues: initialValues.current,
+    initialErrors: initialErrors.current,
+    initialTouched: initialTouched.current,
+    initialStatus: initialStatus.current,
+    handleBlur,
+    handleChange,
+    handleReset,
+    handleSubmit,
+    resetForm,
+    setErrors,
+    setFormikState,
+    setFieldTouched,
+    setFieldValue,
+    setFieldError,
+    setStatus,
+    setSubmitting,
+    setTouched,
+    setValues,
+    submitForm,
+    validateForm: validateFormWithHighPriority,
+    validateField,
+    isValid,
+    dirty,
+    unregisterField,
+    registerField,
+    getFieldProps,
+    getFieldMeta,
+    getFieldHelpers,
+    validateOnBlur,
+    validateOnChange,
+    validateOnMount,
+  };
+
+  return ctx;
+}
+
+export function Formik<
+  Values extends FormikValues = FormikValues,
+  ExtraProps = {}
+>(props: FormikConfig<Values> & ExtraProps) {
+  const formikbag = useFormik<Values>(props);
+  const { component, children, render, innerRef } = props;
+
+  // This allows folks to pass a ref to <Formik />
+  React.useImperativeHandle(innerRef, () => formikbag);
+
+  if (__DEV__) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    React.useEffect(() => {
+      invariant(
+        !props.render,
+        `<Formik render> has been deprecated and will be removed in future versions of Formik. Please use a child callback function instead. To get rid of this warning, replace <Formik render={(props) => ...} /> with <Formik>{(props) => ...}</Formik>`
+      );
+      // eslint-disable-next-line
+    }, []);
+  }
+  return (
+    <FormikProvider value={formikbag}>
+      {component
+        ? React.createElement(component as any, formikbag)
+        : render
+        ? render(formikbag)
+        : children // children come last, always called
+        ? isFunction(children)
+          ? (children as (bag: FormikProps<Values>) => React.ReactNode)(
+              formikbag as FormikProps<Values>
+            )
+          : !isEmptyChildren(children)
+          ? React.Children.only(children)
+          : null
+        : null}
+    </FormikProvider>
+  );
+}
+
+function warnAboutMissingIdentifier({
+  htmlContent,
+  documentationAnchorLink,
+  handlerName,
+}: {
+  htmlContent: string;
+  documentationAnchorLink: string;
+  handlerName: string;
+}) {
+  console.warn(
+    `Warning: Formik called \`${handlerName}\`, but you forgot to pass an \`id\` or \`name\` attribute to your input:
+    ${htmlContent}
+    Formik cannot determine which value to update. For more info see https://formik.org/docs/api/formik#${documentationAnchorLink}
+  `
+  );
+}
+
+/**
+ * Transform Yup ValidationError to a more usable object
+ */
+export function yupToFormErrors<Values>(yupError: any): FormikErrors<Values> {
+  let errors: FormikErrors<Values> = {};
+  if (yupError.inner) {
+    if (yupError.inner.length === 0) {
+      return setIn(errors, yupError.path, yupError.message);
+    }
+    for (let err of yupError.inner) {
+      if (!getIn(errors, err.path)) {
+        errors = setIn(errors, err.path, err.message);
+      }
+    }
+  }
+  return errors;
+}
+
+/**
+ * Validate a yup schema.
+ */
+export function validateYupSchema<T extends FormikValues>(
+  values: T,
+  schema: any,
+  sync: boolean = false,
+  context?: any
+): Promise<Partial<T>> {
+  const normalizedValues: FormikValues = prepareDataForValidation(values);
+
+  return schema[sync ? 'validateSync' : 'validate'](normalizedValues, {
+    abortEarly: false,
+    context: context || normalizedValues,
+  });
+}
+
+/**
+ * Recursively prepare values.
+ */
+export function prepareDataForValidation<T extends FormikValues>(
+  values: T
+): FormikValues {
+  let data: FormikValues = Array.isArray(values) ? [] : {};
+  for (let k in values) {
+    if (Object.prototype.hasOwnProperty.call(values, k)) {
+      const key = String(k);
+      if (Array.isArray(values[key]) === true) {
+        data[key] = values[key].map((value: any) => {
+          if (Array.isArray(value) === true || isPlainObject(value)) {
+            return prepareDataForValidation(value);
+          } else {
+            return value !== '' ? value : undefined;
+          }
+        });
+      } else if (isPlainObject(values[key])) {
+        data[key] = prepareDataForValidation(values[key]);
+      } else {
+        data[key] = values[key] !== '' ? values[key] : undefined;
+      }
+    }
+  }
+  return data;
+}
+
+/**
+ * deepmerge array merging algorithm
+ * https://github.com/KyleAMathews/deepmerge#combine-array
+ */
+function arrayMerge(target: any[], source: any[], options: any): any[] {
+  const destination = target.slice();
+
+  source.forEach(function merge(e: any, i: number) {
+    if (typeof destination[i] === 'undefined') {
+      const cloneRequested = options.clone !== false;
+      const shouldClone = cloneRequested && options.isMergeableObject(e);
+      destination[i] = shouldClone
+        ? deepmerge(Array.isArray(e) ? [] : {}, e, options)
+        : e;
+    } else if (options.isMergeableObject(e)) {
+      destination[i] = deepmerge(target[i], e, options);
+    } else if (target.indexOf(e) === -1) {
+      destination.push(e);
+    }
+  });
+  return destination;
+}
+
+/** Return multi select values based on an array of options */
+function getSelectedValues(options: any[]) {
+  return Array.from(options)
+    .filter(el => el.selected)
+    .map(el => el.value);
+}
+
+/** Return the next value for a checkbox */
+function getValueForCheckbox(
+  currentValue: string | any[],
+  checked: boolean,
+  valueProp: any
+) {
+  // If the current value was a boolean, return a boolean
+  if (typeof currentValue === 'boolean') {
+    return Boolean(checked);
+  }
+
+  // If the currentValue was not a boolean we want to return an array
+  let currentArrayOfValues = [];
+  let isValueInArray = false;
+  let index = -1;
+
+  if (!Array.isArray(currentValue)) {
+    // eslint-disable-next-line eqeqeq
+    if (!valueProp || valueProp == 'true' || valueProp == 'false') {
+      return Boolean(checked);
+    }
+  } else {
+    // If the current value is already an array, use it
+    currentArrayOfValues = currentValue;
+    index = currentValue.indexOf(valueProp);
+    isValueInArray = index >= 0;
+  }
+
+  // If the checkbox was checked and the value is not already present in the aray we want to add the new value to the array of values
+  if (checked && valueProp && !isValueInArray) {
+    return currentArrayOfValues.concat(valueProp);
+  }
+
+  // If the checkbox was unchecked and the value is not in the array, simply return the already existing array of values
+  if (!isValueInArray) {
+    return currentArrayOfValues;
+  }
+
+  // If the checkbox was unchecked and the value is in the array, remove the value and return the array
+  return currentArrayOfValues
+    .slice(0, index)
+    .concat(currentArrayOfValues.slice(index + 1));
+}
+
+// React currently throws a warning when using useLayoutEffect on the server.
+// To get around it, we can conditionally useEffect on the server (no-op) and
+// useLayoutEffect in the browser.
+// @see https://gist.github.com/gaearon/e7d97cdf38a2907924ea12e4ebdf3c85
+const useIsomorphicLayoutEffect =
+  typeof window !== 'undefined' &&
+  typeof window.document !== 'undefined' &&
+  typeof window.document.createElement !== 'undefined'
+    ? React.useLayoutEffect
+    : React.useEffect;
+
+function useEventCallback<T extends (...args: any[]) => any>(fn: T): T {
+  const ref: any = React.useRef(fn);
+
+  // we copy a ref to the callback scoped to the current state/props on each render
+  useIsomorphicLayoutEffect(() => {
+    ref.current = fn;
+  });
+
+  return React.useCallback(
+    (...args: any[]) => ref.current.apply(void 0, args),
+    []
+  ) as T;
+}

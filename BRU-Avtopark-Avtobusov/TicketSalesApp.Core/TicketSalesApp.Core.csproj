@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Common properties -->
+  <PropertyGroup>
+    <!-- Windows XP compatible build -->
+   
+    <!-- Set WindowsXP property based on Configuration -->
+        <!-- <WindowsXP Condition="'$(Configuration)' == 'DebugXP' Or '$(Configuration)' == 'ReleaseXP'">false</WindowsXP> -->
+        <!-- <WindowsXP Condition="'$(Configuration)' != 'DebugXP' And '$(Configuration)' != 'ReleaseXP'">false</WindowsXP> -->
+        <WindowsXP>false</WindowsXP> <!-- default to false - api server will not run on windows xp , i will make the models from this somewhere else  -->
+        <Configurations>Debug;Release;ReleaseXP;DebugXP</Configurations>
+  </PropertyGroup>
+
+  <!-- Modern build (default) -->
+  <PropertyGroup Condition="'$(WindowsXP)' != 'true'">
+    <TargetFramework>net9.0</TargetFramework>
+    <DefineConstants>MODERN</DefineConstants>
+  </PropertyGroup>
+
+  <!-- Windows XP compatible build -->
+  <PropertyGroup Condition="'$(WindowsXP)' == 'true'">
+    <TargetFramework>net40</TargetFramework>
+    <DefineConstants>WINDOWSXP</DefineConstants>
+  </PropertyGroup>
+
+  <!-- Modern packages -->
+  <ItemGroup Condition="'$(WindowsXP)' != 'true'">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Serilog" Version="4.2.1-dev-02337" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.1-dev-02317" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+    <PackageReference Include="System.Text.Json" Version="9.0.1" />
+  </ItemGroup>
+
+  <!-- Windows XP compatible packages -->
+  <ItemGroup Condition="'$(WindowsXP)' == 'true'">
+    <!-- Entity Framework 6 for .NET Framework 4.0 -->
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <!-- Newtonsoft.Json for .NET Framework 4.0 -->
+    <PackageReference Include="Newtonsoft.Json" Version="6.0.8" />
+    <!-- Serilog for .NET Framework 4.0 -->
+    <PackageReference Include="Serilog" Version="1.5.14" />
+    <!-- Add other net40 compatible packages if needed -->
+  </ItemGroup>
+
+</Project>

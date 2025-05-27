@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TicketSalesAPP.Mobile.UI.MAUI.Views.TreeView1Page"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dx="http://schemas.devexpress.com/maui"
+    xmlns:local="clr-namespace:TicketSalesAPP.Mobile.UI.MAUI.Views;assembly=TicketSalesAPP.Mobile.UI.MAUI"
+    xmlns:viewModels="clr-namespace:TicketSalesAPP.Mobile.UI.MAUI.ViewModels;assembly=TicketSalesAPP.Mobile.UI.MAUI"
+    x:DataType="viewModels:TreeView1ViewModel"
+    Title="Files and Folders">
+
+    <ContentPage.BindingContext>
+        <viewModels:TreeView1ViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="Auto,*">
+        <dx:DXBorder
+            BackgroundColor="{dx:ThemeColor Key=SurfaceContainer}"
+            CornerRadius="50"
+            Margin="{OnPlatform Android='16,0,16,16', iOS='16'}">
+            <dx:TextEdit
+                TextChangedCommand="{Binding TextChangedCommand}"
+                TextChangedCommandParameter="{Binding Text, Source={RelativeSource Self}}"
+                BorderThickness="0"
+                FocusedBorderThickness="0"
+                PlaceholderText="Search"
+                StartIcon="search" />
+        </dx:DXBorder>
+        <dx:DXTreeView
+            Grid.Row="1"
+            ItemsSource="{Binding Nodes}"
+            FilterString="{Binding FilterString}"
+            AllowLiveDataShaping="True"
+            DisplayMember="Name"
+            AutoExpandMode="RootNodes"
+            FilterMode="ParentBranch"
+            ExpandNodesOnFiltering="True"
+            TapCommand="{Binding HandleActionCommand}">
+
+            <dx:DXTreeView.TreeDescription>
+                <dx:HierarchyTreeDescription ChildNodeFieldName="Nodes" />
+            </dx:DXTreeView.TreeDescription>
+
+            <dx:DXTreeView.ItemTemplate>
+                <DataTemplate x:DataType="{x:Null}">
+                    <dx:TreeNodeView Icon="{Binding IsExpanded, Converter={local:BoolToImageSourceConverter TrueSource='folder_open', FalseSource='folder'}}">
+                        <dx:TreeNodeView.Triggers>
+                            <DataTrigger
+                                TargetType="dx:TreeNodeView"
+                                Binding="{Binding Item.IsFolder}"
+                                Value="False">
+                                <Setter Property="ShowIcon" Value="False" />
+                            </DataTrigger>
+                        </dx:TreeNodeView.Triggers>
+                    </dx:TreeNodeView>
+                </DataTemplate>
+            </dx:DXTreeView.ItemTemplate>
+        </dx:DXTreeView>
+    </Grid>
+</ContentPage>

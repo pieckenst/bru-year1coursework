@@ -1,0 +1,716 @@
+using System;
+
+using Avalonia.Controls;
+using Avalonia.Data;
+
+using ReDocking.ViewModels;
+
+namespace ReDocking.Views;
+
+public class ToolWindow : Window
+{
+    private readonly IDisposable _disposable;
+    private readonly Window _owner;
+
+    public ToolWindow(ToolWindowViewModel viewModel, Window owner)
+    {
+        _owner = owner;
+        DataContext = viewModel;
+        Width = 300;
+        Height = 300;
+        ShowInTaskbar = false;
+        Content = new ContentControl { [!ContentProperty] = new Binding("Content.Value") };
+        _disposable = viewModel.IsSelected.Subscribe(OnSelectedChanged);
+    }
+
+    public ToolWindowViewModel ViewModel => (ToolWindowViewModel)DataContext!;
+
+    private void OnSelectedChanged(bool isSelected)
+    {
+        if (!isSelected)
+        {
+            Hide();
+        }
+        else
+        {
+            Show(_owner);
+        }
+    }
+
+    protected override void OnClosed(EventArgs e)
+    {
+        base.OnClosed(e);
+        _disposable.Dispose();
+    }
+}
+using System.Collections.Generic;
+
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Templates;
+using Avalonia.Interactivity;
+using Avalonia.VisualTree;
+
+using ReDocking.ViewModels;
+
+namespace ReDocking.Views;
+
+public class CustomSideBarButtonMenuFlyout : MenuFlyout
+{
+    private readonly ReDockHost _dockHost;
+
+    public CustomSideBarButtonMenuFlyout(ReDockHost dockHost)
+    {
+        _dockHost = dockHost;
+        var list = new List<Control>();
+
+        {
+            var moveMenu = new MenuItem();
+            moveMenu.Header = "Move to";
+            moveMenu.ItemsSource = dockHost.DockAreas;
+            moveMenu.DataTemplates.Add(new FuncDataTemplate<DockArea>(_ => true,
+                o => new TextBlock
+                {
+                    [!TextBlock.TextProperty] = o.GetObservable(DockArea.LocalizedNameProperty).ToBinding(),
+                }));
+
+            moveMenu.AddHandler(MenuItem.ClickEvent, OnMoveToSubItemClick);
+            list.Add(moveMenu);
+        }
+
+        {
+            var closeMenu = new MenuItem();
+            closeMenu.Header = "Close";
+            closeMenu.AddHandler(MenuItem.ClickEvent, OnCloseClick);
+            list.Add(closeMenu);
+        }
+
+        if (dockHost.IsFloatingEnabled)
+        {
+            var displayMenu = new MenuItem();
+            displayMenu.Header = "Display mode";
+            displayMenu.ItemsSource = new List<Control>
+            {
+                new MenuItem { Header = "Docked", Tag = DockableDisplayMode.Docked },
+                new MenuItem { Header = "Floating", Tag = DockableDisplayMode.Floating },
+            };
+            displayMenu.AddHandler(MenuItem.ClickEvent, OnDisplayModeClick);
+            list.Add(displayMenu);
+        }
+
+        ItemsSource = list;
+    }
+
+    private void OnCloseClick(object? sender, RoutedEventArgs e)
+    {
+        if (Target is not SideBarButton button) return;
+        if (button is not { DockLocation: { } location }) return;
+        if (button is not { DataContext: ToolWindowViewModel buttonViewModel }) return;
+        if (button.FindAncestorOfType<MainWindow>() is not { DataContext: MainWindowViewModel viewModel }) return;
+
+        buttonViewModel.IsSelected.Value = false;
+        var itemsSource = MainWindow.GetItemsSource(viewModel, location);
+        itemsSource.Remove(buttonViewModel);
+    }
+
+    private void OnDisplayModeClick(object? sender, RoutedEventArgs e)
+    {
+        if (e.Source is MenuItem { Tag: DockableDisplayMode mode } &&
+            Target is SideBarButton button)
+        {
+            var args = new SideBarButtonDisplayModeChangedEventArgs(ReDockHost.ButtonDisplayModeChangedEvent, this)
+            {
+                DisplayMode = mode,
+                Item = button.DataContext,
+                Button = button
+            };
+            _dockHost.RaiseEvent(args);
+        }
+    }
+
+    private void OnMoveToSubItemClick(object? sender, RoutedEventArgs e)
+    {
+        if (e.Source is MenuItem { DataContext: DockArea area } &&
+            Target is SideBarButton button)
+        {
+            // Target
+            var oldSideBar = button.FindAncestorOfType<SideBar>();
+            var newSideBar = area.SideBar;
+            if (oldSideBar is null || newSideBar is null) return;
+            var oldLocation = button.DockLocation;
+            var newLocation = area.Location;
+            if (oldLocation is null || oldLocation == newLocation) return;
+
+            var args = new SideBarButtonMoveEventArgs(ReDockHost.ButtonMoveEvent, this)
+            {
+                Item = button.DataContext,
+                Button = button,
+                SourceSideBar = oldSideBar,
+                SourceLocation = oldLocation,
+                DestinationSideBar = newSideBar,
+                DestinationLocation = newLocation,
+                DestinationIndex = 0
+            };
+            _dockHost.RaiseEvent(args);
+        }
+    }
+}
+
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
+
+namespace ReDocking.Views;
+
+public partial class Search : UserControl
+{
+    public Search()
+    {
+        InitializeComponent();
+    }
+}
+
+<UserControl x:Class="ReDocking.Views.Search"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+    Welcome to Avalonia!
+</UserControl>
+
+<UserControl x:Class="ReDocking.Views.Properties"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="450"
+             d:DesignWidth="400"
+             mc:Ignorable="d">
+    <StackPanel Margin="8" Spacing="4">
+        <Grid ColumnDefinitions="*,2*">
+            <TextBlock VerticalAlignment="Center" Text="Left" />
+            <TextBox Grid.Column="1" Text="0" />
+        </Grid>
+        <Grid ColumnDefinitions="*,2*">
+            <TextBlock VerticalAlignment="Center" Text="Top" />
+            <TextBox Grid.Column="1" Text="0" />
+        </Grid>
+        <Grid ColumnDefinitions="*,2*">
+            <TextBlock VerticalAlignment="Center" Text="Right" />
+            <TextBox Grid.Column="1" Text="0" />
+        </Grid>
+        <Grid ColumnDefinitions="*,2*">
+            <TextBlock VerticalAlignment="Center" Text="Bottom" />
+            <TextBox Grid.Column="1" Text="0" />
+        </Grid>
+    </StackPanel>
+</UserControl>
+
+<UserControl x:Class="ReDocking.Views.Problem"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+    <TabControl>
+        <TabControl.Resources>
+            <x:Double x:Key="TabItemHeaderFontSize">14</x:Double>
+            <x:Double x:Key="TabItemMinHeight">32</x:Double>
+            <FontWeight x:Key="TabItemHeaderThemeFontWeight">Normal</FontWeight>
+            <Thickness x:Key="TabItemHeaderMargin">6,0</Thickness>
+        </TabControl.Resources>
+        <TabItem Header="File" />
+        <TabItem Header="Project" />
+        <TabItem Header="Solution" />
+    </TabControl>
+</UserControl>
+
+<Window x:Class="ReDocking.Views.MainWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dock="using:ReDocking"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+        xmlns:viewModels="clr-namespace:ReDocking.ViewModels"
+        Title="ReDocking"
+        d:DesignHeight="450"
+        d:DesignWidth="800"
+        x:DataType="viewModels:MainWindowViewModel"
+        mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ControlTheme x:Key="SettingsButton"
+                          BasedOn="{StaticResource TransparentButton}"
+                          TargetType="Button">
+                <Setter Property="Width" Value="32" />
+                <Setter Property="Height" Value="32" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+            </ControlTheme>
+            <DataTemplate x:Key="LeftSideBarButtonDataTemplate" x:DataType="viewModels:ToolWindowViewModel">
+                <dock:SideBarButton DisplayMode="{Binding DisplayMode.Value}"
+                                    IsChecked="{Binding IsSelected.Value}"
+                                    ToolTip.Placement="Right"
+                                    ToolTip.ShowDelay="200"
+                                    ToolTip.Tip="{Binding Name.Value}"
+                                    ToolTip.VerticalOffset="0">
+                    <ui:FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="{Binding Icon.Value}" />
+                </dock:SideBarButton>
+            </DataTemplate>
+            <DataTemplate x:Key="RightSideBarButtonDataTemplate" x:DataType="viewModels:ToolWindowViewModel">
+                <dock:SideBarButton DisplayMode="{Binding DisplayMode.Value}"
+                                    IsChecked="{Binding IsSelected.Value}"
+                                    ToolTip.Placement="Left"
+                                    ToolTip.ShowDelay="200"
+                                    ToolTip.Tip="{Binding Name.Value}"
+                                    ToolTip.VerticalOffset="0">
+                    <ui:FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="{Binding Icon.Value}" />
+                </dock:SideBarButton>
+            </DataTemplate>
+            <DataTemplate x:Key="ToolContentDataTemplate" x:DataType="viewModels:ToolWindowViewModel">
+                <ContentControl Content="{Binding Content.Value}" />
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.Styles>
+        <Style Selector="ui|TabView">
+            <Setter Property="Padding" Value="0" />
+        </Style>
+    </Window.Styles>
+    <Grid RowDefinitions="40,1,*">
+        <Grid Name="TitleBar" ColumnDefinitions="*,40">
+            <Button Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Theme="{StaticResource SettingsButton}">
+                <ui:SymbolIcon Symbol="Setting" />
+            </Button>
+        </Grid>
+        <Border Grid.Row="1" Background="{DynamicResource ReDockingDividerBrush}" />
+        <dock:ReDockHost Grid.Row="2"
+                         ButtonDisplayModeChanged="OnSideBarButtonDisplayModeChanged"
+                         ButtonFlyoutRequested="OnButtonFlyoutRequested"
+                         ButtonMove="OnSideBarButtonDrop"
+                         IsFloatingEnabled="True">
+            <dock:ReDockHost.DockAreas>
+                <dock:DockArea LocalizedName="Left"
+                               Location="LeftUpperBottom"
+                               SideBar="LeftSideBar"
+                               Target="TopContent"
+                               View="LeftTopBottomArea" />
+                <dock:DockArea LocalizedName="Left Bottom"
+                               Location="LeftLowerTop"
+                               SideBar="LeftSideBar"
+                               Target="BottomContent"
+                               View="LeftTopBottomArea" />
+
+                <dock:DockArea LocalizedName="Right"
+                               Location="RightUpperBottom"
+                               SideBar="RightSideBar"
+                               Target="TopContent"
+                               View="RightTopBottomArea" />
+
+                <dock:DockArea LocalizedName="Right Bottom"
+                               Location="RightLowerTop"
+                               SideBar="RightSideBar"
+                               Target="BottomContent"
+                               View="RightTopBottomArea" />
+
+                <dock:DockArea LocalizedName="TopLeft"
+                               Location="LeftUpperTop"
+                               SideBar="LeftSideBar"
+                               Target="LeftContent"
+                               View="TopLeftRightArea" />
+                <dock:DockArea LocalizedName="TopRight"
+                               Location="RightUpperTop"
+                               SideBar="RightSideBar"
+                               Target="RightContent"
+                               View="TopLeftRightArea" />
+                <dock:DockArea LocalizedName="BottomLeft"
+                               Location="LeftLowerBottom"
+                               SideBar="LeftSideBar"
+                               Target="LeftContent"
+                               View="BottomLeftRightArea" />
+                <dock:DockArea LocalizedName="BottomRight"
+                               Location="RightLowerBottom"
+                               SideBar="RightSideBar"
+                               Target="RightContent"
+                               View="BottomLeftRightArea" />
+            </dock:ReDockHost.DockAreas>
+            <Grid ColumnDefinitions="40,*,40">
+                <dock:SideBar Name="LeftSideBar"
+                              BorderBrush="{DynamicResource ReDockingDividerBrush}"
+                              BorderThickness="0,0,1,0"
+                              ItemTemplate="{StaticResource LeftSideBarButtonDataTemplate}"
+                              Location="Left"
+                              LowerBottomToolsSource="{Binding LeftLowerBottomTools}"
+                              LowerTopToolsSource="{Binding LeftLowerTopTools}"
+                              UpperBottomToolsSource="{Binding LeftUpperBottomTools}"
+                              UpperTopToolsSource="{Binding LeftUpperTopTools}" />
+
+                <dock:ReDock Name="LeftRightArea" Grid.Column="1">
+                    <dock:ReDock.LeftContent>
+                        <dock:VerticallySplittedView Name="LeftTopBottomArea"
+                                                     BottomContent="{Binding SelectedLeftLowerTopTool.Value}"
+                                                     BottomContentTemplate="{StaticResource ToolContentDataTemplate}"
+                                                     TopContent="{Binding SelectedLeftUpperBottomTool.Value}"
+                                                     TopContentTemplate="{StaticResource ToolContentDataTemplate}" />
+                    </dock:ReDock.LeftContent>
+                    <dock:ReDock.RightContent>
+                        <dock:VerticallySplittedView Name="RightTopBottomArea"
+                                                     BottomContent="{Binding SelectedRightLowerTopTool.Value}"
+                                                     BottomContentTemplate="{StaticResource ToolContentDataTemplate}"
+                                                     TopContent="{Binding SelectedRightUpperBottomTool.Value}"
+                                                     TopContentTemplate="{StaticResource ToolContentDataTemplate}" />
+                    </dock:ReDock.RightContent>
+                    <dock:VerticallySplittedView>
+                        <dock:VerticallySplittedView.TopContent>
+                            <dock:ReDock Name="TopLeftRightArea"
+                                         LeftContent="{Binding SelectedLeftUpperTopTool.Value}"
+                                         RightContent="{Binding SelectedRightUpperTopTool.Value}">
+                                <dock:ReDock.LeftContentTemplate>
+                                    <DataTemplate x:DataType="viewModels:ToolWindowViewModel">
+                                        <ContentControl Content="{Binding Content.Value}" />
+                                    </DataTemplate>
+                                </dock:ReDock.LeftContentTemplate>
+                                <dock:ReDock.RightContentTemplate>
+                                    <DataTemplate x:DataType="viewModels:ToolWindowViewModel">
+                                        <ContentControl Content="{Binding Content.Value}" />
+                                    </DataTemplate>
+                                </dock:ReDock.RightContentTemplate>
+                                <ui:TabView>
+                                    <ui:TabViewItem Header="File 1" />
+                                    <ui:TabViewItem Header="File 2" />
+                                    <ui:TabViewItem Header="File 3" />
+                                </ui:TabView>
+                            </dock:ReDock>
+                        </dock:VerticallySplittedView.TopContent>
+                        <dock:VerticallySplittedView.BottomContent>
+                            <dock:HorizontallySplittedView Name="BottomLeftRightArea"
+                                                           LeftContent="{Binding SelectedLeftLowerBottomTool.Value}"
+                                                           RightContent="{Binding SelectedRightLowerBottomTool.Value}">
+                                <dock:HorizontallySplittedView.LeftContentTemplate>
+                                    <DataTemplate x:DataType="viewModels:ToolWindowViewModel">
+                                        <ContentControl Content="{Binding Content.Value}" />
+                                    </DataTemplate>
+                                </dock:HorizontallySplittedView.LeftContentTemplate>
+                                <dock:HorizontallySplittedView.RightContentTemplate>
+                                    <DataTemplate x:DataType="viewModels:ToolWindowViewModel">
+                                        <ContentControl Content="{Binding Content.Value}" />
+                                    </DataTemplate>
+                                </dock:HorizontallySplittedView.RightContentTemplate>
+                            </dock:HorizontallySplittedView>
+                        </dock:VerticallySplittedView.BottomContent>
+                    </dock:VerticallySplittedView>
+                </dock:ReDock>
+                <dock:SideBar Name="RightSideBar"
+                              Grid.Column="2"
+                              BorderBrush="{DynamicResource ReDockingDividerBrush}"
+                              BorderThickness="1,0,0,0"
+                              ItemTemplate="{StaticResource RightSideBarButtonDataTemplate}"
+                              Location="Right"
+                              LowerBottomToolsSource="{Binding RightLowerBottomTools}"
+                              LowerTopToolsSource="{Binding RightLowerTopTools}"
+                              UpperBottomToolsSource="{Binding RightUpperBottomTools}"
+                              UpperTopToolsSource="{Binding RightUpperTopTools}" />
+            </Grid>
+        </dock:ReDockHost>
+    </Grid>
+</Window>
+
+<Window x:Class="ReDocking.Views.MainWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dock="using:ReDocking"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+        xmlns:viewModels="clr-namespace:ReDocking.ViewModels"
+        Title="ReDocking"
+        d:DesignHeight="450"
+        d:DesignWidth="800"
+        x:DataType="viewModels:MainWindowViewModel"
+        mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ControlTheme x:Key="SettingsButton"
+                          BasedOn="{StaticResource TransparentButton}"
+                          TargetType="Button">
+                <Setter Property="Width" Value="32" />
+                <Setter Property="Height" Value="32" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+            </ControlTheme>
+            <DataTemplate x:Key="LeftSideBarButtonDataTemplate" x:DataType="viewModels:ToolWindowViewModel">
+                <dock:SideBarButton DisplayMode="{Binding DisplayMode.Value}"
+                                    IsChecked="{Binding IsSelected.Value}"
+                                    ToolTip.Placement="Right"
+                                    ToolTip.ShowDelay="200"
+                                    ToolTip.Tip="{Binding Name.Value}"
+                                    ToolTip.VerticalOffset="0">
+                    <ui:FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="{Binding Icon.Value}" />
+                </dock:SideBarButton>
+            </DataTemplate>
+            <DataTemplate x:Key="RightSideBarButtonDataTemplate" x:DataType="viewModels:ToolWindowViewModel">
+                <dock:SideBarButton DisplayMode="{Binding DisplayMode.Value}"
+                                    IsChecked="{Binding IsSelected.Value}"
+                                    ToolTip.Placement="Left"
+                                    ToolTip.ShowDelay="200"
+                                    ToolTip.Tip="{Binding Name.Value}"
+                                    ToolTip.VerticalOffset="0">
+                    <ui:FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="{Binding Icon.Value}" />
+                </dock:SideBarButton>
+            </DataTemplate>
+            <DataTemplate x:Key="ToolContentDataTemplate" x:DataType="viewModels:ToolWindowViewModel">
+                <ContentControl Content="{Binding Content.Value}" />
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.Styles>
+        <Style Selector="ui|TabView">
+            <Setter Property="Padding" Value="0" />
+        </Style>
+    </Window.Styles>
+    <Grid RowDefinitions="40,1,*">
+        <Grid Name="TitleBar" ColumnDefinitions="*,40">
+            <Button Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Theme="{StaticResource SettingsButton}">
+                <ui:SymbolIcon Symbol="Setting" />
+            </Button>
+        </Grid>
+        <Border Grid.Row="1" Background="{DynamicResource ReDockingDividerBrush}" />
+        <dock:ReDockHost Grid.Row="2"
+                         ButtonDisplayModeChanged="OnSideBarButtonDisplayModeChanged"
+                         ButtonFlyoutRequested="OnButtonFlyoutRequested"
+                         ButtonMove="OnSideBarButtonDrop"
+                         IsFloatingEnabled="True">
+            <dock:ReDockHost.DockAreas>
+                <dock:DockArea LocalizedName="Left"
+                               Location="LeftUpperBottom"
+                               SideBar="LeftSideBar"
+                               Target="TopContent"
+                               View="LeftTopBottomArea" />
+                <dock:DockArea LocalizedName="Left Bottom"
+                               Location="LeftLowerTop"
+                               SideBar="LeftSideBar"
+                               Target="BottomContent"
+                               View="LeftTopBottomArea" />
+
+                <dock:DockArea LocalizedName="Right"
+                               Location="RightUpperBottom"
+                               SideBar="RightSideBar"
+                               Target="TopContent"
+                               View="RightTopBottomArea" />
+
+                <dock:DockArea LocalizedName="Right Bottom"
+                               Location="RightLowerTop"
+                               SideBar="RightSideBar"
+                               Target="BottomContent"
+                               View="RightTopBottomArea" />
+
+                <dock:DockArea LocalizedName="TopLeft"
+                               Location="LeftUpperTop"
+                               SideBar="LeftSideBar"
+                               Target="LeftContent"
+                               View="TopLeftRightArea" />
+                <dock:DockArea LocalizedName="TopRight"
+                               Location="RightUpperTop"
+                               SideBar="RightSideBar"
+                               Target="RightContent"
+                               View="TopLeftRightArea" />
+                <dock:DockArea LocalizedName="BottomLeft"
+                               Location="LeftLowerBottom"
+                               SideBar="LeftSideBar"
+                               Target="LeftContent"
+                               View="BottomLeftRightArea" />
+                <dock:DockArea LocalizedName="BottomRight"
+                               Location="RightLowerBottom"
+                               SideBar="RightSideBar"
+                               Target="RightContent"
+                               View="BottomLeftRightArea" />
+            </dock:ReDockHost.DockAreas>
+            <Grid ColumnDefinitions="40,*,40">
+                <dock:SideBar Name="LeftSideBar"
+                              BorderBrush="{DynamicResource ReDockingDividerBrush}"
+                              BorderThickness="0,0,1,0"
+                              ItemTemplate="{StaticResource LeftSideBarButtonDataTemplate}"
+                              Location="Left"
+                              LowerBottomToolsSource="{Binding LeftLowerBottomTools}"
+                              LowerTopToolsSource="{Binding LeftLowerTopTools}"
+                              UpperBottomToolsSource="{Binding LeftUpperBottomTools}"
+                              UpperTopToolsSource="{Binding LeftUpperTopTools}" />
+
+                <dock:ReDock Name="LeftRightArea" Grid.Column="1">
+                    <dock:ReDock.LeftContent>
+                        <dock:VerticallySplittedView Name="LeftTopBottomArea"
+                                                     BottomContent="{Binding SelectedLeftLowerTopTool.Value}"
+                                                     BottomContentTemplate="{StaticResource ToolContentDataTemplate}"
+                                                     TopContent="{Binding SelectedLeftUpperBottomTool.Value}"
+                                                     TopContentTemplate="{StaticResource ToolContentDataTemplate}" />
+                    </dock:ReDock.LeftContent>
+                    <dock:ReDock.RightContent>
+                        <dock:VerticallySplittedView Name="RightTopBottomArea"
+                                                     BottomContent="{Binding SelectedRightLowerTopTool.Value}"
+                                                     BottomContentTemplate="{StaticResource ToolContentDataTemplate}"
+                                                     TopContent="{Binding SelectedRightUpperBottomTool.Value}"
+                                                     TopContentTemplate="{StaticResource ToolContentDataTemplate}" />
+                    </dock:ReDock.RightContent>
+                    <dock:VerticallySplittedView>
+                        <dock:VerticallySplittedView.TopContent>
+                            <dock:ReDock Name="TopLeftRightArea"
+                                         LeftContent="{Binding SelectedLeftUpperTopTool.Value}"
+                                         RightContent="{Binding SelectedRightUpperTopTool.Value}">
+                                <dock:ReDock.LeftContentTemplate>
+                                    <DataTemplate x:DataType="viewModels:ToolWindowViewModel">
+                                        <ContentControl Content="{Binding Content.Value}" />
+                                    </DataTemplate>
+                                </dock:ReDock.LeftContentTemplate>
+                                <dock:ReDock.RightContentTemplate>
+                                    <DataTemplate x:DataType="viewModels:ToolWindowViewModel">
+                                        <ContentControl Content="{Binding Content.Value}" />
+                                    </DataTemplate>
+                                </dock:ReDock.RightContentTemplate>
+                                <ui:TabView>
+                                    <ui:TabViewItem Header="File 1" />
+                                    <ui:TabViewItem Header="File 2" />
+                                    <ui:TabViewItem Header="File 3" />
+                                </ui:TabView>
+                            </dock:ReDock>
+                        </dock:VerticallySplittedView.TopContent>
+                        <dock:VerticallySplittedView.BottomContent>
+                            <dock:HorizontallySplittedView Name="BottomLeftRightArea"
+                                                           LeftContent="{Binding SelectedLeftLowerBottomTool.Value}"
+                                                           RightContent="{Binding SelectedRightLowerBottomTool.Value}">
+                                <dock:HorizontallySplittedView.LeftContentTemplate>
+                                    <DataTemplate x:DataType="viewModels:ToolWindowViewModel">
+                                        <ContentControl Content="{Binding Content.Value}" />
+                                    </DataTemplate>
+                                </dock:HorizontallySplittedView.LeftContentTemplate>
+                                <dock:HorizontallySplittedView.RightContentTemplate>
+                                    <DataTemplate x:DataType="viewModels:ToolWindowViewModel">
+                                        <ContentControl Content="{Binding Content.Value}" />
+                                    </DataTemplate>
+                                </dock:HorizontallySplittedView.RightContentTemplate>
+                            </dock:HorizontallySplittedView>
+                        </dock:VerticallySplittedView.BottomContent>
+                    </dock:VerticallySplittedView>
+                </dock:ReDock>
+                <dock:SideBar Name="RightSideBar"
+                              Grid.Column="2"
+                              BorderBrush="{DynamicResource ReDockingDividerBrush}"
+                              BorderThickness="1,0,0,0"
+                              ItemTemplate="{StaticResource RightSideBarButtonDataTemplate}"
+                              Location="Right"
+                              LowerBottomToolsSource="{Binding RightLowerBottomTools}"
+                              LowerTopToolsSource="{Binding RightLowerTopTools}"
+                              UpperBottomToolsSource="{Binding RightUpperBottomTools}"
+                              UpperTopToolsSource="{Binding RightUpperTopTools}" />
+            </Grid>
+        </dock:ReDockHost>
+    </Grid>
+</Window>
+
+<UserControl x:Class="ReDocking.Views.Explorer"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+    <TreeView>
+        <TreeViewItem Header=".git">
+            <TreeViewItem Header="hooks">
+                <TreeViewItem />
+            </TreeViewItem>
+            <TreeViewItem Header="info">
+                <TreeViewItem />
+            </TreeViewItem>
+            <TreeViewItem Header="logs">
+                <TreeViewItem />
+            </TreeViewItem>
+            <TreeViewItem Header="objects">
+                <TreeViewItem />
+            </TreeViewItem>
+            <TreeViewItem Header="refs">
+                <TreeViewItem />
+            </TreeViewItem>
+
+            <TreeViewItem Header="config" />
+            <TreeViewItem Header="description" />
+            <TreeViewItem Header="FETCH_HEAD" />
+            <TreeViewItem Header="HEAD" />
+            <TreeViewItem Header="index" />
+            <TreeViewItem Header="ORIG_HEAD" />
+        </TreeViewItem>
+        <TreeViewItem Header="ReDocking">
+            <TreeViewItem />
+        </TreeViewItem>
+        <TreeViewItem Header="ReDocking.Sample">
+            <TreeViewItem />
+        </TreeViewItem>
+        <TreeViewItem Header=".editorconfig" />
+        <TreeViewItem Header=".gitignore" />
+        <TreeViewItem Header="Directory.Package.props" />
+        <TreeViewItem Header="LICENSE" />
+        <TreeViewItem Header="README.md" />
+        <TreeViewItem Header="ReDocking.sln" />
+    </TreeView>
+</UserControl>
+<UserControl x:Class="ReDocking.Views.Explorer"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+    <TreeView>
+        <TreeViewItem Header=".git">
+            <TreeViewItem Header="hooks">
+                <TreeViewItem />
+            </TreeViewItem>
+            <TreeViewItem Header="info">
+                <TreeViewItem />
+            </TreeViewItem>
+            <TreeViewItem Header="logs">
+                <TreeViewItem />
+            </TreeViewItem>
+            <TreeViewItem Header="objects">
+                <TreeViewItem />
+            </TreeViewItem>
+            <TreeViewItem Header="refs">
+                <TreeViewItem />
+            </TreeViewItem>
+
+            <TreeViewItem Header="config" />
+            <TreeViewItem Header="description" />
+            <TreeViewItem Header="FETCH_HEAD" />
+            <TreeViewItem Header="HEAD" />
+            <TreeViewItem Header="index" />
+            <TreeViewItem Header="ORIG_HEAD" />
+        </TreeViewItem>
+        <TreeViewItem Header="ReDocking">
+            <TreeViewItem />
+        </TreeViewItem>
+        <TreeViewItem Header="ReDocking.Sample">
+            <TreeViewItem />
+        </TreeViewItem>
+        <TreeViewItem Header=".editorconfig" />
+        <TreeViewItem Header=".gitignore" />
+        <TreeViewItem Header="Directory.Package.props" />
+        <TreeViewItem Header="LICENSE" />
+        <TreeViewItem Header="README.md" />
+        <TreeViewItem Header="ReDocking.sln" />
+    </TreeView>
+</UserControl>

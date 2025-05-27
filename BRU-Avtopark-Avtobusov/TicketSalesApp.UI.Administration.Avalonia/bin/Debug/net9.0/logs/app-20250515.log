@@ -1,0 +1,7 @@
+2025-05-15 09:56:28.014 +03:00 [INF] Starting application...
+2025-05-15 09:56:55.774 +03:00 [INF] Administrator successfully authenticated
+2025-05-15 09:57:06.222 +03:00 [INF] Loaded 10 sales with total income 8.10
+2025-05-15 09:57:10.808 +03:00 [INF] Loaded 10 sales with total income 8.10
+2025-05-15 09:57:16.986 +03:00 [INF] Loaded 5 available tickets across 15 routes
+2025-05-15 09:57:20.097 +03:00 [INF] Loaded 5 available tickets across 15 routes
+2025-05-15 09:58:02.317 +03:00 [INF] Successfully loaded 500 schedules for route 2 with stops

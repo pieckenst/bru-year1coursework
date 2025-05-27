@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>$(DotNetVersion)</TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <WarningsAsErrors>nullable</WarningsAsErrors>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <TrimMode>full</TrimMode>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <NoWarn>$(NoWarn);CS1998</NoWarn>
+        <TargetFramework>net9.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.2.3" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3" />
+        <PackageReference Include="Classic.Avalonia.Theme" Version="11.2.0" />
+        <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
+        <PackageReference Include="PropertyChanged.SourceGenerator" Version="1.0.8">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Antlr4.Runtime.Standard">
+            <Version>4.13.1</Version>
+        </PackageReference>
+        <PackageReference Include="Antlr4BuildTasks">
+            <Version>12.8.0</Version>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="Icons\**\*.gif" />
+        <AvaloniaResource Include="Icons\**\*.gif" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Antlr4 Include="Interpreter\Grammar\VB6.g4">
+            <CustomToolNamespace>SuperNova.Runtime.Interpreter.Grammar</CustomToolNamespace>
+            <Listener>True</Listener>
+            <Visitor>True</Visitor>
+            <Log>True</Log>
+            <LongMessages />
+        </Antlr4>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="BuiltinControls\**\*.axaml" />
+        <Compile Update="BuiltinControls\**\*.axaml.cs">
+            <DependentUpon>%(Filename)</DependentUpon>
+        </Compile>
+    </ItemGroup>
+</Project>

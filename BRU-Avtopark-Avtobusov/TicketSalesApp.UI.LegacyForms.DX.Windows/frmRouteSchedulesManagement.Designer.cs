@@ -1,0 +1,473 @@
+namespace TicketSalesApp.UI.LegacyForms.DX.Windows
+{
+    partial class frmRouteSchedulesManagement
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            components = new System.ComponentModel.Container();
+            layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
+            gridControlSchedules = new DevExpress.XtraGrid.GridControl();
+            routeScheduleBindingSource = new System.Windows.Forms.BindingSource(components);
+            gridViewSchedules = new DevExpress.XtraGrid.Views.Grid.GridView();
+            colRouteScheduleId = new DevExpress.XtraGrid.Columns.GridColumn();
+            colRouteStartPoint = new DevExpress.XtraGrid.Columns.GridColumn();
+            colRouteEndPoint = new DevExpress.XtraGrid.Columns.GridColumn();
+            colRouteStopsDisplay = new DevExpress.XtraGrid.Columns.GridColumn();
+            colDepartureTime = new DevExpress.XtraGrid.Columns.GridColumn();
+            colArrivalTime = new DevExpress.XtraGrid.Columns.GridColumn();
+            colPrice = new DevExpress.XtraGrid.Columns.GridColumn();
+            colAvailableSeats = new DevExpress.XtraGrid.Columns.GridColumn();
+            colIsActive = new DevExpress.XtraGrid.Columns.GridColumn();
+            repositoryItemCheckEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
+            lueRouteFilter = new DevExpress.XtraEditors.LookUpEdit();
+            routeBindingSource = new System.Windows.Forms.BindingSource(components);
+            dateFilter = new DevExpress.XtraEditors.DateEdit();
+            btnAdd = new DevExpress.XtraEditors.SimpleButton();
+            btnEdit = new DevExpress.XtraEditors.SimpleButton();
+            btnDelete = new DevExpress.XtraEditors.SimpleButton();
+            btnRefresh = new DevExpress.XtraEditors.SimpleButton();
+            Root = new DevExpress.XtraLayout.LayoutControlGroup();
+            layoutControlItemGrid = new DevExpress.XtraLayout.LayoutControlItem();
+            layoutControlGroupFilters = new DevExpress.XtraLayout.LayoutControlGroup();
+            layoutControlItemRouteFilter = new DevExpress.XtraLayout.LayoutControlItem();
+            layoutControlItemDateFilter = new DevExpress.XtraLayout.LayoutControlItem();
+            layoutControlItemAdd = new DevExpress.XtraLayout.LayoutControlItem();
+            layoutControlItemRefresh = new DevExpress.XtraLayout.LayoutControlItem();
+            layoutControlItemEdit = new DevExpress.XtraLayout.LayoutControlItem();
+            layoutControlItemDelete = new DevExpress.XtraLayout.LayoutControlItem();
+            emptySpaceItemButtons = new DevExpress.XtraLayout.EmptySpaceItem();
+            ((System.ComponentModel.ISupportInitialize)layoutControl1).BeginInit();
+            layoutControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)gridControlSchedules).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)routeScheduleBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)gridViewSchedules).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)repositoryItemCheckEdit1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)lueRouteFilter.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)routeBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dateFilter.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dateFilter.Properties.CalendarTimeProperties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)Root).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItemGrid).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlGroupFilters).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItemRouteFilter).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItemDateFilter).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItemAdd).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItemRefresh).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItemEdit).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItemDelete).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)emptySpaceItemButtons).BeginInit();
+            SuspendLayout();
+            // 
+            // layoutControl1
+            // 
+            layoutControl1.Controls.Add(gridControlSchedules);
+            layoutControl1.Controls.Add(lueRouteFilter);
+            layoutControl1.Controls.Add(dateFilter);
+            layoutControl1.Controls.Add(btnAdd);
+            layoutControl1.Controls.Add(btnEdit);
+            layoutControl1.Controls.Add(btnDelete);
+            layoutControl1.Controls.Add(btnRefresh);
+            layoutControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            layoutControl1.Location = new System.Drawing.Point(0, 0);
+            layoutControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            layoutControl1.Name = "layoutControl1";
+            layoutControl1.Root = Root;
+            layoutControl1.Size = new System.Drawing.Size(1148, 690);
+            layoutControl1.TabIndex = 0;
+            layoutControl1.Text = "layoutControl1";
+            // 
+            // gridControlSchedules
+            // 
+            gridControlSchedules.DataSource = routeScheduleBindingSource;
+            gridControlSchedules.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            gridControlSchedules.Location = new System.Drawing.Point(14, 45);
+            gridControlSchedules.MainView = gridViewSchedules;
+            gridControlSchedules.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            gridControlSchedules.Name = "gridControlSchedules";
+            gridControlSchedules.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] { repositoryItemCheckEdit1 });
+            gridControlSchedules.Size = new System.Drawing.Size(1120, 599);
+            gridControlSchedules.TabIndex = 4;
+            gridControlSchedules.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridViewSchedules });
+            // 
+            // routeScheduleBindingSource
+            // 
+            routeScheduleBindingSource.DataSource = typeof(Core.Models.RouteSchedules);
+            // 
+            // gridViewSchedules
+            // 
+            gridViewSchedules.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colRouteScheduleId, colRouteStartPoint, colRouteEndPoint, colRouteStopsDisplay, colDepartureTime, colArrivalTime, colPrice, colAvailableSeats, colIsActive });
+            gridViewSchedules.DetailHeight = 431;
+            gridViewSchedules.GridControl = gridControlSchedules;
+            gridViewSchedules.Name = "gridViewSchedules";
+            gridViewSchedules.OptionsBehavior.Editable = false;
+            gridViewSchedules.OptionsEditForm.PopupEditFormWidth = 933;
+            gridViewSchedules.OptionsView.ShowGroupPanel = false;
+            gridViewSchedules.FocusedRowChanged += gridViewSchedules_FocusedRowChanged;
+            gridViewSchedules.CustomUnboundColumnData += gridViewSchedules_CustomUnboundColumnData;
+            // 
+            // colRouteScheduleId
+            // 
+            colRouteScheduleId.Caption = "ID";
+            colRouteScheduleId.FieldName = "RouteScheduleId";
+            colRouteScheduleId.MinWidth = 23;
+            colRouteScheduleId.Name = "colRouteScheduleId";
+            colRouteScheduleId.Visible = true;
+            colRouteScheduleId.VisibleIndex = 0;
+            colRouteScheduleId.Width = 47;
+            // 
+            // colRouteStartPoint
+            // 
+            colRouteStartPoint.Caption = "Маршрут (Начало)";
+            colRouteStartPoint.FieldName = "Marshut.StartPoint";
+            colRouteStartPoint.MinWidth = 23;
+            colRouteStartPoint.Name = "colRouteStartPoint";
+            colRouteStartPoint.OptionsColumn.AllowEdit = false;
+            colRouteStartPoint.UnboundType = DevExpress.Data.UnboundColumnType.String;
+            colRouteStartPoint.Visible = true;
+            colRouteStartPoint.VisibleIndex = 1;
+            colRouteStartPoint.Width = 175;
+            // 
+            // colRouteEndPoint
+            // 
+            colRouteEndPoint.Caption = "Маршрут (Конец)";
+            colRouteEndPoint.FieldName = "Marshut.EndPoint";
+            colRouteEndPoint.MinWidth = 23;
+            colRouteEndPoint.Name = "colRouteEndPoint";
+            colRouteEndPoint.OptionsColumn.AllowEdit = false;
+            colRouteEndPoint.UnboundType = DevExpress.Data.UnboundColumnType.String;
+            colRouteEndPoint.Visible = true;
+            colRouteEndPoint.VisibleIndex = 2;
+            colRouteEndPoint.Width = 175;
+            // 
+            // colRouteStopsDisplay
+            // 
+            colRouteStopsDisplay.Caption = "Остановки";
+            colRouteStopsDisplay.FieldName = "RouteStopsDisplayString";
+            colRouteStopsDisplay.MinWidth = 23;
+            colRouteStopsDisplay.Name = "colRouteStopsDisplay";
+            colRouteStopsDisplay.OptionsColumn.AllowEdit = false;
+            colRouteStopsDisplay.UnboundType = DevExpress.Data.UnboundColumnType.String;
+            colRouteStopsDisplay.Visible = true;
+            colRouteStopsDisplay.VisibleIndex = 3;
+            colRouteStopsDisplay.Width = 292;
+            // 
+            // colDepartureTime
+            // 
+            colDepartureTime.Caption = "Отправление";
+            colDepartureTime.DisplayFormat.FormatString = "dd.MM.yyyy HH:mm";
+            colDepartureTime.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            colDepartureTime.FieldName = "DepartureTime";
+            colDepartureTime.MinWidth = 23;
+            colDepartureTime.Name = "colDepartureTime";
+            colDepartureTime.Visible = true;
+            colDepartureTime.VisibleIndex = 4;
+            colDepartureTime.Width = 140;
+            // 
+            // colArrivalTime
+            // 
+            colArrivalTime.Caption = "Прибытие";
+            colArrivalTime.DisplayFormat.FormatString = "dd.MM.yyyy HH:mm";
+            colArrivalTime.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            colArrivalTime.FieldName = "ArrivalTime";
+            colArrivalTime.MinWidth = 23;
+            colArrivalTime.Name = "colArrivalTime";
+            colArrivalTime.Visible = true;
+            colArrivalTime.VisibleIndex = 5;
+            colArrivalTime.Width = 140;
+            // 
+            // colPrice
+            // 
+            colPrice.Caption = "Цена";
+            colPrice.DisplayFormat.FormatString = "C2";
+            colPrice.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            colPrice.FieldName = "Price";
+            colPrice.MinWidth = 23;
+            colPrice.Name = "colPrice";
+            colPrice.Visible = true;
+            colPrice.VisibleIndex = 6;
+            colPrice.Width = 93;
+            // 
+            // colAvailableSeats
+            // 
+            colAvailableSeats.Caption = "Места";
+            colAvailableSeats.FieldName = "AvailableSeats";
+            colAvailableSeats.MinWidth = 23;
+            colAvailableSeats.Name = "colAvailableSeats";
+            colAvailableSeats.Visible = true;
+            colAvailableSeats.VisibleIndex = 7;
+            colAvailableSeats.Width = 93;
+            // 
+            // colIsActive
+            // 
+            colIsActive.Caption = "Активен";
+            colIsActive.ColumnEdit = repositoryItemCheckEdit1;
+            colIsActive.FieldName = "IsActive";
+            colIsActive.MinWidth = 23;
+            colIsActive.Name = "colIsActive";
+            colIsActive.Visible = true;
+            colIsActive.VisibleIndex = 8;
+            colIsActive.Width = 70;
+            // 
+            // repositoryItemCheckEdit1
+            // 
+            repositoryItemCheckEdit1.AutoHeight = false;
+            repositoryItemCheckEdit1.Name = "repositoryItemCheckEdit1";
+            // 
+            // lueRouteFilter
+            // 
+            lueRouteFilter.Location = new System.Drawing.Point(14, 14);
+            lueRouteFilter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            lueRouteFilter.Name = "lueRouteFilter";
+            lueRouteFilter.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
+            lueRouteFilter.Properties.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] { new DevExpress.XtraEditors.Controls.LookUpColumnInfo("RouteId", "ID", 47, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default), new DevExpress.XtraEditors.Controls.LookUpColumnInfo("StartPoint", "Начало", 175, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default), new DevExpress.XtraEditors.Controls.LookUpColumnInfo("EndPoint", "Конец", 175, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default) });
+            lueRouteFilter.Properties.DataSource = routeBindingSource;
+            lueRouteFilter.Properties.DisplayMember = "StartPoint";
+            lueRouteFilter.Properties.NullText = "[Все маршруты]";
+            lueRouteFilter.Properties.ValueMember = "RouteId";
+            lueRouteFilter.Size = new System.Drawing.Size(429, 22);
+            lueRouteFilter.StyleController = layoutControl1;
+            lueRouteFilter.TabIndex = 5;
+            // 
+            // routeBindingSource
+            // 
+            routeBindingSource.DataSource = typeof(Core.Models.Marshut);
+            // 
+            // dateFilter
+            // 
+            dateFilter.EditValue = null;
+            dateFilter.Location = new System.Drawing.Point(447, 14);
+            dateFilter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            dateFilter.Name = "dateFilter";
+            dateFilter.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
+            dateFilter.Properties.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
+            dateFilter.Properties.NullText = "[Все даты]";
+            dateFilter.Size = new System.Drawing.Size(328, 22);
+            dateFilter.StyleController = layoutControl1;
+            dateFilter.TabIndex = 6;
+            // 
+            // btnAdd
+            // 
+            btnAdd.Location = new System.Drawing.Point(779, 14);
+            btnAdd.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            btnAdd.Name = "btnAdd";
+            btnAdd.Size = new System.Drawing.Size(138, 27);
+            btnAdd.StyleController = layoutControl1;
+            btnAdd.TabIndex = 7;
+            btnAdd.Text = "Добавить расписание";
+            btnAdd.Click += btnAdd_Click;
+            // 
+            // btnEdit
+            // 
+            btnEdit.Location = new System.Drawing.Point(889, 648);
+            btnEdit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            btnEdit.Name = "btnEdit";
+            btnEdit.Size = new System.Drawing.Size(120, 28);
+            btnEdit.StyleController = layoutControl1;
+            btnEdit.TabIndex = 8;
+            btnEdit.Text = "Редактировать";
+            btnEdit.Click += btnEdit_Click;
+            // 
+            // btnDelete
+            // 
+            btnDelete.Location = new System.Drawing.Point(1013, 648);
+            btnDelete.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new System.Drawing.Size(121, 28);
+            btnDelete.StyleController = layoutControl1;
+            btnDelete.TabIndex = 9;
+            btnDelete.Text = "Удалить";
+            btnDelete.Click += btnDelete_Click;
+            // 
+            // btnRefresh
+            // 
+            btnRefresh.Location = new System.Drawing.Point(921, 14);
+            btnRefresh.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            btnRefresh.Name = "btnRefresh";
+            btnRefresh.Size = new System.Drawing.Size(213, 27);
+            btnRefresh.StyleController = layoutControl1;
+            btnRefresh.TabIndex = 10;
+            btnRefresh.Text = "Обновить";
+            btnRefresh.Click += btnRefresh_Click;
+            // 
+            // Root
+            // 
+            Root.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
+            Root.GroupBordersVisible = false;
+            Root.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { layoutControlItemGrid, layoutControlGroupFilters, layoutControlItemEdit, layoutControlItemDelete, emptySpaceItemButtons });
+            Root.Name = "Root";
+            Root.Size = new System.Drawing.Size(1148, 690);
+            Root.TextVisible = false;
+            // 
+            // layoutControlItemGrid
+            // 
+            layoutControlItemGrid.Control = gridControlSchedules;
+            layoutControlItemGrid.Location = new System.Drawing.Point(0, 31);
+            layoutControlItemGrid.Name = "layoutControlItemGrid";
+            layoutControlItemGrid.Size = new System.Drawing.Size(1124, 603);
+            layoutControlItemGrid.TextVisible = false;
+            // 
+            // layoutControlGroupFilters
+            // 
+            layoutControlGroupFilters.GroupBordersVisible = false;
+            layoutControlGroupFilters.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { layoutControlItemRouteFilter, layoutControlItemDateFilter, layoutControlItemAdd, layoutControlItemRefresh });
+            layoutControlGroupFilters.Location = new System.Drawing.Point(0, 0);
+            layoutControlGroupFilters.Name = "layoutControlGroupFilters";
+            layoutControlGroupFilters.Size = new System.Drawing.Size(1124, 31);
+            layoutControlGroupFilters.Spacing = new DevExpress.XtraLayout.Utils.Padding(14, 14, 20, 12);
+            layoutControlGroupFilters.Text = "Фильтры";
+            // 
+            // layoutControlItemRouteFilter
+            // 
+            layoutControlItemRouteFilter.Control = lueRouteFilter;
+            layoutControlItemRouteFilter.Location = new System.Drawing.Point(0, 0);
+            layoutControlItemRouteFilter.Name = "layoutControlItemRouteFilter";
+            layoutControlItemRouteFilter.Size = new System.Drawing.Size(433, 31);
+            layoutControlItemRouteFilter.Text = "Маршрут:";
+            layoutControlItemRouteFilter.TextVisible = false;
+            // 
+            // layoutControlItemDateFilter
+            // 
+            layoutControlItemDateFilter.Control = dateFilter;
+            layoutControlItemDateFilter.Location = new System.Drawing.Point(433, 0);
+            layoutControlItemDateFilter.Name = "layoutControlItemDateFilter";
+            layoutControlItemDateFilter.Size = new System.Drawing.Size(332, 31);
+            layoutControlItemDateFilter.Text = "Дата:";
+            layoutControlItemDateFilter.TextVisible = false;
+            // 
+            // layoutControlItemAdd
+            // 
+            layoutControlItemAdd.Control = btnAdd;
+            layoutControlItemAdd.Location = new System.Drawing.Point(765, 0);
+            layoutControlItemAdd.Name = "layoutControlItemAdd";
+            layoutControlItemAdd.Size = new System.Drawing.Size(142, 31);
+            layoutControlItemAdd.TextVisible = false;
+            // 
+            // layoutControlItemRefresh
+            // 
+            layoutControlItemRefresh.Control = btnRefresh;
+            layoutControlItemRefresh.Location = new System.Drawing.Point(907, 0);
+            layoutControlItemRefresh.Name = "layoutControlItemRefresh";
+            layoutControlItemRefresh.Size = new System.Drawing.Size(217, 31);
+            layoutControlItemRefresh.TextVisible = false;
+            // 
+            // layoutControlItemEdit
+            // 
+            layoutControlItemEdit.Control = btnEdit;
+            layoutControlItemEdit.Location = new System.Drawing.Point(875, 634);
+            layoutControlItemEdit.MaxSize = new System.Drawing.Size(124, 32);
+            layoutControlItemEdit.MinSize = new System.Drawing.Size(124, 32);
+            layoutControlItemEdit.Name = "layoutControlItemEdit";
+            layoutControlItemEdit.Size = new System.Drawing.Size(124, 32);
+            layoutControlItemEdit.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
+            layoutControlItemEdit.TextVisible = false;
+            // 
+            // layoutControlItemDelete
+            // 
+            layoutControlItemDelete.Control = btnDelete;
+            layoutControlItemDelete.Location = new System.Drawing.Point(999, 634);
+            layoutControlItemDelete.MaxSize = new System.Drawing.Size(125, 32);
+            layoutControlItemDelete.MinSize = new System.Drawing.Size(125, 32);
+            layoutControlItemDelete.Name = "layoutControlItemDelete";
+            layoutControlItemDelete.Size = new System.Drawing.Size(125, 32);
+            layoutControlItemDelete.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
+            layoutControlItemDelete.TextVisible = false;
+            // 
+            // emptySpaceItemButtons
+            // 
+            emptySpaceItemButtons.Location = new System.Drawing.Point(0, 634);
+            emptySpaceItemButtons.Name = "emptySpaceItemButtons";
+            emptySpaceItemButtons.Size = new System.Drawing.Size(875, 32);
+            // 
+            // frmRouteSchedulesManagement
+            // 
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(1148, 690);
+            Controls.Add(layoutControl1);
+            Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            Name = "frmRouteSchedulesManagement";
+            Text = "Управление расписанием маршрутов";
+            Load += frmRouteSchedulesManagement_Load;
+            ((System.ComponentModel.ISupportInitialize)layoutControl1).EndInit();
+            layoutControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)gridControlSchedules).EndInit();
+            ((System.ComponentModel.ISupportInitialize)routeScheduleBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)gridViewSchedules).EndInit();
+            ((System.ComponentModel.ISupportInitialize)repositoryItemCheckEdit1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)lueRouteFilter.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)routeBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dateFilter.Properties.CalendarTimeProperties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dateFilter.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)Root).EndInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItemGrid).EndInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlGroupFilters).EndInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItemRouteFilter).EndInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItemDateFilter).EndInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItemAdd).EndInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItemRefresh).EndInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItemEdit).EndInit();
+            ((System.ComponentModel.ISupportInitialize)layoutControlItemDelete).EndInit();
+            ((System.ComponentModel.ISupportInitialize)emptySpaceItemButtons).EndInit();
+            ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private DevExpress.XtraLayout.LayoutControl layoutControl1;
+        private DevExpress.XtraLayout.LayoutControlGroup Root;
+        private DevExpress.XtraGrid.GridControl gridControlSchedules;
+        private DevExpress.XtraGrid.Views.Grid.GridView gridViewSchedules;
+        private DevExpress.XtraEditors.LookUpEdit lueRouteFilter;
+        private DevExpress.XtraEditors.DateEdit dateFilter;
+        private DevExpress.XtraEditors.SimpleButton btnAdd;
+        private DevExpress.XtraEditors.SimpleButton btnEdit;
+        private DevExpress.XtraEditors.SimpleButton btnDelete;
+        private DevExpress.XtraEditors.SimpleButton btnRefresh;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemGrid;
+        private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroupFilters;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemRouteFilter;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemDateFilter;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemAdd;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemRefresh;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemEdit;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemDelete;
+        private DevExpress.XtraLayout.EmptySpaceItem emptySpaceItemButtons;
+        private System.Windows.Forms.BindingSource routeScheduleBindingSource;
+        private System.Windows.Forms.BindingSource routeBindingSource;
+        private DevExpress.XtraGrid.Columns.GridColumn colRouteScheduleId;
+        private DevExpress.XtraGrid.Columns.GridColumn colRouteStartPoint;
+        private DevExpress.XtraGrid.Columns.GridColumn colRouteEndPoint;
+        private DevExpress.XtraGrid.Columns.GridColumn colRouteStopsDisplay;
+        private DevExpress.XtraGrid.Columns.GridColumn colDepartureTime;
+        private DevExpress.XtraGrid.Columns.GridColumn colArrivalTime;
+        private DevExpress.XtraGrid.Columns.GridColumn colPrice;
+        private DevExpress.XtraGrid.Columns.GridColumn colAvailableSeats;
+        private DevExpress.XtraGrid.Columns.GridColumn colIsActive;
+        private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit repositoryItemCheckEdit1;
+    }
+} 

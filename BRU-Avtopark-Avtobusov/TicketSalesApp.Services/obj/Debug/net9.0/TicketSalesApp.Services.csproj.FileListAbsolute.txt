@@ -1,0 +1,51 @@
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Services.deps.json
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Services.runtimeconfig.json
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Services.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Services.pdb
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Core.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Core.pdb
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.csproj.AssemblyReference.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.GeneratedMSBuildEditorConfig.editorconfig
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.AssemblyInfoInputs.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.AssemblyInfo.cs
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.csproj.CoreCompileInputs.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSa.6125B862.Up2Date
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\refint\TicketSalesApp.Services.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.pdb
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.genruntimeconfig.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\ref\TicketSalesApp.Services.dll
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Services.deps.json
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Services.runtimeconfig.json
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Services.dll
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Services.pdb
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Core.dll
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Core.pdb
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.csproj.AssemblyReference.cache
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.GeneratedMSBuildEditorConfig.editorconfig
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.AssemblyInfoInputs.cache
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.AssemblyInfo.cs
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.csproj.CoreCompileInputs.cache
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSa.6125B862.Up2Date
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.dll
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\refint\TicketSalesApp.Services.dll
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.pdb
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.genruntimeconfig.cache
+F:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\ref\TicketSalesApp.Services.dll
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Services.deps.json
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Services.runtimeconfig.json
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Services.dll
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Services.pdb
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Core.dll
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\bin\Debug\net9.0\TicketSalesApp.Core.pdb
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.csproj.AssemblyReference.cache
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.GeneratedMSBuildEditorConfig.editorconfig
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.AssemblyInfoInputs.cache
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.AssemblyInfo.cs
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.csproj.CoreCompileInputs.cache
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSa.6125B862.Up2Date
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.dll
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\refint\TicketSalesApp.Services.dll
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.pdb
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\TicketSalesApp.Services.genruntimeconfig.cache
+E:\бру курсовая\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\ref\TicketSalesApp.Services.dll

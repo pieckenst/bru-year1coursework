@@ -1,0 +1,24 @@
+using System.Collections.Generic;
+// using Newtonsoft.Json; // Not needed unless attributes are used
+
+namespace TicketSalesApp.Core.Legacy.Models // Adjusted namespace
+{
+    public class Form
+    {
+        public string FormName { get; set; } // Non-nullable
+        public List<FormField> Fields { get; set; }
+
+        public Form()
+        {
+            Fields = new List<FormField>();
+        }
+    }
+
+    public class FormField
+    {
+        public string FieldName { get; set; } // Non-nullable
+        public string FieldType { get; set; } // e.g., TextBox, ComboBox, etc. // Non-nullable
+        public bool IsRequired { get; set; }
+        public string Placeholder { get; set; } // Non-nullable
+    }
+} 

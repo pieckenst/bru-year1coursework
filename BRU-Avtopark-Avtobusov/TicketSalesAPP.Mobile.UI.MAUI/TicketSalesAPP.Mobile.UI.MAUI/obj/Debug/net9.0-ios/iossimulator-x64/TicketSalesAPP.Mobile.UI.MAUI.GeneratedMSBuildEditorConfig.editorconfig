@@ -1,0 +1,124 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = 
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.MvvmToolkitEnableINotifyPropertyChangingSupport = true
+build_property.TargetFramework = net9.0-ios
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v9.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = TicketSalesAPP.Mobile.UI.MAUI
+build_property.ProjectDir = G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.EffectiveAnalysisLevelStyle = 9.0
+build_property.EnableCodeStyleSeverity = 
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/App.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.App.xaml
+build_metadata.AdditionalFiles.TargetPath = App.xaml
+build_metadata.AdditionalFiles.RelativePath = App.xaml
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/Resources/Styles/Colors.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.Resources.Styles.Colors.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/Resources/Styles/Styles.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.Resources.Styles.Styles.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/Views/AppShell.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.Views.AppShell.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\AppShell.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\AppShell.xaml
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/Views/AuthPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.Views.AuthPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\AuthPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\AuthPage.xaml
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/Views/DetailForm4Page.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.Views.DetailForm4Page.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\DetailForm4Page.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\DetailForm4Page.xaml
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/Views/ItemEditing3Page.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.Views.ItemEditing3Page.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\ItemEditing3Page.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\ItemEditing3Page.xaml
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/Views/LoginForm2Page.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.Views.LoginForm2Page.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\LoginForm2Page.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\LoginForm2Page.xaml
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/Views/MvvmPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.Views.MvvmPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\MvvmPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\MvvmPage.xaml
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/Views/PostsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.Views.PostsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\PostsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\PostsPage.xaml
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/Views/SettingsForm2Page.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.Views.SettingsForm2Page.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\SettingsForm2Page.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\SettingsForm2Page.xaml
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/Views/SettingsForm3Page.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.Views.SettingsForm3Page.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\SettingsForm3Page.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\SettingsForm3Page.xaml
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/Views/SettingsForm4Page.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.Views.SettingsForm4Page.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\SettingsForm4Page.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\SettingsForm4Page.xaml
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/Views/TreeView1Page.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.Views.TreeView1Page.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\TreeView1Page.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\TreeView1Page.xaml
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/Views/WebApiDetailPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.Views.WebApiDetailPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\WebApiDetailPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\WebApiDetailPage.xaml
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/Views/WebApiEditPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.Views.WebApiEditPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\WebApiEditPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\WebApiEditPage.xaml
+
+[G:/codesecondfolder/BRU-Avtopark-Avtobusov/TicketSalesAPP.Mobile.UI.MAUI/TicketSalesAPP.Mobile.UI.MAUI/Views/WebApiPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TicketSalesAPP.Mobile.UI.MAUI.Views.WebApiPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\WebApiPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\WebApiPage.xaml

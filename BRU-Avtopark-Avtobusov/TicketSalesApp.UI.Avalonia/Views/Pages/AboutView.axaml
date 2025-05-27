@@ -1,0 +1,109 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:TicketSalesApp.UI.Avalonia.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="TicketSalesApp.UI.Avalonia.Views.Pages.AboutView"
+             x:DataType="vm:AboutViewModel">
+    
+    <ScrollViewer>
+        <StackPanel Margin="25" Spacing="5">
+            <TextBlock Text="О программе"
+                     Margin="0 0 0 10"
+                     Theme="{StaticResource TitleTextBlockTheme}" />
+
+            <Panel>
+                <Grid HorizontalAlignment="Left" ColumnDefinitions="Auto,Auto">
+                    
+                    <StackPanel Grid.Column="1" Width="150" Margin="20 0 0 0" VerticalAlignment="Center">
+                        <TextBlock Text="Автопарк автобусов"
+                                 Theme="{StaticResource SubtitleTextBlockTheme}"/>
+                        
+                        <TextBlock Foreground="{DynamicResource TextFillColor3Brush}" FontSize="12">
+                            <Run Text="Версия" /><Run Text=":" />
+                            &#8203;<Run Text="1.0.0" />
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel HorizontalAlignment="Right"
+                          VerticalAlignment="Center"
+                          Width="200">
+                    <TextBlock Text="Разработчик"
+                             Theme="{StaticResource SubtitleTextBlockTheme}"/>
+                    
+                    <TextBlock Text="Савич Андрей Олегович"
+                             FontSize="12"
+                             TextAlignment="Right"
+                             Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                </StackPanel>
+            </Panel>
+            
+            <!-- Used Libraries -->
+            <Border Background="{DynamicResource ControlFillColor1Brush}"
+                    BorderThickness="1"
+                    BorderBrush="{DynamicResource ControlBorderColorBrush}"
+                    Padding="12"
+                    CornerRadius="{DynamicResource ControlCornerRadius}"
+                    Margin="0 20 0 0">
+                <StackPanel>
+                    <TextBlock Text="Использованные библиотеки" FontWeight="Bold" Margin="0 0 0 10" />
+                    
+                    <StackPanel Spacing="10">
+                        <Panel Margin="5">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                               
+                                <TextBlock Text="Avalonia UI" FontSize="20" VerticalAlignment="Center" FontWeight="SemiBold" />
+                            </StackPanel>
+                            
+                            <TextBlock VerticalAlignment="Center"
+                                     HorizontalAlignment="Right"
+                                     Foreground="{DynamicResource TextFillColor3Brush}">
+                                <Run Text="Версия" /><Run Text=":" />
+                                &#8203;<Run Text="11.0.4" />
+                            </TextBlock>
+                        </Panel>
+                        
+                        <Panel Margin="5">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                
+                                <TextBlock Text="Pleasant UI" FontSize="20" VerticalAlignment="Center" FontWeight="SemiBold" />
+                            </StackPanel>
+                            
+                            <TextBlock VerticalAlignment="Center"
+                                     HorizontalAlignment="Right"
+                                     Foreground="{DynamicResource TextFillColor3Brush}">
+                                <Run Text="Версия" /><Run Text=":" />
+                                &#8203;<Run Text="4.0.1" />
+                            </TextBlock>
+                        </Panel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            
+            <!-- Description -->
+            <Border Background="{DynamicResource ControlFillColor1Brush}"
+                    BorderThickness="1"
+                    BorderBrush="{DynamicResource ControlBorderColorBrush}"
+                    Padding="12"
+                    CornerRadius="{DynamicResource ControlCornerRadius}"
+                    Margin="0 10 0 0">
+                <StackPanel>
+                    <TextBlock Text="Описание" FontWeight="Bold" Margin="0 0 0 10" />
+                    <TextBlock Text="Система управления автобусным парком, разработанная в рамках курсового проекта. Позволяет осуществлять поиск, бронирование и покупку билетов на автобусные рейсы." 
+                             TextWrapping="Wrap" />
+
+                    <TextBlock TextWrapping="Wrap" Margin="0 10 0 0">
+                        <Run Text="Работает на" /><Run Text=":" />
+                        &#8203;<Run Text=".NET 9.0" />
+                    </TextBlock>
+                    
+                    <TextBlock Text="Лицензия" FontWeight="Bold" Margin="0 10" />
+                    <TextBlock Text="Все права защищены. © 2025 Белорусско-российский университет" 
+                             TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl> 

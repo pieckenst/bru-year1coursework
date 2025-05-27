@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>MattEqualsCoder.DynamicForms.Avalonia</PackageId>
+        <Version>1.1.2</Version>
+        <Authors>MattEqualsCoder</Authors>
+        
+        <RepositoryUrl>https://github.com/MattEqualsCoder/DynamicForms</RepositoryUrl>
+        <Title>Dynamic Forms Avalonia</Title>
+        <Description>Library to dynamically generate forms for user input based on attributes.</Description>
+        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MattEqualsCoder.AvaloniaControls" Version="1.5.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DynamicForms.Library.Core\DynamicForms.Library.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Groups\DynamicFormGroupStyleExpander.axaml.cs">
+        <DependentUpon>DynamicFormGroupStyleExpander.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Groups\DynamicFormGroupStyleGroupBox.axaml.cs">
+        <DependentUpon>DynamicFormGroupStyleGroupBox.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Fields\DynamicFormEnableDisableReorderControlItem.axaml.cs">
+        <DependentUpon>DynamicFormEnableDisableReorderControlItem.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
+</Project>

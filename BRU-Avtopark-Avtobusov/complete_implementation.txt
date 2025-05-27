@@ -1,0 +1,1001 @@
+# Comprehensive Implementation Documentation
+
+## 1. Core Infrastructure
+
+### 1.1. Database Schema
+CREATE TABLE Users (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    Username NVARCHAR(50) NOT NULL UNIQUE,
+    PasswordHash NVARCHAR(255) NOT NULL,
+    Email NVARCHAR(255),
+    Role INT NOT NULL DEFAULT 0,
+    IsActive BIT DEFAULT 1,
+    CreatedAt DATETIME2 DEFAULT SYSDATETIME(),
+    UpdatedAt DATETIME2
+);
+
+CREATE TABLE Roles (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(), 
+    Name NVARCHAR(50) NOT NULL,
+    Description NVARCHAR(255),
+    IsSystem BIT DEFAULT 0
+);
+
+CREATE TABLE UserRoles (
+    UserId UNIQUEIDENTIFIER,
+    RoleId UNIQUEIDENTIFIER,
+    CONSTRAINT PK_UserRoles PRIMARY KEY (UserId, RoleId),
+    CONSTRAINT FK_UserRoles_Users FOREIGN KEY (UserId) REFERENCES Users(Id),
+    CONSTRAINT FK_UserRoles_Roles FOREIGN KEY (RoleId) REFERENCES Roles(Id)
+);
+
+CREATE TABLE Avtobusy (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    Model NVARCHAR(100) NOT NULL,
+    Capacity INT NOT NULL,
+    IsActive BIT DEFAULT 1,
+    LastMaintenanceDate DATETIME2
+);
+
+CREATE TABLE Marshuti (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    StartPoint NVARCHAR(100) NOT NULL,
+    EndPoint NVARCHAR(100) NOT NULL,
+    BusId UNIQUEIDENTIFIER,
+    TravelTime INT NOT NULL,
+    CONSTRAINT FK_Marshuti_Avtobusy FOREIGN KEY (BusId) REFERENCES Avtobusy(Id)
+);
+
+CREATE TABLE Bilety (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    RouteId UNIQUEIDENTIFIER,
+    TicketPrice DECIMAL(18,2) NOT NULL,
+    Status NVARCHAR(20) DEFAULT 'Available',
+    CreatedAt DATETIME2 DEFAULT SYSDATETIME(),
+    CONSTRAINT FK_Bilety_Marshuti FOREIGN KEY (RouteId) REFERENCES Marshuti(Id)
+);
+
+CREATE TABLE Prodazhi (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    SaleDate DATETIME2 NOT NULL,
+    TicketId UNIQUEIDENTIFIER,
+    UserId UNIQUEIDENTIFIER,
+    PaymentStatus NVARCHAR(20),
+    CONSTRAINT FK_Prodazhi_Bilety FOREIGN KEY (TicketId) REFERENCES Bilety(Id),
+    CONSTRAINT FK_Prodazhi_Users FOREIGN KEY (UserId) REFERENCES Users(Id)
+);
+
+### 1.2. Core Domain Models
+
+public class User
+{
+    public Guid Id { get; set; }
+    public string Username { get; set; }
+    public string PasswordHash { get; set; }
+    public string Email { get; set; }
+    public bool IsActive { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+    public virtual ICollection<Role> Roles { get; set; }
+}
+
+public class Role
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public bool IsSystem { get; set; }
+    public virtual ICollection<User> Users { get; set; }
+}
+
+public class Transport
+{
+    public Guid Id { get; set; }
+    public string Model { get; set; }
+    public int Capacity { get; set; }
+    public bool IsActive { get; set; }
+    public DateTime? LastMaintenanceDate { get; set; }
+    public virtual ICollection<Route> Routes { get; set; }
+}
+
+public class Route
+{
+    public Guid Id { get; set; }
+    public string StartPoint { get; set; }
+    public string EndPoint { get; set; }
+    public Guid BusId { get; set; }
+    public int TravelTime { get; set; }
+    public virtual Transport Transport { get; set; }
+    public virtual ICollection<Ticket> Tickets { get; set; }
+}
+
+public class Ticket
+{
+    public Guid Id { get; set; }
+    public Guid RouteId { get; set; }
+    public decimal TicketPrice { get; set; }
+    public string Status { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public virtual Route Route { get; set; }
+    public virtual ICollection<Sale> Sales { get; set; }
+}
+
+public class Sale
+{
+    public Guid Id { get; set; }
+    public DateTime SaleDate { get; set; }
+    public Guid TicketId { get; set; }
+    public Guid UserId { get; set; }
+    public string PaymentStatus { get; set; }
+    public virtual Ticket Ticket { get; set; }
+    public virtual User User { get; set; }
+}
+
+### 1.3. DbContext Implementation
+
+public class AppDbContext : DbContext
+{
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
+    }
+
+    public DbSet<User> Users { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<Transport> Avtobusy { get; set; }
+    public DbSet<Route> Marshuti { get; set; }
+    public DbSet<Ticket> Bilety { get; set; }
+    public DbSet<Sale> Prodazhi { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Username).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.PasswordHash).IsRequired();
+            entity.Property(e => e.Email).HasMaxLength(255);
+            entity.HasMany(e => e.Roles)
+                  .WithMany(e => e.Users)
+                  .UsingEntity<Dictionary<string, object>>(
+                      "UserRoles",
+                      j => j.HasOne<Role>().WithMany(),
+                      j => j.HasOne<User>().WithMany());
+        });
+
+        modelBuilder.Entity<Transport>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Model).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Capacity).IsRequired();
+        });
+
+        // Additional entity configurations...
+    }
+}
+
+## 2. Authentication and Authorization
+
+### 2.1. Authentication Service
+
+public class AuthenticationService : IAuthenticationService
+{
+    private readonly IUserRepository _userRepository;
+    private readonly ITokenService _tokenService;
+    private readonly IPasswordHasher _passwordHasher;
+    private readonly ILogger<AuthenticationService> _logger;
+
+    public AuthenticationService(
+        IUserRepository userRepository,
+        ITokenService tokenService,
+        IPasswordHasher passwordHasher,
+        ILogger<AuthenticationService> logger)
+    {
+        _userRepository = userRepository;
+        _tokenService = tokenService;
+        _passwordHasher = passwordHasher;
+        _logger = logger;
+    }
+
+    public async Task<AuthResult> AuthenticateAsync(string username, string password)
+    {
+        try
+        {
+            var user = await _userRepository.GetByUsernameAsync(username);
+            if (user == null)
+            {
+                _logger.LogWarning($"Authentication failed: User {username} not found");
+                return AuthResult.Failed("Invalid credentials");
+            }
+
+            if (!user.IsActive)
+            {
+                _logger.LogWarning($"Authentication failed: User {username} is inactive");
+                return AuthResult.Failed("Account is inactive");
+            }
+
+            if (!_passwordHasher.Verify(password, user.PasswordHash))
+            {
+                _logger.LogWarning($"Authentication failed: Invalid password for user {username}");
+                return AuthResult.Failed("Invalid credentials");
+            }
+
+            var token = await _tokenService.GenerateTokenAsync(user);
+            return AuthResult.Success(token, user);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Authentication error for user {username}");
+            throw;
+        }
+    }
+}
+### 2.2. Token Service
+
+public class TokenService : ITokenService
+{
+    private readonly IConfiguration _configuration;
+    private readonly ILogger<TokenService> _logger;
+
+    public TokenService(IConfiguration configuration, ILogger<TokenService> logger)
+    {
+        _configuration = configuration;
+        _logger = logger;
+    }
+
+    public async Task<string> GenerateTokenAsync(User user)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Secret"]);
+        
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Email, user.Email)
+        };
+
+        foreach (var role in user.Roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role.Name));
+        }
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.UtcNow.AddHours(8),
+            SigningCredentials = new SigningCredentials(
+                new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256Signature
+            )
+        };
+
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
+    }
+}
+
+### 2.3. Password Hasher Service
+
+public class PasswordHasher : IPasswordHasher
+{
+    private const int WorkFactor = 12;
+
+    public string Hash(string password)
+    {
+        return BCrypt.Net.BCrypt.HashPassword(password, WorkFactor);
+    }
+
+    public bool Verify(string password, string hash)
+    {
+        return BCrypt.Net.BCrypt.Verify(password, hash);
+    }
+}
+## 3. Business Logic Layer
+
+### 3.1. Ticket Sales Service
+
+public class TicketSalesService : ITicketSalesService
+{
+    private readonly IDbContext _context;
+    private readonly IPaymentProcessor _paymentProcessor;
+    private readonly INotificationService _notificationService;
+    private readonly ILogger<TicketSalesService> _logger;
+
+    public async Task<SaleResult> ProcessTicketSale(TicketSaleRequest request)
+    {
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            var ticket = await _context.Bilety
+                .Include(t => t.Route)
+                .FirstOrDefaultAsync(t => t.Id == request.TicketId);
+
+            if (ticket == null || ticket.Status != "Available")
+                return SaleResult.Failed("Ticket not available");
+
+            var paymentResult = await _paymentProcessor.ProcessPayment(new PaymentRequest
+            {
+                Amount = ticket.TicketPrice,
+                Currency = "USD",
+                PaymentMethod = request.PaymentMethod
+            });
+
+            if (!paymentResult.Success)
+                return SaleResult.Failed(paymentResult.ErrorMessage);
+
+            var sale = new Sale
+            {
+                TicketId = ticket.Id,
+                UserId = request.UserId,
+                SaleDate = DateTime.UtcNow,
+                PaymentStatus = "Completed"
+            };
+
+            ticket.Status = "Sold";
+            await _context.Prodazhi.AddAsync(sale);
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            await _notificationService.SendTicketConfirmation(sale);
+
+            return SaleResult.Success(sale);
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            _logger.LogError(ex, "Error processing ticket sale");
+            throw;
+        }
+    }
+
+    public async Task<decimal> CalculateMonthlyIncome(int year, int month)
+    {
+        return await _context.Prodazhi
+            .Where(p => p.SaleDate.Year == year && p.SaleDate.Month == month)
+            .Join(_context.Bilety,
+                sale => sale.TicketId,
+                ticket => ticket.Id,
+                (sale, ticket) => ticket.TicketPrice)
+            .SumAsync();
+    }
+
+    public async Task<List<TransportDemandDto>> GetTopTransportDemand(int year, int month, int limit = 38)
+    {
+        return await _context.Prodazhi
+            .Where(p => p.SaleDate.Year == year && p.SaleDate.Month == month)
+            .Join(_context.Bilety,
+                sale => sale.TicketId,
+                ticket => ticket.Id,
+                (sale, ticket) => new { sale, ticket })
+            .Join(_context.Marshuti,
+                st => st.ticket.RouteId,
+                route => route.Id,
+                (st, route) => new { st.sale, route })
+            .Join(_context.Avtobusy,
+                sr => sr.route.BusId,
+                bus => bus.Id,
+                (sr, bus) => new { bus.Model })
+            .GroupBy(x => x.Model)
+            .Select(g => new TransportDemandDto
+            {
+                Model = g.Key,
+                TicketsSold = g.Count()
+            })
+            .OrderByDescending(x => x.TicketsSold)
+            .Take(limit)
+            .ToListAsync();
+    }
+}
+
+public class PasswordHasher : IPasswordHasher
+{
+    private const int WorkFactor = 12;
+
+    public string Hash(string password)
+    {
+        return BCrypt.Net.BCrypt.HashPassword(password, WorkFactor);
+    }
+
+    public bool Verify(string password, string hash)
+    {
+        return BCrypt.Net.BCrypt.Verify(password, hash);
+    }
+}
+
+
+
+### 3.2. Route Management Service
+
+public class RouteManagementService : IRouteManagementService
+{
+    private readonly IDbContext _context;
+    private readonly IRouteOptimizer _routeOptimizer;
+    private readonly ILogger<RouteManagementService> _logger;
+
+    public async Task<RouteOptimizationResult> OptimizeRoutes()
+    {
+        var routes = await _context.Marshuti
+            .Include(r => r.Transport)
+            .Include(r => r.Tickets)
+            .ToListAsync();
+
+        var optimizedRoutes = await _routeOptimizer.OptimizeRoutes(routes);
+        
+        foreach (var route in optimizedRoutes)
+        {
+            _context.Marshuti.Update(route);
+        }
+
+        await _context.SaveChangesAsync();
+        return new RouteOptimizationResult
+        {
+            OptimizedRoutes = optimizedRoutes,
+            OptimizationDate = DateTime.UtcNow
+        };
+    }
+}
+
+### 3.3. Transport Fleet Service
+
+public class TransportFleetService : ITransportFleetService
+{
+    private readonly IDbContext _context;
+    private readonly IMaintenanceScheduler _maintenanceScheduler;
+
+    public async Task<MaintenanceSchedule> ScheduleMaintenance(Guid transportId)
+    {
+        var transport = await _context.Avtobusy
+            .Include(t => t.MaintenanceHistory)
+            .FirstOrDefaultAsync(t => t.Id == transportId);
+
+        if (transport == null)
+            throw new NotFoundException("Transport not found");
+
+        var schedule = await _maintenanceScheduler.CreateSchedule(
+            transport.MaintenanceHistory,
+            transport.Model,
+            transport.LastMaintenanceDate
+        );
+
+        await _context.MaintenanceSchedules.AddAsync(schedule);
+        await _context.SaveChangesAsync();
+
+        return schedule;
+    }
+}
+
+### 3.4. Reporting Service
+
+public class ReportingService : IReportingService
+{
+    private readonly IDbContext _context;
+    private readonly IReportGenerator _reportGenerator;
+    private readonly ILogger<ReportingService> _logger;
+
+    public async Task<byte[]> GenerateMonthlyReport(int year, int month)
+    {
+        var reportData = new MonthlyReportData
+        {
+            Sales = await GetMonthlySales(year, month),
+            Revenue = await CalculateRevenue(year, month),
+            TopRoutes = await GetTopRoutes(year, month),
+            MaintenanceSchedule = await GetMaintenanceSchedule(year, month)
+        };
+
+        return await _reportGenerator.GeneratePdfReport(reportData);
+    }
+
+    private async Task<List<SaleData>> GetMonthlySales(int year, int month)
+    {
+        return await _context.Prodazhi
+            .Where(s => s.SaleDate.Year == year && s.SaleDate.Month == month)
+            .Select(s => new SaleData
+            {
+                Id = s.Id,
+                TicketId = s.TicketId,
+                Amount = s.Ticket.TicketPrice,
+                SaleDate = s.SaleDate
+            })
+            .ToListAsync();
+    }
+}
+
+### 3.4. Reporting Service
+
+public class ReportingService : IReportingService
+{
+    private readonly IDbContext _context;
+    private readonly IReportGenerator _reportGenerator;
+    private readonly ILogger<ReportingService> _logger;
+
+    public async Task<byte[]> GenerateMonthlyReport(int year, int month)
+    {
+        var reportData = new MonthlyReportData
+        {
+            Sales = await GetMonthlySales(year, month),
+            Revenue = await CalculateRevenue(year, month),
+            TopRoutes = await GetTopRoutes(year, month),
+            MaintenanceSchedule = await GetMaintenanceSchedule(year, month)
+        };
+
+        return await _reportGenerator.GeneratePdfReport(reportData);
+    }
+
+    private async Task<List<SaleData>> GetMonthlySales(int year, int month)
+    {
+        return await _context.Prodazhi
+            .Where(s => s.SaleDate.Year == year && s.SaleDate.Month == month)
+            .Select(s => new SaleData
+            {
+                Id = s.Id,
+                TicketId = s.TicketId,
+                Amount = s.Ticket.TicketPrice,
+                SaleDate = s.SaleDate
+            })
+            .ToListAsync();
+    }
+
+    private async Task<decimal> CalculateRevenue(int year, int month)
+    {
+        return await _context.Prodazhi
+            .Where(s => s.SaleDate.Year == year && s.SaleDate.Month == month)
+            .SumAsync(s => s.Ticket.TicketPrice);
+    }
+
+    private async Task<List<RoutePerformance>> GetTopRoutes(int year, int month)
+    {
+        return await _context.Marshuti
+            .Select(r => new RoutePerformance
+            {
+                RouteId = r.Id,
+                StartPoint = r.StartPoint,
+                EndPoint = r.EndPoint,
+                TotalTickets = r.Tickets.Count(t => t.Sales.Any(s => 
+                    s.SaleDate.Year == year && s.SaleDate.Month == month)),
+                Revenue = r.Tickets.Sum(t => 
+                    t.Sales.Where(s => s.SaleDate.Year == year && s.SaleDate.Month == month)
+                    .Count() * t.TicketPrice)
+            })
+            .OrderByDescending(r => r.Revenue)
+            .Take(10)
+            .ToListAsync();
+    }
+}
+
+### 3.5. Notification Service
+
+public class NotificationService : INotificationService
+{
+    private readonly IEmailService _emailService;
+    private readonly ISmsService _smsService;
+    private readonly ITemplateEngine _templateEngine;
+    private readonly ILogger<NotificationService> _logger;
+
+    public async Task SendTicketConfirmation(Sale sale)
+    {
+        var emailTemplate = await _templateEngine.RenderTemplate(
+            "TicketConfirmation",
+            new
+            {
+                TicketId = sale.TicketId,
+                Route = sale.Ticket.Route,
+                Price = sale.Ticket.TicketPrice,
+                PurchaseDate = sale.SaleDate
+            });
+
+        await _emailService.SendEmailAsync(
+            sale.User.Email,
+            "Ticket Purchase Confirmation",
+            emailTemplate
+        );
+
+        if (!string.IsNullOrEmpty(sale.User.PhoneNumber))
+        {
+            await _smsService.SendSmsAsync(
+                sale.User.PhoneNumber,
+                $"Your ticket {sale.TicketId} has been confirmed. Thank you for your purchase!"
+            );
+        }
+    }
+}
+
+## 4. API Layer
+
+### 4.1. Controllers
+
+[ApiController]
+[Route("api/[controller]")]
+public class TicketsController : ControllerBase
+{
+    private readonly ITicketSalesService _ticketSalesService;
+    private readonly ILogger<TicketsController> _logger;
+
+    public TicketsController(
+        ITicketSalesService ticketSalesService,
+        ILogger<TicketsController> logger)
+    {
+        _ticketSalesService = ticketSalesService;
+        _logger = logger;
+    }
+
+    [HttpPost("purchase")]
+    [Authorize]
+    public async Task<ActionResult<SaleResult>> PurchaseTicket(
+        [FromBody] TicketPurchaseRequest request)
+    {
+        try
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var result = await _ticketSalesService.ProcessTicketSale(
+                new TicketSaleRequest
+                {
+                    TicketId = request.TicketId,
+                    UserId = Guid.Parse(userId),
+                    PaymentMethod = request.PaymentMethod
+                });
+
+            if (!result.Success)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error processing ticket purchase");
+            return StatusCode(500, "An error occurred while processing your request");
+        }
+    }
+}
+
+[ApiController]
+[Route("api/[controller]")]
+public class RoutesController : ControllerBase
+{
+    private readonly IRouteManagementService _routeService;
+    private readonly ILogger<RoutesController> _logger;
+
+    [HttpGet]
+    public async Task<ActionResult<List<RouteDto>>> GetRoutes()
+    {
+        try
+        {
+            var routes = await _routeService.GetAllRoutes();
+            return Ok(routes);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving routes");
+            return StatusCode(500, "An error occurred while retrieving routes");
+        }
+    }
+
+    [HttpPost("optimize")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<RouteOptimizationResult>> OptimizeRoutes()
+    {
+        try
+        {
+            var result = await _routeService.OptimizeRoutes();
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error optimizing routes");
+            return StatusCode(500, "An error occurred while optimizing routes");
+        }
+    }
+}
+
+## 5. Infrastructure Layer
+
+### 5.1. Email Service
+
+public class EmailService : IEmailService
+{
+    private readonly SmtpClient _smtpClient;
+    private readonly ILogger<EmailService> _logger;
+    private readonly EmailSettings _settings;
+
+    public EmailService(
+        IOptions<EmailSettings> settings,
+        ILogger<EmailService> logger)
+    {
+        _settings = settings.Value;
+        _logger = logger;
+        _smtpClient = new SmtpClient
+        {
+            Host = _settings.SmtpHost,
+            Port = _settings.SmtpPort,
+            EnableSsl = true,
+            Credentials = new NetworkCredential(
+                _settings.Username,
+                _settings.Password)
+        };
+    }
+
+    public async Task SendEmailAsync(string to, string subject, string body)
+    {
+        try
+        {
+            var message = new MailMessage
+            {
+                From = new MailAddress(_settings.FromEmail),
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true
+            };
+            message.To.Add(to);
+
+            await _smtpClient.SendMailAsync(message);
+            _logger.LogInformation($"Email sent successfully to {to}");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error sending email to {to}");
+            throw;
+        }
+    }
+}
+
+### 5.2. SMS Service
+
+public class SmsService : ISmsService
+{
+    private readonly ITwilioRestClient _twilioClient;
+    private readonly SmsSettings _settings;
+    private readonly ILogger<SmsService> _logger;
+
+    public async Task SendSmsAsync(string phoneNumber, string message)
+    {
+        try
+        {
+            var smsMessage = await MessageResource.CreateAsync(
+                body: message,
+                from: new PhoneNumber(_settings.FromNumber),
+                to: new PhoneNumber(phoneNumber),
+                client: _twilioClient
+            );
+
+            _logger.LogInformation($"SMS sent successfully to {phoneNumber}, SID: {smsMessage.Sid}");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error sending SMS to {phoneNumber}");
+            throw;
+        }
+    }
+}
+
+### 5.3. Payment Processor
+
+public class PaymentProcessor : IPaymentProcessor
+{
+    private readonly IStripeClient _stripeClient;
+    private readonly ILogger<PaymentProcessor> _logger;
+
+    public async Task<PaymentResult> ProcessPayment(PaymentRequest request)
+    {
+        try
+        {
+            var paymentIntentService = new PaymentIntentService(_stripeClient);
+            var paymentIntent = await paymentIntentService.CreateAsync(new PaymentIntentCreateOptions
+            {
+                Amount = (long)(request.Amount * 100), // Convert to cents
+                Currency = request.Currency.ToLower(),
+                PaymentMethod = request.PaymentMethodId,
+                Confirm = true,
+                ConfirmationMethod = "automatic"
+            });
+
+            return new PaymentResult
+            {
+                Success = paymentIntent.Status == "succeeded",
+                TransactionId = paymentIntent.Id,
+                Status = paymentIntent.Status
+            };
+        }
+        catch (StripeException ex)
+        {
+            _logger.LogError(ex, "Stripe payment processing error");
+            return new PaymentResult
+            {
+                Success = false,
+                ErrorMessage = ex.Message
+            };
+        }
+    }
+}
+
+## 6. Testing
+
+### 6.1. Unit Tests
+
+[TestFixture]
+public class TicketSalesServiceTests
+{
+    private Mock<IDbContext> _contextMock;
+    private Mock<IPaymentProcessor> _paymentProcessorMock;
+    private Mock<INotificationService> _notificationServiceMock;
+    private ITicketSalesService _service;
+
+    [SetUp]
+    public void Setup()
+    {
+        _contextMock = new Mock<IDbContext>();
+        _paymentProcessorMock = new Mock<IPaymentProcessor>();
+        _notificationServiceMock = new Mock<INotificationService>();
+        
+        _service = new TicketSalesService(
+            _contextMock.Object,
+            _paymentProcessorMock.Object,
+            _notificationServiceMock.Object,
+            Mock.Of<ILogger<TicketSalesService>>()
+        );
+    }
+
+    [Test]
+    public async Task ProcessTicketSale_ValidRequest_ReturnsSuccessResult()
+    {
+        // Arrange
+        var request = new TicketSaleRequest
+        {
+            TicketId = Guid.NewGuid(),
+            UserId = Guid.NewGuid(),
+            PaymentMethod = "card"
+        };
+
+        var ticket = new Ticket
+        {
+            Id = request.TicketId,
+            Status = "Available",
+            TicketPrice = 100m
+        };
+
+        _contextMock.Setup(c => c.Bilety
+            .Include(It.IsAny<Expression<Func<Ticket, object>>>()))
+            .Returns(Mock.Of<IQueryable<Ticket>>());
+
+        _paymentProcessorMock.Setup(p => p.ProcessPayment(It.IsAny<PaymentRequest>()))
+            .ReturnsAsync(new PaymentResult { Success = true });
+
+        // Act
+        var result = await _service.ProcessTicketSale(request);
+
+        // Assert
+        Assert.That(result.Success, Is.True);
+        _notificationServiceMock.Verify(
+            n => n.SendTicketConfirmation(It.IsAny<Sale>()),
+            Times.Once);
+    }
+}
+
+### 6.2. Integration Tests
+
+[TestFixture]
+public class TicketSalesIntegrationTests : IDisposable
+{
+    private readonly TestServer _server;
+    private readonly HttpClient _client;
+    private readonly AppDbContext _context;
+
+    public TicketSalesIntegrationTests()
+    {
+        var builder = new WebHostBuilder()
+            .UseStartup<TestStartup>();
+        
+        _server = new TestServer(builder);
+        _client = _server.CreateClient();
+        
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseInMemoryDatabase("TestDb")
+            .Options;
+        _context = new AppDbContext(options);
+    }
+
+    [Test]
+    public async Task PurchaseTicket_ValidRequest_ReturnsSuccess()
+    {
+        // Arrange
+        var ticket = new Ticket
+        {
+            Id = Guid.NewGuid(),
+            Status = "Available",
+            TicketPrice = 100m
+        };
+        await _context.Bilety.AddAsync(ticket);
+        await _context.SaveChangesAsync();
+
+        var request = new TicketPurchaseRequest
+        {
+            TicketId = ticket.Id,
+            PaymentMethod = "card"
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/tickets/purchase", request);
+        var result = await response.Content.ReadFromJsonAsync<SaleResult>();
+
+        // Assert
+        Assert.That(response.IsSuccessStatusCode, Is.True);
+        Assert.That(result.Success, Is.True);
+    }
+
+    public void Dispose()
+    {
+        _context.Database.EnsureDeleted();
+        _context.Dispose();
+        _client.Dispose();
+        _server.Dispose();
+    }
+}
+
+## 7. Documentation
+
+### 7.1. API Documentation
+
+/**
+ * @api {post} /api/tickets/purchase Purchase Ticket
+ * @apiName PurchaseTicket
+ * @apiGroup Tickets
+ *
+ * @apiHeader {String} Authorization JWT token
+ *
+ * @apiParam {String} ticketId Unique ticket identifier
+ * @apiParam {String} paymentMethod Payment method (card, paypal)
+ *
+ * @apiSuccess {Boolean} success Operation success status
+ * @apiSuccess {String} transactionId Payment transaction identifier
+ * @apiSuccess {Object} ticket Purchased ticket details
+ *
+ * @apiError (400) BadRequest Invalid request parameters
+ * @apiError (401) Unauthorized Authentication failed
+ * @apiError (500) ServerError Internal server error
+ */
+
+### 7.2. System Documentation
+
+/**
+ * Bus Ticket Management System
+ * Version 1.0.0
+ *
+ * Core Components:
+ * 1. Authentication System
+ * 2. Ticket Sales Management
+ * 3. Route Optimization
+ * 4. Payment Processing
+ * 5. Notification System
+ *
+ * Dependencies:
+ * - .NET 6.0
+ * - SQL Server 2019
+ * - Redis (for caching)
+ * - Stripe API (for payments)
+ * - Twilio API (for SMS)
+ *
+ * Deployment:
+ * 1. Configure appsettings.json
+ * 2. Run database migrations
+ * 3. Set up SSL certificates
+ * 4. Configure IIS or other web server
+ */
+
+## 8. Configuration
+
+### 8.1. Application Settings
+
+{
+    "ConnectionStrings": {
+        "DefaultConnection": "Server=.;Database=BusTickets;Trusted_Connection=True;MultipleActiveResultSets=true"
+    },
+    "Jwt": {
+        "Secret": "your-256-bit-secret",
+        "Issuer": "bus-ticket-system",
+        "Audience": "bus-ticket-clients",
+        "ExpiryInHours": 8
+    },
+    

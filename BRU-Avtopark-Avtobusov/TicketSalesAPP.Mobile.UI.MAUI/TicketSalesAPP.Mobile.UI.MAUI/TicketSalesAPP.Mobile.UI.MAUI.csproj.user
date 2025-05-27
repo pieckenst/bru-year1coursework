@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <None Update="App.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Resources\Styles\Colors.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Resources\Styles\Styles.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Views\AppShell.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Views\AuthPage.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Views\DetailForm4Page.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Views\ItemEditing3Page.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Views\LoginForm2Page.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Views\MvvmPage.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Views\PostsPage.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Views\SettingsForm2Page.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Views\SettingsForm3Page.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Views\SettingsForm4Page.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Views\TreeView1Page.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Views\WebApiDetailPage.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Views\WebApiEditPage.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Views\WebApiPage.xaml">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+</Project>

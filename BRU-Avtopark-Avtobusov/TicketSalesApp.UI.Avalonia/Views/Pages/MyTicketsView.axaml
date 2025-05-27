@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:TicketSalesApp.UI.Avalonia.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="TicketSalesApp.UI.Avalonia.Views.Pages.MyTicketsView"
+             x:DataType="vm:MyTicketsViewModel">
+    
+    <Grid RowDefinitions="Auto,*,Auto" Margin="20">
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Spacing="10">
+            <TextBlock Text="Мои билеты" Theme="{StaticResource HeaderText}"/>
+            <TextBlock Text="Управление купленными билетами" 
+                     Foreground="{DynamicResource SecondaryColor}"/>
+            
+            <!-- Filter Controls -->
+            <Grid ColumnDefinitions="*,*,Auto" Margin="0,20,0,0">
+                <ComboBox Grid.Column="0" 
+                         ItemsSource="{Binding SortOptions}"
+                         SelectedItem="{Binding SelectedSortOption}"
+                         PlaceholderText="Сортировка"
+                         HorizontalAlignment="Stretch"
+                         Margin="0,0,10,0"/>
+                
+                <ComboBox Grid.Column="1" 
+                         ItemsSource="{Binding FilterOptions}"
+                         SelectedItem="{Binding SelectedFilterOption}"
+                         PlaceholderText="Фильтр"
+                         HorizontalAlignment="Stretch"
+                         Margin="0,0,10,0"/>
+                
+                <Button Grid.Column="2"
+                        Content="Обновить"
+                        Command="{Binding RefreshCommand}"/>
+            </Grid>
+        </StackPanel>
+        
+        <!-- Tickets List -->
+        <DataGrid Grid.Row="1" 
+                  ItemsSource="{Binding PurchasedTickets}"
+                  SelectedItem="{Binding SelectedTicket}"
+                  IsReadOnly="True"
+                  Margin="0,20,0,0"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Маршрут" 
+                                  Binding="{Binding Bilet.Marshut.StartPoint}" 
+                                  Width="*"/>
+                <DataGridTextColumn Header="Пункт назначения" 
+                                  Binding="{Binding Bilet.Marshut.EndPoint}" 
+                                  Width="*"/>
+                <DataGridTextColumn Header="Дата покупки" 
+                                  Binding="{Binding SaleDate, StringFormat={}{0:dd.MM.yyyy HH:mm}}" 
+                                  Width="Auto"/>
+                <DataGridTextColumn Header="Цена" 
+                                  Binding="{Binding Bilet.TicketPrice, StringFormat={}{0:C}}" 
+                                  Width="Auto"/>
+                <DataGridTextColumn Header="Тип продажи" 
+                                  Binding="{Binding TicketSoldToUser}" 
+                                  Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="2" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right" 
+                    Spacing="10"
+                    Margin="0,10,0,0">
+            <Button Content="Распечатать"
+                    Command="{Binding PrintTicketCommand}"
+                    CommandParameter="{Binding SelectedTicket}"
+                    IsEnabled="{Binding SelectedTicket, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            <Button Content="Возврат"
+                    Command="{Binding RefundTicketCommand}"
+                    CommandParameter="{Binding SelectedTicket}"
+                    IsEnabled="{Binding SelectedTicket, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+        </StackPanel>
+
+		<!-- Loading Overlay -->
+		<Panel Grid.RowSpan="3"
+              Background="#80000000"
+              IsVisible="{Binding IsBusy}">
+			<StackPanel HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Spacing="20">
+				<ProgressRing IsIndeterminate="True"
+                             Width="60"
+                             Height="60"
+                             Foreground="White"/>
+				<TextBlock Text="Загрузка..."
+                         Classes="loading-text light dark"
+                         HorizontalAlignment="Center"/>
+			</StackPanel>
+		</Panel>
+
+        <!-- Error Message -->
+        <TextBlock Grid.Row="1" 
+                   Text="{Binding ErrorMessage}"
+                   Foreground="Red"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   IsVisible="{Binding HasError}"/>
+    </Grid>
+</UserControl> 

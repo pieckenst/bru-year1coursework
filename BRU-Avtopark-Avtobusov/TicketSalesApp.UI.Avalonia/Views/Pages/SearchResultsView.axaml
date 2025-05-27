@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:TicketSalesApp.UI.Avalonia.ViewModels"
+             xmlns:icons="using:Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="TicketSalesApp.UI.Avalonia.Views.Pages.SearchResultsView"
+             x:DataType="vm:SearchResultsViewModel">
+    
+    <Grid RowDefinitions="Auto,*" Margin="20">
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Spacing="10">
+            <TextBlock Text="Результаты поиска" Theme="{StaticResource HeaderText}"/>
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock Text="{Binding SearchSummary}" 
+                         Foreground="{DynamicResource SecondaryColor}"/>
+                <ProgressBar IsIndeterminate="True" 
+                           Width="100"
+                           IsVisible="{Binding IsLoading}"/>
+            </StackPanel>
+        </StackPanel>
+        
+        <!-- Results -->
+        <TabControl Grid.Row="1" Margin="0,20,0,0">
+            <!-- Schedules Tab -->
+            <TabItem Header="Расписание">
+                <Grid RowDefinitions="*">
+                    <DataGrid ItemsSource="{Binding ScheduleResults}"
+                             IsReadOnly="True"
+                             AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Маршрут" 
+                                              Binding="{Binding StartPoint}" 
+                                              Width="*"/>
+                            <DataGridTextColumn Header="Пункт назначения" 
+                                              Binding="{Binding EndPoint}" 
+                                              Width="*"/>
+                            <DataGridTextColumn Header="Отправление" 
+                                              Binding="{Binding DepartureTime, StringFormat={}{0:dd.MM.yyyy HH:mm}}" 
+                                              Width="Auto"/>
+                            <DataGridTextColumn Header="Прибытие" 
+                                              Binding="{Binding ArrivalTime, StringFormat={}{0:dd.MM.yyyy HH:mm}}" 
+                                              Width="Auto"/>
+                            <DataGridTextColumn Header="Цена" 
+                                              Binding="{Binding Price, StringFormat={}{0:C}}" 
+                                              Width="Auto"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    
+                    <TextBlock Text="Нет результатов"
+                             IsVisible="{Binding !ScheduleResults.Count}"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             Foreground="{DynamicResource SecondaryColor}"/>
+                </Grid>
+            </TabItem>
+
+            <!-- Tickets Tab -->
+            <TabItem Header="Билеты">
+                <Grid RowDefinitions="*">
+                    <DataGrid ItemsSource="{Binding TicketResults}"
+                             IsReadOnly="True"
+                             AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Маршрут" 
+                                              Binding="{Binding Marshut.StartPoint}" 
+                                              Width="*"/>
+                            <DataGridTextColumn Header="Пункт назначения" 
+                                              Binding="{Binding Marshut.EndPoint}" 
+                                              Width="*"/>
+                            <DataGridTextColumn Header="Цена" 
+                                              Binding="{Binding TicketPrice, StringFormat={}{0:C}}" 
+                                              Width="Auto"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    
+                    <TextBlock Text="Нет результатов"
+                             IsVisible="{Binding !TicketResults.Count}"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             Foreground="{DynamicResource SecondaryColor}"/>
+                </Grid>
+            </TabItem>
+
+            <!-- My Tickets Tab -->
+            <TabItem Header="Мои билеты">
+                <Grid RowDefinitions="*">
+                    <DataGrid ItemsSource="{Binding MyTicketResults}"
+                             IsReadOnly="True"
+                             AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Маршрут" 
+                                              Binding="{Binding Bilet.Marshut.StartPoint}" 
+                                              Width="*"/>
+                            <DataGridTextColumn Header="Пункт назначения" 
+                                              Binding="{Binding Bilet.Marshut.EndPoint}" 
+                                              Width="*"/>
+                            <DataGridTextColumn Header="Дата покупки" 
+                                              Binding="{Binding SaleDate, StringFormat={}{0:dd.MM.yyyy HH:mm}}" 
+                                              Width="Auto"/>
+                            <DataGridTextColumn Header="Цена" 
+                                              Binding="{Binding Bilet.TicketPrice, StringFormat={}{0:C}}" 
+                                              Width="Auto"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    
+                    <TextBlock Text="Нет результатов"
+                             IsVisible="{Binding !MyTicketResults.Count}"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             Foreground="{DynamicResource SecondaryColor}"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl> 

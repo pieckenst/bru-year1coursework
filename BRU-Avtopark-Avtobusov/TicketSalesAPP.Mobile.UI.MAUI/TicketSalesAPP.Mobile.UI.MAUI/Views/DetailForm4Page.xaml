@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TicketSalesAPP.Mobile.UI.MAUI.Views.DetailForm4Page"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dx="http://schemas.devexpress.com/maui"
+    xmlns:viewModels="clr-namespace:TicketSalesAPP.Mobile.UI.MAUI.ViewModels;assembly=TicketSalesAPP.Mobile.UI.MAUI"
+    xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+    ios:Page.UseSafeArea="True"
+    x:DataType="viewModels:DetailForm4ViewModel"
+    Title="Real Estate Listing">
+
+    <ContentPage.BindingContext>
+        <viewModels:DetailForm4ViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <Style x:Key="FormComponent" TargetType="dx:FormItem">
+            <Setter Property="Padding" Value="0,16" />
+            <Setter Property="ArrowMargin" Value="16,0" />
+            <Setter Property="ShowSeparator" Value="False" />
+            <Setter Property="ImageWidth" Value="24" />
+            <Setter Property="ImageHeight" Value="24" />
+            <Setter Property="ImageMargin" Value="16,0" />
+            <Setter Property="ImageColor" Value="{dx:ThemeColor Key=OnSurfaceVariant}" />
+            <Setter Property="ArrowMargin" Value="16,0" />
+            <Setter Property="HorizontalSpacing" Value="0" />
+            <Setter Property="VerticalSpacing" Value="10" />
+            <Setter Property="TextFontSize" Value="16" />
+            <Setter Property="TextFontFamily" Value="Roboto" />
+            <Setter Property="DetailFontSize" Value="14" />
+            <Setter Property="DetailFontFamily" Value="Roboto" />
+            <Setter Property="DetailColor" Value="{dx:ThemeColor Key=OnSurfaceVariant}" />
+            <Setter Property="UseRippleEffect" Value="False" />
+        </Style>
+    </ContentPage.Resources>
+
+    <dx:DXScrollView>
+        <dx:DXStackLayout>
+            <Label
+                Text="{Binding Price, StringFormat='{0:C}'}"
+                FontSize="16"
+                FontFamily="Roboto Medium"
+                FontAttributes="Bold"
+                TextColor="{dx:ThemeColor Key=OnSurface}"
+                Margin="16,8" />
+            <Label
+                Text="{Binding Description}"
+                FontSize="16"
+                FontFamily="Roboto"
+                TextColor="{dx:ThemeColor Key=OnSurface}"
+                Margin="16,0" />
+
+            <dx:DXImage
+                Source="house.jpg"
+                HeightRequest="196"
+                Margin="0,16,0,0"
+                Aspect="AspectFill" />
+            <dx:FormItem
+                Style="{StaticResource FormComponent}"
+                BackgroundColor="{dx:ThemeColor Key=SurfaceContainerLow}"
+                TapCommand="{Binding HandleActionCommand}"
+                ImageSource="location"
+                Text="{Binding Address}"
+                ShowArrow="True"
+                UseRippleEffect="True" />
+
+            <Grid
+                Margin="16"
+                ColumnDefinitions="*,*"
+                RowDefinitions="Auto,Auto,Auto">
+                <dx:FormItem
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Style="{StaticResource FormComponent}"
+                    Text="{Binding YearBuilt}"
+                    Detail="Year built" />
+                <dx:FormItem
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Style="{StaticResource FormComponent}"
+                    Text="{Binding LotSize}"
+                    Detail="Lot size" />
+                <dx:FormItem
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Style="{StaticResource FormComponent}"
+                    Text="{Binding ParkingSpaces}"
+                    Detail="Parking spaces" />
+                <dx:FormItem
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Style="{StaticResource FormComponent}"
+                    Text="{Binding Heating}"
+                    Detail="Heating" />
+                <dx:FormItem
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Style="{StaticResource FormComponent}"
+                    Text="{Binding Cooling}"
+                    Detail="Cooling" />
+                <dx:FormItem
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Style="{StaticResource FormComponent}"
+                    Text="{Binding Levels}"
+                    Detail="Levels" />
+            </Grid>
+        </dx:DXStackLayout>
+    </dx:DXScrollView>
+</ContentPage>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TicketSalesAPP.Mobile.UI.MAUI.Views.SettingsForm3Page"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dx="http://schemas.devexpress.com/maui"
+    xmlns:viewModels="clr-namespace:TicketSalesAPP.Mobile.UI.MAUI.ViewModels;assembly=TicketSalesAPP.Mobile.UI.MAUI"
+    x:DataType="viewModels:SettingsForm3ViewModel"
+    Title="Settings">
+
+    <ContentPage.BindingContext>
+        <viewModels:SettingsForm3ViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <Style x:Key="FormGroupComponent" TargetType="dx:FormGroupItem">
+            <Setter Property="HeaderFontSize" Value="16" />
+            <Setter Property="HeaderFontFamily" Value="Roboto Medium" />
+            <Setter Property="HeaderFontAttributes" Value="Bold" />
+            <Setter Property="HeaderColor" Value="{dx:ThemeColor Key=OnSurfaceVariant}" />
+            <Setter Property="HeaderMargin" Value="16,24,16,8" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style x:Key="FormComponent" TargetType="dx:FormItem">
+            <Setter Property="Padding" Value="16" />
+            <Setter Property="ShowSeparator" Value="False" />
+            <Setter Property="ImageWidth" Value="24" />
+            <Setter Property="ImageHeight" Value="24" />
+            <Setter Property="ImageColor" Value="{dx:ThemeColor Key=OnSurfaceVariant}" />
+            <Setter Property="HorizontalSpacing" Value="16" />
+            <Setter Property="VerticalSpacing" Value="10" />
+            <Setter Property="TextFontSize" Value="16" />
+            <Setter Property="TextFontFamily" Value="Roboto" />
+            <Setter Property="ShowArrow" Value="True" />
+        </Style>
+    </ContentPage.Resources>
+
+    <dx:DXScrollView>
+        <dx:DXStackLayout>
+            <dx:FormGroupItem Style="{StaticResource FormGroupComponent}" Header="Notifications">
+                <dx:FormSwitchItem Style="{StaticResource FormComponent}" Text="Push" />
+                <dx:FormSwitchItem Style="{StaticResource FormComponent}" Text="Email" />
+                <dx:FormSwitchItem Style="{StaticResource FormComponent}" Text="SMS" />
+            </dx:FormGroupItem>
+
+            <dx:FormGroupItem Style="{StaticResource FormGroupComponent}" Header="Preferences">
+                <dx:FormListPickerItem
+                    Style="{StaticResource FormComponent}"
+                    ItemsSource="{Binding Languages}"
+                    SelectedItem="{Binding Language}"
+                    PickerShowMode="BottomSheet"
+                    ImageSource="language"
+                    Text="Language" />
+                <dx:FormSwitchItem
+                    Style="{StaticResource FormComponent}"
+                    ImageSource="theme"
+                    IsToggled="{Binding DarkMode}"
+                    Text="Dark Mode" />
+            </dx:FormGroupItem>
+        </dx:DXStackLayout>
+    </dx:DXScrollView>
+</ContentPage>

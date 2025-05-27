@@ -1,0 +1,131 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="TicketSalesApp.UI.Administration.Avalonia.App"
+             xmlns:local="using:TicketSalesApp.UI.Administration.Avalonia"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
+			 xmlns:views="clr-namespace:TicketSalesApp.UI.Administration.Avalonia.Views"
+			 xmlns:toolviews="clr-namespace:TicketSalesApp.UI.Administration.Avalonia.Views.ManagementToolWindowsViews"
+			 xmlns:viewModels="clr-namespace:TicketSalesApp.UI.Administration.Avalonia.ViewModels"
+			 xmlns:sty="using:FluentAvalonia.Styling"
+			 xmlns:sukiUi="clr-namespace:SukiUI;assembly=SukiUI"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+  
+    <Application.Styles>
+		<FluentTheme/>
+		
+		<StyleInclude Source="avares://Classic.CommonControls.Avalonia/Themes/Fluent.axaml" />
+		
+		<StyleInclude Source="avares://ReDocking/Styles.axaml" />
+        
+        <StyleInclude Source="avares://Semi.Avalonia.DataGrid/Index.axaml"/>
+        <materialIcons:MaterialIconStyles />
+		<sty:FluentAvaloniaTheme />
+		 <StyleInclude Source="avares://FluentAvalonia.ProgressRing/Styling/Controls/ProgressRing.axaml" />
+    </Application.Styles>
+
+    <Application.Resources>
+        <!-- Theme-aware colors -->
+        <Color x:Key="PrimaryColorLight">#007BFF</Color>
+        <Color x:Key="PrimaryColorDark">#409CFF</Color>
+        <Color x:Key="SecondaryColorLight">#6C757D</Color>
+        <Color x:Key="SecondaryColorDark">#A6ADB5</Color>
+        <Color x:Key="SuccessColorLight">#28A745</Color>
+        <Color x:Key="SuccessColorDark">#34CE57</Color>
+        <Color x:Key="DangerColorLight">#DC3545</Color>
+        <Color x:Key="DangerColorDark">#FF4B5A</Color>
+        <Color x:Key="WarningColorLight">#FFC107</Color>
+        <Color x:Key="WarningColorDark">#FFD43B</Color>
+        <Color x:Key="InfoColorLight">#17A2B8</Color>
+        <Color x:Key="InfoColorDark">#3DD5F3</Color>
+        
+        <!-- Card Styles -->
+        <ControlTheme x:Key="ModernCard" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundAltHighBrush}"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BoxShadow" Value="2 2 4 0 #20000000"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="10"/>
+        </ControlTheme>
+        
+        <!-- Text Styles -->
+        <ControlTheme x:Key="HeaderText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+        </ControlTheme>
+        
+        <ControlTheme x:Key="SubHeaderText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Margin" Value="0 0 0 8"/>
+            <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+        </ControlTheme>
+        
+        <!-- Button Styles -->
+        <ControlTheme x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource SystemAccentColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundAltHighBrush}"/>
+            <Setter Property="Padding" Value="15 8"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </ControlTheme>
+    </Application.Resources>
+
+	<Application.DataTemplates>
+		<DataTemplate x:DataType="viewModels:ExplorerViewModel">
+			<views:Explorer />
+		</DataTemplate>
+		<DataTemplate x:DataType="viewModels:DebugViewModel">
+			<views:Debug />
+		</DataTemplate>
+		<DataTemplate x:DataType="viewModels:NotificationsViewModel">
+			<views:Notifications />
+		</DataTemplate>
+		<DataTemplate x:DataType="viewModels:ProblemViewModel">
+			<views:Problem />
+		</DataTemplate>
+		<DataTemplate x:DataType="viewModels:PropertiesViewModel">
+			<views:Properties />
+		</DataTemplate>
+		<DataTemplate x:DataType="viewModels:SearchViewModel">
+			<views:Search />
+		</DataTemplate>
+		<DataTemplate x:DataType="viewModels:BusManagementViewModel">
+			<views:BusManagementToolWindow />
+		</DataTemplate>
+		<DataTemplate x:DataType="viewModels:EmployeeManagementViewModel">
+			<toolviews:EmployeeManagementToolWindow />
+		</DataTemplate>
+		<DataTemplate x:DataType="viewModels:JobManagementViewModel">
+			<toolviews:JobManagementToolWindow />
+		</DataTemplate>
+		<DataTemplate x:DataType="viewModels:MaintenanceManagementViewModel">
+			<toolviews:MaintenanceManagementToolWindow />
+		</DataTemplate>
+		<DataTemplate x:DataType="viewModels:RouteManagementViewModel">
+			<views:RouteManagementToolWindow />
+		</DataTemplate>
+		<DataTemplate x:DataType="viewModels:SalesManagementViewModel">
+			<views:SalesManagementToolWindow />
+		</DataTemplate>
+		<DataTemplate x:DataType="viewModels:SalesStatisticsViewModel">
+			<toolviews:SalesStatisticsToolWindow />
+		</DataTemplate>
+		<DataTemplate x:DataType="viewModels:TicketManagementViewModel">
+			<views:TicketManagementToolWindow />
+		</DataTemplate>
+		<DataTemplate x:DataType="viewModels:UserManagementViewModel">
+			<toolviews:UserManagementToolWindow />
+		</DataTemplate>
+		<DataTemplate x:DataType="viewModels:IncomeReportViewModel">
+			<toolviews:IncomeReportToolWindow />
+		</DataTemplate>
+		<DataTemplate x:DataType="viewModels:RouteSchedulesManagementViewModel">
+			<toolviews:RouteSchedulesManagementToolWindow />
+		</DataTemplate>
+	</Application.DataTemplates>
+</Application>

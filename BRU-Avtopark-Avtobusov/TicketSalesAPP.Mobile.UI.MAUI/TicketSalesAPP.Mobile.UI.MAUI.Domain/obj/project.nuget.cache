@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "v62GJYPeX1A=",
+  "success": true,
+  "projectFilePath": "G:\\codesecondfolder\\BRU-Avtopark-Avtobusov\\TicketSalesAPP.Mobile.UI.MAUI\\TicketSalesAPP.Mobile.UI.MAUI.Domain\\TicketSalesAPP.Mobile.UI.MAUI.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\andrej\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\8.0.0\\microsoft.extensions.caching.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\andrej\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
+    "C:\\Users\\andrej\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.1\\microsoft.netcore.app.ref.9.0.1.nupkg.sha512",
+    "C:\\Users\\andrej\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\9.0.1\\microsoft.windowsdesktop.app.ref.9.0.1.nupkg.sha512",
+    "C:\\Users\\andrej\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\9.0.1\\microsoft.aspnetcore.app.ref.9.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

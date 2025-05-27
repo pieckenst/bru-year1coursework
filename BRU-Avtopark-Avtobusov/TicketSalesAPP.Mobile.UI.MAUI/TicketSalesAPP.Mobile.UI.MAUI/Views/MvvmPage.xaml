@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Name="page"
+    x:Class="TicketSalesAPP.Mobile.UI.MAUI.Views.MvvmPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dx="http://schemas.devexpress.com/maui"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModels="clr-namespace:TicketSalesAPP.Mobile.UI.MAUI.ViewModels"
+    xmlns:models="clr-namespace:TicketSalesAPP.Mobile.UI.MAUI.Domain.Data;assembly=TicketSalesAPP.Mobile.UI.MAUI.Domain"
+    x:DataType="viewModels:MvvmViewModel"
+    BindingContext="{dx:Ioc Type={x:Type TypeName=viewModels:MvvmViewModel}}"
+    Title="MvvmPage">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Loaded" Command="{Binding InitializeCommand}" BindingContext="{Binding Path=BindingContext, Source={x:Reference page}}" />
+    </ContentPage.Behaviors>
+
+    <Grid>
+        <dx:DXCollectionView ItemsSource="{Binding Customers}" ItemSpacing="16">
+            <dx:DXCollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Customer">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" Padding="16,0">
+                        <Label Grid.Column="0" Text="{Binding Id}" />
+                        <Label Grid.Column="1" Text="{Binding FirstName}"/>
+                    </Grid>
+                </DataTemplate>
+            </dx:DXCollectionView.ItemTemplate>
+        </dx:DXCollectionView>
+
+        <ActivityIndicator
+            IsRunning="{Binding InitializeCommand.IsRunning}"
+            HorizontalOptions="Center"
+            VerticalOptions="Center" />
+    </Grid>
+
+</ContentPage>

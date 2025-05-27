@@ -1,0 +1,87 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:TicketSalesApp.UI.Avalonia.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="TicketSalesApp.UI.Avalonia.Views.Pages.HelpView"
+             x:DataType="vm:HelpViewModel">
+    
+    <Grid RowDefinitions="Auto,*" Margin="20">
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Spacing="10">
+            <TextBlock Text="Помощь" Theme="{StaticResource HeaderText}"/>
+            <TextBlock Text="Руководство пользователя и часто задаваемые вопросы" 
+                     Foreground="{DynamicResource SecondaryColor}"/>
+        </StackPanel>
+        
+        <!-- Help Content -->
+        <ScrollViewer Grid.Row="1" Margin="0,20,0,0">
+            <StackPanel Spacing="20">
+                <!-- Quick Start Guide -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                        BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        Padding="15">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Быстрый старт" FontWeight="Bold" FontSize="18"/>
+                        <TextBlock Text="1. Поиск билетов" FontWeight="SemiBold"/>
+                        <TextBlock Text="Выберите пункт отправления, назначения и дату поездки в форме поиска билетов."
+                                 TextWrapping="Wrap"/>
+                        
+                        <TextBlock Text="2. Покупка билета" FontWeight="SemiBold"/>
+                        <TextBlock Text="Выберите подходящий рейс из списка результатов и нажмите кнопку 'Купить'."
+                                 TextWrapping="Wrap"/>
+                        
+                        <TextBlock Text="3. Управление билетами" FontWeight="SemiBold"/>
+                        <TextBlock Text="В разделе 'Мои билеты' вы можете просматривать купленные билеты, распечатывать их или оформить возврат."
+                                 TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+                
+                <!-- FAQ -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                        BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        Padding="15">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Часто задаваемые вопросы" FontWeight="Bold" FontSize="18"/>
+                        
+                        <TextBlock Text="Как купить билет?" FontWeight="SemiBold"/>
+                        <TextBlock Text="Выберите маршрут в форме поиска, укажите дату поездки и нажмите 'Найти'. Выберите подходящий рейс и нажмите 'Купить билет'."
+                                 TextWrapping="Wrap"/>
+                        
+                        <TextBlock Text="Как вернуть билет?" FontWeight="SemiBold"/>
+                        <TextBlock Text="В разделе 'Мои билеты' найдите нужный билет и нажмите кнопку 'Возврат'. Следуйте инструкциям для оформления возврата."
+                                 TextWrapping="Wrap"/>
+                        
+                        <TextBlock Text="Как распечатать билет?" FontWeight="SemiBold"/>
+                        <TextBlock Text="В разделе 'Мои билеты' найдите нужный билет и нажмите кнопку 'Распечатать'. Билет будет сохранен в формате PDF."
+                                 TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+                
+                <!-- Contact Support -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                        BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        Padding="15">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Поддержка" FontWeight="Bold" FontSize="18"/>
+                        <TextBlock Text="Если у вас остались вопросы, обратитесь в службу поддержки:"
+                                 TextWrapping="Wrap"/>
+                        <TextBlock Text="Телефон: +7 (XXX) XXX-XX-XX"
+                                 TextWrapping="Wrap"/>
+                        <TextBlock Text="Email: support@example.com"
+                                 TextWrapping="Wrap"/>
+                        <TextBlock Text="Время работы: 24/7"
+                                 TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl> 

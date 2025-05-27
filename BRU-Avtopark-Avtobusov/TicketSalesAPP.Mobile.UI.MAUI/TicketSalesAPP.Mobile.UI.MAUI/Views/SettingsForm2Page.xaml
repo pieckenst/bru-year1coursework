@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TicketSalesAPP.Mobile.UI.MAUI.Views.SettingsForm2Page"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dx="http://schemas.devexpress.com/maui"
+    xmlns:viewModels="clr-namespace:TicketSalesAPP.Mobile.UI.MAUI.ViewModels;assembly=TicketSalesAPP.Mobile.UI.MAUI"
+    x:DataType="viewModels:SettingsForm2ViewModel"
+    BackgroundColor="{dx:ThemeColor Key=SurfaceContainer}"
+    Shell.BackgroundColor="{dx:ThemeColor Key=SurfaceContainer}"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.BindingContext>
+        <viewModels:SettingsForm2ViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <Style x:Key="HeaderText" TargetType="Label">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontFamily" Value="Roboto" />
+            <Setter Property="TextColor" Value="{dx:ThemeColor Key=OnSurfaceVariant}" />
+        </Style>
+        <Style x:Key="FormComponent" TargetType="dx:FormItem">
+            <Setter Property="Padding" Value="0,16" />
+            <Setter Property="ArrowMargin" Value="16,0" />
+            <Setter Property="ShowSeparator" Value="False" />
+            <Setter Property="ImageWidth" Value="24" />
+            <Setter Property="ImageHeight" Value="24" />
+            <Setter Property="ImageMargin" Value="16,0" />
+            <Setter Property="ImageColor" Value="{dx:ThemeColor Key=OnSurfaceVariant}" />
+            <Setter Property="HorizontalSpacing" Value="0" />
+            <Setter Property="VerticalSpacing" Value="10" />
+            <Setter Property="TextFontSize" Value="16" />
+            <Setter Property="TextFontFamily" Value="Roboto" />
+            <Setter Property="ShowArrow" Value="True" />
+        </Style>
+    </ContentPage.Resources>
+
+    <ContentPage.Behaviors>
+        <dx:SystemBarBehavior AndroidStatusBarBackground="{dx:ThemeColor Key=SurfaceContainer}" />
+    </ContentPage.Behaviors>
+
+    <dx:DXScrollView>
+        <dx:DXStackLayout>
+            <dx:DXBorder
+                Margin="16,4,16,16"
+                BackgroundColor="{dx:ThemeColor Key=PrimaryContainer}"
+                WidthRequest="60"
+                HeightRequest="60"
+                CornerRadius="30">
+                <Label
+                    Text="{Binding NameInitials}"
+                    FontSize="16"
+                    FontFamily="Roboto Medium"
+                    FontAttributes="Bold"
+                    TextColor="{dx:ThemeColor Key=OnPrimaryContainer}"
+                    VerticalTextAlignment="Center"
+                    HorizontalTextAlignment="Center" />
+            </dx:DXBorder>
+
+            <Label
+                Text="{Binding FullName}"
+                TextColor="{dx:ThemeColor Key=OnSurface}"
+                FontSize="16"
+                FontFamily="Roboto Medium"
+                FontAttributes="Bold"
+                HorizontalTextAlignment="Center" />
+            <Label
+                Text="{Binding Company}"
+                TextColor="{dx:ThemeColor Key=OnSurfaceVariant}"
+                FontSize="16"
+                Margin="0,4,0,0"
+                FontFamily="Roboto"
+                HorizontalTextAlignment="Center" />
+
+            <dx:DXButton
+                Content="Update Avatar"
+                WidthRequest="160"
+                Margin="16,16,16,24"
+                Command="{Binding HandleActionCommand}"
+                ButtonType="Outlined" />
+
+            <Label
+                Style="{StaticResource HeaderText}"
+                Text="Acount &amp; Profile"
+                Margin="16,0,16,12" />
+            <dx:DXStackLayout BackgroundColor="{dx:ThemeColor Key=Surface}">
+                <dx:FormItem
+                    Style="{StaticResource FormComponent}"
+                    ImageSource="user"
+                    TapCommand="{Binding HandleActionCommand}"
+                    Text="Your Account" />
+                <dx:FormItem
+                    Style="{StaticResource FormComponent}"
+                    ImageSource="location"
+                    TapCommand="{Binding HandleActionCommand}"
+                    Text="Contact information" />
+                <dx:FormItem
+                    Style="{StaticResource FormComponent}"
+                    ImageSource="payment"
+                    TapCommand="{Binding HandleActionCommand}"
+                    Text="Payment methods" />
+                <dx:FormItem
+                    Style="{StaticResource FormComponent}"
+                    ImageSource="settings"
+                    TapCommand="{Binding HandleActionCommand}"
+                    Text="Appearance" />
+                <dx:FormItem
+                    Style="{StaticResource FormComponent}"
+                    ImageSource="notifications"
+                    TapCommand="{Binding HandleActionCommand}"
+                    Text="Notifications" />
+            </dx:DXStackLayout>
+
+            <Label
+                Style="{StaticResource HeaderText}"
+                Text="Support"
+                Margin="16,24,16,12" />
+            <dx:DXStackLayout BackgroundColor="{dx:ThemeColor Key=Surface}">
+                <dx:FormItem
+                    Style="{StaticResource FormComponent}"
+                    ImageSource="issue"
+                    TapCommand="{Binding HandleActionCommand}"
+                    Text="Report an issue" />
+                <dx:FormItem
+                    Style="{StaticResource FormComponent}"
+                    ImageSource="question"
+                    TapCommand="{Binding HandleActionCommand}"
+                    Text="FAQ" />
+            </dx:DXStackLayout>
+        </dx:DXStackLayout>
+    </dx:DXScrollView>
+</ContentPage>

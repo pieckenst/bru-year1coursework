@@ -1,0 +1,15 @@
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure\bin\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure.deps.json
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure\bin\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure\bin\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure.pdb
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure\bin\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Domain.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure\bin\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Domain.pdb
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure\obj\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure.csproj.AssemblyReference.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure\obj\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure\obj\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure.AssemblyInfoInputs.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure\obj\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure.AssemblyInfo.cs
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure\obj\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure.csproj.CoreCompileInputs.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure\obj\Debug\net9.0\TicketSa.3E321B29.Up2Date
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure\obj\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure\obj\Debug\net9.0\refint\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure\obj\Debug\net9.0\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure.pdb
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesAPP.Mobile.UI.MAUI\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure\obj\Debug\net9.0\ref\TicketSalesAPP.Mobile.UI.MAUI.Infrastructure.dll

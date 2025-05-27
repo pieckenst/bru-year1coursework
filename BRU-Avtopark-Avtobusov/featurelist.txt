@@ -1,0 +1,172 @@
+### Comprehensive Coursework Project Plan: Sales Ticket Accounting System with 1C Enterprise & ASC CRM Features
+
+---
+
+### **Feature List**
+
+#### **1. Original Coursework Specific Features**
+
+1. **Authorization:**
+   - **Feature Name:** User Authentication
+   - **Description:** Implement user authentication using a file for storing login credentials (username, password, role). Users can log in as either an administrator (role = 1) or a user (role = 0). Administrators can create accounts if they do not exist and register new users.
+   - **Reimplementation of:** Basic authentication system.
+
+2. **User Account Management:**
+   - **Feature Name:** Administrator User Management
+   - **Description:** Administrators can view, add, edit, and delete user accounts. This includes managing roles and permissions.
+   - **Reimplementation of:** Basic user management.
+
+3. **Working with Data:**
+   - **Feature Name:** Data Management
+   - **Description:** After authorization, users can perform CRUD operations on data. Administrators can create, open, and delete data files. Both administrators and users can view, add, edit, delete, and process data, including searching and sorting by three parameters.
+   - **Reimplementation of:** Basic CRUD operations.
+
+4. **Individual Tasks:**
+   - **Feature Name:** Monthly Income Calculation
+   - **Description:** Calculate the total income from the sale of travel tickets for a specific month. The system retrieves sales data for the specified month, finds the corresponding ticket, gets the ticket price, and sums the prices of all sold tickets.
+   - **Reimplementation of:** Basic data processing.
+
+5. **Search and Sort:**
+   - **Feature Name:** Data Search and Sort
+   - **Description:** Users can search and sort data by three parameters, facilitating easier data retrieval and analysis.
+   - **Reimplementation of:** Basic search and sort functionality.
+
+6. **Data Export:**
+   - **Feature Name:** Data Export
+   - **Description:** Users can export data to text files upon request.
+   - **Reimplementation of:** Basic data export functionality.
+
+7. **Splash Screen:**
+   - **Feature Name:** Project Theme Splash Screen
+   - **Description:** Display a splash screen with the project theme and the author’s name.
+   - **Reimplementation of:** Basic splash screen.
+
+8. **Menu System:**
+   - **Feature Name:** Menu Navigation
+   - **Description:** Implement a menu system for navigating through different functionalities.
+   - **Reimplementation of:** Basic menu system.
+
+9. **Help Section:**
+   - **Feature Name:** Help Section
+   - **Description:** Include a help section with detailed instructions and FAQs.
+   - **Reimplementation of:** Basic help section.
+
+---
+
+#### **2. Expanded Features Inspired by 1C Enterprise and ASC CRM**
+
+1. **Enhanced User Management:**
+   - **Feature Name:** Role-Based Access Control (RBAC)
+   - **Description:** Implement a more granular role-based access control system, replacing the binary role system. Define roles with specific permissions and assign them to users. Ensure backward compatibility by mapping existing roles to new roles during migration.
+   - **Reimplementation of:** 1C Enterprise role management.
+
+2. **Dynamic Metadata Configuration:**
+   - **Feature Name:** Dynamic Characteristic Types
+   - **Description:** Implement a metadata-driven architecture for adding, editing, and deleting custom attributes for transport entities. This includes validation rules and automatic SQL schema updates via EF Core migrations.
+   - **Reimplementation of:** 1C Enterprise dynamic metadata system.
+
+3. **Document Workflow Engine:**
+   - **Feature Name:** Document Workflow Management
+   - **Description:** Implement a state machine engine for managing document workflows, including draft, pending approval, and completed states. Track historical audit trails and SLA (Service Level Agreement) tracking.
+   - **Reimplementation of:** ASC CRM document workflow engine.
+
+4. **Advanced Analytics and Reporting:**
+   - **Feature Name:** Accumulation Registers
+   - **Description:** Pre-aggregate sales data into accumulation registers for fast reporting. Implement monthly sales registers and materialized views for quick analytics.
+   - **Reimplementation of:** 1C Enterprise accumulation registers.
+
+5. **Custom Query Language:**
+   - **Feature Name:** 1C-Style Query Language
+   - **Description:** Implement a subset of 1C query syntax for querying and aggregating data. This includes support for filtering, sorting, and grouping.
+   - **Reimplementation of:** 1C Enterprise query language.
+
+6. **Form Designer:**
+   - **Feature Name:** Dynamic Form Designer
+   - **Description:** Implement a form designer that allows users to create and customize forms for various entities, including transport and employee forms. This includes drag-and-drop functionality and real-time SQL DDL preview.
+   - **Reimplementation of:** 1C Enterprise form designer.
+
+7. **Repair Management:**
+   - **Feature Name:** ASC CRM-Inspired Repair Management
+   - **Description:** Implement a repair management system with a Kanban board for managing repair stages, including diagnosis, parts ordering, and repair completion. Include SLA tracking and automated notifications for upcoming deadlines.
+   - **Reimplementation of:** ASC CRM repair management.
+
+8. **Telephony Integration:**
+   - **Feature Name:** Telephony Integration
+   - **Description:** Integrate a virtual telephone system that records calls and provides detailed call analytics. Automatically display client history and integrate post-call surveys.
+   - **Reimplementation of:** ASC CRM telephony integration.
+
+9. **Inventory Management:**
+   - **Feature Name:** Multi-Warehouse Inventory Management
+   - **Description:** Implement comprehensive inventory management, including local and remote warehouse configurations, detailed item tracking, and usage records for repairs and sales. Include automated reordering based on economic order quantity.
+   - **Reimplementation of:** ASC CRM inventory management.
+
+10. **Task and Deadline Management:**
+    - **Feature Name:** Addressable Tasks
+    - **Description:** Implement addressable tasks for each employee, with controls for task completion and automatic notifications for deadlines. Include task prioritization and SLA tracking.
+    - **Reimplementation of:** ASC CRM task and deadline management.
+
+11. **Photo Documentation:**
+    - **Feature Name:** Photo Documentation
+    - **Description:** Capture photos of received equipment to protect against fraudulent claims and maintain a record of the device's condition before repairs begin.
+    - **Reimplementation of:** ASC CRM photo documentation.
+
+12. **Cartridge Refilling and Maintenance Module:**
+    - **Feature Name:** Cartridge Refilling and Maintenance
+    - **Description:** Automate the handling, repair, and refilling of cartridges, streamlining processes and improving material and time tracking.
+    - **Reimplementation of:** ASC CRM cartridge refilling and maintenance module.
+
+13. **Row-Level Security (RLS):**
+    - **Feature Name:** Row-Level Security
+    - **Description:** Implement row-level security to restrict data access based on user roles and permissions. Ensure GDPR compliance and data protection.
+    - **Reimplementation of:** 1C Enterprise row-level security.
+
+14. **Audit Logging:**
+    - **Feature Name:** Audit Logs
+    - **Description:** Implement an audit logging system to track all administrator actions, including user account modifications, document approvals, and data exports.
+    - **Reimplementation of:** 1C Enterprise audit logging.
+
+15. **Compliance and Reporting:**
+    - **Feature Name:** Compliance and Reporting
+    - **Description:** Implement compliance with standards like GOST R 7.0.97-2016 for document numbering and generate official documents with watermarks and digital signatures. Provide export capabilities to PDF, Excel, and Power BI.
+    - **Reimplementation of:** 1C Enterprise and ASC CRM compliance and reporting features.
+
+16. **Data Import/Export:**
+    - **Feature Name:** Data Import/Export
+    - **Description:** Implement functionalities for importing and exporting data in various formats (Excel, CSV, JSON) to facilitate easy data migration and synchronization. Additionally, allow bulk editing of records to streamline data management processes.
+    - **Reimplementation of:** ASC CRM data import/export.
+
+17. **Regular Updates and Customization:**
+    - **Feature Name:** Version Control and Updates
+    - **Description:** Ensure the application receives regular updates and enhancements, incorporating user feedback and requests for additional features. Implement API endpoints for managing application versions and updates.
+    - **Reimplementation of:** ASC CRM regular updates and customization.
+
+18. **Multi-Language Support and Currency Handling:**
+    - **Feature Name:** Localization
+    - **Description:** Provide support for multiple languages and currencies, allowing users to customize the application according to their regional preferences. Implement API endpoints for managing localization.
+    - **Reimplementation of:** ASC CRM multi-language support and currency handling.
+
+19. **Real-Time Inventory Dashboard:**
+    - **Feature Name:** Real-Time Inventory Dashboard
+    - **Description:** Implement a real-time inventory dashboard that updates in real-time using WebSocket connections. Display stock levels, reordering alerts, and heatmaps of frequently accessed items.
+    - **Reimplementation of:** ASC CRM real-time inventory dashboard.
+
+20. **OLAP Cube Configuration:**
+    - **Feature Name:** OLAP Cube Configuration
+    - **Description:** Implement OLAP cubes for multidimensional analysis, enabling users to generate detailed reports on sales performance, revenue trends, and customer behavior. Provide drag-and-drop field placement and conditional formatting rules.
+    - **Reimplementation of:** ASC CRM OLAP cube configuration.
+
+21. **Security and Compliance:**
+    - **Feature Name:** Security and Compliance
+    - **Description:** Implement advanced security features, including row-level security, audit trails, and GDPR compliance measures. Ensure data protection and privacy.
+    - **Reimplementation of:** 1C Enterprise and ASC CRM security and compliance.
+
+22. **Advanced UI/UX Features:**
+    - **Feature Name:** Advanced UI/UX Features
+    - **Description:** Implement advanced UI/UX features, such as drag-and-drop form designers, OLAP report builders, and query language integration. Ensure the application is WCAG 2.1 AA compliant.
+    - **Reimplementation of:** ASC CRM advanced UI/UX features.
+
+---
+
+### **Conclusion**
+
+By implementing these features, the coursework project will not only meet the initial technical and functional requirements but also incorporate advanced features inspired by industry-leading solutions, providing students with a rich learning experience and a robust final product. Each feature is designed to be a reimplementation of 1C Enterprise and ASC CRM functionalities, ensuring that the application is both academically relevant and industrially applicable.

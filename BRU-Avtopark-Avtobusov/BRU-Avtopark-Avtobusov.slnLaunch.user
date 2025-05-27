@@ -1,0 +1,41 @@
+[
+  {
+    "Name": "ADMIN SERVER+ ADMIN UI",
+    "Projects": [
+      {
+        "Path": "TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj",
+        "Action": "Start"
+      }
+    ]
+  },
+  {
+    "Name": "USER UI+ ADMIN SERVER",
+    "Projects": [
+      {
+        "Path": "TicketSalesApp.UI.Avalonia\\TicketSalesApp.UI.Avalonia.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj",
+        "Action": "Start"
+      }
+    ]
+  },
+  {
+    "Name": "WINFORM+ ADMIN SERVER",
+    "Projects": [
+      {
+        "Path": "TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "TicketSalesApp.UI.LegacyForms.DX.Windows\\TicketSalesApp.UI.LegacyForms.DX.Windows.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

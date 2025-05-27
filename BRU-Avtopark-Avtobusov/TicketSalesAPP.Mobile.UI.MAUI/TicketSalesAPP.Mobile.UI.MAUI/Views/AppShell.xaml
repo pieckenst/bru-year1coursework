@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="TicketSalesAPP.Mobile.UI.MAUI.Views.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dx="http://schemas.devexpress.com/maui"
+    xmlns:views="clr-namespace:TicketSalesAPP.Mobile.UI.MAUI.Views"
+    Shell.FlyoutBehavior="Disabled">
+
+    <Shell.Behaviors>
+        <dx:SystemBarBehavior AndroidNavigationBarBackground="{dx:ThemeColor Key=SurfaceContainer}" />
+    </Shell.Behaviors>
+
+    <!-- Admin TabBar -->
+    <TabBar x:Name="AdminTabBar" IsVisible="{Binding IsAdmin}">
+        <Tab Title="Users" Icon="user">
+            <ShellContent ContentTemplate="{DataTemplate views:UserManagementPage}" />
+        </Tab>
+        <Tab Title="Buses" Icon="bus">
+            <ShellContent ContentTemplate="{DataTemplate views:BusManagementPage}" />
+        </Tab>
+        <Tab Title="Routes" Icon="route">
+            <ShellContent ContentTemplate="{DataTemplate views:RouteManagementPage}" />
+        </Tab>
+        <Tab Title="Schedule" Icon="calendar">
+            <ShellContent ContentTemplate="{DataTemplate views:RouteSchedulesPage}" />
+        </Tab>
+        <Tab Title="Maintenance" Icon="wrench">
+            <ShellContent ContentTemplate="{DataTemplate views:MaintenancePage}" />
+        </Tab>
+        <Tab Title="Employees" Icon="people">
+            <ShellContent ContentTemplate="{DataTemplate views:EmployeePage}" />
+        </Tab>
+        <Tab Title="Jobs" Icon="work">
+            <ShellContent ContentTemplate="{DataTemplate views:JobPage}" />
+        </Tab>
+        <Tab Title="Sales" Icon="money">
+            <ShellContent ContentTemplate="{DataTemplate views:SalesPage}" />
+        </Tab>
+        <Tab Title="Stats" Icon="chart">
+            <ShellContent ContentTemplate="{DataTemplate views:StatisticsPage}" />
+        </Tab>
+    </TabBar>
+
+    <!-- User TabBar -->
+    <TabBar x:Name="UserTabBar" IsVisible="{Binding IsUser}">
+        <Tab Title="Search" Icon="search">
+            <ShellContent ContentTemplate="{DataTemplate views:TicketSearchPage}" />
+        </Tab>
+        <Tab Title="Schedule" Icon="calendar">
+            <ShellContent ContentTemplate="{DataTemplate views:SchedulePage}" />
+        </Tab>
+        <Tab Title="My Tickets" Icon="ticket">
+            <ShellContent ContentTemplate="{DataTemplate views:MyTicketsPage}" />
+        </Tab>
+        <Tab Title="Profile" Icon="person">
+            <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" />
+        </Tab>
+    </TabBar>
+
+</Shell>

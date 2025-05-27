@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TicketSalesAPP.Mobile.UI.MAUI.Views.AuthPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dx="http://schemas.devexpress.com/maui"
+    xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+    xmlns:viewModels="clr-namespace:TicketSalesAPP.Mobile.UI.MAUI.ViewModels;assembly=TicketSalesAPP.Mobile.UI.MAUI"
+    BindingContext="{dx:Ioc Type={x:Type TypeName=viewModels:AuthViewModel}}"
+    x:DataType="viewModels:AuthViewModel"
+    ios:Page.UseSafeArea="True"
+    Title="Вход в систему">
+
+    <Grid RowDefinitions="Auto,*" Margin="20">
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Spacing="10">
+            <Label Text="Автопарк автобусов" 
+                   FontSize="24" 
+                   HorizontalOptions="Center"/>
+            <Label Text="Система управления автобусным парком" 
+                   FontSize="16" 
+                   HorizontalOptions="Center"
+                   Opacity="0.7"/>
+        </StackPanel>
+
+        <!-- Content -->
+        <Grid Grid.Row="1" RowDefinitions="*,Auto">
+            <!-- Username Entry View -->
+            <StackPanel IsVisible="{Binding IsUsernameEntryVisible}"
+                       VerticalOptions="Center"
+                       Spacing="20">
+                <Label Text="Введите имя пользователя для продолжения"
+                       HorizontalOptions="Center"/>
+                <dx:TextEdit Text="{Binding Login}"
+                            Placeholder="Имя пользователя"
+                            HorizontalOptions="Center"
+                            WidthRequest="300"/>
+                <Button Text="Продолжить"
+                        Command="{Binding ContinueWithUsernameCommand}"
+                        HorizontalOptions="Center"
+                        WidthRequest="200"/>
+            </StackPanel>
+
+            <!-- QR Code Login View -->
+            <StackPanel IsVisible="{Binding IsQRLoginVisible}"
+                       VerticalOptions="Center"
+                       Spacing="20">
+                <Label Text="QR-код для входа"
+                       HorizontalOptions="Center"/>
+                <Label Text="Отсканируйте QR-код для входа в систему"
+                       HorizontalOptions="Center"
+                       Opacity="0.7"/>
+                <Image Source="{Binding QRCodeImage}"
+                       HeightRequest="200"
+                       WidthRequest="200"
+                       HorizontalOptions="Center"/>
+                <Button Text="Войти с паролем"
+                        Command="{Binding SwitchToPasswordLoginCommand}"
+                        HorizontalOptions="Center"
+                        WidthRequest="200"/>
+            </StackPanel>
+
+            <!-- Password Login View -->
+            <StackPanel IsVisible="{Binding IsPasswordLoginVisible}"
+                       VerticalOptions="Center"
+                       Spacing="20">
+                <Label Text="Вход по паролю"
+                       HorizontalOptions="Center"/>
+                <dx:TextEdit Text="{Binding Login}"
+                            IsEnabled="False"
+                            Placeholder="Имя пользователя"
+                            HorizontalOptions="Center"
+                            WidthRequest="300"/>
+                <dx:PasswordEdit Text="{Binding Password}"
+                                Placeholder="Пароль"
+                                HorizontalOptions="Center"
+                                WidthRequest="300"/>
+                <Button Text="Войти"
+                        Command="{Binding LoginCommand}"
+                        HorizontalOptions="Center"
+                        WidthRequest="200"/>
+                <Button Text="Вернуться к QR-коду"
+                        Command="{Binding SwitchToQRLoginCommand}"
+                        HorizontalOptions="Center"
+                        WidthRequest="200"/>
+            </StackPanel>
+
+            <!-- Error Message -->
+            <Label Grid.Row="1"
+                   Text="{Binding ErrorMessage}"
+                   TextColor="Red"
+                   HorizontalOptions="Center"
+                   IsVisible="{Binding HasError}"/>
+        </Grid>
+    </Grid>
+</ContentPage>

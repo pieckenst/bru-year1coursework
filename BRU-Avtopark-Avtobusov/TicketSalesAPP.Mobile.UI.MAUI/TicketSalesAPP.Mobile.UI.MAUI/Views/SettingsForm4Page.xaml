@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TicketSalesAPP.Mobile.UI.MAUI.Views.SettingsForm4Page"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dx="http://schemas.devexpress.com/maui"
+    xmlns:viewModels="clr-namespace:TicketSalesAPP.Mobile.UI.MAUI.ViewModels;assembly=TicketSalesAPP.Mobile.UI.MAUI"
+    x:DataType="viewModels:SettingsForm4ViewModel"
+    Title="Settings">
+
+    <ContentPage.BindingContext>
+        <viewModels:SettingsForm4ViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <Style x:Key="FormComponent" TargetType="dx:FormItem">
+            <Setter Property="Padding" Value="16" />
+            <Setter Property="ShowSeparator" Value="False" />
+            <Setter Property="ImageWidth" Value="24" />
+            <Setter Property="ImageHeight" Value="24" />
+            <Setter Property="ImageColor" Value="{dx:ThemeColor Key=OnSurfaceVariant}" />
+            <Setter Property="HorizontalSpacing" Value="16" />
+            <Setter Property="VerticalSpacing" Value="10" />
+            <Setter Property="TextFontSize" Value="16" />
+            <Setter Property="TextFontFamily" Value="Roboto" />
+            <Setter Property="ShowArrow" Value="True" />
+        </Style>
+    </ContentPage.Resources>
+
+    <dx:DXScrollView>
+        <dx:DXStackLayout>
+            <dx:FormListPickerItem
+                Style="{StaticResource FormComponent}"
+                Margin="0,16,0,0"
+                ItemsSource="{Binding Languages}"
+                SelectedItem="{Binding Language}"
+                PickerShowMode="BottomSheet"
+                ImageSource="language"
+                Text="Language" />
+            <dx:FormSwitchItem
+                Style="{StaticResource FormComponent}"
+                ImageSource="theme"
+                IsToggled="{Binding DarkMode}"
+                Text="Dark Mode" />
+
+            <Grid ColumnDefinitions="*,Auto" Padding="16">
+                <dx:DXContentPresenter
+                    Grid.Column="0"
+                    Content="Color Scheme"
+                    Icon="palette"
+                    IconIndent="16"
+                    IconColor="{dx:ThemeColor OnSurfaceVariant}"
+                    VerticalContentAlignment="Center"
+                    TextColor="{dx:ThemeColor OnSurface}"
+                    FontFamily="Roboto"
+                    FontSize="16" />
+                <Label
+                    Grid.Column="1"
+                    Text="{Binding PreviewColorName}"
+                    TextColor="{dx:ThemeColor OnSurfaceVariant}"
+                    FontSize="13" />
+            </Grid>
+            <dx:ChoiceChipGroup
+                SelectedIndex="{Binding SelectedColorIndex}"
+                ItemsSource="{Binding Themes}"
+                ChipBorderColor="Transparent"
+                ChipBorderThickness="2"
+                Padding="16,0"
+                ChipSelectedBackgroundColor="Transparent"
+                ChipSelectedBorderColor="{dx:ThemeColor OnSurface}"
+                IsMultiline="True"
+                ChipPadding="3"
+                ChipCornerRadius="28"
+                SelectionChangedCommand="{Binding ChangeColorCommand}">
+                <dx:ChoiceChipGroup.ChipContentTemplate>
+                    <DataTemplate x:DataType="viewModels:ColorModel">
+                        <dx:DXBorder
+                            CornerRadius="26"
+                            WidthRequest="52"
+                            HeightRequest="52"
+                            BackgroundColor="{Binding Color}">
+                            <Label
+                                Text="{Binding Name}"
+                                TextColor="White"
+                                FontSize="12"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                WidthRequest="52"
+                                HeightRequest="52" />
+                        </dx:DXBorder>
+                    </DataTemplate>
+                </dx:ChoiceChipGroup.ChipContentTemplate>
+            </dx:ChoiceChipGroup>
+        </dx:DXStackLayout>
+    </dx:DXScrollView>
+</ContentPage>

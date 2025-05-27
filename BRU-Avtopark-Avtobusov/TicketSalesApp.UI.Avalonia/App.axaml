@@ -1,0 +1,32 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="TicketSalesApp.UI.Avalonia.App"
+             xmlns:local="using:TicketSalesApp.UI.Avalonia"
+             xmlns:common="clr-namespace:Classic.CommonControls;assembly=Classic.CommonControls.Avalonia"
+             xmlns:pleasant="using:PleasantUI"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://PleasantUI.DataGrid/DataGrid.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <Application.Styles>
+		<pleasant:PleasantTheme />
+        
+
+        <Style Selector="ToolChromeControl /template/ TextBlock#PART_Title">
+            <Setter Property="Padding" Value="1,1,0,0" />
+        </Style>
+    </Application.Styles>
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+  
+</Application>

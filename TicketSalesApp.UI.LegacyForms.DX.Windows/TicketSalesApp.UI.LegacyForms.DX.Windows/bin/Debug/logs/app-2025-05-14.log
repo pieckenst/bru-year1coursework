@@ -1,0 +1,235 @@
+2025-05-14 23:11:59.366 +03:00 [Info] (WIN-O8QPOO3GK6I/9) Application starting up in normal mode
+2025-05-14 23:12:01.954 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Showing splash screen
+2025-05-14 23:12:02.101 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Performing long operation
+2025-05-14 23:12:10.133 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Long operation completed
+2025-05-14 23:12:10.192 +03:00 [Info] (WIN-O8QPOO3GK6I/9) Showing login form
+2025-05-14 23:12:25.002 +03:00 [Debug] (WIN-O8QPOO3GK6I/17) Decoded JWT Payload: {"unique_name":"admin","role":"1","nbf":1747253544,"exp":1747260744,"iat":1747253544}
+2025-05-14 23:12:25.084 +03:00 [Info] (WIN-O8QPOO3GK6I/17) User role parsed from token: 1
+2025-05-14 23:12:25.121 +03:00 [Info] (WIN-O8QPOO3GK6I/17) Username parsed from token: admin
+2025-05-14 23:12:25.151 +03:00 [Info] (WIN-O8QPOO3GK6I/17) User 'admin' successfully authenticated via password.
+2025-05-14 23:12:25.332 +03:00 [Info] (WIN-O8QPOO3GK6I/9) Login result: OK
+2025-05-14 23:12:25.872 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Applying permissions for role: 1
+2025-05-14 23:12:25.904 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Permissions applied.
+2025-05-14 23:12:30.023 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) frmSalesStatistics_Load event triggered (initial run).
+2025-05-14 23:12:30.136 +03:00 [Info] (WIN-O8QPOO3GK6I/9) Loading routes synchronously for statistics form...
+2025-05-14 23:12:30.169 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Fetching route lookup data from: http://localhost:5000/api/Routes
+2025-05-14 23:12:30.841 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Root element name changed from '[null]' to 'Routes'. Managing caches.
+2025-05-14 23:12:30.874 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) No suitable backup found or backup empty. Clearing main fully cleaned cache.
+2025-05-14 23:12:30.924 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Processing raw JSON for Routes (truncated): {"$id":"1","$values":[{"$id":"2","routeId":1,"startPoint":"Вейнянка","endPoint":"Фатина","driverId":1,"employee":{"$id":"3","empId":1,"surname":"Иванов","name":"Иван","patronym":"Иванович","employedSince":"2020-01-15T00:00:00","jobId":1,"job":null},"busId":1,"avtobus":{"$id":"4","busId":1,"model":"МАЗ-203.069","routes":{"$id":"5","$values":[{"$ref":"2"},{"$id":"6","routeId":11,"startPoint":"Вокзал","endPoint":"Соломинка","driverId":1,"employee":{"$ref":"3"},"busId":1,"avtobus":{"$ref":"4"},"travelTime":"35 минут","tickets":{"$id":"7","$values":[{"$id":"8","ticketId":11,"routeId":11,"marshut":{"$ref":"6"},"ticketPrice":0.75,"sales":{"$id":"9","$values":[]}}]}}]},"obsluzhivanies":{"$id":"10","$values":[]}},"travelTime":"45 минут","tickets":{"$id":"11","$values":[{"$id":"12","ticketId":1,"routeId":1,"marshut":{"$ref":"2"},"ticketPrice":0.85,"sales":{"$id":"13","$values":[]}}]}},{"$id":"14","routeId":2,"startPoint":"Мал. Боровка","endPoint":"Солтановка","driverId":2,"employee":{"$id":"15","empId":2,"surname":"Петров","name":"Петр","patronym":"Петрович","employedSince":"2019-03-20T00:00:00","jobId":1,"job":null},"busId":2,"avtobus":{"$id":"16","busId":2,"model":"МАЗ-215.069","routes":{"$id":"17","$values":[{"$ref":"14"},{"$id":"18","routeId":12,"startPoint":"Площадь Ленина","endPoint":"Чаусы","driverId":2,"employee":{"$ref":"15"},"busId":2,"avtobus":{"$ref":"16"},"travelTime":"50 минут","tickets":{"$id":"19","$values":[{"$id":"20","ticketId":12,"routeId":12,"marshut":{"$ref":"18"},"ticketPrice":0.75,"sales":{"$id":"21","$values":[]}}]}}]},"obsluzhivanies":{"$id":"22","$values":[]}},"travelTime":"50 минут","tickets":{"$id":"23","$values":[{"$id":"24","ticketId":2,"routeId":2,"marshut":{"$ref":"14"},"ticketPrice":0.85,"sales":{"$id":"25","$values":[]}}]}},{"$id":"26","routeId":3,"startPoint":"Вокзал","endPoint":"Спутник","driverId":7,"employee":{"$id":"27","empId":7,"surname":"Волков","name":"Михаил","patronym":"Дмитриевич","employedSince":"2020-11-30T00:00:00","jobId":1,"...
+2025-05-14 23:12:31.361 +03:00 [Info] (WIN-O8QPOO3GK6I/9) Built GLOBAL ID map with 95 entries for Routes structure.
+2025-05-14 23:12:31.376 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Pre-populating resolved reference cache...
+2025-05-14 23:12:32.538 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Finished pre-populating cache with 95 entries.
+2025-05-14 23:12:32.800 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Detected root as object containing $values array for Routes.
+2025-05-14 23:12:32.843 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Resolved 15 top-level items for Routes.
+2025-05-14 23:12:34.004 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 2 which is already being processed. Returning empty object.
+2025-05-14 23:12:34.822 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 4 which is already being processed. Returning empty object.
+2025-05-14 23:12:35.244 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 6 which is already being processed. Returning empty object.
+2025-05-14 23:12:35.445 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:35.489 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:12:35.698 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:35.744 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:12:35.790 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:35.858 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'routes' wrapper object
+2025-05-14 23:12:35.908 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:35.961 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'obsluzhivanies' wrapper object
+2025-05-14 23:12:36.267 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 2 which is already being processed. Returning empty object.
+2025-05-14 23:12:36.472 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:36.674 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:12:36.723 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:36.775 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:12:37.892 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 14 which is already being processed. Returning empty object.
+2025-05-14 23:12:38.708 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 16 which is already being processed. Returning empty object.
+2025-05-14 23:12:39.319 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 18 which is already being processed. Returning empty object.
+2025-05-14 23:12:39.522 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:39.587 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:12:39.587 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:39.587 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:12:39.739 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:39.739 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'routes' wrapper object
+2025-05-14 23:12:39.739 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:39.943 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'obsluzhivanies' wrapper object
+2025-05-14 23:12:40.354 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 14 which is already being processed. Returning empty object.
+2025-05-14 23:12:40.556 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:40.556 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:12:40.556 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:40.769 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:12:41.816 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 26 which is already being processed. Returning empty object.
+2025-05-14 23:12:42.847 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 28 which is already being processed. Returning empty object.
+2025-05-14 23:12:43.260 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 30 which is already being processed. Returning empty object.
+2025-05-14 23:12:43.461 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:43.461 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:12:43.665 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:43.665 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:12:43.665 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:43.665 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'routes' wrapper object
+2025-05-14 23:12:43.873 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:43.873 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'obsluzhivanies' wrapper object
+2025-05-14 23:12:44.289 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 26 which is already being processed. Returning empty object.
+2025-05-14 23:12:44.494 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:44.494 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:12:44.704 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:44.704 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:12:45.940 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 38 which is already being processed. Returning empty object.
+2025-05-14 23:12:46.754 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 40 which is already being processed. Returning empty object.
+2025-05-14 23:12:47.161 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 42 which is already being processed. Returning empty object.
+2025-05-14 23:12:47.366 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:47.568 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:12:47.568 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:47.568 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:12:47.769 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:47.769 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'routes' wrapper object
+2025-05-14 23:12:47.769 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:47.984 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'obsluzhivanies' wrapper object
+2025-05-14 23:12:48.391 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 38 which is already being processed. Returning empty object.
+2025-05-14 23:12:48.594 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:48.596 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:12:48.596 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:48.798 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:12:49.812 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 50 which is already being processed. Returning empty object.
+2025-05-14 23:12:50.829 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 51 which is already being processed. Returning empty object.
+2025-05-14 23:12:51.234 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 53 which is already being processed. Returning empty object.
+2025-05-14 23:12:51.442 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:51.442 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:12:51.442 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:51.646 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:12:51.646 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:51.646 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'routes' wrapper object
+2025-05-14 23:12:51.855 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:51.855 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'obsluzhivanies' wrapper object
+2025-05-14 23:12:52.274 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 50 which is already being processed. Returning empty object.
+2025-05-14 23:12:52.476 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:52.476 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:12:52.690 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:52.690 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:12:53.733 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 61 which is already being processed. Returning empty object.
+2025-05-14 23:12:53.948 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:53.948 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'routes' wrapper object
+2025-05-14 23:12:53.948 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:54.143 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'obsluzhivanies' wrapper object
+2025-05-14 23:12:54.554 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 61 which is already being processed. Returning empty object.
+2025-05-14 23:12:54.758 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:54.758 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:12:54.758 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:54.963 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:12:55.991 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 68 which is already being processed. Returning empty object.
+2025-05-14 23:12:55.991 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:56.206 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'routes' wrapper object
+2025-05-14 23:12:56.206 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:56.206 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'obsluzhivanies' wrapper object
+2025-05-14 23:12:56.607 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 68 which is already being processed. Returning empty object.
+2025-05-14 23:12:56.823 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:57.026 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:12:57.026 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:57.026 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:12:58.288 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 75 which is already being processed. Returning empty object.
+2025-05-14 23:12:58.288 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:58.288 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'routes' wrapper object
+2025-05-14 23:12:58.491 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:58.491 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'obsluzhivanies' wrapper object
+2025-05-14 23:12:58.905 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 75 which is already being processed. Returning empty object.
+2025-05-14 23:12:59.108 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:59.108 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:12:59.322 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:12:59.322 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:13:00.339 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 82 which is already being processed. Returning empty object.
+2025-05-14 23:13:00.541 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:00.541 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'routes' wrapper object
+2025-05-14 23:13:00.541 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:00.741 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'obsluzhivanies' wrapper object
+2025-05-14 23:13:01.174 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 82 which is already being processed. Returning empty object.
+2025-05-14 23:13:01.384 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:01.384 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:13:01.384 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:01.590 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:13:02.615 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 89 which is already being processed. Returning empty object.
+2025-05-14 23:13:02.615 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:02.819 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'routes' wrapper object
+2025-05-14 23:13:02.819 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:02.819 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'obsluzhivanies' wrapper object
+2025-05-14 23:13:03.434 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 89 which is already being processed. Returning empty object.
+2025-05-14 23:13:03.641 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:03.641 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:13:03.644 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:03.644 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:13:04.057 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Filtered 0 empty objects from 15 cleaned items for Routes
+2025-05-14 23:13:04.057 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Final Routes JSON prepared for XML conversion (truncated): {"Routes":[{"routeId":1,"startPoint":"Вейнянка","endPoint":"Фатина","driverId":1,"employee":{"empId":1,"surname":"Иванов","name":"Иван","patronym":"Иванович","employedSince":"2020-01-15T00:00:00","jobId":1},"busId":1,"avtobus":{"busId":1,"model":"МАЗ-203.069","routes":[{"routeId":11,"startPoint":"Вокзал","endPoint":"Соломинка","driverId":1,"employee":{"empId":1,"surname":"Иванов","name":"Иван","patronym":"Иванович","employedSince":"2020-01-15T00:00:00","jobId":1},"busId":1,"travelTime":"35 минут","tickets":[{"ticketId":11,"routeId":11,"ticketPrice":0.75,"sales":[]}]}],"obsluzhivanies":[]},"travelTime":"45 минут","tickets":[{"ticketId":1,"routeId":1,"ticketPrice":0.85,"sales":[]}]},{"routeId":2,"startPoint":"Мал. Боровка","endPoint":"Солтановка","driverId":2,"employee":{"empId":2,"surname":"Петров","name":"Петр","patronym":"Петрович","employedSince":"2019-03-20T00:00:00","jobId":1},"busId":2,"avtobus":{"busId":2,"model":"МАЗ-215.069","routes":[{"routeId":12,"startPoint":"Площадь Ленина","endPoint":"Чаусы","driverId":2,"employee":{"empId":2,"surname":"Петров","name":"Петр","patronym":"Петрович","employedSince":"2019-03-20T00:00:00","jobId":1},"busId":2,"travelTime":"50 минут","tickets":[{"ticketId":12,"routeId":12,"ticketPrice":0.75,"sales":[]}]}],"obsluzhivanies":[]},"travelTime":"50 минут","tickets":[{"ticketId":2,"routeId":2,"ticketPrice":0.85,"sales":[]}]},{"routeId":3,"startPoint":"Вокзал","endPoint":"Спутник","driverId":7,"employee":{"empId":7,"surname":"Волков","name":"Михаил","patronym":"Дмитриевич","employedSince":"2020-11-30T00:00:00","jobId":1},"busId":3,"avtobus":{"busId":3,"model":"МАЗ-107.468","routes":[{"routeId":13,"startPoint":"Могилев-2","endPoint":"Дашковка","driverId":7,"employee":{"empId":7,"surname":"Волков","name":"Михаил","patronym":"Дмитриевич","employedSince":"2020-11-30T00:00:00","jobId":1},"busId":3,"travelTime":"40 минут","tickets":[{"ticketId":13,"routeId":13,"ticketPrice":0.75,"sales":[]}]}],"obsluzhivanies":[]},"travelTime":"40 минут","...
+2025-05-14 23:13:04.492 +03:00 [Info] (WIN-O8QPOO3GK6I/9) Successfully loaded 15 routes for lookup.
+2025-05-14 23:13:04.492 +03:00 [Info] (WIN-O8QPOO3GK6I/9) Loading sales statistics synchronously...
+2025-05-14 23:13:04.492 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Setting UI to loading state.
+2025-05-14 23:13:04.560 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Fetching sales data for statistics from: http://localhost:5000/api/TicketSales/search?startDate=2025-04-01T00%3a00%3a00.0000000&endDate=2025-05-14T23%3a59%3a59.9999999%2b03%3a00
+2025-05-14 23:13:04.993 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Raw JSON response: {"$id":"1","$values":[{"$id":"2","saleId":50,"saleDate":"2025-05-04T13:27:44.2578024","ticketId":10,"bilet":{"$id":"3","ticketId":10,"routeId":10,"marshut":{"$id":"4","routeId":10,"startPoint":"Заднепровье","endPoint":"Химволокно","driverId":2,"employee":{"$id":"5","empId":2,"surname":"Петров","name":"Петр","patronym":"Петрович","employedSince":"2019-03-20T00:00:00","jobId":1,"job":null},"busId":10,"avtobus":{"$id":"6","busId":10,"model":"МАЗ-107.066","routes":{"$id":"7","$values":[{"$ref":"4"}]},"obsluzhivanies":{"$id":"8","$values":[]}},"travelTime":"25 минут","tickets":{"$id":"9","$values":[{"$ref":"3"}]}},"ticketPrice":0.75,"sales":{"$id":"10","$values":[{"$ref":"2"}]}},"ticketSoldToUser":"guest","ticketSoldToUserPhone":"+375333000000"},{"$id":"11","saleId":49,"saleDate":"2025-05-04T11:27:44.2578023","ticketId":9,"bilet":{"$id":"12","ticketId":9,"routeId":9,"marshut":{"$id":"13","routeId":9,"startPoint":"Площадь Славы","endPoint":"Буйничи","driverId":1,"employee":{"$id":"14","empId":1,"surname":"Иванов","name":"Иван","patronym":"Иванович","employedSince":"2020-01-15T00:00:00","jobId":1,"job":null},"busId":9,"avtobus":{"$id":"15","busId":9,"model":"МАЗ-103.465","routes":{"$id":"16","$values":[{"$ref":"13"}]},"obsluzhivanies":{"$id":"17","$values":[]}},"travelTime":"30 минут","tickets":{"$id":"18","$values":[{"$ref":"12"}]}},"ticketPrice":0.75,"sales":{"$id":"19","$values":[{"$ref":"11"}]}},"ticketSoldToUser":"admin","ticketSoldToUserPhone":"+375333000000"},{"$id":"20","saleId":48,"saleDate":"2025-05-04T09:27:44.2578022","ticketId":8,"bilet":{"$id":"21","ticketId":8,"routeId":8,"marshut":{"$id":"22","routeId":8,"startPoint":"Центр","endPoint":"Сидоровичи","driverId":9,"employee":{"$id":"23","empId":9,"surname":"Васильев","name":"Николай","patronym":"Андреевич","employedSince":"2021-07-08T00:00:00","jobId":1,"job":null},"busId":8,"avtobus":{"$id":"24","busId":8,"model":"МАЗ-206.068","routes":{"$id":"25","$values":[{"$ref":"22"}]},"obsluzhivanies":{"$id":"26","$values":[]}},"travelTime":"60 минут","tickets":{"$id":"27","$values":[{"$ref":"21"}]}},"ticketPrice":0.95,"sales":{"$id":"28","$values":[{"$ref":"20"}]}},"ticketSoldToUser":"guest","ticketSoldToUserPhone":"+375333000000"},{"$id":"29","saleId":47,"saleDate":"2025-05-04T07:27:44.2578021","ticketId":7,"bilet":{"$id":"30","ticketId":7,"routeId":7,"marshut":{"$id":"31","routeId":7,"startPoint":"Автовокзал","endPoint":"Полыковичи","driverId":7,"employee":{"$id":"32","empId":7,"surname":"Волков","name":"Михаил","patronym":"Дмитриевич","employedSince":"2020-11-30T00:00:00","jobId":1,"job":null},"busId":7,"avtobus":{"$id":"33","busId":7,"model":"МАЗ-203.L65","routes":{"$id":"34","$values":[{"$ref":"31"}]},"obsluzhivanies":{"$id":"35","$values":[]}},"travelTime":"40 минут","tickets":{"$id":"36","$values":[{"$ref":"30"}]}},"ticketPrice":0.75,"sales":{"$id":"37","$values":[{"$ref":"29"}]}},"ticketSoldToUser":"admin","ticketSoldToUserPhone":"+375333000000"},{"$id":"38","saleId":46,"saleDate":"2025-05-04T03:27:44.2577813","ticketId":6,"bilet":{"$id":"39","ticketId":6,"routeId":6,"marshut":{"$id":"40","routeId":6,"startPoint":"Гребеневский рынок","endPoint":"Холмы","driverId":2,"employee":{"$ref":"5"},"busId":6,"avtobus":{"$id":"41","busId":6,"model":"МАЗ-105.065","routes":{"$id":"42","$values":[{"$ref":"40"}]},"obsluzhivanies":{"$id":"43","$values":[]}},"travelTime":"45 минут","tickets":{"$id":"44","$values":[{"$ref":"39"}]}},"ticketPrice":0.85,"sales":{"$id":"45","$values":[{"$ref":"38"}]}},"ticketSoldToUser":"guest","ticketSoldToUserPhone":"+375333000000"},{"$id":"46","saleId":45,"saleDate":"2025-05-03T15:27:44.2577812","ticketId":5,"bilet":{"$id":"47","ticketId":5,"routeId":5,"marshut":{"$id":"48","routeId":5,"startPoint":"Броды","endPoint":"Казимировка","driverId":1,"employee":{"$ref":"14"},"busId":5,"avtobus":{"$id":"49","busId":5,"model":"МАЗ-203.169","routes":{"$id":"50","$values":[{"$ref":"48"}]},"obsluzhivanies":{"$id":"51","$values":[]}},"travelTime":"55 минут","tickets":{"$id":"52","$values":[{"$ref":"47"}]}},"ticketPrice":0.85,"sales":{"$id":"53","$values":[{"$ref":"46"}]}},"ticketSoldToUser":"admin","ticketSoldToUserPhone":"+375333000000"},{"$id":"54","saleId":44,"saleDate":"2025-05-02T15:27:44.2577811","ticketId":4,"bilet":{"$id":"55","ticketId":4,"routeId":4,"marshut":{"$id":"56","routeId":4,"startPoint":"Мясокомбинат","endPoint":"Заводская","driverId":9,"employee":{"$ref":"23"},"busId":4,"avtobus":{"$id":"57","busId":4,"model":"МАЗ-103.065","routes":{"$id":"58","$values":[{"$ref":"56"}]},"obsluzhivanies":{"$id":"59","$values":[]}},"travelTime":"35 минут","tickets":{"$id":"60","$values":[{"$ref":"55"}]}},"ticketPrice":0.75,"sales":{"$id":"61","$values":[{"$ref":"54"}]}},"ticketSoldToUser":"guest","ticketSoldToUserPhone":"+375333000000"},{"$id":"62","saleId":43,"saleDate":"2025-05-01T15:27:44.257781","ticketId":3,"bilet":{"$id":"63","ticketId":3,"routeId":3,"marshut":{"$id":"64","routeId":3,"startPoint":"Вокзал","endPoint":"Спутник","driverId":7,"employee":{"$ref":"32"},"busId":3,"avtobus":{"$id":"65","busId":3,"model":"МАЗ-107.468","routes":{"$id":"66","$values":[{"$ref":"64"}]},"obsluzhivanies":{"$id":"67","$values":[]}},"travelTime":"40 минут","tickets":{"$id":"68","$values":[{"$ref":"63"}]}},"ticketPrice":0.75,"sales":{"$id":"69","$values":[{"$ref":"62"}]}},"ticketSoldToUser":"admin","ticketSoldToUserPhone":"+375333000000"},{"$id":"70","saleId":42,"saleDate":"2025-04-30T15:27:44.2577808","ticketId":2,"bilet":{"$id":"71","ticketId":2,"routeId":2,"marshut":{"$id":"72","routeId":2,"startPoint":"Мал. Боровка","endPoint":"Солтановка","driverId":2,"employee":{"$ref":"5"},"busId":2,"avtobus":{"$id":"73","busId":2,"model":"МАЗ-215.069","routes":{"$id":"74","$values":[{"$ref":"72"}]},"obsluzhivanies":{"$id":"75","$values":[]}},"travelTime":"50 минут","tickets":{"$id":"76","$values":[{"$ref":"71"}]}},"ticketPrice":0.85,"sales":{"$id":"77","$values":[{"$ref":"70"}]}},"ticketSoldToUser":"guest","ticketSoldToUserPhone":"+375333000000"},{"$id":"78","saleId":41,"saleDate":"2025-04-29T15:27:44.2577768","ticketId":1,"bilet":{"$id":"79","ticketId":1,"routeId":1,"marshut":{"$id":"80","routeId":1,"startPoint":"Вейнянка","endPoint":"Фатина","driverId":1,"employee":{"$ref":"14"},"busId":1,"avtobus":{"$id":"81","busId":1,"model":"МАЗ-203.069","routes":{"$id":"82","$values":[{"$ref":"80"}]},"obsluzhivanies":{"$id":"83","$values":[]}},"travelTime":"45 минут","tickets":{"$id":"84","$values":[{"$ref":"79"}]}},"ticketPrice":0.85,"sales":{"$id":"85","$values":[{"$ref":"78"}]}},"ticketSoldToUser":"admin","ticketSoldToUserPhone":"+375333000000"}]}
+2025-05-14 23:13:06.058 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Root element name changed from 'Routes' to 'Sales'. Managing caches.
+2025-05-14 23:13:06.066 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Backing up current fully cleaned cache (94 items, Routes) to backup slot 2.
+2025-05-14 23:13:06.066 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) No suitable backup found or backup empty. Clearing main fully cleaned cache.
+2025-05-14 23:13:06.091 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Processing raw JSON for Sales (truncated): {"$id":"1","$values":[{"$id":"2","saleId":50,"saleDate":"2025-05-04T13:27:44.2578024","ticketId":10,"bilet":{"$id":"3","ticketId":10,"routeId":10,"marshut":{"$id":"4","routeId":10,"startPoint":"Заднепровье","endPoint":"Химволокно","driverId":2,"employee":{"$id":"5","empId":2,"surname":"Петров","name":"Петр","patronym":"Петрович","employedSince":"2019-03-20T00:00:00","jobId":1,"job":null},"busId":10,"avtobus":{"$id":"6","busId":10,"model":"МАЗ-107.066","routes":{"$id":"7","$values":[{"$ref":"4"}]},"obsluzhivanies":{"$id":"8","$values":[]}},"travelTime":"25 минут","tickets":{"$id":"9","$values":[{"$ref":"3"}]}},"ticketPrice":0.75,"sales":{"$id":"10","$values":[{"$ref":"2"}]}},"ticketSoldToUser":"guest","ticketSoldToUserPhone":"+375333000000"},{"$id":"11","saleId":49,"saleDate":"2025-05-04T11:27:44.2578023","ticketId":9,"bilet":{"$id":"12","ticketId":9,"routeId":9,"marshut":{"$id":"13","routeId":9,"startPoint":"Площадь Славы","endPoint":"Буйничи","driverId":1,"employee":{"$id":"14","empId":1,"surname":"Иванов","name":"Иван","patronym":"Иванович","employedSince":"2020-01-15T00:00:00","jobId":1,"job":null},"busId":9,"avtobus":{"$id":"15","busId":9,"model":"МАЗ-103.465","routes":{"$id":"16","$values":[{"$ref":"13"}]},"obsluzhivanies":{"$id":"17","$values":[]}},"travelTime":"30 минут","tickets":{"$id":"18","$values":[{"$ref":"12"}]}},"ticketPrice":0.75,"sales":{"$id":"19","$values":[{"$ref":"11"}]}},"ticketSoldToUser":"admin","ticketSoldToUserPhone":"+375333000000"},{"$id":"20","saleId":48,"saleDate":"2025-05-04T09:27:44.2578022","ticketId":8,"bilet":{"$id":"21","ticketId":8,"routeId":8,"marshut":{"$id":"22","routeId":8,"startPoint":"Центр","endPoint":"Сидоровичи","driverId":9,"employee":{"$id":"23","empId":9,"surname":"Васильев","name":"Николай","patronym":"Андреевич","employedSince":"2021-07-08T00:00:00","jobId":1,"job":null},"busId":8,"avtobus":{"$id":"24","busId":8,"model":"МАЗ-206.068","routes":{"$id":"25","$values":[{"$ref":"22"}]},"obsluzhivanies":{"$id":"26","$valu...
+2025-05-14 23:13:06.507 +03:00 [Info] (WIN-O8QPOO3GK6I/9) Built GLOBAL ID map with 85 entries for Sales structure.
+2025-05-14 23:13:06.689 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Pre-populating resolved reference cache...
+2025-05-14 23:13:07.706 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Finished pre-populating cache with 85 entries.
+2025-05-14 23:13:07.962 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Detected root as object containing $values array for Sales.
+2025-05-14 23:13:07.983 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Resolved 10 top-level items for Sales.
+2025-05-14 23:13:09.341 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 4 which is already being processed. Returning empty object.
+2025-05-14 23:13:09.363 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:09.546 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'routes' wrapper object
+2025-05-14 23:13:09.567 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:09.588 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'obsluzhivanies' wrapper object
+2025-05-14 23:13:09.758 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 3 which is already being processed. Returning empty object.
+2025-05-14 23:13:09.983 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:10.004 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:13:10.172 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 2 which is already being processed. Returning empty object.
+2025-05-14 23:13:10.189 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:10.230 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:13:12.034 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 13 which is already being processed. Returning empty object.
+2025-05-14 23:13:12.105 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:12.133 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'routes' wrapper object
+2025-05-14 23:13:12.264 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:12.293 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'obsluzhivanies' wrapper object
+2025-05-14 23:13:12.442 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 12 which is already being processed. Returning empty object.
+2025-05-14 23:13:12.478 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:12.681 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:13:12.852 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 11 which is already being processed. Returning empty object.
+2025-05-14 23:13:12.886 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:12.923 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:13:14.717 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 22 which is already being processed. Returning empty object.
+2025-05-14 23:13:14.811 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:14.850 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'routes' wrapper object
+2025-05-14 23:13:14.923 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:14.961 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'obsluzhivanies' wrapper object
+2025-05-14 23:13:15.124 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 21 which is already being processed. Returning empty object.
+2025-05-14 23:13:15.159 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:15.341 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:13:15.556 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 20 which is already being processed. Returning empty object.
+2025-05-14 23:13:15.603 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:15.649 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:13:17.429 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 31 which is already being processed. Returning empty object.
+2025-05-14 23:13:17.547 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:17.595 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'routes' wrapper object
+2025-05-14 23:13:17.652 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:17.708 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'obsluzhivanies' wrapper object
+2025-05-14 23:13:17.841 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 30 which is already being processed. Returning empty object.
+2025-05-14 23:13:17.891 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:18.107 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:13:18.257 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 29 which is already being processed. Returning empty object.
+2025-05-14 23:13:18.308 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:18.358 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:13:20.123 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 40 which is already being processed. Returning empty object.
+2025-05-14 23:13:20.273 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:20.333 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'routes' wrapper object
+2025-05-14 23:13:20.380 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:20.474 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'obsluzhivanies' wrapper object
+2025-05-14 23:13:20.591 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 39 which is already being processed. Returning empty object.
+2025-05-14 23:13:20.798 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:20.849 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:13:20.946 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 38 which is already being processed. Returning empty object.
+2025-05-14 23:13:20.994 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:21.157 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object
+2025-05-14 23:13:22.807 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 48 which is already being processed. Returning empty object.
+2025-05-14 23:13:22.807 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:22.817 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'routes' wrapper object
+2025-05-14 23:13:23.009 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:23.009 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'obsluzhivanies' wrapper object
+2025-05-14 23:13:23.223 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 47 which is already being processed. Returning empty object.
+2025-05-14 23:13:23.223 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:23.439 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'tickets' wrapper object
+2025-05-14 23:13:23.640 +03:00 [Warn] (WIN-O8QPOO3GK6I/9) Recursion detected: trying to resolve $ref = 46 which is already being processed. Returning empty object.
+2025-05-14 23:13:23.640 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Renaming cleaned '$values' property to 'Items'
+2025-05-14 23:13:23.644 +03:00 [Debug] (WIN-O8QPOO3GK6I/9) Extracting 'Items' array from cleaned property 'sales' wrapper object

@@ -1,0 +1,246 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:TicketSalesApp.UI.Avalonia.ViewModels"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        x:Class="TicketSalesApp.UI.Avalonia.Views.AuthWindow"
+        Title="Авторизация" Width="400" Height="600"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+        x:DataType="vm:AuthViewModel">
+    
+    <Design.DataContext>
+        <vm:AuthViewModel/>
+    </Design.DataContext>
+
+    <Window.Styles>
+        <!-- Light Theme -->
+        <Style Selector="TextBox.light">
+            <Setter Property="Foreground" Value="{DynamicResource SystemBaseHighColor}"/>
+            <Setter Property="Background" Value="{DynamicResource SystemAltHighColor}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource SystemBaseMediumColor}"/>
+        </Style>
+        <Style Selector="TextBlock.light">
+            <Setter Property="Foreground" Value="{DynamicResource SystemBaseHighColor}"/>
+        </Style>
+        <Style Selector="Button.primary.light">
+            <Setter Property="Background" Value="{DynamicResource SystemAccentColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource SystemAltHighColor}"/>
+        </Style>
+        <Style Selector="Button.secondary.light">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
+        </Style>
+
+        <!-- Dark Theme -->
+        <Style Selector="TextBox.dark">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#2D2D2D"/>
+        </Style>
+        <Style Selector="TextBlock.dark">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="Button.primary.dark">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="Button.secondary.dark">
+            <Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
+        </Style>
+
+        <!-- Base Styles -->
+        <Style Selector="TextBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Margin" Value="0,8"/>
+            <Style.Animations>
+                <Animation Duration="0:0:0.2">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0.8"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <Style Selector="Button">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="Margin" Value="0,8"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="{DynamicResource SystemAccentColor}"/>
+        </Style>
+
+        <Style Selector="Button.secondary">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style Selector="TextBlock.title">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,20"/>
+        </Style>
+
+        <Style Selector="TextBlock.subtitle">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,8"/>
+            <Setter Property="Opacity" Value="0.9"/>
+        </Style>
+
+        <Style Selector="Panel.loading-overlay">
+            <Setter Property="Background" Value="#80000000"/>
+            <Setter Property="IsVisible" Value="{Binding IsLoading}"/>
+            <Style.Animations>
+                <Animation Duration="0:0:0.3">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <Style Selector="TextBlock.loading-text">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="0,16,0,0"/>
+            <Style.Animations>
+                <Animation Duration="0:0:2" IterationCount="Infinite">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0.6"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="50%">
+                        <Setter Property="Opacity" Value="1"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="0.6"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </Window.Styles>
+
+    <Panel>
+        <!-- Username Entry View -->
+        <StackPanel Margin="32" IsVisible="{Binding IsUsernameEntryVisible}">
+            <TextBlock Classes="title" Text="Добро пожаловать"/>
+            <TextBlock Classes="subtitle" 
+                     Text="Введите имя пользователя для продолжения"
+                     Margin="0,8,0,24"/>
+            
+            <TextBox Watermark="Имя пользователя" 
+                    Text="{Binding Login}"/>
+            
+            <Button Classes="primary"
+                    Command="{Binding ContinueWithUsernameCommand}"
+                    Content="Продолжить"
+                    Margin="0,16"/>
+        </StackPanel>
+
+        <!-- QR Code Login View -->
+        <StackPanel Margin="32" IsVisible="{Binding IsQRLoginVisible}">
+            <TextBlock Classes="title" Text="QR-код для входа"/>
+            <TextBlock Classes="subtitle" 
+                     Text="Отсканируйте QR-код с помощью мобильного приложения"
+                     Margin="0,8,0,24"/>
+
+            <!-- QR Code Display -->
+            <Border Background="White"
+                    CornerRadius="16"
+                    Padding="16"
+                    Width="250"
+                    Height="250"
+                    HorizontalAlignment="Center"
+                    BoxShadow="0 2 10 0 #20000000">
+                <Image Source="{Binding QRCodeImage}"
+                       Width="218"
+                       Height="218"/>
+            </Border>
+
+            <Button Command="{Binding RefreshQRCodeCommand}"
+                    Content="Обновить QR-код"
+                    Margin="0,16,0,8"/>
+
+            <Button Command="{Binding SwitchToPasswordLoginCommand}"
+                    Content="Или войти с использованием пароля"
+                    Margin="0,8,0,16"/>
+
+            <TextBlock Text="{Binding Login}"
+                      HorizontalAlignment="Center"
+                      Margin="0,8"/>
+        </StackPanel>
+
+        <!-- Traditional Login View -->
+        <StackPanel Margin="32" IsVisible="{Binding IsPasswordLoginVisible}">
+            <TextBlock Classes="title" Text="Вход в систему"/>
+            
+            <TextBox Watermark="Имя пользователя" 
+                    Text="{Binding Login}"
+                    IsEnabled="{Binding !HasExistingUsername}"/>
+            
+            <TextBox Watermark="Пароль" 
+                    PasswordChar="●"
+                    Text="{Binding Password}"/>
+
+            <TextBlock Text="{Binding ErrorMessage}"
+                     IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                     Foreground="{DynamicResource SystemErrorTextColor}"
+                     TextWrapping="Wrap"
+                     Margin="0,8"/>
+            
+            <Button Classes="primary"
+                    Command="{Binding LoginCommand}"
+                    Content="Войти"
+                    Margin="0,16,0,8"/>
+
+            <Button Command="{Binding SwitchToQRLoginCommand}"
+                    Content="Вернуться к QR-коду"
+                    Margin="0,8,0,16"/>
+        </StackPanel>
+
+        <!-- Loading Overlay -->
+        <Panel Classes="loading-overlay">
+            <!-- Blurred background -->
+            <Panel>
+                <Panel.Effect>
+                    <BlurEffect Radius="10"/>
+                </Panel.Effect>
+                <Rectangle Fill="#80000000" />
+            </Panel>
+            
+            <!-- Loading content (not blurred) -->
+            <Border Background="#40000000"
+                    CornerRadius="20"
+                    Width="200"
+                    Height="200"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    BoxShadow="0 4 20 0 #40000000">
+                <StackPanel HorizontalAlignment="Center" 
+                           VerticalAlignment="Center">
+                    <ProgressRing IsIndeterminate="True"
+                                   Width="60" 
+                                   Height="60"
+                                   Foreground="White"/>
+                    <TextBlock Classes="loading-text"
+                              Text="Подождите..."
+                              HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+        </Panel>
+    </Panel>
+</Window>

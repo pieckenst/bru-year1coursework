@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Common properties -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWindowsForms>true</UseWindowsForms>
+    <!-- Windows XP compatible build -->
+    <WindowsXP>false</WindowsXP>
+    <Configurations>Debug;Release;DebugXP</Configurations>
+  </PropertyGroup>
+
+  <!-- Modern build (default) -->
+  <PropertyGroup Condition="'$(WindowsXP)' != 'true'">
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <DefineConstants>MODERN</DefineConstants>
+  </PropertyGroup>
+
+  <!-- Windows XP compatible build -->
+  <PropertyGroup Condition="'$(WindowsXP)' == 'true'">
+    <TargetFramework>net40</TargetFramework> <!-- Changed from net48 to net40 cause thats windows xp max supported version -->
+    <DefineConstants>WINDOWSXP</DefineConstants>
+  </PropertyGroup>
+
+  <!-- Modern packages -->
+  <ItemGroup Condition="'$(WindowsXP)' != 'true'">
+    <PackageReference Include="DevExpress.Win.BonusSkins" Version="24.2.5" />
+    <PackageReference Include="DevExpress.Win.Design" Version="24.2.5" />
+    <PackageReference Include="Serilog" Version="4.2.1-dev-02337" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.1-dev-02317" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+    <PackageReference Include="System.Text.Json" Version="9.0.1" />
+  </ItemGroup>
+
+  <!-- Windows XP compatible packages -->
+  <ItemGroup Condition="'$(WindowsXP)' == 'true'">
+    <PackageReference Include="DevExpress.Win.BonusSkins" Version="15.2.9" />
+    <PackageReference Include="DevExpress.Win.Design" Version="15.2.9" />
+    <PackageReference Include="Serilog" Version="1.5.14" />
+    <PackageReference Include="Newtonsoft.Json" Version="6.0.8" />
+  </ItemGroup>
+
+  <!-- Project references - invalid cause code will not built without core project reference - must modify core project to support net40 -->
+  <ItemGroup Condition="'$(WindowsXP)' != 'true'"> 
+    <ProjectReference Include="..\TicketSalesApp.Core\TicketSalesApp.Core.csproj" />
+  </ItemGroup>
+
+</Project>
