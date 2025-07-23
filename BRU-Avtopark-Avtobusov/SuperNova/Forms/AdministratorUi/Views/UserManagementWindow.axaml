@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PleasantWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:SuperNova.Forms.AdministratorUi.ViewModels"
+        xmlns:models="using:TicketSalesApp.Core.Models"
+        xmlns:converters="using:SuperNova.Converters"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+        x:Class="SuperNova.Forms.AdministratorUi.Views.UserManagementWindow"
+        x:DataType="vm:UserManagementViewModel"
+        Title="User Management"
+        Width="800" Height="600"
+        WindowStartupLocation="CenterOwner">
+
+    <PleasantWindow.Resources>
+        <converters:RoleConverter x:Key="RoleConverter"/>
+    </PleasantWindow.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="10">
+        <!-- Search and Add Button -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
+            <TextBox Grid.Column="0" 
+                     Text="{Binding SearchText}"
+                     Watermark="Search users.."
+                     Margin="0,0,10,0"/>
+            <Button Grid.Column="1" 
+                    Command="{Binding AddCommand}"
+                    Content="Add User"/>
+        </Grid>
+
+        <!-- Error Message -->
+        <TextBlock Grid.Row="1" 
+                   Text="{Binding ErrorMessage}"
+                   IsVisible="{Binding HasError}"
+                   Foreground="Red"
+                   TextWrapping="Wrap"
+                   Margin="0,0,0,10"/>
+
+        <!-- Users DataGrid -->
+        <DataGrid Grid.Row="2"
+                  ItemsSource="{Binding Users}"
+                  SelectedItem="{Binding SelectedUser}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  GridLinesVisibility="All"
+                  BorderThickness="1" 
+                  BorderBrush="Gray"
+                  Margin="0,0,0,10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" 
+                                  Binding="{Binding UserId}"
+                                  Width="Auto"/>
+                <DataGridTextColumn Header="Login" 
+                                  Binding="{Binding Login}"
+                                  Width="*"/>
+                <DataGridTextColumn Header="Role" 
+                                  Binding="{Binding Role, Converter={StaticResource RoleConverter}}"
+                                  Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="3" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right" 
+                    Spacing="10">
+            <Button Command="{Binding EditCommand}"
+                    Content="Edit"
+                    IsEnabled="{Binding SelectedUser, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            <Button Command="{Binding DeleteCommand}"
+                    Content="Delete"
+                    IsEnabled="{Binding SelectedUser, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+        </StackPanel>
+
+        <!-- Busy Indicator -->
+        <Grid Grid.Row="0" Grid.RowSpan="4" 
+              Background="#80000000"
+              IsVisible="{Binding IsBusy}">
+            <ProgressBar IsIndeterminate="True"
+                        Width="100" Height="100"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"/>
+        </Grid>
+    </Grid>
+</PleasantWindow> 

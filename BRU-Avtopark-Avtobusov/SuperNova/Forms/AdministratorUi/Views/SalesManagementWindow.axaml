@@ -1,0 +1,79 @@
+<PleasantWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:SuperNova.Forms.AdministratorUi.ViewModels"
+        xmlns:converters="using:SuperNova.Converters"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SuperNova.Forms.AdministratorUi.Views.SalesManagementWindow"
+        x:DataType="vm:SalesManagementViewModel"
+        Title="Управление продажами"
+        Width="1200" Height="600"
+        WindowStartupLocation="CenterOwner">
+
+    <PleasantWindow.Resources>
+        <converters:SafeDateTimeFormatConverter x:Key="DateTimeConverter" DateFormat="dd.MM.yyyy HH:mm"/>
+        <converters:SafeCurrencyFormatConverter x:Key="CurrencyConverter"/>
+    </PleasantWindow.Resources>
+
+    <Design.DataContext>
+        <vm:SalesManagementViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,*,Auto" Margin="20">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,*,Auto" Margin="0,0,0,10">
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" Margin="0,0,20,0">
+                <TextBlock Text="С:" VerticalAlignment="Center"/>
+                <DatePicker SelectedDate="{Binding StartDate}"/>
+            </StackPanel>
+            
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" Margin="0,0,20,0">
+                <TextBlock Text="По:" VerticalAlignment="Center"/>
+                <DatePicker SelectedDate="{Binding EndDate}"/>
+            </StackPanel>
+
+            <TextBlock Grid.Column="2" 
+                      Text="{Binding TotalIncome, StringFormat={}Общий доход: {0:C}}"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Right"
+                      Margin="0,0,20,0"/>
+
+            <Button Grid.Column="3"
+                    Command="{Binding AddCommand}"
+                    Content="Добавить продажу"/>
+        </Grid>
+
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Sales}"
+                  SelectedItem="{Binding SelectedSale}"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False"
+                  Margin="0,0,0,10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID"
+                                  Binding="{Binding SaleId}"/>
+                <DataGridTextColumn Header="Дата продажи"
+                                  Binding="{Binding SaleDate, Converter={StaticResource DateTimeConverter}}"/>
+                <DataGridTextColumn Header="Маршрут"
+                                  Binding="{Binding Bilet.Marshut.StartPoint}"/>
+                <DataGridTextColumn Header="Конечная точка"
+                                  Binding="{Binding Bilet.Marshut.EndPoint}"/>
+                <DataGridTextColumn Header="Время в пути"
+                                  Binding="{Binding Bilet.Marshut.TravelTime}"/>
+                <DataGridTextColumn Header="Цена билета"
+                                  Binding="{Binding Bilet.TicketPrice}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto">
+            <TextBlock Grid.Column="0"
+                       Text="{Binding ErrorMessage}"
+                       Foreground="Red"
+                       IsVisible="{Binding HasError}"/>
+            <Button Grid.Column="1"
+                    Command="{Binding DeleteCommand}"
+                    Content="Удалить"
+                    IsEnabled="{Binding SelectedSale, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+        </Grid>
+    </Grid>
+</PleasantWindow> 

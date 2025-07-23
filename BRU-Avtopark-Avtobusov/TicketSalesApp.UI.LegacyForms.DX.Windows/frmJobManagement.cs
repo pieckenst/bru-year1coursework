@@ -3,36 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Views.Base;
 using Serilog;
 using TicketSalesApp.Core.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace TicketSalesApp.UI.LegacyForms.DX.Windows
 {
     public partial class frmJobManagement : DevExpress.XtraEditors.XtraForm
     {
         private readonly ApiClientService _apiClient;
-        private readonly string _baseUrl = "http://localhost:5000/api";
         private List<Job> _allJobs = new List<Job>();
-        private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
+        private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
         {
-            PreserveReferencesHandling = PreserveReferencesHandling.Objects
+            PropertyNameCaseInsensitive = true,
+            ReferenceHandler = ReferenceHandler.Preserve
         };
 
         public frmJobManagement()
         {
             InitializeComponent();
             _apiClient = ApiClientService.Instance;
-            gridViewJobs.CustomUnboundColumnData += new CustomColumnDataEventHandler(gridViewJobs_CustomUnboundColumnData);
+            gridViewJobs.CustomUnboundColumnData += gridViewJobs_CustomUnboundColumnData;
 
-            _apiClient.OnAuthTokenChanged += async delegate(object s, string e_token) {
+            _apiClient.OnAuthTokenChanged += (s, e) => { 
                 if (this.Visible) { 
-                    await LoadJobsAsync(); 
+                    LoadJobsAsync().ConfigureAwait(false); 
                 }
             };
             UpdateButtonStates();
@@ -45,26 +45,23 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
 
         private async Task LoadJobsAsync()
         {
-            HttpClient client = null;
             try
             {
-                client = _apiClient.CreateClient();
-                var apiUrl = string.Format("{0}/Jobs?includeEmployees=true", _baseUrl);
-                Log.Debug("Fetching jobs from: {0}", apiUrl);
-                var response = await client.GetAsync(apiUrl); 
+                using var client = _apiClient.CreateClient();
+                // Include Employees to get the count
+                var response = await client.GetAsync("jobs?includeEmployees=true"); 
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
                     Log.Debug("Raw JSON response from /api/jobs: {JsonResponse}", jsonResponse);
-                    _allJobs = JsonConvert.DeserializeObject<List<Job>>(jsonResponse, _jsonSettings);
-                    if (_allJobs == null) { _allJobs = new List<Job>(); }
+                    _allJobs = JsonSerializer.Deserialize<List<Job>>(jsonResponse, _jsonOptions) ?? new List<Job>();
                     FilterAndBindJobs();
                 }
                 else
                 {
                     var error = await response.Content.ReadAsStringAsync();
                     Log.Error("Failed to load jobs. Status: {StatusCode}, Error: {Error}", response.StatusCode, error);
-                    XtraMessageBox.Show(string.Format("Не удалось загрузить должности: {0}", response.ReasonPhrase), "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    XtraMessageBox.Show($"Не удалось загрузить должности: {response.ReasonPhrase}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     _allJobs = new List<Job>();
                     FilterAndBindJobs();
                 }
@@ -72,13 +69,12 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             catch (Exception ex)
             {
                 Log.Error(ex, "Exception loading jobs");
-                XtraMessageBox.Show(string.Format("Произошла ошибка при загрузке должностей: {0}", ex.Message), "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                XtraMessageBox.Show($"Произошла ошибка при загрузке должностей: {ex.Message}", "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 _allJobs = new List<Job>();
                 FilterAndBindJobs();
             }
             finally
             {
-                if (client != null) client.Dispose();
                 UpdateButtonStates();
             }
         }
@@ -94,11 +90,10 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             }
             else
             {
-                filteredJobs = _allJobs.Where(delegate(Job j) {
-                    bool titleMatch = (j.JobTitle != null && j.JobTitle.ToLowerInvariant().Contains(searchText));
-                    bool internshipMatch = (j.Internship != null && j.Internship.ToLowerInvariant().Contains(searchText));
-                    return titleMatch || internshipMatch;
-                }).ToList();
+                filteredJobs = _allJobs.Where(j =>
+                    (j.JobTitle?.ToLowerInvariant().Contains(searchText) ?? false) ||
+                    (j.Internship?.ToLowerInvariant().Contains(searchText) ?? false)
+                ).ToList();
             }
 
             jobBindingSource.DataSource = filteredJobs;
@@ -109,14 +104,10 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
         {
              if (e.Column.FieldName == "Employees.Count" && e.IsGetData)
             {
-                Job job = e.Row as Job;
-                if (job != null)
+                if (e.Row is Job job)
                 {
-                    e.Value = (job.Employees != null) ? job.Employees.Count : 0; 
-                }
-                else
-                {
-                    e.Value = 0;
+                    // Accessing navigation property might be null if not included/handled by Preserve
+                    e.Value = job.Employees?.Count ?? 0; 
                 }
             }
         }
@@ -133,14 +124,14 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             ShowEditJobForm(selectedJob);
         }
 
-        private void ShowEditJobForm(Job jobToEdit)
+        private void ShowEditJobForm(Job? jobToEdit)
         {
             using (var form = new XtraForm())
             {
                 bool isAdding = jobToEdit == null;
                 form.Text = isAdding ? "Добавить должность" : "Редактировать должность";
                 form.Width = 500;
-                form.Height = 250;
+                form.Height = 250; // Adjusted height
                 form.StartPosition = FormStartPosition.CenterParent;
 
                 var panel = new Panel { Dock = DockStyle.Fill, Padding = new Padding(10) };
@@ -151,20 +142,23 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                 int controlWidth = 300;
                 int spacing = 30;
 
+                // Job Title
                 var titleLabel = new LabelControl { Text = "Название должности:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(10, yPos) };
-                var titleBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(10 + labelWidth + 10, yPos), Text = (jobToEdit != null ? jobToEdit.JobTitle : "") };
+                var titleBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(10 + labelWidth + 10, yPos), Text = jobToEdit?.JobTitle ?? "" };
                 panel.Controls.AddRange(new Control[] { titleLabel, titleBox });
                 yPos += spacing;
 
+                // Internship
                 var internshipLabel = new LabelControl { Text = "Требования к стажу:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(10, yPos) };
-                var internshipBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(10 + labelWidth + 10, yPos), Text = (jobToEdit != null ? jobToEdit.Internship : "") };
+                var internshipBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(10 + labelWidth + 10, yPos), Text = jobToEdit?.Internship ?? "" };
                 panel.Controls.AddRange(new Control[] { internshipLabel, internshipBox });
                 yPos += spacing + 10;
 
+                // Save Button
                 var saveButton = new SimpleButton { Text = isAdding ? "Добавить" : "Обновить", Width = 100, Location = new System.Drawing.Point(form.ClientSize.Width / 2 - 50, yPos) };
                 panel.Controls.Add(saveButton);
 
-                saveButton.Click += async delegate(object s, EventArgs args) {
+                saveButton.Click += async (s, args) => {
                     if (string.IsNullOrWhiteSpace(titleBox.Text))
                     {
                         XtraMessageBox.Show("Название должности обязательно.", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -175,52 +169,42 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                     {
                         var jobData = new Job
                         {
-                            JobId = isAdding ? 0 : jobToEdit.JobId,
+                            JobId = isAdding ? 0 : jobToEdit!.JobId,
                             JobTitle = titleBox.Text,
-                            Internship = internshipBox.Text
+                            Internship = internshipBox.Text // Can be null or empty
                         };
 
-                        HttpClient client = null;
-                        try {
-                            client = _apiClient.CreateClient();
-                            HttpResponseMessage response;
-                            string jsonPayload = JsonConvert.SerializeObject(jobData, _jsonSettings);
-                            HttpContent content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+                        using var client = _apiClient.CreateClient();
+                        HttpResponseMessage response;
+                        string jsonPayload = JsonSerializer.Serialize(jobData, _jsonOptions);
+                        HttpContent content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-                            if (isAdding)
-                            {
-                                var apiUrl = string.Format("{0}/Jobs", _baseUrl);
-                                Log.Debug("Posting new job to: {0}", apiUrl);
-                                response = await client.PostAsync(apiUrl, content);
-                            }
-                            else
-                            {
-                                var apiUrl = string.Format("{0}/Jobs/{1}", _baseUrl, jobToEdit.JobId);
-                                Log.Debug("Putting updated job to: {0}", apiUrl);
-                                response = await client.PutAsync(apiUrl, content);
-                            }
-
-                            if (response.IsSuccessStatusCode)
-                            {
-                                await LoadJobsAsync();
-                                form.DialogResult = DialogResult.OK;
-                                form.Close();
-                            }
-                            else
-                            {
-                                var error = await response.Content.ReadAsStringAsync();
-                                Log.Error("Failed to save job. Status: {StatusCode}, Error: {Error}", response.StatusCode, error);
-                                XtraMessageBox.Show(string.Format("Не удалось сохранить должность: {0}", error), "Ошибка API", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
+                        if (isAdding)
+                        {
+                            response = await client.PostAsync("jobs", content);
                         }
-                        finally {
-                            if (client != null) client.Dispose();
+                        else
+                        {
+                            response = await client.PutAsync($"jobs/{jobToEdit!.JobId}", content);
+                        }
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            await LoadJobsAsync();
+                            form.DialogResult = DialogResult.OK;
+                            form.Close();
+                        }
+                        else
+                        {
+                            var error = await response.Content.ReadAsStringAsync();
+                            Log.Error("Failed to save job. Status: {StatusCode}, Error: {Error}", response.StatusCode, error);
+                            XtraMessageBox.Show($"Не удалось сохранить должность: {error}", "Ошибка API", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                     catch (Exception ex)
                     {
                         Log.Error(ex, "Error saving job");
-                        XtraMessageBox.Show(string.Format("Ошибка при сохранении должности: {0}", ex.Message), "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        XtraMessageBox.Show($"Ошибка при сохранении должности: {ex.Message}", "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 };
 
@@ -234,11 +218,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             var selectedJob = gridViewJobs.GetFocusedRow() as Job;
             if (selectedJob == null) return;
 
-            string jobTitle = selectedJob.JobTitle != null ? selectedJob.JobTitle : "[Без названия]";
-
-            var result = XtraMessageBox.Show(string.Format("Вы уверены, что хотите удалить должность '{0}' (ID: {1})?", 
-                                                jobTitle,
-                                                selectedJob.JobId),
+            var result = XtraMessageBox.Show($"Вы уверены, что хотите удалить должность '{selectedJob.JobTitle}' (ID: {selectedJob.JobId})?",
                                               "Подтверждение удаления",
                                               MessageBoxButtons.YesNo,
                                               MessageBoxIcon.Warning);
@@ -247,43 +227,33 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             {
                 try
                 {
-                    HttpClient client = null;
-                    try
-                    {
-                        client = _apiClient.CreateClient();
-                        var apiUrl = string.Format("{0}/Jobs/{1}", _baseUrl, selectedJob.JobId);
-                        Log.Debug("Deleting job from: {0}", apiUrl);
-                        var response = await client.DeleteAsync(apiUrl);
+                    using var client = _apiClient.CreateClient();
+                    var response = await client.DeleteAsync($"jobs/{selectedJob.JobId}");
 
-                        if (response.IsSuccessStatusCode)
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Log.Information("Job deleted successfully: ID {JobId}", selectedJob.JobId);
+                        XtraMessageBox.Show("Должность успешно удалена.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        await LoadJobsAsync(); // Refresh the list
+                    }
+                    else
+                    {
+                        var error = await response.Content.ReadAsStringAsync();
+                        Log.Error("Failed to delete job. Status: {StatusCode}, Error: {Error}", response.StatusCode, error);
+                         if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
                         {
-                            Log.Information("Job deleted successfully: ID {JobId}", selectedJob.JobId);
-                            XtraMessageBox.Show("Должность успешно удалена.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            await LoadJobsAsync();
+                            XtraMessageBox.Show("Не удалось удалить должность: она используется сотрудниками.", "Ошибка удаления", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         else
                         {
-                            var error = await response.Content.ReadAsStringAsync();
-                            Log.Error("Failed to delete job. Status: {StatusCode}, Error: {Error}", response.StatusCode, error);
-                            if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
-                            {
-                                XtraMessageBox.Show("Не удалось удалить должность: она используется сотрудниками.", "Ошибка удаления", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
-                            else
-                            {
-                                XtraMessageBox.Show(string.Format("Не удалось удалить должность: {0}\n{1}", response.ReasonPhrase, error), "Ошибка удаления", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
+                             XtraMessageBox.Show($"Не удалось удалить должность: {response.ReasonPhrase}\n{error}", "Ошибка удаления", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-                    }
-                    finally
-                    {
-                        if (client != null) client.Dispose();
                     }
                 }
                 catch (Exception ex)
                 {
                     Log.Error(ex, "Exception deleting job");
-                    XtraMessageBox.Show(string.Format("Произошла ошибка при удалении должности: {0}", ex.Message), "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    XtraMessageBox.Show($"Произошла ошибка при удалении должности: {ex.Message}", "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

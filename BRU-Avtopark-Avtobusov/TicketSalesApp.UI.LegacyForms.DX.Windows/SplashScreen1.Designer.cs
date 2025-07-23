@@ -28,68 +28,82 @@
         /// </summary>
 		private void InitializeComponent()
         {
-            this.labelCopyright = new DevExpress.XtraEditors.LabelControl();
-            this.labelStatus = new DevExpress.XtraEditors.LabelControl();
-            this.progressPanel = new DevExpress.XtraWaitForm.ProgressPanel();
-            this.SuspendLayout();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SplashScreen1));
+            progressBarControl = new DevExpress.XtraEditors.MarqueeProgressBarControl();
+            labelCopyright = new DevExpress.XtraEditors.LabelControl();
+            labelStatus = new DevExpress.XtraEditors.LabelControl();
+            peImage = new DevExpress.XtraEditors.PictureEdit();
+            ((System.ComponentModel.ISupportInitialize)progressBarControl.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)peImage.Properties).BeginInit();
+            SuspendLayout();
+            // 
+            // progressBarControl
+            // 
+            progressBarControl.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            progressBarControl.EditValue = 0;
+            progressBarControl.Location = new System.Drawing.Point(24, 232);
+            progressBarControl.Name = "progressBarControl";
+            progressBarControl.Size = new System.Drawing.Size(402, 12);
+            progressBarControl.TabIndex = 5;
             // 
             // labelCopyright
             // 
-            this.labelCopyright.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelCopyright.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
-            this.labelCopyright.Location = new System.Drawing.Point(25, 171);
-            this.labelCopyright.Name = "labelCopyright";
-            this.labelCopyright.Size = new System.Drawing.Size(231, 13);
-            this.labelCopyright.TabIndex = 6;
-            this.labelCopyright.Text = "© 2025 Белорусско-российский университет.";
+            labelCopyright.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            labelCopyright.Location = new System.Drawing.Point(24, 287);
+            labelCopyright.Name = "labelCopyright";
+            labelCopyright.Size = new System.Drawing.Size(231, 13);
+            labelCopyright.TabIndex = 6;
+            labelCopyright.Text = "© 2025 Белорусско-российский университет.";
             // 
             // labelStatus
             // 
-            this.labelStatus.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.labelStatus.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-            this.labelStatus.Location = new System.Drawing.Point(25, 30);
-            this.labelStatus.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
-            this.labelStatus.Name = "labelStatus";
-            this.labelStatus.Size = new System.Drawing.Size(400, 20);
-            this.labelStatus.TabIndex = 7;
-            this.labelStatus.Text = "Происходит запуск приложения ... ";
+            labelStatus.Location = new System.Drawing.Point(24, 215);
+            labelStatus.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
+            labelStatus.Name = "labelStatus";
+            labelStatus.Size = new System.Drawing.Size(181, 13);
+            labelStatus.TabIndex = 7;
+            labelStatus.Text = "Происходит запуск приложения ... ";
             // 
-            // progressPanel
+            // peImage
             // 
-            this.progressPanel.Appearance.BackColor = System.Drawing.Color.Transparent;
-            this.progressPanel.Appearance.Options.UseBackColor = true;
-            this.progressPanel.AppearanceCaption.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.progressPanel.AppearanceCaption.Options.UseFont = true;
-            this.progressPanel.AppearanceDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.progressPanel.AppearanceDescription.Options.UseFont = true;
-            this.progressPanel.Caption = "Загрузка";
-            this.progressPanel.Description = "Пожалуйста, подождите ... ";
-            this.progressPanel.Location = new System.Drawing.Point(102, 67);
-            this.progressPanel.Name = "progressPanel";
-            this.progressPanel.Size = new System.Drawing.Size(246, 66);
-            this.progressPanel.TabIndex = 8;
-            this.progressPanel.Text = "progressPanel1";
+            peImage.Dock = System.Windows.Forms.DockStyle.Top;
+            peImage.EditValue = resources.GetObject("peImage.EditValue");
+            peImage.Location = new System.Drawing.Point(1, 1);
+            peImage.Name = "peImage";
+            peImage.Properties.AllowFocused = false;
+            peImage.Properties.Appearance.BackColor = System.Drawing.Color.Transparent;
+            peImage.Properties.Appearance.Options.UseBackColor = true;
+            peImage.Properties.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            peImage.Properties.ShowMenu = false;
+            peImage.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Stretch;
+            peImage.Properties.SvgImageColorizationMode = DevExpress.Utils.SvgImageColorizationMode.None;
+            peImage.Size = new System.Drawing.Size(448, 200);
+            peImage.TabIndex = 9;
             // 
             // SplashScreen1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(450, 200);
-            this.Controls.Add(this.progressPanel);
-            this.Controls.Add(this.labelStatus);
-            this.Controls.Add(this.labelCopyright);
-            this.Name = "SplashScreen1";
-            this.Padding = new System.Windows.Forms.Padding(1);
-            this.Text = "SplashScreen1";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(450, 320);
+            Controls.Add(peImage);
+            Controls.Add(labelStatus);
+            Controls.Add(labelCopyright);
+            Controls.Add(progressBarControl);
+            Name = "SplashScreen1";
+            Padding = new System.Windows.Forms.Padding(1);
+            Text = "SplashScreen1";
+            ((System.ComponentModel.ISupportInitialize)progressBarControl.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)peImage.Properties).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 
         #endregion
 
+        private DevExpress.XtraEditors.MarqueeProgressBarControl progressBarControl;
         private DevExpress.XtraEditors.LabelControl labelCopyright;
         private DevExpress.XtraEditors.LabelControl labelStatus;
-        private DevExpress.XtraWaitForm.ProgressPanel progressPanel;
+        private DevExpress.XtraEditors.PictureEdit peImage;
     }
 }

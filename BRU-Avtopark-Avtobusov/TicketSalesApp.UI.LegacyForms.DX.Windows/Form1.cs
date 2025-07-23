@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using DevExpress.XtraBars; // Required for BarItem, ItemClickEventArgs
 using DevExpress.XtraBars.Ribbon; // Required for RibbonForm
-using NLog;
+using Serilog;
 
 namespace TicketSalesApp.UI.LegacyForms.DX.Windows
 {
@@ -16,7 +16,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
     public partial class Form1 : RibbonForm 
     {
         // Add static logger field
-        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+        
 
         public Form1(bool loginresult)
         {

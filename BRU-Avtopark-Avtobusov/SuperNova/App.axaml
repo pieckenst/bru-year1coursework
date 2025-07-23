@@ -1,0 +1,75 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:SuperNova="clr-namespace:SuperNova"
+             xmlns:classic="clr-namespace:Classic.Avalonia.Theme"
+             xmlns:common="clr-namespace:Classic.CommonControls;assembly=Classic.CommonControls.Avalonia"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
+             xmlns:pleasant="using:PleasantUI"
+			 x:Class="SuperNova.App"
+             RequestedThemeVariant="Default">
+
+        <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="Controls/MDI/MDIWindow.axaml" />
+                <ResourceInclude Source="Controls/MDI/MDIHost.axaml" />
+                <ResourceInclude Source="Controls/ResizeAdorner.axaml" />
+                <ResourceInclude Source="Controls/Properties/PropertyBox.axaml" />
+                <ResourceInclude Source="avares://SuperNova.Runtime/BuiltinControls/VBTimer.axaml" />
+                <ResourceInclude Source="avares://SuperNova.Runtime/BuiltinControls/VBLabel.axaml" />
+                <ResourceInclude Source="avares://SuperNova.Runtime/BuiltinControls/Resources.axaml" />
+                <ResourceInclude Source="avares://PleasantUI.DataGrid/DataGrid.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <Application.Styles>
+        <!-- Base Classic Theme - Required for Classic Controls -->
+		<materialIcons:MaterialIconStyles />
+        
+        <FluentTheme />
+        <DockFluentTheme /> 
+        <StyleInclude Source="avares://Classic.CommonControls.Avalonia/Themes/Fluent.axaml" />
+        <!-- <StyleInclude Source="avares://Classic.Avalonia.Theme.Dock/Classic.axaml" /> -->
+
+        <StyleInclude Source="avares://Classic.Avalonia.Theme.ColorPicker/Classic.axaml" />
+        
+		
+        <StyleInclude Source="avares://AvaloniaEdit/Themes/Simple/AvaloniaEdit.xaml" />
+        
+        <!-- Pleasant UI Theme for Modern Controls -->
+        <pleasant:PleasantTheme />
+
+        <!-- Classic Control Styles -->
+        <Style Selector="ToolChromeControl /template/ TextBlock#PART_Title">
+            <Setter Property="Padding" Value="1,1,0,0" />
+        </Style>
+
+        
+        
+        
+
+        <!-- Modern Control Class Styles -->
+        <Style Selector="Button.modern">
+            <Setter Property="Theme" Value="{DynamicResource ButtonPleasant}" />
+        </Style>
+        <Style Selector="TextBox.modern">
+            <Setter Property="Theme" Value="{DynamicResource TextBoxPleasant}" />
+        </Style>
+        <Style Selector="ComboBox.modern">
+            <Setter Property="Theme" Value="{DynamicResource ComboBoxPleasant}" />
+        </Style>
+        <Style Selector="ListBox.modern">
+            <Setter Property="Theme" Value="{DynamicResource ListBoxPleasant}" />
+        </Style>
+        <Style Selector="TreeView.modern">
+            <Setter Property="Theme" Value="{DynamicResource TreeViewPleasant}" />
+        </Style>
+        
+    </Application.Styles>
+
+    <Application.DataTemplates>
+        <SuperNova:ViewLocator />
+    </Application.DataTemplates>
+</Application>

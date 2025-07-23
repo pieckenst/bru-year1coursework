@@ -1,0 +1,14 @@
+{
+  "NumericalAccentColor": 4294918979,
+  "PreferUserAccentColor": false,
+  "Theme": 1,
+  "WindowSettings": {
+    "EnableBlur": true,
+    "EnableCustomTitleBar": true,
+    "OpacityLevel": 0.8
+  },
+  "RenderSettings": {
+    "EnableShadowing": true
+  },
+  "ColorPalettes": []
+}

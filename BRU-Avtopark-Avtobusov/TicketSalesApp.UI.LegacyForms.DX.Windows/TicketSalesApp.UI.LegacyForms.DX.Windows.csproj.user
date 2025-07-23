@@ -38,9 +38,6 @@
     <Compile Update="frmTicketManagement.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="POSLogin.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="SplashScreen1.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -1,0 +1,14 @@
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\bin\Debug\net9.0\SuperNova.Runtime.deps.json
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\bin\Debug\net9.0\SuperNova.Runtime.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\bin\Debug\net9.0\SuperNova.Runtime.pdb
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\SuperNova.Runtime.csproj.AssemblyReference.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\Avalonia\Resources.Inputs.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\Avalonia\resources
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\SuperNova.Runtime.GeneratedMSBuildEditorConfig.editorconfig
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\SuperNova.Runtime.AssemblyInfoInputs.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\SuperNova.Runtime.AssemblyInfo.cs
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\SuperNova.Runtime.csproj.CoreCompileInputs.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\Avalonia\SuperNova.Runtime.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\Avalonia\SuperNova.Runtime.pdb
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\refint\Avalonia\SuperNova.Runtime.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\ref\SuperNova.Runtime.dll

@@ -5,16 +5,16 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Views.Base;
 using TicketSalesApp.Core.Models;
 using Serilog;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using DevExpress.XtraLayout;
+using System.Text.Json.Serialization;
 
 namespace TicketSalesApp.UI.LegacyForms.DX.Windows
 {
@@ -23,71 +23,28 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
         private readonly ApiClientService _apiClient;
         private List<Avtobus> _allBuses = new List<Avtobus>();
         private readonly string _baseUrl = "http://localhost:5000/api";
-        private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
+        private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
         {
-            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            PropertyNameCaseInsensitive = true,
+            ReferenceHandler = ReferenceHandler.Preserve
         };
-
-        #region Helper: Input Dialog
-
-        private static string ShowInputDialog(string caption, string prompt, string defaultValue = "")
-        {
-            using (var form = new XtraForm())
-            {
-                form.Text = caption;
-                form.StartPosition = FormStartPosition.CenterParent;
-                form.FormBorderStyle = FormBorderStyle.FixedDialog;
-                form.MinimizeBox = false;
-                form.MaximizeBox = false;
-                form.ClientSize = new Size(350, 120);
-
-                var lc = new LayoutControl() { Dock = DockStyle.Fill };
-                form.Controls.Add(lc);
-
-                var txtInput = new TextEdit();
-                txtInput.Text = defaultValue;
-
-                var btnOK = new SimpleButton() { Text = "OK" };
-                var btnCancel = new SimpleButton() { Text = "Отмена" };
-                btnOK.DialogResult = DialogResult.OK;
-                btnCancel.DialogResult = DialogResult.Cancel;
-
-                lc.Root.AddItem(prompt, txtInput).TextLocation = DevExpress.Utils.Locations.Top;
-                var itemOK = lc.Root.AddItem(string.Empty, btnOK);
-                var itemCancel = lc.Root.AddItem(string.Empty, btnCancel);
-
-                // Basic horizontal button layout (adjust spacing/alignment as needed)
-                lc.Root.AddItem(itemCancel).Move(itemOK, DevExpress.XtraLayout.Utils.InsertType.Right);
-
-                form.AcceptButton = btnOK;
-                form.CancelButton = btnCancel;
-
-                if (form.ShowDialog() == DialogResult.OK)
-                {
-                    return txtInput.Text;
-                }
-                else
-                {
-                    return null; // Indicate cancellation
-                }
-            }
-        }
-
-        #endregion
 
         public frmBusManagement()
         {
             InitializeComponent();
             _apiClient = ApiClientService.Instance;
             
+            // Handle unbound columns (Count properties)
             gridViewBuses.CustomUnboundColumnData += GridViewBuses_CustomUnboundColumnData;
 
+            // Initial button state
             UpdateButtonStates();
             
-            _apiClient.OnAuthTokenChanged += async delegate(object sender, string token) {
+            // Subscribe to auth token changes
+            _apiClient.OnAuthTokenChanged += (sender, token) => {
+                // Reload data with the new token if the form is visible/active
                 if (this.Visible) { 
-                    await LoadBusesAsync(); 
+                    LoadBusesAsync().ConfigureAwait(false); 
                 }
             };
         }
@@ -99,39 +56,35 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
 
         private async Task LoadBusesAsync()
         {
-            HttpClient client = null;
             try
             {
-                client = _apiClient.CreateClient();
-                var apiUrl = string.Format("{0}/Buses?includeRoutes=true&includeMaintenance=true", _baseUrl);
-                var response = await client.GetAsync(apiUrl);
+                using var client = _apiClient.CreateClient();
+                var response = await client.GetAsync($"{_baseUrl}/Buses?includeRoutes=true&includeMaintenance=true");
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
                     Log.Debug("Raw JSON response from /api/buses: {JsonResponse}", jsonResponse);
-                    _allBuses = JsonConvert.DeserializeObject<List<Avtobus>>(jsonResponse, _jsonSettings);
-                    if (_allBuses == null) { _allBuses = new List<Avtobus>(); }
+                    _allBuses = JsonSerializer.Deserialize<List<Avtobus>>(jsonResponse, _jsonOptions) ?? new List<Avtobus>();
                     FilterAndBindBuses();
                 }
                 else
                 {
                     var error = await response.Content.ReadAsStringAsync();
                     Log.Error("Failed to load buses. Status: {StatusCode}, Error: {Error}", response.StatusCode, error);
-                    XtraMessageBox.Show(string.Format("Не удалось загрузить автобусы: {0}", response.ReasonPhrase), "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    _allBuses = new List<Avtobus>();
-                    FilterAndBindBuses();
+                    XtraMessageBox.Show($"Не удалось загрузить автобусы: {response.ReasonPhrase}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    _allBuses = new List<Avtobus>(); // Clear list on error
+                    FilterAndBindBuses(); // Update grid even on error (empty)
                 }
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Exception loading buses");
-                XtraMessageBox.Show(string.Format("Произошла ошибка при загрузке автобусов: {0}", ex.Message), "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                _allBuses = new List<Avtobus>();
-                FilterAndBindBuses();
+                XtraMessageBox.Show($"Произошла ошибка при загрузке автобусов: {ex.Message}", "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _allBuses = new List<Avtobus>(); // Clear list on error
+                FilterAndBindBuses(); // Update grid even on error (empty)
             }
             finally
             {
-                 if (client != null) client.Dispose();
                  UpdateButtonStates();
             }
         }
@@ -148,71 +101,66 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             else
             {
                 filteredBuses = _allBuses
-                    .Where(delegate(Avtobus b) { 
-                        return b.Model != null && b.Model.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0;
-                     })
+                    .Where(b => b.Model != null && b.Model.Contains(searchText, StringComparison.OrdinalIgnoreCase))
                     .ToList();
             }
             
+            // Use BindingList for better grid updates if needed, but List is fine for now
             busBindingSource.DataSource = filteredBuses;
-            gridControlBuses.RefreshDataSource();
+            gridControlBuses.RefreshDataSource(); // Ensure grid updates
         }
 
         private void GridViewBuses_CustomUnboundColumnData(object sender, CustomColumnDataEventArgs e)
         {
             if (e.Column.FieldName == "Routes.Count" && e.IsGetData)
             {
-                if (e.Row is Avtobus)
+                if (e.Row is Avtobus bus)
                 {
-                    Avtobus bus = (Avtobus)e.Row;
-                    e.Value = (bus.Routes != null) ? bus.Routes.Count : 0;
+                    e.Value = bus.Routes?.Count ?? 0;
                 }
             }
             else if (e.Column.FieldName == "Obsluzhivanies.Count" && e.IsGetData)
             {
-                if (e.Row is Avtobus)
+                if (e.Row is Avtobus bus)
                 {
-                    Avtobus bus = (Avtobus)e.Row;
-                    e.Value = (bus.Obsluzhivanies != null) ? bus.Obsluzhivanies.Count : 0;
+                    e.Value = bus.Obsluzhivanies?.Count ?? 0;
                 }
             }
         }
 
         private async void btnAdd_Click(object sender, EventArgs e)
         {
-            string busModel = ShowInputDialog("Добавить автобус", "Введите модель нового автобуса:");
-
-            if (!string.IsNullOrWhiteSpace(busModel))
+            // Open a dialog/form to get new bus details
+            // For simplicity, using InputBox here, replace with a proper form
+            string? newModel = XtraInputBox.Show("Введите модель нового автобуса:", "Добавить автобус", "");
+            if (!string.IsNullOrWhiteSpace(newModel))
             {
-                var newBus = new Avtobus { Model = busModel };
-                HttpClient client = null;
+                var newBus = new Avtobus { Model = newModel };
                 try
                 {
-                    client = _apiClient.CreateClient();
-                    var json = JsonConvert.SerializeObject(newBus, _jsonSettings);
+                    using var client = _apiClient.CreateClient();
+                    var json = JsonSerializer.Serialize(newBus, _jsonOptions);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var apiUrl = string.Format("{0}/Buses", _baseUrl);
-                    var response = await client.PostAsync(apiUrl, content);
+                    var response = await client.PostAsync($"{_baseUrl}/Buses", content);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        Log.Information("Bus added successfully: {Model}", busModel);
+                        Log.Information("Bus added successfully: {Model}", newModel);
                         XtraMessageBox.Show("Автобус успешно добавлен.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        await LoadBusesAsync();
+                        await LoadBusesAsync(); // Refresh the list
                     }
                     else
                     {
                         var error = await response.Content.ReadAsStringAsync();
                         Log.Error("Failed to add bus. Status: {StatusCode}, Error: {Error}", response.StatusCode, error);
-                        XtraMessageBox.Show(string.Format("Не удалось добавить автобус: {0}\n{1}", response.ReasonPhrase, error), "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        XtraMessageBox.Show($"Не удалось добавить автобус: {response.ReasonPhrase}\n{error}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 catch (Exception ex)
                 {
                     Log.Error(ex, "Exception adding bus");
-                    XtraMessageBox.Show(string.Format("Произошла ошибка при добавлении автобуса: {0}", ex.Message), "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    XtraMessageBox.Show($"Произошла ошибка при добавлении автобуса: {ex.Message}", "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                finally { if (client != null) client.Dispose(); }
             }
         }
 
@@ -221,38 +169,38 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             var selectedBus = gridViewBuses.GetFocusedRow() as Avtobus;
             if (selectedBus == null) return;
 
-            string newBusModel = ShowInputDialog("Редактировать автобус", "Введите новую модель для автобуса:", selectedBus.Model);
-            if (!string.IsNullOrWhiteSpace(newBusModel) && newBusModel != selectedBus.Model)
+            // Open a dialog/form to edit bus details, pre-populated with selectedBus.Model
+            // For simplicity, using InputBox here, replace with a proper form
+            string? updatedModel = XtraInputBox.Show("Введите новую модель автобуса:", "Редактировать автобус", selectedBus.Model);
+            if (!string.IsNullOrWhiteSpace(updatedModel) && updatedModel != selectedBus.Model)
             {
-                var updatedBusData = new Avtobus { BusId = selectedBus.BusId, Model = newBusModel };
-                HttpClient client = null;
+                var updatedBusData = new Avtobus { BusId = selectedBus.BusId, Model = updatedModel };
+
                 try
                 {
-                    client = _apiClient.CreateClient();
-                    var json = JsonConvert.SerializeObject(updatedBusData, _jsonSettings);
+                    using var client = _apiClient.CreateClient();
+                    var json = JsonSerializer.Serialize(updatedBusData, _jsonOptions);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var apiUrl = string.Format("{0}/Buses/{1}", _baseUrl, selectedBus.BusId);
-                    var response = await client.PutAsync(apiUrl, content);
+                    var response = await client.PutAsync($"{_baseUrl}/Buses/{selectedBus.BusId}", content);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        Log.Information("Bus updated successfully: ID {BusId}, New Model {Model}", selectedBus.BusId, newBusModel);
+                        Log.Information("Bus updated successfully: ID {BusId}, New Model {Model}", selectedBus.BusId, updatedModel);
                         XtraMessageBox.Show("Автобус успешно обновлен.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        await LoadBusesAsync();
+                        await LoadBusesAsync(); // Refresh the list
                     }
                     else
                     {
                         var error = await response.Content.ReadAsStringAsync();
                         Log.Error("Failed to update bus. Status: {StatusCode}, Error: {Error}", response.StatusCode, error);
-                        XtraMessageBox.Show(string.Format("Не удалось обновить автобус: {0}\n{1}", response.ReasonPhrase, error), "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        XtraMessageBox.Show($"Не удалось обновить автобус: {response.ReasonPhrase}\n{error}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 catch (Exception ex)
                 {
                     Log.Error(ex, "Exception updating bus");
-                    XtraMessageBox.Show(string.Format("Произошла ошибка при обновлении автобуса: {0}", ex.Message), "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    XtraMessageBox.Show($"Произошла ошибка при обновлении автобуса: {ex.Message}", "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                finally { if (client != null) client.Dispose(); }
             }
         }
 
@@ -261,57 +209,56 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             var selectedBus = gridViewBuses.GetFocusedRow() as Avtobus;
             if (selectedBus == null) return;
 
-            var result = XtraMessageBox.Show(string.Format("Вы уверены, что хотите удалить автобус '{0}' (ID: {1})?", selectedBus.Model, selectedBus.BusId), 
+            var result = XtraMessageBox.Show($"Вы уверены, что хотите удалить автобус '{selectedBus.Model}' (ID: {selectedBus.BusId})?", 
                                               "Подтверждение удаления", 
                                               MessageBoxButtons.YesNo, 
                                               MessageBoxIcon.Warning);
 
             if (result == DialogResult.Yes)
             {
-                HttpClient client = null;
                 try
                 {
-                    client = _apiClient.CreateClient();
-                    var apiUrl = string.Format("{0}/Buses/{1}", _baseUrl, selectedBus.BusId);
-                    var response = await client.DeleteAsync(apiUrl);
+                    using var client = _apiClient.CreateClient();
+                    var response = await client.DeleteAsync($"{_baseUrl}/Buses/{selectedBus.BusId}");
 
                     if (response.IsSuccessStatusCode)
                     {
                         Log.Information("Bus deleted successfully: ID {BusId}, Model {Model}", selectedBus.BusId, selectedBus.Model);
                         XtraMessageBox.Show("Автобус успешно удален.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        await LoadBusesAsync();
+                        await LoadBusesAsync(); // Refresh the list
                     }
                     else
                     {
                         var error = await response.Content.ReadAsStringAsync();
                         Log.Error("Failed to delete bus. Status: {StatusCode}, Error: {Error}", response.StatusCode, error);
+                        // Check for specific conflict errors (e.g., bus assigned to routes)
                         if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
                         {
-                            XtraMessageBox.Show("Не удалось удалить автобус: он используется в маршрутах или обслуживании.", "Ошибка удаления", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            XtraMessageBox.Show($"Не удалось удалить автобус: он используется в маршрутах или обслуживании.", "Ошибка удаления", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         else
                         {
-                            XtraMessageBox.Show(string.Format("Не удалось удалить автобус: {0}\n{1}", response.ReasonPhrase, error), "Ошибка удаления", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            XtraMessageBox.Show($"Не удалось удалить автобус: {response.ReasonPhrase}\n{error}", "Ошибка удаления", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
                     Log.Error(ex, "Exception deleting bus");
-                    XtraMessageBox.Show(string.Format("Произошла ошибка при удалении автобуса: {0}", ex.Message), "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    XtraMessageBox.Show($"Произошла ошибка при удалении автобуса: {ex.Message}", "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                finally { if (client != null) client.Dispose(); }
             }
         }
 
         private async void btnRefresh_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = string.Empty;
+            txtSearch.Text = string.Empty; // Clear search on refresh
             await LoadBusesAsync();
         }
 
         private void txtSearch_EditValueChanged(object sender, EventArgs e)
         {
+            // Optional: Add a debounce timer here if performance is an issue
             FilterAndBindBuses();
         }
 

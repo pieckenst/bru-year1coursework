@@ -4,10 +4,9 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Serilog;
-using NLog;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 
 namespace TicketSalesApp.UI.LegacyForms.DX.Windows
 {
@@ -15,7 +14,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
     {
         private static ApiClientService _instance;
         private static readonly object _lock = new object();
-        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Log = Serilog.Log.ForContext<ApiClientService>();
 
         private string _authToken;
         private int? _userRole;
@@ -109,7 +108,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                 var parts = token.Split('.');
                 if (parts.Length < 2)
                 {
-                    Log.Warn("JWT token does not contain enough parts.");
+                    Log.Warning("JWT token does not contain enough parts.");
                     return;
                 }
 
@@ -124,52 +123,52 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                 byte[] data = Convert.FromBase64String(payload);
                 string decodedPayload = Encoding.UTF8.GetString(data);
 
-                Log.Debug("Decoded JWT Payload: {0}", decodedPayload);
+                Log.Debug("Decoded JWT Payload: {Payload}", decodedPayload);
 
-                JObject jsonPayload = JObject.Parse(decodedPayload);
+                JsonNode jsonPayload = JsonNode.Parse(decodedPayload);
 
-                JToken roleToken;
-                if (jsonPayload.TryGetValue("role", StringComparison.OrdinalIgnoreCase, out roleToken))
+                if (jsonPayload?["role"] != null)
                 {
                     try
                     {
-                        _userRole = roleToken.Value<int>();
-                        Log.Info("User role parsed from token: {0}", _userRole);
+                        _userRole = jsonPayload["role"].GetValue<int>();
+                        Log.Information("User role parsed from token: {UserRole}", _userRole);
                     }
                     catch (Exception exConv)
                     {
-                         string roleValueStr = roleToken.ToString();
-                         string errorMsg = string.Format("Failed to convert role claim '{0}' to integer. Exception: {1}", roleValueStr, exConv.ToString());
-                         Log.Error(errorMsg);
+                         string roleValueStr = jsonPayload["role"].ToString();
+                         Log.Error(exConv, "Failed to convert role claim '{RoleValue}' to integer", roleValueStr);
                         _userRole = null;
                     }
                 }
                 else
                 {
-                    Log.Warn("JWT payload does not contain 'role' claim.");
+                    Log.Warning("JWT payload does not contain 'role' claim.");
                     _userRole = null;
                 }
 
-                JToken nameToken;
-                if (jsonPayload.TryGetValue("unique_name", StringComparison.OrdinalIgnoreCase, out nameToken) ||
-                    jsonPayload.TryGetValue("name", StringComparison.OrdinalIgnoreCase, out nameToken))
+                if (jsonPayload?["unique_name"] != null)
                 {
-                     _userName = nameToken.Value<string>();
-                     Log.Info("Username parsed from token: {0}", _userName);
+                     _userName = jsonPayload["unique_name"].GetValue<string>();
+                     Log.Information("Username parsed from token: {UserName}", _userName);
+                }
+                else if (jsonPayload?["name"] != null)
+                {
+                     _userName = jsonPayload["name"].GetValue<string>();
+                     Log.Information("Username parsed from token: {UserName}", _userName);
                 }
                 else
                 {
-                     Log.Warn("JWT payload does not contain standard username claim ('unique_name' or 'name').");
+                     Log.Warning("JWT payload does not contain standard username claim ('unique_name' or 'name').");
                      _userName = null;
                 }
 
             }
             catch (FormatException exFormat)
             {
-                string errorMsg = string.Format("Failed to decode Base64 payload. Exception: {0}", exFormat.ToString());
-                Log.Error(errorMsg);
+                Log.Error(exFormat, "Failed to decode Base64 payload");
             }
-            catch (JsonReaderException exJson)
+            catch (JsonException exJson)
             {
                  string errorMsg = string.Format("Failed to parse JSON payload. Exception: {0}", exJson.ToString());
                  Log.Error(errorMsg);

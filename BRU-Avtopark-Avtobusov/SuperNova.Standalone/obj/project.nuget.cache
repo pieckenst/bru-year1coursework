@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "vq9vd0Ubuss=",
+  "success": false,
+  "projectFilePath": "G:\\codesecondfolder\\BRU-Avtopark-Avtobusov\\SuperNova.Standalone\\SuperNova.Standalone.csproj",
+  "expectedPackageFiles": [],
+  "logs": [
+    {
+      "code": "NU1105",
+      "level": "Error",
+      "message": "Unable to read project information for 'SuperNova.Standalone': Invalid framework identifier ''."
+    }
+  ]
+}

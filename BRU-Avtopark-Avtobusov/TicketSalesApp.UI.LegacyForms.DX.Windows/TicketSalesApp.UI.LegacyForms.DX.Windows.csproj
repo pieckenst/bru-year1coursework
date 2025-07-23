@@ -91,10 +91,6 @@
   <ItemGroup Condition="'$(WindowsXP)' == 'true'">
     <ProjectReference Include="..\TicketSalesApp.Core.Legacy\TicketSalesApp.Core.Legacy.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NLog" Version="5.4.0" />
-  </ItemGroup>
   
 
 </Project>

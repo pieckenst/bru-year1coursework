@@ -138,6 +138,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             this.btnApplyFilter.StyleController = this.layoutControl;
             this.btnApplyFilter.TabIndex = 3;
             this.btnApplyFilter.Text = "Применить";
+            this.btnApplyFilter.Click += new System.EventHandler(this.btnApplyFilter_Click);
             // 
             // dateToFilter
             // 

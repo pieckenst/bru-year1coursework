@@ -1,0 +1,44 @@
+{
+  "version": 3,
+  "targets": {},
+  "libraries": {},
+  "projectFileDependencyGroups": {},
+  "packageFolders": {
+    "C:\\Users\\andrej\\.nuget\\packages\\": {},
+    "C:\\Program Files\\DevExpress 24.2\\Components\\Offline Packages": {},
+    "D:\\sdk\\NuGetPackages": {}
+  },
+  "project": {
+    "restore": {
+      "projectUniqueName": "G:\\codesecondfolder\\BRU-Avtopark-Avtobusov\\SuperNova.Standalone\\SuperNova.Standalone.csproj",
+      "projectPath": "G:\\codesecondfolder\\BRU-Avtopark-Avtobusov\\SuperNova.Standalone\\SuperNova.Standalone.csproj",
+      "packagesPath": "C:\\Users\\andrej\\.nuget\\packages\\",
+      "outputPath": "G:\\codesecondfolder\\BRU-Avtopark-Avtobusov\\SuperNova.Standalone\\obj\\",
+      "projectStyle": "PackageReference",
+      "UsingMicrosoftNETSdk": false,
+      "fallbackFolders": [
+        "C:\\Program Files\\DevExpress 24.2\\Components\\Offline Packages",
+        "D:\\sdk\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\andrej\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 24.2.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\DevExpress 24.2\\Components\\System\\Components\\Packages": {},
+        "D:\\vs2010nugetlocal": {},
+        "https://www.nuget.org/api/v2/": {}
+      }
+    }
+  },
+  "logs": [
+    {
+      "code": "NU1105",
+      "level": "Error",
+      "message": "Unable to read project information for 'SuperNova.Standalone': Invalid framework identifier ''."
+    }
+  ]
+}

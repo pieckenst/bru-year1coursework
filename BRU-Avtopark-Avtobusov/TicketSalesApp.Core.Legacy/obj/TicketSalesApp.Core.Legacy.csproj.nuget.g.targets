@@ -3,6 +3,5 @@
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Import Project="$(NuGetPackageRoot)entityframework\6.4.4\buildTransitive\EntityFramework.targets" Condition="Exists('$(NuGetPackageRoot)entityframework\6.4.4\buildTransitive\EntityFramework.targets')" />
     <Import Project="$(NuGetPackageRoot)stub.system.data.sqlite.core.netframework\1.0.118\buildTransitive\net40\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('$(NuGetPackageRoot)stub.system.data.sqlite.core.netframework\1.0.118\buildTransitive\net40\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
-    <Import Project="$(NuGetPackageRoot)microsoft.netframework.referenceassemblies.net40\1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net40.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.netframework.referenceassemblies.net40\1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net40.targets')" />
   </ImportGroup>
 </Project>

@@ -1,0 +1,17 @@
+D:\SuperNova6-master\SuperNova\bin\Debug\net8.0\SuperNova.deps.json
+D:\SuperNova6-master\SuperNova\bin\Debug\net8.0\SuperNova.dll
+D:\SuperNova6-master\SuperNova\bin\Debug\net8.0\SuperNova.pdb
+D:\SuperNova6-master\SuperNova\bin\Debug\net8.0\SuperNova.Runtime.dll
+D:\SuperNova6-master\SuperNova\bin\Debug\net8.0\SuperNova.Runtime.pdb
+D:\SuperNova6-master\SuperNova\obj\Debug\net8.0\SuperNova.csproj.AssemblyReference.cache
+D:\SuperNova6-master\SuperNova\obj\Debug\net8.0\Avalonia\Resources.Inputs.cache
+D:\SuperNova6-master\SuperNova\obj\Debug\net8.0\Avalonia\resources
+D:\SuperNova6-master\SuperNova\obj\Debug\net8.0\SuperNova.GeneratedMSBuildEditorConfig.editorconfig
+D:\SuperNova6-master\SuperNova\obj\Debug\net8.0\SuperNova.AssemblyInfoInputs.cache
+D:\SuperNova6-master\SuperNova\obj\Debug\net8.0\SuperNova.AssemblyInfo.cs
+D:\SuperNova6-master\SuperNova\obj\Debug\net8.0\SuperNova.csproj.CoreCompileInputs.cache
+D:\SuperNova6-master\SuperNova\obj\Debug\net8.0\Avalonia\SuperNova.dll
+D:\SuperNova6-master\SuperNova\obj\Debug\net8.0\Avalonia\SuperNova.pdb
+D:\SuperNova6-master\SuperNova\obj\Debug\net8.0\refint\Avalonia\SuperNova.dll
+D:\SuperNova6-master\SuperNova\obj\Debug\net8.0\Avalonia.D57ED89B.Up2Date
+D:\SuperNova6-master\SuperNova\obj\Debug\net8.0\ref\SuperNova.dll

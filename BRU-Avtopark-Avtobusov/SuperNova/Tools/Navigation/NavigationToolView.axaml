@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:tools="clr-namespace:SuperNova.Tools.Navigation"
+             xmlns:material="using:Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="800"
+             x:DataType="tools:NavigationToolViewModel"
+             x:Class="SuperNova.Tools.Navigation.NavigationToolView">
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Search Box -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource SystemChromeLowColor}"
+                BorderBrush="{DynamicResource SystemBaseLowColor}"
+                BorderThickness="0,0,0,1"
+                Padding="5">
+            <TextBox Classes="modern search-box" 
+                     Name="SearchBox" 
+                     Text="{Binding SearchText, Mode=TwoWay}"
+                     Watermark="Поиск (Ctrl+F)">
+                <TextBox.InnerLeftContent>
+                    <material:MaterialIcon Kind="Search" 
+                                         Height="16" Width="16"
+                                         Margin="8,0,0,0"/>
+                </TextBox.InnerLeftContent>
+            </TextBox>
+        </Border>
+
+        <DockPanel Grid.Row="1">
+            
+            <TreeView x:Name="NavigationTree" ItemsSource="{Binding FilteredNavigationNodes}" SelectedItem="{Binding SelectedNode, Mode=TwoWay}">
+                <TreeView.ItemTemplate>
+    <TreeDataTemplate ItemsSource="{Binding Children}">
+        <StackPanel Orientation="Horizontal" Spacing="4">
+            <Image Source="{Binding Icon}" Width="16" Height="16" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding Header}" VerticalAlignment="Center"/>
+        </StackPanel>
+    </TreeDataTemplate>
+</TreeView.ItemTemplate>
+                <TreeView.ContextMenu>
+                    <ContextMenu>
+                    <MenuItem Header="Открыть" 
+                             Command="{Binding OpenCommand}" 
+                             CommandParameter="{Binding $parent[TreeView].SelectedItem}"/>
+                    <MenuItem Header="Добавить" 
+                             Command="{Binding AddCommand}" 
+                             CommandParameter="{Binding $parent[TreeView].SelectedItem}"/>
+                    <MenuItem Header="Удалить" 
+                             Command="{Binding DeleteCTXCommand}" 
+                             CommandParameter="{Binding $parent[TreeView].SelectedItem}"/>
+                </ContextMenu>
+                </TreeView.ContextMenu>
+            </TreeView>
+        </DockPanel>
+    </Grid>
+
+    <UserControl.Styles>
+        <Style Selector="TreeViewItem">
+            <Setter Property="IsExpanded" Value="True"/>
+        </Style>
+        <Style Selector="TextBox.search-box">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="32,4,4,4"/>
+        </Style>
+        <Style Selector="material|MaterialIcon">
+            <Setter Property="Foreground" Value="{DynamicResource SystemBaseMediumColor}"/>
+        </Style>
+    </UserControl.Styles>
+</UserControl> 

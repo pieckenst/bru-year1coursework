@@ -7,15 +7,12 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Timers;
 using Timer = System.Timers.Timer;
 using Serilog;
 using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using System.Security.Cryptography;
-using System.Threading;
 
 namespace TicketSalesApp.UI.LegacyForms.DX.Windows
 {
@@ -26,24 +23,23 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
     {
         private readonly HttpClient _httpClient;
         private readonly Timer _qrCheckTimer;
-        private string _deviceId;
+        private string? _deviceId;
         private const string BaseUrl = "http://localhost:5000";
         private bool _isAuthenticated = false;
-        private CancellationTokenSource _ctsQr;
 
         // Properties
-        private string Login { get; set; }
-        private string Password { get; set; }
-        private string ErrorMessage { get; set; }
+        private string Login { get; set; } = string.Empty;
+        private string Password { get; set; } = string.Empty;
+        private string ErrorMessage { get; set; } = string.Empty;
         private bool IsLoading
         {
-            get { return progressPanel.Visible; }
+            get => progressPanel.Visible;
             set
             {
-                if (progressPanel != null) progressPanel.Visible = value;
-                if (panelUsername != null) panelUsername.Enabled = !value;
-                if (panelPassword != null) panelPassword.Enabled = !value;
-                if (panelQRCode != null) panelQRCode.Enabled = !value;
+                progressPanel.Visible = value;
+                panelUsername.Enabled = !value;
+                panelPassword.Enabled = !value;
+                panelQRCode.Enabled = !value;
             }
         }
 
@@ -51,22 +47,16 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
         {
             InitializeComponent();
 
-            // Initialize strings
-            Login = string.Empty;
-            Password = string.Empty;
-            ErrorMessage = string.Empty;
-            _deviceId = null;
-
-            // Initialize HTTP client via service
+            // Initialize HTTP client
             _httpClient = ApiClientService.Instance.CreateClient();
 
             // Initialize QR check timer
             _qrCheckTimer = new Timer(2000); // Check every 2 seconds
-            _qrCheckTimer.Elapsed += new ElapsedEventHandler(CheckQRLoginStatus);
+            _qrCheckTimer.Elapsed += (s, e) => CheckQRLoginStatus();
 
-            // Set up event handlers - Use delegate
-            txtUsername.EditValueChanged += delegate(object s, EventArgs e) { Login = txtUsername.Text; };
-            txtPassword.EditValueChanged += delegate(object s, EventArgs e) { Password = txtPassword.Text; };
+            // Set up event handlers
+            txtUsername.EditValueChanged += (s, e) => Login = txtUsername.Text;
+            txtPassword.EditValueChanged += (s, e) => Password = txtPassword.Text;
 
             // Start with username entry panel visible
             panelUsername.Visible = true;
@@ -85,14 +75,14 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             panelQRCode.Visible = false;
             panelPassword.Visible = true;
             _qrCheckTimer.Stop();
-            lblLoginTitle.Text = string.Format("Вход для {0}", Login);
+            lblLoginTitle.Text = $"Вход для {Login}";
         }
 
         private void SwitchToQRLogin()
         {
             panelPassword.Visible = false;
             panelQRCode.Visible = true;
-            Task.Factory.StartNew(() => RefreshQRCodeAsync());
+            Task.Run(async () => await RefreshQRCodeAsync());
         }
 
         #endregion
@@ -103,106 +93,64 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
         {
             if (string.IsNullOrWhiteSpace(Login))
             {
-                if (this.InvokeRequired) {
-                    this.Invoke(new Action(delegate {
-                        MessageBox.Show("Пожалуйста, введите имя пользователя", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }));
-                } else {
+                this.Invoke(new Action(() => {
                     MessageBox.Show("Пожалуйста, введите имя пользователя", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                }));
                 return;
             }
 
-            HttpClient client = null;
             try
             {
-                if (this.InvokeRequired) { this.Invoke(new Action(delegate { IsLoading = true; })); } else { IsLoading = true; }
+                this.Invoke(new Action(() => IsLoading = true));
 
-                client = _httpClient;
-                var apiUrl = string.Format("{0}/api/auth/qr/direct/generate?username={1}&deviceType=desktop", BaseUrl, Login);
-                Log.Debug("Requesting QR code from {ApiUrl}", apiUrl);
-                var response = await client.GetAsync(apiUrl);
+                // Generate QR code for the username
+                var response = await _httpClient.GetAsync($"{BaseUrl}/api/auth/qr/direct/generate?username={Login}&deviceType=desktop");
                 
                 if (response.IsSuccessStatusCode)
                 {
-                    var jsonString = await response.Content.ReadAsStringAsync();
-                    var result = JsonConvert.DeserializeObject<QRCodeResponse>(jsonString);
-
-                    if (result != null && !string.IsNullOrEmpty(result.qrCode))
+                    var result = await response.Content.ReadFromJsonAsync<QRCodeResponse>();
+                    if (result != null)
                     {
+                        // Convert base64 to image
                         var bytes = Convert.FromBase64String(result.qrCode);
-                        using (var ms = new MemoryStream(bytes))
-                        {
-                            var qrImage = Image.FromStream(ms);
+                        using var ms = new MemoryStream(bytes);
+                        var qrImage = Image.FromStream(ms);
                         
-                            if (this.InvokeRequired) {
-                                this.Invoke(new Action(delegate { 
-                                    pictureBoxQR.SizeMode = PictureBoxSizeMode.Zoom;
-                                    pictureBoxQR.Image = qrImage;
-                                    _deviceId = result.deviceId;
-                                    lblQRUsername.Text = string.Format("Вход для пользователя: {0}", Login);
+                        this.Invoke(new Action(() => {
+                            // Resize QR code to fit in the picture box while maintaining aspect ratio
+                            pictureBoxQR.SizeMode = PictureBoxSizeMode.Zoom;
+                            pictureBoxQR.Image = qrImage;
+                            _deviceId = result.deviceId;
+                            lblQRUsername.Text = $"Вход для пользователя: {Login}";
 
-                                    panelUsername.Visible = false;
-                                    panelQRCode.Visible = true;
+                            // Switch to QR view
+                            panelUsername.Visible = false;
+                            panelQRCode.Visible = true;
 
-                                    _qrCheckTimer.Start();
-                                 }));
-                            } else {
-                                    pictureBoxQR.SizeMode = PictureBoxSizeMode.Zoom;
-                                    pictureBoxQR.Image = qrImage;
-                                    _deviceId = result.deviceId;
-                                    lblQRUsername.Text = string.Format("Вход для пользователя: {0}", Login);
-                                    panelUsername.Visible = false;
-                                    panelQRCode.Visible = true;
-                                    _qrCheckTimer.Start();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Log.Warning("QR Code generation returned success but result or qrCode was null/empty.");
-                        if (this.InvokeRequired) {
-                            this.Invoke(new Action(delegate {
-                                ErrorMessage = "Не удалось получить данные QR-кода.";
-                                MessageBox.Show(ErrorMessage, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }));
-                        } else {
-                                ErrorMessage = "Не удалось получить данные QR-кода.";
-                                MessageBox.Show(ErrorMessage, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+                            // Start polling for login status
+                            _qrCheckTimer.Start();
+                        }));
                     }
                 }
                 else
                 {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    Log.Error("Failed to generate QR code. Status: {StatusCode}, Content: {ErrorContent}", response.StatusCode, errorContent);
-                    if (this.InvokeRequired) {
-                        this.Invoke(new Action(delegate {
-                             ErrorMessage = string.Format("Не удалось сгенерировать QR-код: {0}", response.ReasonPhrase);
-                             MessageBox.Show(ErrorMessage, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }));
-                    } else {
-                             ErrorMessage = string.Format("Не удалось сгенерировать QR-код: {0}", response.ReasonPhrase);
-                             MessageBox.Show(ErrorMessage, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    this.Invoke(new Action(() => {
+                        ErrorMessage = "Не удалось сгенерировать QR-код";
+                        MessageBox.Show(ErrorMessage, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }));
                 }
             }
             catch (Exception ex)
             {
-                if (this.InvokeRequired) {
-                    this.Invoke(new Action(delegate {
-                        ErrorMessage = string.Format("Ошибка при генерации QR-кода: {0}", ex.Message);
-                        MessageBox.Show(ErrorMessage, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }));
-                } else {
-                        ErrorMessage = string.Format("Ошибка при генерации QR-кода: {0}", ex.Message);
-                        MessageBox.Show(ErrorMessage, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                this.Invoke(new Action(() => {
+                    ErrorMessage = "Ошибка при генерации QR-кода";
+                    MessageBox.Show(ErrorMessage, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }));
                 Log.Error(ex, "Error generating QR code");
             }
             finally
             {
-                if (this.InvokeRequired) { this.Invoke(new Action(delegate { IsLoading = false; })); } else { IsLoading = false; }
+                this.Invoke(new Action(() => IsLoading = false));
             }
         }
 
@@ -216,138 +164,88 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
         {
             if (string.IsNullOrWhiteSpace(Login) || string.IsNullOrWhiteSpace(Password))
             {
-                if (this.InvokeRequired) {
-                    this.Invoke(new Action(delegate {
-                        lblError.Text = "Пожалуйста, введите логин и пароль";
-                        lblError.Visible = true;
-                    }));
-                } else {
-                        lblError.Text = "Пожалуйста, введите логин и пароль";
-                        lblError.Visible = true;
-                }
+                this.Invoke(new Action(() => {
+                    lblError.Text = "Пожалуйста, введите логин и пароль";
+                    lblError.Visible = true;
+                }));
                 return;
             }
 
-            HttpClient client = null;
             try
             {
-                if (this.InvokeRequired) {
-                    this.Invoke(new Action(delegate {
-                        IsLoading = true;
-                        lblError.Visible = false;
-                    }));
-                } else {
-                        IsLoading = true;
-                        lblError.Visible = false;
-                }
+                this.Invoke(new Action(() => {
+                    IsLoading = true;
+                    lblError.Visible = false;
+                }));
 
                 var loginData = new { Login, Password };
-                string jsonPayload = JsonConvert.SerializeObject(loginData);
-                HttpContent content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-                var apiUrl = string.Format("{0}/api/auth/login", BaseUrl);
-                client = _httpClient;
-                var response = await client.PostAsync(apiUrl, content);
+                var response = await _httpClient.PostAsJsonAsync("/api/auth/login", loginData);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var jsonString = await response.Content.ReadAsStringAsync();
-                    var result = JsonConvert.DeserializeObject<AuthResponse>(jsonString);
-                    
-                    if (result != null && !string.IsNullOrEmpty(result.Token)) 
+                    var result = await response.Content.ReadFromJsonAsync<AuthResponse>();
+                    if (result?.Token != null)
                     {
+                        // Store token in the ApiClientService
                         ApiClientService.Instance.AuthToken = result.Token;
                         
                         _isAuthenticated = true;
                         Log.Information("User successfully authenticated");
                         
-                        if (this.InvokeRequired) {
-                            this.Invoke(new Action(delegate {
-                                WriteLoginUnitXML();
-                                this.DialogResult = DialogResult.OK;
-                                this.Close();
-                            }));
-                        } else {
-                                WriteLoginUnitXML();
-                                this.DialogResult = DialogResult.OK;
-                                this.Close();
-                        }
-                    }
-                    else
-                    {
-                        Log.Warning("Authentication succeeded but token was null or empty.");
-                        if (this.InvokeRequired) {
-                            this.Invoke(new Action(delegate {
-                                lblError.Text = "Ошибка авторизации: Не удалось получить токен.";
-                                lblError.Visible = true;
-                            }));
-                        } else {
-                                lblError.Text = "Ошибка авторизации: Не удалось получить токен.";
-                                lblError.Visible = true;
-                        }
+                        // Save login info
+                        this.Invoke(new Action(() => {
+                            WriteLoginUnitXML();
+                            this.DialogResult = DialogResult.OK;
+                            this.Close();
+                        }));
                     }
                 }
                 else
                 {
                     var error = await response.Content.ReadAsStringAsync();
-                    if (this.InvokeRequired) {
-                        this.Invoke(new Action(delegate {
-                            lblError.Text = string.Format("Ошибка авторизации: {0}", error);
-                            lblError.Visible = true;
-                        }));
-                    } else {
-                            lblError.Text = string.Format("Ошибка авторизации: {0}", error);
-                            lblError.Visible = true;
-                    }
+                    this.Invoke(new Action(() => {
+                        lblError.Text = $"Ошибка авторизации: {error}";
+                        lblError.Visible = true;
+                    }));
                     Log.Warning("Authentication failed: {Error}", error);
                 }
             }
             catch (Exception ex)
             {
-                if (this.InvokeRequired) {
-                    this.Invoke(new Action(delegate {
-                        lblError.Text = string.Format("Произошла ошибка при авторизации: {0}", ex.Message);
-                        lblError.Visible = true;
-                    }));
-                } else {
-                         lblError.Text = string.Format("Произошла ошибка при авторизации: {0}", ex.Message);
-                         lblError.Visible = true;
-                }
+                this.Invoke(new Action(() => {
+                    lblError.Text = "Произошла ошибка при авторизации";
+                    lblError.Visible = true;
+                }));
                 Log.Error(ex, "Authentication error");
             }
             finally
             {
-                if (this.InvokeRequired) {
-                    this.Invoke(new Action(delegate { IsLoading = false; }));
-                } else {
-                    IsLoading = false;
-                }
+                this.Invoke(new Action(() => IsLoading = false));
             }
         }
 
-        private async void CheckQRLoginStatus(object source, ElapsedEventArgs e)
+        private async Task CheckQRLoginStatus()
         {
             if (string.IsNullOrEmpty(_deviceId)) return;
 
-            HttpClient client = null;
             try
             {
-                client = _httpClient;
-                var apiUrl = string.Format("{0}/api/auth/qr/direct/check?deviceId={1}", BaseUrl, _deviceId);
-                var response = await client.GetAsync(apiUrl);
+                var response = await _httpClient.GetAsync($"/api/auth/qr/direct/check?deviceId={_deviceId}");
                 if (response.IsSuccessStatusCode)
                 {
-                    var jsonString = await response.Content.ReadAsStringAsync();
-                    var result = JsonConvert.DeserializeObject<QRLoginStatusResponse>(jsonString);
-
-                    if (result != null && result.success && !string.IsNullOrEmpty(result.token))
+                    var result = await response.Content.ReadFromJsonAsync<QRLoginStatusResponse>();
+                    if (result?.success == true && result?.token != null)
                     {
                         _qrCheckTimer.Stop();
                         
+                        // Store token in the ApiClientService
                         ApiClientService.Instance.AuthToken = result.token;
                         
+                        // Handle successful login
                         _isAuthenticated = true;
                         
-                        this.Invoke(new Action(delegate {
+                        // Need to invoke on UI thread since timer callback is on a different thread
+                        this.Invoke(new Action(() => {
                             WriteLoginUnitXML();
                             this.DialogResult = DialogResult.OK;
                             this.Close();
@@ -365,134 +263,31 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
 
         #region Event Handlers
 
-        private void AuthenticateUser()
+        private void login()
         {
-            Task.Factory.StartNew(() => AuthenticateUserAsync());
-        }
-
-        private async Task AuthenticateUserAsync()
-        {
-            var username = txtUsername.Text;
-            var password = txtPassword.Text;
-
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(Password))
             {
-                if (this.InvokeRequired) {
-                    this.Invoke(new Action(delegate {
-                        lblError.Text = "Пожалуйста, введите логин и пароль";
-                        lblError.Visible = true;
-                    }));
-                } else {
-                        lblError.Text = "Пожалуйста, введите логин и пароль";
-                        lblError.Visible = true;
-                }
+                MessageBox.Show("Пожалуйста, введите пароль!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            HttpClient client = null;
-            try
-            {
-                if (this.InvokeRequired) {
-                    this.Invoke(new Action(delegate {
-                        IsLoading = true;
-                        lblError.Visible = false;
-                    }));
-                } else {
-                        IsLoading = true;
-                        lblError.Visible = false;
-                }
+            // Use async login method
+            Task.Run(async () => await LoginAsync());
+        }
 
-                var loginData = new { Login = username, Password = password };
-                string jsonPayload = JsonConvert.SerializeObject(loginData);
-                HttpContent content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-                var apiUrl = string.Format("{0}/api/auth/login", BaseUrl);
-                client = _httpClient;
-                var response = await client.PostAsync(apiUrl, content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var jsonString = await response.Content.ReadAsStringAsync();
-                    var result = JsonConvert.DeserializeObject<AuthResponse>(jsonString);
-                    
-                    if (result != null && !string.IsNullOrEmpty(result.Token)) 
-                    {
-                        ApiClientService.Instance.AuthToken = result.Token;
-                        
-                        _isAuthenticated = true;
-                        Log.Information("User successfully authenticated");
-                        
-                        if (this.InvokeRequired) {
-                            this.Invoke(new Action(delegate {
-                                WriteLoginUnitXML();
-                                this.DialogResult = DialogResult.OK;
-                                this.Close();
-                            }));
-                        } else {
-                                WriteLoginUnitXML();
-                                this.DialogResult = DialogResult.OK;
-                                this.Close();
-                        }
-                    }
-                    else
-                    {
-                        Log.Warning("Authentication succeeded but token was null or empty.");
-                        if (this.InvokeRequired) {
-                            this.Invoke(new Action(delegate {
-                                lblError.Text = "Ошибка авторизации: Не удалось получить токен.";
-                                lblError.Visible = true;
-                            }));
-                        } else {
-                                lblError.Text = "Ошибка авторизации: Не удалось получить токен.";
-                                lblError.Visible = true;
-                        }
-                    }
-                }
-                else
-                {
-                    var error = await response.Content.ReadAsStringAsync();
-                    if (this.InvokeRequired) {
-                        this.Invoke(new Action(delegate {
-                            lblError.Text = string.Format("Ошибка авторизации: {0}", error);
-                            lblError.Visible = true;
-                        }));
-                    } else {
-                            lblError.Text = string.Format("Ошибка авторизации: {0}", error);
-                            lblError.Visible = true;
-                    }
-                    Log.Warning("Authentication failed: {Error}", error);
-                }
-            }
-            catch (Exception ex)
+        private void txtPassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar.ToString() == "\r")
             {
-                if (this.InvokeRequired) {
-                    this.Invoke(new Action(delegate {
-                        lblError.Text = string.Format("Произошла ошибка при авторизации: {0}", ex.Message);
-                        lblError.Visible = true;
-                    }));
-                } else {
-                         lblError.Text = string.Format("Произошла ошибка при авторизации: {0}", ex.Message);
-                         lblError.Visible = true;
-                }
-                Log.Error(ex, "Authentication error");
-            }
-            finally
-            {
-                if (this.InvokeRequired) {
-                    this.Invoke(new Action(delegate { IsLoading = false; }));
-                } else {
-                    IsLoading = false;
-                }
+                login();
             }
         }
 
-        private void btnLogin_Click(object sender, EventArgs e)
+        private void btnContinueWithUsername_Click(object sender, EventArgs e)
         {
-            AuthenticateUser();
-        }
-
-        private void btnQrLogin_Click(object sender, EventArgs e)
-        {
-            StartQrCodeLoginProcess();
+            Login = txtUsernameInput.Text;
+            txtUsername.Text= Login;
+            Task.Run(async () => await ContinueWithUsernameAsync());
         }
 
         private void btnSwitchToPassword_Click(object sender, EventArgs e)
@@ -505,15 +300,19 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             SwitchToQRLogin();
         }
 
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            Task.Run(async () => await LoginAsync());
+        }
+
         private void btnRefreshQR_Click(object sender, EventArgs e)
         {
-            Task.Factory.StartNew(() => RefreshQRCodeAsync());
+            Task.Run(async () => await RefreshQRCodeAsync());
         }
 
         private void frmLogin_Load(object sender, EventArgs e)
         {
             // Form load initialization if needed
-            Task.Factory.StartNew(() => ContinueWithUsernameAsync());
         }
 
         #endregion
@@ -538,7 +337,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                         XmlNode userNode = rootNode.FirstChild;
                         if (userNode != null && userNode.Attributes != null)
                         {
-                            string savedUsername = (userNode.Attributes["UserName"] != null ? userNode.Attributes["UserName"].Value : null);
+                            string savedUsername = userNode.Attributes["UserName"]?.Value ?? string.Empty;
                             if (!string.IsNullOrEmpty(savedUsername))
                             {
                                 txtUsername.Text = savedUsername;
@@ -563,6 +362,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             {
                 string fileName = Path.Combine(Application.StartupPath, "HistoryLogin.xml");
                 
+                // Create file if it doesn't exist
                 if (!File.Exists(fileName))
                 {
                     XmlDocument newDoc = new XmlDocument();
@@ -577,13 +377,15 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                 myXmlDocument.Load(fileName);
                 XmlNode rootNode = myXmlDocument.DocumentElement;
                 
+                // Clear existing nodes
                 if (rootNode != null)
                 {
                     rootNode.RemoveAll();
                     
+                    // Add current user
                     XmlElement userElement = myXmlDocument.CreateElement("User");
                     XmlAttribute userNameAttr = myXmlDocument.CreateAttribute("UserName");
-                    userNameAttr.Value = Login != null ? Login : string.Empty;
+                    userNameAttr.Value = Login;
                     userElement.Attributes.Append(userNameAttr);
                     rootNode.AppendChild(userElement);
                     
@@ -602,214 +404,22 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
 
         private class QRCodeResponse
         {
-            public string qrCode { get; set; }
-            public string deviceId { get; set; }
-            public string rawData { get; set; }
+            public string qrCode { get; set; } = string.Empty;
+            public string deviceId { get; set; } = string.Empty;
+            public string? rawData { get; set; }
         }
 
         private class QRLoginStatusResponse
         {
             public bool success { get; set; }
-            public string token { get; set; }
+            public string? token { get; set; }
         }
 
         private class AuthResponse
         {
-            public string Token { get; set; }
+            public string? Token { get; set; }
         }
 
         #endregion
-
-        private void StartQrCodeLoginProcess()
-        {
-            Task.Factory.StartNew(() => StartQrCodeLoginProcessAsync());
-        }
-
-        private async Task StartQrCodeLoginProcessAsync()
-        {
-            Log.Information("QR code login process started.");
-            _ctsQr = new CancellationTokenSource();
-            try
-            {
-                await ContinueWithUsernameAsync();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Error starting QR code login process");
-                if (this.InvokeRequired) {
-                    this.Invoke(new Action(delegate {
-                        lblError.Text = string.Format("Ошибка при запуске процесса входа: {0}", ex.Message);
-                        lblError.Visible = true;
-                    }));
-                } else {
-                        lblError.Text = string.Format("Ошибка при запуске процесса входа: {0}", ex.Message);
-                        lblError.Visible = true;
-                }
-            }
-        }
-
-        private async Task PollForQrLoginStatus(string sessionId, CancellationToken cancellationToken)
-        {
-            var client = _httpClient;
-            var pollUrl = string.Format("{0}/api/auth/qr-status/{1}", BaseUrl, sessionId);
-            try
-            {
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    var response = await client.GetAsync(pollUrl, cancellationToken);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonString = await response.Content.ReadAsStringAsync();
-                        var result = JsonConvert.DeserializeObject<QRLoginStatusResponse>(jsonString);
-
-                        if (result != null && result.success && !string.IsNullOrEmpty(result.token))
-                        {
-                            _qrCheckTimer.Stop();
-                            
-                            ApiClientService.Instance.AuthToken = result.token;
-                            
-                            _isAuthenticated = true;
-                            
-                            this.Invoke(new Action(delegate {
-                                WriteLoginUnitXML();
-                                this.DialogResult = DialogResult.OK;
-                                this.Close();
-                            }));
-                        }
-                    }
-                    else
-                    {
-                        Log.Warning("QR login status polling failed. Status: {StatusCode}", response.StatusCode);
-                    }
-
-                    Thread.Sleep(500);
-                    if (cancellationToken.IsCancellationRequested) break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Error polling for QR login status");
-            }
-        }
-
-        private async Task RegisterUserAsync()
-        {
-            var username = txtUsername.Text;
-            var password = txtPassword.Text;
-
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
-            {
-                if (this.InvokeRequired) {
-                    this.Invoke(new Action(delegate {
-                        MessageBox.Show("Имя пользователя и пароль не могут быть пустыми.", "Ошибка регистрации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }));
-                } else {
-                        MessageBox.Show("Имя пользователя и пароль не могут быть пустыми.", "Ошибка регистрации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                return;
-            }
-
-            HttpClient client = null;
-            try
-            {
-                if (this.InvokeRequired) {
-                    this.Invoke(new Action(delegate {
-                        IsLoading = true;
-                        lblError.Visible = false;
-                    }));
-                } else {
-                        IsLoading = true;
-                        lblError.Visible = false;
-                }
-
-                client = _httpClient;
-                var registerDto = new { Login = username, Password = password };
-                string jsonPayload = JsonConvert.SerializeObject(registerDto);
-                HttpContent content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-
-                var response = await client.PostAsync(string.Format("{0}/api/auth/register", BaseUrl), content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    Log.Information("User {Username} registered successfully.", username);
-                    if (this.InvokeRequired) {
-                        this.Invoke(new Action(delegate {
-                            MessageBox.Show("Пользователь успешно зарегистрирован.", "Регистрация успешна", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }));
-                    } else {
-                            MessageBox.Show("Пользователь успешно зарегистрирован.", "Регистрация успешна", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                }
-                else
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    Log.Warning("Registration failed for {Username}. Status: {StatusCode}, Reason: {Reason}, Content: {Content}", username, response.StatusCode, response.ReasonPhrase, errorContent);
-                    if (this.InvokeRequired) {
-                        this.Invoke(new Action(delegate {
-                            lblError.Text = string.Format("Ошибка регистрации: {0}", errorContent);
-                            lblError.Visible = true;
-                        }));
-                    } else {
-                            lblError.Text = string.Format("Ошибка регистрации: {0}", errorContent);
-                            lblError.Visible = true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Exception during registration for {Username}", username);
-                if (this.InvokeRequired) {
-                    this.Invoke(new Action(delegate {
-                        MessageBox.Show(string.Format("Произошла ошибка: {0}", ex.Message), "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }));
-                } else {
-                        MessageBox.Show(string.Format("Произошла ошибка: {0}", ex.Message), "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            finally
-            {
-                if (client != null) client.Dispose();
-                if (this.InvokeRequired) {
-                    this.Invoke(new Action(delegate { IsLoading = false; }));
-                } else {
-                    IsLoading = false;
-                }
-            }
-        }
-
-        private void SetLoading(bool isLoading)
-        {
-            if (isLoading)
-            {
-                progressPanel.Visible = true;
-            }
-            else
-            {
-                progressPanel.Visible = false;
-            }
-            panelUsername.Enabled = !isLoading;
-            panelPassword.Enabled = !isLoading;
-            panelQRCode.Enabled = !isLoading;
-        }
-
-        private void btnRegister_Click(object sender, EventArgs e)
-        {
-            Task.Factory.StartNew(() => RegisterUserAsync());
-        }
-
-        private void btnContinueWithUsername_Click(object sender, EventArgs e)
-        {
-            Login = txtUsernameInput.Text;
-            Task.Factory.StartNew(() => ContinueWithUsernameAsync());
-        }
-
-        private void txtPassword_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                AuthenticateUser();
-                e.Handled = true;
-            }
-        }
     }
 }

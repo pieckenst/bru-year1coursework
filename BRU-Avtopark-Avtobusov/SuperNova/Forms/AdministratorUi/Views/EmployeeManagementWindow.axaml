@@ -1,0 +1,82 @@
+<PleasantWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:SuperNova.Forms.AdministratorUi.ViewModels"
+        xmlns:converters="using:SuperNova.Converters"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+        x:Class="SuperNova.Forms.AdministratorUi.Views.EmployeeManagementWindow"
+        x:DataType="vm:EmployeeManagementViewModel"
+        Title="Управление сотрудниками"
+        Width="1000" Height="600"
+        WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+        <converters:SafeDateTimeFormatConverter x:Key="DateConverter" DateFormat="dd.MM.yyyy"/>
+    </Window.Resources>
+
+    <Design.DataContext>
+        <vm:EmployeeManagementViewModel/>
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,*,Auto" Margin="10">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
+            <TextBox Grid.Column="0" 
+                     Text="{Binding SearchText}"
+                     Watermark="Поиск по фамилии, имени, отчеству или должности.."
+                     Margin="0,0,10,0"/>
+            <Button Grid.Column="1" 
+                    Command="{Binding AddCommand}"
+                    Content="Добавить сотрудника"
+                    IsEnabled="{Binding !IsBusy}"/>
+        </Grid>
+
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Employees}"
+                  SelectedItem="{Binding SelectedEmployee}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  GridLinesVisibility="All"
+                  BorderThickness="1"
+                  BorderBrush="Gray"
+                  Margin="0,0,0,10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" 
+                                    Binding="{Binding EmpId}"
+                                    Width="Auto"/>
+                <DataGridTextColumn Header="Фамилия" 
+                                    Binding="{Binding Surname}"
+                                    Width="*"/>
+                <DataGridTextColumn Header="Имя" 
+                                    Binding="{Binding Name}"
+                                    Width="*"/>
+                <DataGridTextColumn Header="Отчество" 
+                                    Binding="{Binding Patronym}"
+                                    Width="*"/>
+                <DataGridTextColumn Header="Дата приема"
+                                    Binding="{Binding EmployedSince, Converter={StaticResource DateConverter}}"
+                                    Width="Auto"/>
+                <DataGridTextColumn Header="Должность" 
+                                    Binding="{Binding Job.JobTitle}"
+                                    Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto,Auto">
+            <TextBlock Grid.Column="0" 
+                       Text="{Binding ErrorMessage}"
+                       Foreground="Red"
+                       IsVisible="{Binding HasError}"
+                       VerticalAlignment="Center"/>
+            <Button Grid.Column="1" 
+                    Command="{Binding EditCommand}"
+                    Content="Редактировать"
+                    IsEnabled="{Binding SelectedEmployee, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    Margin="0,0,10,0"/>
+            <Button Grid.Column="2" 
+                    Command="{Binding DeleteCommand}"
+                    Content="Удалить"
+                    IsEnabled="{Binding SelectedEmployee, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+        </Grid>
+    </Grid>
+</PleasantWindow> 

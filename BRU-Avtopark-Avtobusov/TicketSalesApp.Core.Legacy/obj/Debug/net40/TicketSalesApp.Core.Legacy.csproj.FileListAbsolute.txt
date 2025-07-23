@@ -1,0 +1,16 @@
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core.Legacy\bin\Debug\net40\TicketSalesApp.Core.Legacy.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core.Legacy\bin\Debug\net40\TicketSalesApp.Core.Legacy.pdb
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core.Legacy\bin\Debug\net40\EntityFramework.SqlServer.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core.Legacy\bin\Debug\net40\EntityFramework.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core.Legacy\bin\Debug\net40\Newtonsoft.Json.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core.Legacy\bin\Debug\net40\System.Data.SQLite.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core.Legacy\bin\Debug\net40\System.Data.SQLite.EF6.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core.Legacy\bin\Debug\net40\System.Data.SQLite.Linq.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core.Legacy\obj\Debug\net40\TicketSalesApp.Core.Legacy.csproj.AssemblyReference.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core.Legacy\obj\Debug\net40\TicketSalesApp.Core.Legacy.GeneratedMSBuildEditorConfig.editorconfig
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core.Legacy\obj\Debug\net40\TicketSalesApp.Core.Legacy.AssemblyInfoInputs.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core.Legacy\obj\Debug\net40\TicketSalesApp.Core.Legacy.AssemblyInfo.cs
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core.Legacy\obj\Debug\net40\TicketSalesApp.Core.Legacy.csproj.CoreCompileInputs.cache
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core.Legacy\obj\Debug\net40\TicketSa.038AB19B.Up2Date
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core.Legacy\obj\Debug\net40\TicketSalesApp.Core.Legacy.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core.Legacy\obj\Debug\net40\TicketSalesApp.Core.Legacy.pdb

@@ -1,0 +1,298 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:commonControls="clr-namespace:Classic.CommonControls;assembly=Classic.CommonControls.Avalonia"
+             xmlns:vb="clr-namespace:SuperNova"
+             xmlns:utils="clr-namespace:SuperNova.Utils"
+             xmlns:controls="clr-namespace:SuperNova.Controls"
+             xmlns:input="clr-namespace:Avalonia.Labs.Input"
+             xmlns:ide="clr-namespace:SuperNova.IDE"
+             xmlns:projects="clr-namespace:SuperNova.Projects"
+             mc:Ignorable="d" d:DesignWidth="1080" d:DesignHeight="551"
+             x:DataType="vb:MainViewViewModel"
+             x:Name="RootView"
+             Design.DataContext="{x:Static vb:DISetup.DesignTimeRootViewModel}"
+             x:Class="SuperNova.MainView"
+             Background="{DynamicResource PleasantBackgroundBrush}">
+    <input:CommandManager.CommandBindings>
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.NYICommand}"
+                              ExecutingCommand="{CompiledBinding NYI}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.NewProjectCommand}"
+                              ExecutingCommand="{CompiledBinding NewProject}"/>
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.AddProjectCommand}"
+                              ExecutingCommand="{CompiledBinding AddProject}"/>
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.AvaloniaOnWebCommand}"
+                              Executed="AvaloniaOnWeb"/>
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.AboutCommand}"
+                              ExecutingCommand="{CompiledBinding About}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.HelpCommand}"
+                              ExecutingCommand="{CompiledBinding Help}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.AddInManagerCommand}"
+                              ExecutingCommand="{CompiledBinding OpenAddInManager}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenOptionsCommand}"
+                              ExecutingCommand="{CompiledBinding OpenOptions}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenProjectExplorerCommand}"
+                              ExecutingCommand="{CompiledBinding OpenProjectExplorerTool}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenPropertiesCommand}"
+                              ExecutingCommand="{CompiledBinding OpenPropertiesTool}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenFormLayoutCommand}"
+                              ExecutingCommand="{CompiledBinding OpenFormLayoutTool}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenObjectBrowserCommand}"
+                              ExecutingCommand="{x:Static vb:ApplicationCommands.DisabledCommand}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenToolBoxCommand}"
+                              ExecutingCommand="{CompiledBinding OpenToolBox}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenImmediateCommand}"
+                              ExecutingCommand="{CompiledBinding OpenImmediateTool}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenLocalsCommand}"
+                              ExecutingCommand="{CompiledBinding OpenLocalsTool}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenWatchesCommand}"
+                              ExecutingCommand="{CompiledBinding OpenWatchesTool}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenColorPaletteCommand}"
+                              ExecutingCommand="{CompiledBinding OpenColorPaletteTool}" />
+
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.StartDefaultProjectCommand}"
+                              ExecutingCommand="{CompiledBinding StartDefaultProjectCommand}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.StartDefaultProjectWithFullCompileCommand}"
+                              ExecutingCommand="{CompiledBinding StartDefaultProjectWithFullCompileCommand}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.BreakProjectCommand}"
+                              ExecutingCommand="{CompiledBinding BreakProjectCommand}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.EndProjectCommand}"
+                              ExecutingCommand="{CompiledBinding EndProjectCommand}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.RestartProjectCommand}"
+                              ExecutingCommand="{CompiledBinding RestartProjectCommand}" />
+
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenDataViewCommand}"
+                              ExecutingCommand="{x:Static vb:ApplicationCommands.DisabledCommand}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenVisualComponentCommand}"
+                              ExecutingCommand="{x:Static vb:ApplicationCommands.DisabledCommand}" />
+
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.SaveProjectCommand}"
+                              ExecutingCommand="{CompiledBinding SaveProject}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.SaveProjectAsCommand}"
+                              ExecutingCommand="{CompiledBinding SaveProjectAs}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenProjectCommand}"
+                              ExecutingCommand="{CompiledBinding OpenProject}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.MakeProjectCommand}"
+                              ExecutingCommand="{CompiledBinding MakeProjectCommand}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.RemoveProjectCommand}"
+                              ExecutingCommand="{CompiledBinding RemoveProjectCommand}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.MakeProjectGroupCommand}"
+                              ExecutingCommand="{x:Static vb:ApplicationCommands.DisabledCommand}" />
+
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.StepIntoCommand}"
+                              ExecutingCommand="{CompiledBinding StepInto}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.StepOverCommand}"
+                              ExecutingCommand="{CompiledBinding StepOver}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.StepOutCommand}"
+                              ExecutingCommand="{CompiledBinding StepOut}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.RunToCursorCommand}"
+                              ExecutingCommand="{CompiledBinding RunToCursor}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.AddWatchCommand}"
+                              ExecutingCommand="{CompiledBinding AddWatch}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.EditWatchCommand}"
+                              ExecutingCommand="{CompiledBinding EditWatch}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.QuickWatchCommand}"
+                              ExecutingCommand="{CompiledBinding QuickWatch}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.ToggleBreakpointCommand}"
+                              ExecutingCommand="{CompiledBinding ToggleBreakpoint}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.ClearAllBreakpointsCommand}"
+                              ExecutingCommand="{CompiledBinding ClearAllBreakpoints}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.SetNextStatementCommand}"
+                              ExecutingCommand="{CompiledBinding SetNextStatement}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.ShowNextStatementCommand}"
+                              ExecutingCommand="{CompiledBinding ShowNextStatement}" />
+
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.ProjectReferencesCommand}"
+                              ExecutingCommand="{CompiledBinding ProjectReferencesCommand}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.ProjectComponentsCommand}"
+                              ExecutingCommand="{CompiledBinding ProjectComponentsCommand}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.ProjectPropertiesCommand}"
+                              ExecutingCommand="{CompiledBinding ProjectPropertiesCommand}" />
+
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenUserManagementCommand}"
+                              ExecutingCommand="{CompiledBinding OpenUserManagement}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenEmployeeManagementCommand}"
+                              ExecutingCommand="{CompiledBinding OpenEmployeeManagement}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenJobManagementCommand}"
+                              ExecutingCommand="{CompiledBinding OpenJobManagement}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenBusManagementCommand}"
+                              ExecutingCommand="{CompiledBinding OpenBusManagement}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenRouteManagementCommand}"
+                              ExecutingCommand="{CompiledBinding OpenRouteManagement}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenMaintenanceManagementCommand}"
+                              ExecutingCommand="{CompiledBinding OpenMaintenanceManagement}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenTicketManagementCommand}"
+                              ExecutingCommand="{CompiledBinding OpenTicketManagement}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenSalesManagementCommand}"
+                              ExecutingCommand="{CompiledBinding OpenSalesManagement}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenSalesStatisticsCommand}"
+                              ExecutingCommand="{CompiledBinding OpenSalesStatistics}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenIncomeReportCommand}"
+                              ExecutingCommand="{CompiledBinding OpenIncomeReport}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenRouteStatisticsCommand}"
+                              ExecutingCommand="{CompiledBinding OpenRouteStatistics}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.ExportReportCommand}"
+                              ExecutingCommand="{CompiledBinding ExportReport}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenCalculatorCommand}"
+                              ExecutingCommand="{CompiledBinding OpenCalculator}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.OpenCalendarCommand}"
+                              ExecutingCommand="{CompiledBinding OpenCalendar}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.AdvancedSearchCommand}"
+                              ExecutingCommand="{CompiledBinding AdvancedSearch}" />
+        <input:CommandBinding Command="{x:Static vb:ApplicationCommands.ExitCommand}"
+                              ExecutingCommand="{CompiledBinding Exit}" />
+    </input:CommandManager.CommandBindings>
+    <Panel HorizontalAlignment="Left" VerticalAlignment="Top">
+        <DockPanel>
+            <StackPanel Background="{DynamicResource PleasantControlLowBrush}"
+                        Orientation="Vertical" DockPanel.Dock="Top">
+                <Border BorderThickness="0,0,0,1" 
+                        BorderBrush="{DynamicResource PleasantBorderBrush}"
+                        DockPanel.Dock="Top">
+                    <Menu Margin="0,1,0,2" Background="{DynamicResource PleasantControlMidBrush}">
+                        <MenuItem Header="_Файл" Foreground="{DynamicResource PleasantForegroundBrush}">
+                            <MenuItem Header="_Новый проект" Command="{x:Static vb:ApplicationCommands.NewProjectCommand}" utils:MenuUtils.MenuIcon="Icons/addproject.gif"/>
+                            <MenuItem Header="_Открыть проект..." utils:MenuUtils.MenuIcon="Icons/open.gif" Command="{x:Static vb:ApplicationCommands.OpenProjectCommand}"/>
+                            <Separator />
+                            <MenuItem Header="_Сохранить проект" utils:MenuUtils.MenuIcon="Icons/save.gif" Command="{x:Static vb:ApplicationCommands.SaveProjectCommand}" />
+                            <MenuItem Header="_Сохранить проект как..." Command="{x:Static vb:ApplicationCommands.SaveProjectAsCommand}" utils:MenuUtils.MenuIcon="Icons/save.gif"/>
+                            <Separator />
+                            <MenuItem Header="_Печать..." utils:MenuUtils.MenuIcon="Icons/print.gif" Command="{x:Static vb:ApplicationCommands.NYICommand}" />
+                            <MenuItem Header="_Настройка печати..." utils:MenuUtils.MenuIcon="Icons/pagesetup.gif" Command="{x:Static vb:ApplicationCommands.NYICommand}" />
+                            <Separator />
+                            <MenuItem Header="_Выход" Command="{x:Static vb:ApplicationCommands.ExitCommand}"/>
+                        </MenuItem>
+                        <MenuItem Header="_Администрирование">
+                            <MenuItem Header="Управление пользователями" Command="{x:Static vb:ApplicationCommands.OpenUserManagementCommand}" utils:MenuUtils.MenuIcon="Icons/project.gif"/>
+                            <MenuItem Header="Управление сотрудниками" Command="{x:Static vb:ApplicationCommands.OpenEmployeeManagementCommand}" utils:MenuUtils.MenuIcon="Icons/data.gif"/>
+                            <MenuItem Header="Управление должностями" Command="{x:Static vb:ApplicationCommands.OpenJobManagementCommand}" utils:MenuUtils.MenuIcon="Icons/object.gif"/>
+                            <Separator />
+                            <MenuItem Header="Управление автобусами" Command="{x:Static vb:ApplicationCommands.OpenBusManagementCommand}" utils:MenuUtils.MenuIcon="Icons/object.gif"/>
+                            <MenuItem Header="Управление маршрутами" Command="{x:Static vb:ApplicationCommands.OpenRouteManagementCommand}" utils:MenuUtils.MenuIcon="Icons/directories.gif"/>
+                            <MenuItem Header="Управление обслуживанием" Command="{x:Static vb:ApplicationCommands.OpenMaintenanceManagementCommand}" utils:MenuUtils.MenuIcon="Icons/timer.gif"/>
+                            <Separator />
+                            <MenuItem Header="Настройки системы" Command="{x:Static vb:ApplicationCommands.OpenOptionsCommand}" utils:MenuUtils.MenuIcon="Icons/properties.gif"/>
+                        </MenuItem>
+                        <MenuItem Header="_Операции">
+                            <MenuItem Header="Продажа билетов" Command="{x:Static vb:ApplicationCommands.OpenTicketManagementCommand}" utils:MenuUtils.MenuIcon="Icons/form.gif"/>
+                            <MenuItem Header="Управление продажами" Command="{x:Static vb:ApplicationCommands.OpenSalesManagementCommand}" utils:MenuUtils.MenuIcon="Icons/grid.gif"/>
+                            <Separator />
+                            <MenuItem Header="Поиск билетов" Command="{x:Static vb:ApplicationCommands.FindCommand}" utils:MenuUtils.MenuIcon="Icons/find.gif"/>
+                            <MenuItem Header="Расширенный поиск" Command="{x:Static vb:ApplicationCommands.AdvancedSearchCommand}" utils:MenuUtils.MenuIcon="Icons/search.gif"/>
+                        </MenuItem>
+                        <MenuItem Header="_Отчеты">
+                            <MenuItem Header="Статистика продаж" Command="{x:Static vb:ApplicationCommands.OpenSalesStatisticsCommand}" utils:MenuUtils.MenuIcon="Icons/dataview.gif"/>
+                            <MenuItem Header="Отчет по доходам" Command="{x:Static vb:ApplicationCommands.OpenIncomeReportCommand}" utils:MenuUtils.MenuIcon="Icons/listproperties.gif"/>
+                            <MenuItem Header="Популярные маршруты" Command="{x:Static vb:ApplicationCommands.OpenRouteStatisticsCommand}" utils:MenuUtils.MenuIcon="Icons/objectbrowser.gif"/>
+                            <Separator />
+                            <MenuItem Header="Экспорт отчета" Command="{x:Static vb:ApplicationCommands.ExportReportCommand}" utils:MenuUtils.MenuIcon="Icons/project_folder.gif"/>
+                        </MenuItem>
+                        <MenuItem Header="_Инструменты">
+                            <MenuItem Header="Калькулятор" Command="{x:Static vb:ApplicationCommands.OpenCalculatorCommand}" utils:MenuUtils.MenuIcon="Icons/controls.gif"/>
+                            <MenuItem Header="Календарь" Command="{x:Static vb:ApplicationCommands.OpenCalendarCommand}" utils:MenuUtils.MenuIcon="Icons/timer.gif"/>
+                            <Separator />
+                            <MenuItem Header="_Настройки..." Command="{x:Static vb:ApplicationCommands.OpenOptionsCommand}" utils:MenuUtils.MenuIcon="Icons/properties.gif"/>
+                        </MenuItem>
+                        <MenuItem Header="_Справка">
+                            <MenuItem Header="Руководство пользователя" Command="{x:Static vb:ApplicationCommands.HelpCommand}" utils:MenuUtils.MenuIcon="Icons/contents.gif"/>
+                            <MenuItem Header="О программе" Command="{x:Static vb:ApplicationCommands.AboutCommand}" />
+                        </MenuItem>
+                        <MenuItem Header="Исходный код системы" Command="{CompiledBinding OpenGithubRepo}" IsVisible="{x:Static vb:Static.IsBrowser}" />
+                    </Menu>
+                </Border>
+                <Border BorderThickness="0,0,0,1" 
+                        BorderBrush="{DynamicResource PleasantBorderBrush}"
+                        IsVisible="{CompiledBinding IsStandardToolbarVisible}"
+                        HorizontalAlignment="Left">
+                    <commonControls:ToolBar Size="Small" TextPlacement="NoText" Margin="0,1"
+                                          Background="{DynamicResource PleasantControlMidBrush}">
+                        <commonControls:RebarHandle Width="4" Margin="2,0,0,0" />
+                        <commonControls:RebarHandle Width="4"/>
+                        <commonControls:ToolBarButton SmallIcon="Icons/addproject.gif">
+                            <Button.Flyout>
+                                <MenuFlyout>
+                                    <MenuItem Header="Standard EXE" Command="{x:Static vb:ApplicationCommands.AddProjectCommand}" CommandParameter="{x:Static projects:IProjectTemplate.StandardEXE}" utils:MenuUtils.MenuIcon="Icons/types/standardexe16.gif" />
+                                    <MenuItem Header="ActiveX EXE" Command="{x:Static vb:ApplicationCommands.AddProjectCommand}" CommandParameter="{x:Static projects:IProjectTemplate.ActiveXEXE}" utils:MenuUtils.MenuIcon="Icons/types/activexexe16.gif" />
+                                    <MenuItem Header="ActiveX DLL" Command="{x:Static vb:ApplicationCommands.AddProjectCommand}" CommandParameter="{x:Static projects:IProjectTemplate.ActiveXDLL}" utils:MenuUtils.MenuIcon="Icons/types/activexdll16.gif" />
+                                    <MenuItem Header="ActiveX Control" Command="{x:Static vb:ApplicationCommands.AddProjectCommand}" CommandParameter="{x:Static projects:IProjectTemplate.ActiveXControl}" utils:MenuUtils.MenuIcon="Icons/types/activexcontrol16.gif" />
+                                </MenuFlyout>
+                            </Button.Flyout>
+                        </commonControls:ToolBarButton>
+                        <commonControls:ToolBarButton SmallIcon="Icons/addform.gif">
+                            <Button.Flyout>
+                                <MenuFlyout />
+                            </Button.Flyout>
+                        </commonControls:ToolBarButton>
+                        <commonControls:ToolBarButton SmallIcon="Icons/menubar.gif"
+                                                      Command="{x:Static vb:ApplicationCommands.EditMenuCommand}" />
+                        <Separator />
+                        <commonControls:ToolBarButton SmallIcon="Icons/open.gif" Command="{x:Static vb:ApplicationCommands.OpenProjectCommand}" />
+                        <commonControls:ToolBarButton SmallIcon="Icons/save.gif" Command="{x:Static vb:ApplicationCommands.SaveProjectCommand}" />
+                        <Separator />
+                        <commonControls:ToolBarButton Command="{x:Static vb:ApplicationCommands.CutCommand}" SmallIcon="Icons/cut.gif" />
+                        <commonControls:ToolBarButton Command="{x:Static vb:ApplicationCommands.CopyCommand}" SmallIcon="Icons/copy.gif" />
+                        <commonControls:ToolBarButton Command="{x:Static vb:ApplicationCommands.PasteCommand}" SmallIcon="Icons/paste.gif" />
+                        <commonControls:ToolBarButton Command="{x:Static vb:ApplicationCommands.FindCommand}" SmallIcon="Icons/find.gif" />
+                        <Separator />
+                        <commonControls:ToolBarButton SmallIcon="Icons/undo.gif" Command="{x:Static vb:ApplicationCommands.UndoCommand}" />
+                        <commonControls:ToolBarButton SmallIcon="Icons/redo.gif" Command="{x:Static vb:ApplicationCommands.RedoCommand}" />
+                        <Separator />
+                        <commonControls:ToolBarButton SmallIcon="Icons/play.gif" Command="{x:Static vb:ApplicationCommands.StartDefaultProjectCommand}" />
+                        <commonControls:ToolBarButton SmallIcon="Icons/pause.gif" Command="{x:Static vb:ApplicationCommands.BreakProjectCommand}" />
+                        <commonControls:ToolBarButton SmallIcon="Icons/stop.gif" Command="{x:Static vb:ApplicationCommands.EndProjectCommand}" />
+                        <Separator />
+                        <commonControls:ToolBarButton SmallIcon="Icons/projectexplorer.gif" Command="{x:Static vb:ApplicationCommands.OpenProjectExplorerCommand}" />
+                        <commonControls:ToolBarButton SmallIcon="Icons/properties.gif" Command="{x:Static vb:ApplicationCommands.OpenPropertiesCommand}" />
+                        <commonControls:ToolBarButton SmallIcon="Icons/formlayout.gif" Command="{x:Static vb:ApplicationCommands.OpenFormLayoutCommand}" />
+                        <commonControls:ToolBarButton SmallIcon="Icons/objectbrowser.gif" Command="{x:Static vb:ApplicationCommands.OpenObjectBrowserCommand}" />
+                        <commonControls:ToolBarButton SmallIcon="Icons/toolbox.gif" Command="{x:Static vb:ApplicationCommands.OpenToolBoxCommand}" />
+                        <commonControls:ToolBarButton SmallIcon="Icons/dataview.gif" Command="{x:Static vb:ApplicationCommands.OpenDataViewCommand}" />
+                        <commonControls:ToolBarButton SmallIcon="Icons/visualcomponent.gif" Command="{x:Static vb:ApplicationCommands.OpenVisualComponentCommand}" />
+                        <Separator />
+                        <Image Source="Icons/position.gif" Width="16" Height="16" />
+                        <TextBlock VerticalAlignment="Center" Text="{CompiledBinding FocusedProjectUtil.FocusedComponentPosition}" />
+                        <Border Width="50" />
+                        <Image Source="Icons/size.gif" Width="16" Height="16" />
+                        <TextBlock VerticalAlignment="Center" Text="{CompiledBinding FocusedProjectUtil.FocusedComponentSize}" />
+                        <Border Width="20" />
+                    </commonControls:ToolBar>
+                </Border>
+            </StackPanel>
+
+            <DockControl x:Name="DockControl" Layout="{Binding Layout}">
+                <DockControl.Styles>
+                    <Style Selector="DocumentTabStrip">
+                        <Setter Property="IsVisible" Value="False" />
+                    </Style>
+                    <Style Selector="ToolChromeControl /template/ Button#PART_MenuButton">
+                        <Setter Property="IsVisible" Value="False" />
+                    </Style>
+                    <Style Selector="ToolPinnedControl">
+                        <Setter Property="IsVisible" Value="False" />
+                    </Style>
+                    <Style Selector="ToolChromeControl">
+                        <Setter Property="IsMaximized" Value="False" />
+                        <Setter Property="Background" Value="{DynamicResource PleasantControlMidBrush}" />
+                    </Style>
+                    <Style Selector="DocumentControl">
+                        <Setter Property="Background" Value="{DynamicResource PleasantBackgroundBrush}" />
+                    </Style>
+                </DockControl.Styles>
+            </DockControl>
+        </DockPanel>
+
+        <controls:MDIHostPanel Name="PART_DialogHost" IsVisible="{Binding #PART_DialogHost.Children.Count}">
+            <Panel.Background>
+                <VisualBrush TileMode="Tile" SourceRect="0,0,2,2" DestinationRect="0,0,2,2">
+                    <VisualBrush.Visual>
+                        <Canvas Width="2" Height="2" Background="Transparent">
+                            <Rectangle Fill="{DynamicResource PleasantBackgroundBrush}" Width="1" Height="1" />
+                            <Rectangle Fill="{DynamicResource PleasantBackgroundBrush}" Width="1" Height="1" Canvas.Left="1" Canvas.Top="1" />
+                        </Canvas>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Panel.Background>
+        </controls:MDIHostPanel>
+    </Panel>
+</UserControl>

@@ -22,6 +22,14 @@ public partial class ComponentInstance
 
     public ComponentInstance SetProperty<T>(PropertyClass<T> propertyClass, T? value)
     {
+        // Defensive guard: Prevent DateTime or other non-string assignment to string properties
+        if (propertyClass.PropertyType == typeof(string) && value != null && value is not string)
+        {
+            // Log the type mismatch
+            System.Diagnostics.Debug.WriteLine($"[DEFENSIVE GUARD] Attempted to assign value of type {value.GetType().Name} to string property '{propertyClass.Name}' on {BaseClass.Name}. Value: {value}");
+            // Optionally, you could throw or ignore the assignment
+            return this;
+        }
         var oldValue = properties.GetValueOrDefault(propertyClass, UnsetValue.Instance);
         OnComponentPropertyChanging?.Invoke(this, propertyClass, oldValue, value);
         properties[propertyClass] = value;
@@ -31,6 +39,12 @@ public partial class ComponentInstance
 
     public void SetUntypedProperty(PropertyClass propertyClass, object? untypedValue)
     {
+        // Defensive guard: Prevent DateTime or other non-string assignment to string properties
+        if (propertyClass.PropertyType == typeof(string) && untypedValue != null && untypedValue is not string)
+        {
+            System.Diagnostics.Debug.WriteLine($"[DEFENSIVE GUARD] Attempted to assign value of type {untypedValue.GetType().Name} to string property '{propertyClass.Name}' on {BaseClass.Name}. Value: {untypedValue}");
+            return;
+        }
         if (untypedValue == null || propertyClass.PropertyType.IsInstanceOfType(untypedValue))
         {
             if (ReferenceEquals(propertyClass, NameProperty) &&

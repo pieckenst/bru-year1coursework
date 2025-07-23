@@ -1,0 +1,171 @@
+<PleasantWindow  xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:SuperNova.Forms.ViewModels"
+        x:Class="SuperNova.Forms.Views.AuthWindow"
+		xmlns:icons="using:Material.Icons.Avalonia"
+        Title="Вход в систему"
+        Width="900" Height="600"
+        WindowStartupLocation="CenterScreen"
+		 RequestedThemeVariant="Dark" 
+        CanResize="False"
+        Background="#1E1E1E"
+        x:DataType="vm:AuthViewModel">
+
+		 <!-- LOGIN WINDOW REQUESTS DARK THEME FOR CORRECT TITLEBAR BUTTON COLOR -->
+	<!-- Root Grid with two columns -->
+	<Grid ColumnDefinitions="*,350">
+		<!-- Left Side - Features -->
+		<Grid Grid.Column="0" RowDefinitions="*,Auto" Margin="40">
+			<!-- Logo and Title -->
+			<StackPanel Grid.Row="0"
+                      VerticalAlignment="Center"
+                      Spacing="20">
+				<icons:MaterialIcon Kind="Bus"
+                                  Width="100" Height="100"
+                                  Foreground="White"/>
+				<TextBlock Text="Автопарк автобусов"
+                         FontSize="32"
+                         FontWeight="Bold"
+                         Foreground="White"/>
+				<TextBlock Text="Система управления автопарком и продажей билетов"
+                         FontSize="18"
+                         Foreground="White"
+                         TextWrapping="Wrap"/>
+			</StackPanel>
+
+			<!-- Features List -->
+			<StackPanel Grid.Row="1" Spacing="10">
+				<TextBlock Text="Возможности системы:"
+                         FontSize="16"
+                         FontWeight="SemiBold"
+                         Foreground="White"/>
+				<ItemsControl>
+					<StackPanel Orientation="Horizontal" Spacing="10">
+						<icons:MaterialIcon Kind="Check" Foreground="White"/>
+						<TextBlock Text="Управление автопарком и маршрутами" Foreground="White"/>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal" Spacing="10" Margin="0,5,0,0">
+						<icons:MaterialIcon Kind="Check" Foreground="White"/>
+						<TextBlock Text="Продажа и учет билетов" Foreground="White"/>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal" Spacing="10" Margin="0,5,0,0">
+						<icons:MaterialIcon Kind="Check" Foreground="White"/>
+						<TextBlock Text="Контроль технического обслуживания" Foreground="White"/>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal" Spacing="10" Margin="0,5,0,0">
+						<icons:MaterialIcon Kind="Check" Foreground="White"/>
+						<TextBlock Text="Статистика и аналитика" Foreground="White"/>
+					</StackPanel>
+				</ItemsControl>
+			</StackPanel>
+		</Grid>
+
+		<!-- Right Side - Login Form -->
+		<Border Grid.Column="1"
+                Background="#252526">
+			<Grid RowDefinitions="Auto,*,Auto" Margin="35">
+				<!-- Login Header -->
+				<StackPanel Grid.Row="0" Spacing="10">
+					<TextBlock Text="Вход в систему"
+                             FontSize="24"
+                             FontWeight="Bold"
+                             Foreground="White"/>
+					<TextBlock Text="Введите ваши учетные данные"
+                             Foreground="#808080"/>
+				</StackPanel>
+
+				<!-- Login Form -->
+				<StackPanel Grid.Row="1"
+                          VerticalAlignment="Center"
+                          Spacing="25">
+					<!-- Username -->
+					<StackPanel Spacing="5">
+						<TextBlock Text="Логин"
+                                 Foreground="#808080"/>
+						<TextBox Text="{Binding Username}"
+                                Classes="auth"
+								
+                                Watermark="Введите логин"/>
+					</StackPanel>
+
+					<!-- Password -->
+					<StackPanel Spacing="5">
+						<TextBlock Text="Пароль"
+                                 Foreground="#808080"/>
+						<TextBox Text="{Binding Password}"
+                                Classes="auth"
+                                PasswordChar="•"
+                                Watermark="Введите пароль"/>
+					</StackPanel>
+
+					<!-- Error Message -->
+					<TextBlock Text="{Binding ErrorMessage}"
+                             Foreground="#FF4444"
+                             IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                             TextWrapping="Wrap"/>
+
+					<!-- Login Button -->
+					<Button Content="Войти"
+                            Command="{Binding LoginCommand}"
+                            Classes="auth"
+                            HorizontalAlignment="Stretch"
+                            IsEnabled="{Binding !IsLoading}"/>
+
+					<!-- Loading Indicator -->
+					<ProgressBar IsIndeterminate="True"
+                               IsVisible="{Binding IsLoading}"
+                               Height="2"/>
+				</StackPanel>
+
+				<!-- Footer -->
+				<StackPanel Grid.Row="2"
+                          HorizontalAlignment="Center"
+                          Spacing="5">
+					<TextBlock Text="© 2024 Автопарк автобусов"
+                             Foreground="#808080"/>
+					<TextBlock Text="Все права защищены"
+                             Foreground="#808080"/>
+				</StackPanel>
+			</Grid>
+		</Border>
+	</Grid>
+
+	<PleasantWindow.Styles>
+		
+		<Style Selector="TextBox.auth">
+			<Setter Property="Background" Value="#2D2D2D"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="BorderBrush" Value="#404040"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Padding" Value="15"/>
+			<Setter Property="Height" Value="55"/>
+		</Style>
+		<Style Selector="TextBox.auth /template/ TextBlock#PART_Watermark">
+			<Setter Property="Foreground" Value="#808080"/>
+		</Style>
+		<Style Selector="TextBox.auth:pointerover">
+			<Setter Property="BorderBrush" Value="#4CAF50"/>
+		</Style>
+		<Style Selector="TextBox.auth:focus">
+			<Setter Property="BorderBrush" Value="#4CAF50"/>
+			<Setter Property="BorderThickness" Value="2"/>
+		</Style>
+		<Style Selector="Button.auth">
+			<Setter Property="Background" Value="#4CAF50"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+			<Setter Property="Height" Value="40"/>
+			<Setter Property="Cursor" Value="Hand"/>
+		</Style>
+		<Style Selector="Button.auth:pointerover">
+			<Setter Property="Background" Value="#45A049"/>
+		</Style>
+		<Style Selector="Button.auth:disabled">
+			<Setter Property="Opacity" Value="0.6"/>
+		</Style>
+	</PleasantWindow.Styles>
+
+</PleasantWindow >

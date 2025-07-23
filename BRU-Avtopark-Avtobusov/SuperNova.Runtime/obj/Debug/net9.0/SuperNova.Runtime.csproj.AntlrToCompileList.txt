@@ -1,0 +1,6 @@
+G:/codesecondfolder/BRU-Avtopark-Avtobusov/SuperNova.Runtime/obj/Debug/net9.0/VB6BaseListener.cs
+G:/codesecondfolder/BRU-Avtopark-Avtobusov/SuperNova.Runtime/obj/Debug/net9.0/VB6BaseVisitor.cs
+G:/codesecondfolder/BRU-Avtopark-Avtobusov/SuperNova.Runtime/obj/Debug/net9.0/VB6Lexer.cs
+G:/codesecondfolder/BRU-Avtopark-Avtobusov/SuperNova.Runtime/obj/Debug/net9.0/VB6Listener.cs
+G:/codesecondfolder/BRU-Avtopark-Avtobusov/SuperNova.Runtime/obj/Debug/net9.0/VB6Parser.cs
+G:/codesecondfolder/BRU-Avtopark-Avtobusov/SuperNova.Runtime/obj/Debug/net9.0/VB6Visitor.cs

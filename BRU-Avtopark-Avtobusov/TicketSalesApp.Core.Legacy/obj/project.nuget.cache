@@ -1,12 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "W74QCCNhXn4=",
+  "dgSpecHash": "teU734MELe8=",
   "success": true,
-  "projectFilePath": "E:\\бру курсовая\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj",
+  "projectFilePath": "G:\\codesecondfolder\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core.Legacy\\TicketSalesApp.Core.Legacy.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\andrej\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
-    "C:\\Users\\andrej\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.3\\microsoft.netframework.referenceassemblies.1.0.3.nupkg.sha512",
-    "C:\\Users\\andrej\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net40\\1.0.3\\microsoft.netframework.referenceassemblies.net40.1.0.3.nupkg.sha512",
     "C:\\Users\\andrej\\.nuget\\packages\\newtonsoft.json\\6.0.8\\newtonsoft.json.6.0.8.nupkg.sha512",
     "C:\\Users\\andrej\\.nuget\\packages\\stub.system.data.sqlite.core.netframework\\1.0.118\\stub.system.data.sqlite.core.netframework.1.0.118.nupkg.sha512",
     "C:\\Users\\andrej\\.nuget\\packages\\system.data.sqlite\\1.0.118\\system.data.sqlite.1.0.118.nupkg.sha512",
@@ -14,16 +12,5 @@
     "C:\\Users\\andrej\\.nuget\\packages\\system.data.sqlite.ef6\\1.0.118\\system.data.sqlite.ef6.1.0.118.nupkg.sha512",
     "C:\\Users\\andrej\\.nuget\\packages\\system.data.sqlite.linq\\1.0.118\\system.data.sqlite.linq.1.0.118.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Newtonsoft.Json' 6.0.8 has a known high severity vulnerability, https://github.com/advisories/GHSA-5crp-9r3c-p9vr",
-      "libraryId": "Newtonsoft.Json",
-      "targetGraphs": [
-        ".NETFramework,Version=v4.0"
-      ]
-    }
-  ]
+  "logs": []
 }

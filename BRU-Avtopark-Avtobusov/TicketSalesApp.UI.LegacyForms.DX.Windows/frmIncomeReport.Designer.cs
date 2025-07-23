@@ -61,8 +61,6 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             this.emptySpaceItem1 = new DevExpress.XtraLayout.EmptySpaceItem();
             this.layoutControlItemExport = new DevExpress.XtraLayout.LayoutControlItem();
             this.emptySpaceItem2 = new DevExpress.XtraLayout.EmptySpaceItem();
-            this.colPassengerName = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colPassengerPhone = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lueRouteFilter.Properties)).BeginInit();
@@ -180,7 +178,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             // 
             // saleViewModelBindingSource
             // 
-            this.saleViewModelBindingSource.DataSource = typeof(TicketSalesApp.UI.LegacyForms.DX.Windows.IncomeReport_SaleViewModel);
+            this.saleViewModelBindingSource.DataSource = typeof(TicketSalesApp.UI.LegacyForms.DX.Windows.SaleViewModel);
             // 
             // gridViewReport
             // 
@@ -194,8 +192,6 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             this.colSeatNumber,
             this.colTotalAmount,
             this.colPaymentMethod,
-            this.colPassengerName,
-            this.colPassengerPhone,
             this.colStatus});
             this.gridViewReport.GridControl = this.gridControlReport;
             this.gridViewReport.Name = "gridViewReport";
@@ -392,24 +388,6 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             this.emptySpaceItem2.Size = new System.Drawing.Size(769, 26);
             this.emptySpaceItem2.TextSize = new System.Drawing.Size(0, 0);
             // 
-            // colPassengerName
-            // 
-            this.colPassengerName.Caption = "Пассажир";
-            this.colPassengerName.FieldName = "PassengerName";
-            this.colPassengerName.Name = "colPassengerName";
-            this.colPassengerName.Visible = true;
-            this.colPassengerName.VisibleIndex = 7;
-            this.colPassengerName.Width = 150;
-            // 
-            // colPassengerPhone
-            // 
-            this.colPassengerPhone.Caption = "Телефон Пассажира";
-            this.colPassengerPhone.FieldName = "PassengerPhone";
-            this.colPassengerPhone.Name = "colPassengerPhone";
-            this.colPassengerPhone.Visible = true;
-            this.colPassengerPhone.VisibleIndex = 8;
-            this.colPassengerPhone.Width = 120;
-            // 
             // frmIncomeReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -472,7 +450,5 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
         private DevExpress.XtraEditors.SimpleButton btnExport;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItemExport;
         private DevExpress.XtraLayout.EmptySpaceItem emptySpaceItem2;
-        private DevExpress.XtraGrid.Columns.GridColumn colPassengerName;
-        private DevExpress.XtraGrid.Columns.GridColumn colPassengerPhone;
     }
 } 

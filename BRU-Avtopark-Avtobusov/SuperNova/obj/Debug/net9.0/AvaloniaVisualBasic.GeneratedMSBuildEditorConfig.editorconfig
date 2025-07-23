@@ -1,0 +1,110 @@
+is_global = true
+build_property.AvaloniaNameGeneratorIsEnabled = true
+build_property.AvaloniaNameGeneratorBehavior = InitializeComponent
+build_property.AvaloniaNameGeneratorDefaultFieldModifier = internal
+build_property.AvaloniaNameGeneratorFilterByPath = *
+build_property.AvaloniaNameGeneratorFilterByNamespace = *
+build_property.AvaloniaNameGeneratorViewFileNamingStrategy = NamespaceAndClassName
+build_property.AvaloniaNameGeneratorAttachDevTools = true
+build_property.MvvmToolkitEnableINotifyPropertyChangingSupport = true
+build_property.TargetFramework = net9.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = SuperNova
+build_property.ProjectDir = D:\SuperNova6-master\SuperNova\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.EffectiveAnalysisLevelStyle = 9.0
+build_property.EnableCodeStyleSeverity = 
+
+[D:/SuperNova6-master/SuperNova/App.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Controls/MDI/MDIHost.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Controls/MDI/MDIWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Controls/Properties/PropertyBox.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Controls/ResizeAdorner.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Forms/Views/AddInManagerView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Forms/Views/AddProcedureView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Forms/Views/CodeEditorView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Forms/Views/ComponentsView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Forms/Views/NewProjectView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Forms/Views/OptionsView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Forms/Views/ProjectPropertiesView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Forms/Views/ReferencesView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Forms/Views/RuntimeErrorView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Forms/Views/SaveChangesView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/IDE/DialogWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/IDE/MDIControllerView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/MainView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/MainWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Tools/ColorPalette/ColorPaletteToolView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Tools/FormLayout/FormLayoutToolView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Tools/Immediate/ImmediateToolView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Tools/Locals/LocalsToolView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Tools/Projects/ProjectToolView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/Tools/Watches/WatchesToolView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/VisualDesigner/Views/FormEditView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/VisualDesigner/Views/MenuEditorView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/VisualDesigner/Views/PropertiesToolView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/SuperNova6-master/SuperNova/VisualDesigner/Views/ToolBoxToolView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

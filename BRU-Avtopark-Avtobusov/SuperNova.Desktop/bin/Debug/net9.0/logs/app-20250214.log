@@ -1,0 +1,259 @@
+2025-02-14 14:37:44.623 +03:00 [INF] Starting application...
+2025-02-14 14:38:03.566 +03:00 [INF] Starting application...
+2025-02-14 14:39:55.220 +03:00 [INF] Starting application...
+2025-02-14 14:43:19.983 +03:00 [INF] Starting application...
+2025-02-14 14:44:27.065 +03:00 [INF] Starting application...
+2025-02-14 14:44:46.187 +03:00 [INF] Starting application...
+2025-02-14 14:46:05.399 +03:00 [INF] Starting application...
+2025-02-14 14:46:30.507 +03:00 [ERR] Authentication error
+System.Net.Http.HttpRequestException: No connection could be made because the target machine actively refused it. (localhost:5000)
+ ---> System.Net.Sockets.SocketException (10061): No connection could be made because the target machine actively refused it.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.InjectNewHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at SuperNova.Forms.ViewModels.AuthViewModel.LoginAsync() in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\Forms\ViewModels\AuthViewModel.cs:line 76
+2025-02-14 14:50:52.761 +03:00 [INF] Starting application...
+2025-02-14 14:53:18.652 +03:00 [INF] Starting application...
+2025-02-14 14:58:33.780 +03:00 [INF] Starting application...
+2025-02-14 14:59:29.853 +03:00 [INF] Starting application...
+2025-02-14 15:00:03.206 +03:00 [INF] Starting application...
+2025-02-14 15:00:22.377 +03:00 [INF] Starting application...
+2025-02-14 15:01:04.448 +03:00 [INF] Starting application...
+2025-02-14 15:03:28.847 +03:00 [INF] Starting application...
+2025-02-14 15:13:46.988 +03:00 [INF] Starting application...
+2025-02-14 15:14:12.049 +03:00 [INF] Starting application...
+2025-02-14 15:14:56.024 +03:00 [INF] Starting application...
+2025-02-14 15:15:58.163 +03:00 [INF] Starting application...
+2025-02-14 15:16:15.488 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 15:18:19.001 +03:00 [INF] Starting application...
+2025-02-14 15:18:34.022 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 15:28:07.119 +03:00 [INF] Starting application...
+2025-02-14 15:28:21.683 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 15:30:51.390 +03:00 [INF] Starting application...
+2025-02-14 15:31:07.795 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 15:33:41.630 +03:00 [INF] Starting application...
+2025-02-14 15:33:57.807 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 15:36:13.099 +03:00 [INF] Starting application...
+2025-02-14 15:36:30.566 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 15:37:57.147 +03:00 [INF] Starting application...
+2025-02-14 15:38:13.687 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 15:58:40.870 +03:00 [INF] Starting application...
+2025-02-14 15:58:57.491 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 15:59:41.750 +03:00 [INF] Starting application...
+2025-02-14 16:00:00.310 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 16:04:58.564 +03:00 [INF] Starting application...
+2025-02-14 16:05:12.845 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 16:40:57.949 +03:00 [INF] Starting application...
+2025-02-14 16:41:11.796 +03:00 [WRN] Authentication failed: {"$id":"1","message":"Invalid username or password"}
+2025-02-14 16:41:17.107 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 16:41:17.212 +03:00 [ERR] An error occurred during application initialization
+System.IO.FileNotFoundException: The resource Icons/users.gif could not be found.
+   at Avalonia.Platform.StandardAssetLoader.OpenAndGetAssembly(Uri uri, Uri baseUri)
+   at Avalonia.Platform.StandardAssetLoader.Open(Uri uri, Uri baseUri)
+   at Avalonia.Markup.Xaml.Converters.BitmapTypeConverter.ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, Object value)
+   at SuperNova.MainView.!XamlIlPopulate(IServiceProvider, MainView) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\MainView.axaml:line 129
+   at SuperNova.MainView.!XamlIlPopulateTrampoline(MainView)
+   at SuperNova.MainView.InitializeComponent(Boolean loadXaml) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\obj\Debug\net9.0\Avalonia.Generators\Avalonia.Generators.NameGenerator.AvaloniaNameSourceGenerator\SuperNova.MainView.g.cs:line 29
+   at SuperNova.MainView..ctor() in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\MainView.axaml.cs:line 11
+   at SuperNova.MainWindow.!XamlIlPopulate(IServiceProvider, MainWindow) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\MainWindow.axaml:line 12
+   at SuperNova.MainWindow.!XamlIlPopulateTrampoline(MainWindow)
+   at SuperNova.MainWindow.InitializeComponent(Boolean loadXaml, Boolean attachDevTools) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\obj\Debug\net9.0\Avalonia.Generators\Avalonia.Generators.NameGenerator.AvaloniaNameSourceGenerator\SuperNova.MainWindow.g.cs:line 26
+   at SuperNova.MainWindow..ctor() in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\MainWindow.axaml.cs:line 19
+   at SuperNova.App.OnFrameworkInitializationCompleted() in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\App.axaml.cs:line 104
+2025-02-14 16:47:54.688 +03:00 [INF] Starting application...
+2025-02-14 16:48:12.806 +03:00 [WRN] Authentication failed: {"$id":"1","message":"Invalid username or password"}
+2025-02-14 16:48:20.995 +03:00 [WRN] Authentication failed: {"$id":"1","message":"Invalid username or password"}
+2025-02-14 16:48:26.229 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 16:52:30.460 +03:00 [INF] Starting application...
+2025-02-14 16:52:46.581 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 16:53:17.838 +03:00 [INF] Starting application...
+2025-02-14 16:53:33.466 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 16:54:36.719 +03:00 [INF] Starting application...
+2025-02-14 16:54:52.845 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 16:57:30.312 +03:00 [INF] Starting application...
+2025-02-14 16:57:44.977 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 17:21:05.781 +03:00 [INF] Starting application...
+2025-02-14 17:21:18.831 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 17:46:47.391 +03:00 [INF] Starting application...
+2025-02-14 17:46:58.800 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 17:49:00.090 +03:00 [INF] Starting application...
+2025-02-14 17:49:15.443 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 18:03:52.267 +03:00 [INF] Starting application...
+2025-02-14 18:04:06.343 +03:00 [WRN] Authentication failed: {"$id":"1","message":"Invalid username or password"}
+2025-02-14 18:04:11.105 +03:00 [WRN] Authentication failed: {"$id":"1","message":"Invalid username or password"}
+2025-02-14 18:04:23.813 +03:00 [WRN] Authentication failed: {"$id":"1","message":"Invalid username or password"}
+2025-02-14 18:04:35.817 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 18:08:33.716 +03:00 [INF] Starting application...
+2025-02-14 18:08:55.359 +03:00 [WRN] Authentication failed: {"$id":"1","message":"Invalid username or password"}
+2025-02-14 18:09:01.702 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 18:14:03.254 +03:00 [INF] Starting application...
+2025-02-14 18:14:16.954 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 18:15:17.165 +03:00 [INF] Starting application...
+2025-02-14 18:15:31.332 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 18:21:54.627 +03:00 [INF] Starting application...
+2025-02-14 18:22:09.031 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 18:26:31.290 +03:00 [INF] Starting application...
+2025-02-14 18:26:44.723 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 18:57:25.324 +03:00 [INF] Starting application...
+2025-02-14 18:57:38.981 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 19:35:39.714 +03:00 [INF] Starting application...
+2025-02-14 19:36:02.734 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 19:50:16.669 +03:00 [INF] Starting application...
+2025-02-14 19:52:32.614 +03:00 [INF] Starting application...
+2025-02-14 19:52:49.534 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 19:56:31.418 +03:00 [INF] Starting application...
+2025-02-14 19:56:45.343 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 19:58:19.461 +03:00 [INF] Starting application...
+2025-02-14 19:58:33.753 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 20:00:49.362 +03:00 [INF] Starting application...
+2025-02-14 20:01:03.389 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 20:07:25.362 +03:00 [INF] Starting application...
+2025-02-14 20:07:38.710 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 20:08:40.760 +03:00 [INF] Starting application...
+2025-02-14 20:08:53.987 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 20:12:22.798 +03:00 [INF] Starting application...
+2025-02-14 20:12:39.464 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 20:14:28.561 +03:00 [INF] Starting application...
+2025-02-14 20:14:42.279 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 20:15:17.950 +03:00 [FTL] Application terminated unexpectedly
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index')
+   at System.Collections.Generic.List`1.get_Item(Int32 index)
+   at System.Collections.ObjectModel.Collection`1.System.Collections.IList.get_Item(Int32 index)
+   at Avalonia.Controls.Selection.SelectedItems`1.GetEnumerator()+MoveNext()
+   at System.Linq.Enumerable.<ToArray>g__EnumerableToArray|314_0[TSource](IEnumerable`1 source)
+   at Avalonia.Controls.Selection.InternalSelectionModel.OnSelectionChanged(Object sender, SelectionModelSelectionChangedEventArgs e)
+   at Avalonia.Controls.Selection.SelectionModel`1.CommitOperation(Operation operation, Boolean raisePropertyChanged)
+   at Avalonia.Controls.Selection.SelectionModel`1.OnSelectionRemoved(Int32 index, Int32 count, IReadOnlyList`1 deselectedItems)
+   at Avalonia.Controls.Selection.SelectionNodeBase`1.OnSourceCollectionChanged(NotifyCollectionChangedEventArgs e)
+   at Avalonia.Controls.Selection.SelectionModel`1.OnSourceCollectionChanged(NotifyCollectionChangedEventArgs e)
+   at Avalonia.Controls.Selection.InternalSelectionModel.OnSourceCollectionChanged(NotifyCollectionChangedEventArgs e)
+   at Avalonia.Controls.Selection.SelectionNodeBase`1.<set_Source>g__OnChanged|5_1(Object sender, NotifyCollectionChangedEventArgs e)
+   at Avalonia.Controls.ItemsSourceView.Avalonia.Controls.Utils.ICollectionChangedListener.Changed(INotifyCollectionChanged sender, NotifyCollectionChangedEventArgs e)
+   at Avalonia.Controls.Utils.CollectionChangedEventManager.Entry.<Avalonia.Utilities.IWeakEventSubscriber<System.Collections.Specialized.NotifyCollectionChangedEventArgs>.OnEvent>g__Notify|6_0(INotifyCollectionChanged incc, NotifyCollectionChangedEventArgs args, WeakReference`1[] listeners)
+   at Avalonia.Utilities.WeakEvent`2.Subscription.OnEvent(Object sender, TEventArgs eventArgs)
+   at System.Collections.ObjectModel.ObservableCollection`1.OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+   at System.Collections.ObjectModel.Collection`1.Remove(T item)
+   at SuperNova.Forms.Views.HelpWindow.AddToRecentTopics(String topic) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\Forms\Views\HelpWindow.axaml.cs:line 508
+   at SuperNova.Forms.Views.HelpWindow.LoadContent(String topic) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\Forms\Views\HelpWindow.axaml.cs:line 498
+   at SuperNova.Forms.Views.HelpWindow.RecentTopics_SelectionChanged(Object sender, SelectionChangedEventArgs e) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\Forms\Views\HelpWindow.axaml.cs:line 522
+   at Avalonia.Interactivity.EventRoute.RaiseEventImpl(RoutedEventArgs e)
+   at Avalonia.Interactivity.Interactive.RaiseEvent(RoutedEventArgs e)
+   at Avalonia.Controls.Selection.SelectionModel`1.CommitOperation(Operation operation, Boolean raisePropertyChanged)
+   at Avalonia.Controls.Selection.SelectionModelExtensions.BatchUpdateOperation.Dispose()
+   at Avalonia.Controls.Primitives.SelectingItemsControl.UpdateSelection(Int32 index, Boolean select, Boolean rangeModifier, Boolean toggleModifier, Boolean rightButton, Boolean fromFocus)
+   at Avalonia.Controls.Primitives.SelectingItemsControl.UpdateSelection(Int32 index, Boolean select, Boolean rangeModifier, Boolean toggleModifier, Boolean rightButton, Boolean fromFocus)
+   at Avalonia.Controls.Primitives.SelectingItemsControl.UpdateSelection(Control container, Boolean select, Boolean rangeModifier, Boolean toggleModifier, Boolean rightButton, Boolean fromFocus)
+   at Avalonia.Controls.Primitives.SelectingItemsControl.UpdateSelectionFromEventSource(Object eventSource, Boolean select, Boolean rangeModifier, Boolean toggleModifier, Boolean rightButton, Boolean fromFocus)
+   at Avalonia.Controls.ListBox.UpdateSelectionFromPointerEvent(Control source, PointerEventArgs e)
+   at Avalonia.Controls.ListBoxItem.OnPointerPressed(PointerPressedEventArgs e)
+   at Avalonia.Reactive.LightweightObservableBase`1.PublishNext(T value)
+   at Avalonia.Interactivity.EventRoute.RaiseEventImpl(RoutedEventArgs e)
+   at Avalonia.Interactivity.Interactive.RaiseEvent(RoutedEventArgs e)
+   at Avalonia.Input.MouseDevice.MouseDown(IMouseDevice device, UInt64 timestamp, IInputElement root, Point p, PointerPointProperties properties, KeyModifiers inputModifiers, IInputElement hitTest)
+   at Avalonia.Input.MouseDevice.ProcessRawEvent(RawPointerEventArgs e)
+   at Avalonia.Threading.Dispatcher.Send(SendOrPostCallback action, Object arg, Nullable`1 priority)
+   at Avalonia.Controls.TopLevel.HandleInput(RawInputEventArgs e)
+   at Avalonia.Win32.WindowImpl.AppWndProc(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.WindowImpl.WndProcMessageHandler(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.Interop.UnmanagedMethods.DispatchMessage(MSG& lpmsg)
+   at Avalonia.Win32.Win32DispatcherImpl.RunLoop(CancellationToken cancellationToken)
+   at Avalonia.Threading.DispatcherFrame.Run(IControlledDispatcherImpl impl)
+   at Avalonia.Threading.Dispatcher.PushFrame(DispatcherFrame frame)
+   at Avalonia.Threading.Dispatcher.MainLoop(CancellationToken cancellationToken)
+   at Avalonia.Controls.ApplicationLifetimes.ClassicDesktopStyleApplicationLifetime.StartCore(String[] args)
+   at Avalonia.Controls.ApplicationLifetimes.ClassicDesktopStyleApplicationLifetime.Start(String[] args)
+   at Avalonia.ClassicDesktopStyleApplicationLifetimeExtensions.StartWithClassicDesktopLifetime(AppBuilder builder, String[] args, ShutdownMode shutdownMode)
+   at SuperNova.Desktop.Program.Main(String[] args) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Desktop\Program.cs:line 35
+2025-02-14 20:16:55.465 +03:00 [INF] Starting application...
+2025-02-14 20:17:09.924 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 20:17:16.832 +03:00 [FTL] Application terminated unexpectedly
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index')
+   at System.Collections.Generic.List`1.get_Item(Int32 index)
+   at System.Collections.ObjectModel.Collection`1.System.Collections.IList.get_Item(Int32 index)
+   at Avalonia.Controls.ItemsSourceView`1.GetAt(Int32 index)
+   at Avalonia.Controls.ItemsSourceView`1.get_Item(Int32 index)
+   at Avalonia.Controls.Selection.SelectedItems`1.GetEnumerator()+MoveNext()
+   at System.Linq.Enumerable.<ToArray>g__EnumerableToArray|314_0[TSource](IEnumerable`1 source)
+   at Avalonia.Controls.Selection.InternalSelectionModel.OnSelectionChanged(Object sender, SelectionModelSelectionChangedEventArgs e)
+   at Avalonia.Controls.Selection.SelectionModel`1.CommitOperation(Operation operation, Boolean raisePropertyChanged)
+   at Avalonia.Controls.Selection.SelectionModel`1.OnSelectionRemoved(Int32 index, Int32 count, IReadOnlyList`1 deselectedItems)
+   at Avalonia.Controls.Selection.SelectionNodeBase`1.OnSourceCollectionChanged(NotifyCollectionChangedEventArgs e)
+   at Avalonia.Controls.Selection.SelectionModel`1.OnSourceCollectionChanged(NotifyCollectionChangedEventArgs e)
+   at Avalonia.Controls.Selection.InternalSelectionModel.OnSourceCollectionChanged(NotifyCollectionChangedEventArgs e)
+   at Avalonia.Controls.Selection.SelectionNodeBase`1.<set_Source>g__OnChanged|5_1(Object sender, NotifyCollectionChangedEventArgs e)
+   at Avalonia.Controls.Utils.CollectionChangedEventManager.Entry.<Avalonia.Utilities.IWeakEventSubscriber<System.Collections.Specialized.NotifyCollectionChangedEventArgs>.OnEvent>g__Notify|6_0(INotifyCollectionChanged incc, NotifyCollectionChangedEventArgs args, WeakReference`1[] listeners)
+   at Avalonia.Utilities.WeakEvent`2.Subscription.OnEvent(Object sender, TEventArgs eventArgs)
+   at System.Collections.ObjectModel.ObservableCollection`1.OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+   at SuperNova.Forms.Views.HelpWindow.AddToRecentTopics(String topic) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\Forms\Views\HelpWindow.axaml.cs:line 509
+   at SuperNova.Forms.Views.HelpWindow.LoadContent(String topic) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\Forms\Views\HelpWindow.axaml.cs:line 498
+   at SuperNova.Forms.Views.HelpWindow.RecentTopics_SelectionChanged(Object sender, SelectionChangedEventArgs e) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\Forms\Views\HelpWindow.axaml.cs:line 523
+   at Avalonia.Interactivity.EventRoute.RaiseEventImpl(RoutedEventArgs e)
+   at Avalonia.Interactivity.Interactive.RaiseEvent(RoutedEventArgs e)
+   at Avalonia.Controls.Primitives.SelectingItemsControl.OnSelectionModelSelectionChanged(Object sender, SelectionModelSelectionChangedEventArgs e)
+   at Avalonia.Controls.Selection.SelectionModel`1.CommitOperation(Operation operation, Boolean raisePropertyChanged)
+   at Avalonia.Controls.Selection.SelectionModelExtensions.BatchUpdateOperation.Dispose()
+   at Avalonia.Controls.Primitives.SelectingItemsControl.UpdateSelection(Int32 index, Boolean select, Boolean rangeModifier, Boolean toggleModifier, Boolean rightButton, Boolean fromFocus)
+   at Avalonia.Controls.Primitives.SelectingItemsControl.UpdateSelection(Int32 index, Boolean select, Boolean rangeModifier, Boolean toggleModifier, Boolean rightButton, Boolean fromFocus)
+   at Avalonia.Controls.Primitives.SelectingItemsControl.UpdateSelection(Control container, Boolean select, Boolean rangeModifier, Boolean toggleModifier, Boolean rightButton, Boolean fromFocus)
+   at Avalonia.Controls.Primitives.SelectingItemsControl.UpdateSelectionFromEventSource(Object eventSource, Boolean select, Boolean rangeModifier, Boolean toggleModifier, Boolean rightButton, Boolean fromFocus)
+   at Avalonia.Controls.ListBox.UpdateSelectionFromPointerEvent(Control source, PointerEventArgs e)
+   at Avalonia.Controls.ListBoxItem.OnPointerPressed(PointerPressedEventArgs e)
+   at Avalonia.Input.InputElement.<>c.<.cctor>b__32_8(InputElement x, PointerPressedEventArgs e)
+   at Avalonia.Reactive.LightweightObservableBase`1.PublishNext(T value)
+   at Avalonia.Interactivity.EventRoute.RaiseEventImpl(RoutedEventArgs e)
+   at Avalonia.Interactivity.Interactive.RaiseEvent(RoutedEventArgs e)
+   at Avalonia.Input.MouseDevice.MouseDown(IMouseDevice device, UInt64 timestamp, IInputElement root, Point p, PointerPointProperties properties, KeyModifiers inputModifiers, IInputElement hitTest)
+   at Avalonia.Input.MouseDevice.ProcessRawEvent(RawPointerEventArgs e)
+   at Avalonia.Threading.Dispatcher.Send(SendOrPostCallback action, Object arg, Nullable`1 priority)
+   at Avalonia.Controls.TopLevel.HandleInput(RawInputEventArgs e)
+   at Avalonia.Win32.WindowImpl.AppWndProc(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.WindowImpl.WndProcMessageHandler(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.Interop.UnmanagedMethods.DispatchMessage(MSG& lpmsg)
+   at Avalonia.Win32.Win32DispatcherImpl.RunLoop(CancellationToken cancellationToken)
+   at Avalonia.Threading.DispatcherFrame.Run(IControlledDispatcherImpl impl)
+   at Avalonia.Threading.Dispatcher.PushFrame(DispatcherFrame frame)
+   at Avalonia.Threading.Dispatcher.MainLoop(CancellationToken cancellationToken)
+   at Avalonia.Controls.ApplicationLifetimes.ClassicDesktopStyleApplicationLifetime.StartCore(String[] args)
+   at Avalonia.Controls.ApplicationLifetimes.ClassicDesktopStyleApplicationLifetime.Start(String[] args)
+   at Avalonia.ClassicDesktopStyleApplicationLifetimeExtensions.StartWithClassicDesktopLifetime(AppBuilder builder, String[] args, ShutdownMode shutdownMode)
+   at SuperNova.Desktop.Program.Main(String[] args) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Desktop\Program.cs:line 35
+2025-02-14 20:18:31.917 +03:00 [INF] Starting application...
+2025-02-14 20:18:46.994 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 20:35:19.997 +03:00 [INF] Starting application...
+2025-02-14 20:35:35.377 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 20:40:04.823 +03:00 [INF] Starting application...
+2025-02-14 20:40:21.135 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 20:51:22.554 +03:00 [INF] Starting application...
+2025-02-14 20:51:37.641 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 21:05:08.972 +03:00 [INF] Starting application...
+2025-02-14 21:05:24.664 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 21:20:53.262 +03:00 [INF] Starting application...
+2025-02-14 21:21:21.241 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 21:33:08.163 +03:00 [INF] Starting application...
+2025-02-14 21:33:27.159 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 21:34:08.229 +03:00 [INF] Starting application...
+2025-02-14 21:34:20.832 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 21:42:10.006 +03:00 [INF] Starting application...
+2025-02-14 21:42:23.064 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 21:43:46.280 +03:00 [INF] Starting application...
+2025-02-14 21:43:59.054 +03:00 [INF] Administrator successfully authenticated
+2025-02-14 21:47:39.712 +03:00 [INF] Starting application...
+2025-02-14 21:53:03.617 +03:00 [INF] Starting application...
+2025-02-14 21:55:46.502 +03:00 [INF] Starting application...
+2025-02-14 22:00:30.178 +03:00 [INF] Starting application...
+2025-02-14 22:05:24.813 +03:00 [INF] Starting application...
+2025-02-14 22:08:47.004 +03:00 [INF] Starting application...
+2025-02-14 22:32:30.115 +03:00 [INF] Starting application...
+2025-02-14 22:58:27.280 +03:00 [INF] Starting application...
+2025-02-14 23:05:21.898 +03:00 [INF] Starting application...

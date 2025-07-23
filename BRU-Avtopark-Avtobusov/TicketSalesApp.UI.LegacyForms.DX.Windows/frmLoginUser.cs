@@ -11,7 +11,7 @@ using System.Windows.Forms;
 namespace TicketSalesApp.UI.LegacyForms.DX.Windows
 {
     /// <summary>
-    /// ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½
+    /// ÓÃ»§¹ÜÀí
     /// </summary>
     public partial class frmLoginUser : DevExpress.XtraEditors.XtraForm
     {
@@ -29,7 +29,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
 
             LoadData();
 
-            MessageBox.Show("ï¿½ï¿½ï¿½ï¿½É¹ï¿½!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("±£´æ³É¹¦!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void frmLoginUser_Load(object sender, EventArgs e)
@@ -49,7 +49,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             this.Close();
         }
 
-        //É¾ï¿½ï¿½
+        //É¾³ý
         private void tsBtnDel_Click(object sender, EventArgs e)
         {
             
@@ -57,7 +57,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
         }
 
 
-        //ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½Ç°Ñ¡ï¿½ï¿½ï¿½ï¿½
+        //µÃµ½Íø¸ñµ±Ç°Ñ¡ÔñÐÐ
         public int RowIndex(object dataSource)
         {
             int result = -1;
