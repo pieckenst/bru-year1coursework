@@ -55,6 +55,26 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "GirCore.Adw-1": {
+              "target": "Package",
+              "version": "[0.7.0-preview.1, )"
+            },
+            "GirCore.Cairo-1.0": {
+              "target": "Package",
+              "version": "[0.7.0-preview.1, )"
+            },
+            "GirCore.Gst-1.0": {
+              "target": "Package",
+              "version": "[0.7.0-preview.1, )"
+            },
+            "GirCore.Gtk-4.0": {
+              "target": "Package",
+              "version": "[0.7.0-preview.1, )"
+            },
+            "GirCore.Secret-1": {
+              "target": "Package",
+              "version": "[0.7.0-preview.1, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.1, )"
@@ -84,6 +104,30 @@
             "System.Text.Json": {
               "target": "Package",
               "version": "[9.0.1, )"
+            },
+            "Vanara.Core": {
+              "target": "Package",
+              "version": "[4.1.6, )"
+            },
+            "Vanara.PInvoke.CredUI": {
+              "target": "Package",
+              "version": "[4.1.6, )"
+            },
+            "Vanara.PInvoke.Cryptography": {
+              "target": "Package",
+              "version": "[4.1.6, )"
+            },
+            "Vanara.PInvoke.Kernel32": {
+              "target": "Package",
+              "version": "[4.1.6, )"
+            },
+            "Vanara.PInvoke.Security": {
+              "target": "Package",
+              "version": "[4.1.6, )"
+            },
+            "Vanara.PInvoke.Shared": {
+              "target": "Package",
+              "version": "[4.1.6, )"
             }
           },
           "imports": [

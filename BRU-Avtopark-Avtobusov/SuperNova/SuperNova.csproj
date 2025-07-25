@@ -59,6 +59,7 @@
         <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc2" />
         <PackageReference Include="Semi.Avalonia" Version="11.0.7" />
         <PackageReference Include="Semi.Avalonia.DataGrid" Version="11.0.7" />
+        <PackageReference Include="Vanara.PInvoke.CredUI" Version="4.1.6" />
     </ItemGroup>
 
     <ItemGroup>

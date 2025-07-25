@@ -67,7 +67,7 @@
             // peImage
             // 
             peImage.Dock = System.Windows.Forms.DockStyle.Top;
-            peImage.EditValue = resources.GetObject("peImage.EditValue");
+           
             peImage.Location = new System.Drawing.Point(1, 1);
             peImage.Name = "peImage";
             peImage.Properties.AllowFocused = false;

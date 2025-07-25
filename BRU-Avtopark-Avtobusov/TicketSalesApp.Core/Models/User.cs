@@ -59,5 +59,8 @@ namespace TicketSalesApp.Core.Models
 #else
         public virtual ICollection<UserRole> UserRoles { get; set; }
 #endif
+
+        public string? WindowsIdentity { get; set; }  // Store Windows SID or username
+        public bool IsWindowsAuth { get; set; }      // Flag for Windows auth users
     }
 }

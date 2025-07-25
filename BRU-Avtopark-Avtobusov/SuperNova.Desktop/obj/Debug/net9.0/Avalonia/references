@@ -1,3 +1,4 @@
+C:\Users\andrej\.nuget\packages\gircore.adw-1\0.7.0-preview.1\lib\net9.0\Adw-1.dll
 C:\Users\andrej\.nuget\packages\antlr4.runtime.standard\4.13.1\lib\netstandard2.0\Antlr4.Runtime.Standard.dll
 C:\Users\andrej\.nuget\packages\antlr4buildtasks\12.8.0\lib\netstandard2.0\Antlr4BuildTasks.dll
 C:\Users\andrej\.nuget\packages\avalonia\11.2.3\ref\net8.0\Avalonia.Base.dll
@@ -30,6 +31,7 @@ C:\Users\andrej\.nuget\packages\avalonia\11.2.3\ref\net8.0\Avalonia.Vulkan.dll
 C:\Users\andrej\.nuget\packages\avalonia.win32\11.2.3\lib\net8.0\Avalonia.Win32.dll
 C:\Users\andrej\.nuget\packages\avalonia.x11\11.2.3\lib\net8.0\Avalonia.X11.dll
 C:\Users\andrej\.nuget\packages\avalonia.avaloniaedit\11.1.0\lib\net6.0\AvaloniaEdit.dll
+C:\Users\andrej\.nuget\packages\gircore.cairo-1.0\0.7.0-preview.1\lib\net9.0\cairo-1.0.dll
 C:\Users\andrej\.nuget\packages\classic.avalonia.theme.colorpicker\11.2.0\lib\netstandard2.0\Classic.Avalonia.Theme.ColorPicker.dll
 C:\Users\andrej\.nuget\packages\classic.avalonia.theme.datagrid\11.2.0\lib\netstandard2.0\Classic.Avalonia.Theme.DataGrid.dll
 C:\Users\andrej\.nuget\packages\classic.avalonia.theme\11.2.0\lib\netstandard2.0\Classic.Avalonia.Theme.dll
@@ -45,6 +47,17 @@ C:\Users\andrej\.nuget\packages\dock.model.mvvm\11.2.0\lib\net8.0\Dock.Model.Mvv
 C:\Users\andrej\.nuget\packages\dock.serializer\11.2.0\lib\net8.0\Dock.Serializer.dll
 C:\Users\andrej\.nuget\packages\dock.settings\11.2.0\lib\net8.0\Dock.Settings.dll
 C:\Users\andrej\.nuget\packages\dynamicdata\8.4.1\lib\net8.0\DynamicData.dll
+C:\Users\andrej\.nuget\packages\gircore.freetype2-2.0\0.7.0-preview.1\lib\net9.0\freetype2-2.0.dll
+C:\Users\andrej\.nuget\packages\gircore.gdk-4.0\0.7.0-preview.1\lib\net9.0\Gdk-4.0.dll
+C:\Users\andrej\.nuget\packages\gircore.gdkpixbuf-2.0\0.7.0-preview.1\lib\net9.0\GdkPixbuf-2.0.dll
+C:\Users\andrej\.nuget\packages\gircore.gio-2.0\0.7.0-preview.1\lib\net9.0\Gio-2.0.dll
+C:\Users\andrej\.nuget\packages\gircore.glib-2.0\0.7.0-preview.1\lib\net9.0\GLib-2.0.dll
+C:\Users\andrej\.nuget\packages\gircore.gobject-2.0\0.7.0-preview.1\lib\net9.0\GObject-2.0.dll
+C:\Users\andrej\.nuget\packages\gircore.graphene-1.0\0.7.0-preview.1\lib\net9.0\Graphene-1.0.dll
+C:\Users\andrej\.nuget\packages\gircore.gsk-4.0\0.7.0-preview.1\lib\net9.0\Gsk-4.0.dll
+C:\Users\andrej\.nuget\packages\gircore.gst-1.0\0.7.0-preview.1\lib\net9.0\Gst-1.0.dll
+C:\Users\andrej\.nuget\packages\gircore.gtk-4.0\0.7.0-preview.1\lib\net9.0\Gtk-4.0.dll
+C:\Users\andrej\.nuget\packages\gircore.harfbuzz-0.0\0.7.0-preview.1\lib\net9.0\HarfBuzz-0.0.dll
 C:\Users\andrej\.nuget\packages\harfbuzzsharp\7.3.0.3\lib\net6.0\HarfBuzzSharp.dll
 C:\Users\andrej\.nuget\packages\languageext.core\4.4.9\lib\netstandard2.0\LanguageExt.Core.dll
 C:\Users\andrej\.nuget\packages\livechartscore\2.0.0-rc2\lib\net6.0\LiveChartsCore.dll
@@ -90,11 +103,14 @@ C:\Users\andrej\.nuget\packages\messagebox.avalonia\3.2.0\lib\netstandard2.0\MsB
 C:\Users\andrej\.nuget\packages\microsoft.netcore.app.ref\9.0.1\ref\net9.0\mscorlib.dll
 C:\Users\andrej\.nuget\packages\microsoft.netcore.app.ref\9.0.1\ref\net9.0\netstandard.dll
 C:\Users\andrej\.nuget\packages\newtonsoft.json\13.0.1\lib\netstandard2.0\Newtonsoft.Json.dll
+C:\Users\andrej\.nuget\packages\gircore.pango-1.0\0.7.0-preview.1\lib\net9.0\Pango-1.0.dll
+C:\Users\andrej\.nuget\packages\gircore.pangocairo-1.0\0.7.0-preview.1\lib\net9.0\PangoCairo-1.0.dll
 C:\Users\andrej\.nuget\packages\pleasantui.datagrid\5.0.0-alpha2\lib\netstandard2.0\PleasantUI.DataGrid.dll
 C:\Users\andrej\.nuget\packages\pleasantui\5.0.0-alpha2\lib\netstandard2.0\PleasantUI.dll
 C:\Users\andrej\.nuget\packages\qrcoder\1.6.0\lib\net6.0\QRCoder.dll
 C:\Users\andrej\.nuget\packages\r3\1.2.9\lib\net8.0\R3.dll
 C:\Users\andrej\.nuget\packages\reactiveui\20.1.1\lib\net8.0\ReactiveUI.dll
+C:\Users\andrej\.nuget\packages\gircore.secret-1\0.7.0-preview.1\lib\net9.0\Secret-1.dll
 C:\Users\andrej\.nuget\packages\semi.avalonia.datagrid\11.0.7\lib\net6.0\Semi.Avalonia.DataGrid.dll
 C:\Users\andrej\.nuget\packages\semi.avalonia\11.0.7\lib\net6.0\Semi.Avalonia.dll
 C:\Users\andrej\.nuget\packages\serilog\4.2.1-dev-02337\lib\net9.0\Serilog.dll
@@ -277,4 +293,10 @@ C:\Users\andrej\.nuget\packages\microsoft.netcore.app.ref\9.0.1\ref\net9.0\Syste
 G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Core\obj\Debug\net9.0\ref\TicketSalesApp.Core.dll
 G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.Services\obj\Debug\net9.0\ref\TicketSalesApp.Services.dll
 C:\Users\andrej\.nuget\packages\tmds.dbus.protocol\0.20.0\lib\net8.0\Tmds.DBus.Protocol.dll
+C:\Users\andrej\.nuget\packages\vanara.core\4.1.6\lib\net7.0\Vanara.Core.dll
+C:\Users\andrej\.nuget\packages\vanara.pinvoke.credui\4.1.6\lib\net7.0\Vanara.PInvoke.CredUI.dll
+C:\Users\andrej\.nuget\packages\vanara.pinvoke.cryptography\4.1.6\lib\net7.0\Vanara.PInvoke.Cryptography.dll
+C:\Users\andrej\.nuget\packages\vanara.pinvoke.kernel32\4.1.6\lib\net7.0\Vanara.PInvoke.Kernel32.dll
+C:\Users\andrej\.nuget\packages\vanara.pinvoke.security\4.1.6\lib\net7.0\Vanara.PInvoke.Security.dll
+C:\Users\andrej\.nuget\packages\vanara.pinvoke.shared\4.1.6\lib\net7.0\Vanara.PInvoke.Shared.dll
 C:\Users\andrej\.nuget\packages\microsoft.netcore.app.ref\9.0.1\ref\net9.0\WindowsBase.dll

@@ -78,6 +78,19 @@
 				<StackPanel Grid.Row="1"
                           VerticalAlignment="Center"
                           Spacing="25">
+                    
+                    <!-- Windows Auth Container -->
+                    <StackPanel Spacing="15" IsVisible="{Binding IsWindowsAuthInProgress}">
+                        <TextBlock Text="Authenticating with Windows..." 
+                                 HorizontalAlignment="Center"
+                                 Foreground="White"/>
+                        <ProgressBar IsIndeterminate="True"
+                                   Height="4"
+                                   Margin="0,10,0,0"/>
+                    </StackPanel>
+
+                    <!-- Standard Login Form -->
+                    <StackPanel Spacing="25" IsVisible="{Binding !IsWindowsAuthInProgress}">
 					<!-- Username -->
 					<StackPanel Spacing="5">
 						<TextBlock Text="Логин"
@@ -98,23 +111,59 @@
                                 Watermark="Введите пароль"/>
 					</StackPanel>
 
-					<!-- Error Message -->
-					<TextBlock Text="{Binding ErrorMessage}"
-                             Foreground="#FF4444"
-                             IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                             TextWrapping="Wrap"/>
+						<!-- Error Message -->
+						<TextBlock Text="{Binding ErrorMessage}"
+                                     Foreground="#FF4444"
+                                     IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                     TextWrapping="Wrap"/>
 
-					<!-- Login Button -->
-					<Button Content="Войти"
-                            Command="{Binding LoginCommand}"
-                            Classes="auth"
-                            HorizontalAlignment="Stretch"
-                            IsEnabled="{Binding !IsLoading}"/>
+						<!-- Login Button -->
+						<Button Content="Войти"
+                                Command="{Binding LoginCommand}"
+                                Classes="auth"
+                                HorizontalAlignment="Stretch"
+                                IsEnabled="{Binding !IsLoading}"/>
 
-					<!-- Loading Indicator -->
-					<ProgressBar IsIndeterminate="True"
-                               IsVisible="{Binding IsLoading}"
-                               Height="2"/>
+						<!-- Windows Login Button -->
+						<Button Content="Войти с Windows"
+                                Command="{Binding WindowsLoginCommand}"
+                                Classes="windowsAuth"
+                                HorizontalAlignment="Stretch"
+                                IsEnabled="{Binding !IsLoading}">
+                            <Button.Styles>
+                                <Style Selector="Button.windowsAuth">
+                                    <Setter Property="Background" Value="#0078D4"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="CornerRadius" Value="4"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Height" Value="40"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Style.Animations>
+                                        <Animation Duration="0:0:0.2">
+                                            <KeyFrame Cue="0%">
+                                                <Setter Property="Opacity" Value="1"/>
+                                            </KeyFrame>
+                                            <KeyFrame Cue="100%">
+                                                <Setter Property="Opacity" Value="0.9"/>
+                                            </KeyFrame>
+                                        </Animation>
+                                    </Style.Animations>
+                                </Style>
+                                <Style Selector="Button.windowsAuth:pointerover">
+                                    <Setter Property="Background" Value="#106EBE"/>
+                                </Style>
+                                <Style Selector="Button.windowsAuth:disabled">
+                                    <Setter Property="Opacity" Value="0.6"/>
+                                </Style>
+                            </Button.Styles>
+                        </Button>
+
+						<!-- Loading Indicator -->
+						<ProgressBar IsIndeterminate="True"
+                                   IsVisible="{Binding IsLoading}"
+                                   Height="2"/>
+                    </StackPanel>
 				</StackPanel>
 
 				<!-- Footer -->

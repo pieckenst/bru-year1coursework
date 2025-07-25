@@ -1,0 +1,38 @@
+2025-07-23 20:10:06.024 +03:00 [INF] Application starting up
+2025-07-23 20:10:11.803 +03:00 [DBG] Showing splash screen
+2025-07-23 20:10:24.486 +03:00 [INF] Application starting up
+2025-07-23 20:10:26.629 +03:00 [DBG] Showing splash screen
+2025-07-23 20:10:26.763 +03:00 [DBG] Performing long operation
+2025-07-23 20:10:34.769 +03:00 [DBG] Long operation completed
+2025-07-23 20:10:34.773 +03:00 [INF] Showing login form
+2025-07-23 20:10:46.926 +03:00 [DBG] Decoded JWT Payload: {"unique_name":"admin","role":"1","nbf":1753290646,"exp":1753297846,"iat":1753290646}
+2025-07-23 20:10:46.973 +03:00 [ERR] Failed to convert role claim '1' to integer
+System.InvalidOperationException: An element of type 'String' cannot be converted to a 'System.Int32'.
+   at System.Text.Json.ThrowHelper.ThrowInvalidOperationException_NodeUnableToConvertElement(JsonValueKind valueKind, Type destinationType)
+   at System.Text.Json.Nodes.JsonValueOfElement.GetValue[TypeToConvert]()
+   at TicketSalesApp.UI.LegacyForms.DX.Windows.ApiClientService.ParseTokenAndStoreInfo(String token) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\TicketSalesApp.UI.LegacyForms.DX.Windows\ApiClientService.cs:line 134
+2025-07-23 20:10:47.010 +03:00 [INF] Username parsed from token: admin
+2025-07-23 20:10:47.011 +03:00 [INF] User successfully authenticated
+2025-07-23 20:10:47.082 +03:00 [INF] Login result: "OK"
+2025-07-23 20:10:47.533 +03:00 [DBG] Applying permissions for role: None
+2025-07-23 20:10:47.535 +03:00 [DBG] Permissions applied.
+2025-07-23 20:10:54.808 +03:00 [INF] Loading route schedules for Ticket Management filter...
+2025-07-23 20:10:54.811 +03:00 [INF] Fetching route schedule data from: http://localhost:5000/api/routeschedules
+2025-07-23 20:10:54.813 +03:00 [INF] Loading route schedules for Ticket Management filter...
+2025-07-23 20:10:54.814 +03:00 [INF] Fetching route schedule data from: http://localhost:5000/api/routeschedules
+2025-07-23 20:10:57.611 +03:00 [INF] Successfully loaded 500 route schedules for lookup.
+2025-07-23 20:10:57.613 +03:00 [INF] Loading initial tickets data...
+2025-07-23 20:10:57.615 +03:00 [INF] Loading all tickets data...
+2025-07-23 20:10:57.621 +03:00 [INF] Fetching all tickets from: http://localhost:5000/api/tickets
+2025-07-23 20:10:57.641 +03:00 [INF] Successfully loaded 500 route schedules for lookup.
+2025-07-23 20:10:57.642 +03:00 [INF] Loading initial tickets data...
+2025-07-23 20:10:57.643 +03:00 [INF] Loading all tickets data...
+2025-07-23 20:10:57.645 +03:00 [INF] Fetching all tickets from: http://localhost:5000/api/tickets
+2025-07-23 20:11:00.407 +03:00 [INF] Successfully loaded 15 total tickets.
+2025-07-23 20:11:00.408 +03:00 [INF] Applying client-side filters for tickets...
+2025-07-23 20:11:00.410 +03:00 [INF] Client-side filtering applied. Displaying 15 tickets.
+2025-07-23 20:11:00.413 +03:00 [INF] Successfully loaded 15 total tickets.
+2025-07-23 20:11:00.415 +03:00 [INF] Applying client-side filters for tickets...
+2025-07-23 20:11:00.417 +03:00 [INF] Client-side filtering applied. Displaying 15 tickets.
+2025-07-23 20:11:02.445 +03:00 [DBG] Raw JSON response from /api/employees: {"$id":"1","$values":[{"$id":"2","empId":1,"surname":"Иванов","name":"Иван","patronym":"Иванович","employedSince":"2020-01-15T00:00:00","jobId":1,"job":{"$id":"3","jobId":1,"jobTitle":"Водитель автобуса","internship":"Стажировка (2 года)","employees":{"$id":"4","$values":[{"$ref":"2"},{"$id":"5","empId":2,"surname":"Петров","name":"Петр","patronym":"Петрович","employedSince":"2019-03-20T00:00:00","jobId":1,"job":{"$ref":"3"}},{"$id":"6","empId":7,"surname":"Волков","name":"Михаил","patronym":"Дмитриевич","employedSince":"2020-11-30T00:00:00","jobId":1,"job":{"$ref":"3"}},{"$id":"7","empId":9,"surname":"Васильев","name":"Николай","patronym":"Андреевич","employedSince":"2021-07-08T00:00:00","jobId":1,"job":{"$ref":"3"}}]}}},{"$ref":"5"},{"$id":"8","empId":3,"surname":"Сидоров","name":"Алексей","patronym":"Михайлович","employedSince":"2018-06-10T00:00:00","jobId":2,"job":{"$id":"9","jobId":2,"jobTitle":"Механик","internship":"Стажировка (3 года)","employees":{"$id":"10","$values":[{"$ref":"8"},{"$id":"11","empId":8,"surname":"Соловьев","name":"Артем","patronym":"Игоревич","employedSince":"2019-09-15T00:00:00","jobId":2,"job":{"$ref":"9"}}]}}},{"$id":"12","empId":4,"surname":"Козлов","name":"Дмитрий","patronym":"Сергеевич","employedSince":"2021-02-05T00:00:00","jobId":3,"job":{"$id":"13","jobId":3,"jobTitle":"Диспетчер","internship":"Стажировка (1 год)","employees":{"$id":"14","$values":[{"$ref":"12"},{"$id":"15","empId":10,"surname":"Зайцев","name":"Владимир","patronym":"Петрович","employedSince":"2018-12-03T00:00:00","jobId":3,"job":{"$ref":"13"}}]}}},{"$id":"16","empId":5,"surname":"Морозов","name":"Андрей","patronym":"Владимирович","employedSince":"2017-08-25T00:00:00","jobId":4,"job":{"$id":"17","jobId":4,"jobTitle":"Начальник автопарка","internship":"Стажировка (5 лет)","employees":{"$id":"18","$values":[{"$ref":"16"}]}}},{"$id":"19","empId":6,"surname":"Новиков","name":"Сергей","patronym":"Александрович","employedSince":"2022-04-12T00:00:00","jobId":5,"job":{"$id":"20","jobId":5,"jobTitle":"Кассир","internship":"Стажировка (6 месяцев)","employees":{"$id":"21","$values":[{"$ref":"19"}]}}},{"$ref":"6"},{"$ref":"11"},{"$ref":"7"},{"$ref":"15"}]}
+2025-07-23 20:54:11.567 +03:00 [INF] Application starting up

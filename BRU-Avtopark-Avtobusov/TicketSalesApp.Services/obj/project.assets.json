@@ -15,6 +15,211 @@
           }
         }
       },
+      "GirCore.Adw-1/0.7.0-preview.1": {
+        "type": "package",
+        "dependencies": {
+          "GirCore.Gio-2.0": "0.7.0-preview.1",
+          "GirCore.Gtk-4.0": "0.7.0-preview.1"
+        },
+        "compile": {
+          "lib/net9.0/Adw-1.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Adw-1.dll": {}
+        }
+      },
+      "GirCore.Cairo-1.0/0.7.0-preview.1": {
+        "type": "package",
+        "dependencies": {
+          "GirCore.GObject-2.0": "0.7.0-preview.1"
+        },
+        "compile": {
+          "lib/net9.0/cairo-1.0.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/cairo-1.0.dll": {}
+        }
+      },
+      "GirCore.FreeType2-2.0/0.7.0-preview.1": {
+        "type": "package",
+        "dependencies": {
+          "GirCore.GLib-2.0": "0.7.0-preview.1",
+          "GirCore.GObject-2.0": "0.7.0-preview.1"
+        },
+        "compile": {
+          "lib/net9.0/freetype2-2.0.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/freetype2-2.0.dll": {}
+        }
+      },
+      "GirCore.Gdk-4.0/0.7.0-preview.1": {
+        "type": "package",
+        "dependencies": {
+          "GirCore.Cairo-1.0": "0.7.0-preview.1",
+          "GirCore.GdkPixbuf-2.0": "0.7.0-preview.1",
+          "GirCore.Gio-2.0": "0.7.0-preview.1",
+          "GirCore.Pango-1.0": "0.7.0-preview.1",
+          "GirCore.PangoCairo-1.0": "0.7.0-preview.1"
+        },
+        "compile": {
+          "lib/net9.0/Gdk-4.0.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Gdk-4.0.dll": {}
+        }
+      },
+      "GirCore.GdkPixbuf-2.0/0.7.0-preview.1": {
+        "type": "package",
+        "dependencies": {
+          "GirCore.Gio-2.0": "0.7.0-preview.1"
+        },
+        "compile": {
+          "lib/net9.0/GdkPixbuf-2.0.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/GdkPixbuf-2.0.dll": {}
+        }
+      },
+      "GirCore.Gio-2.0/0.7.0-preview.1": {
+        "type": "package",
+        "dependencies": {
+          "GirCore.GObject-2.0": "0.7.0-preview.1"
+        },
+        "compile": {
+          "lib/net9.0/Gio-2.0.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Gio-2.0.dll": {}
+        }
+      },
+      "GirCore.GLib-2.0/0.7.0-preview.1": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/GLib-2.0.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/GLib-2.0.dll": {}
+        }
+      },
+      "GirCore.GObject-2.0/0.7.0-preview.1": {
+        "type": "package",
+        "dependencies": {
+          "GirCore.GLib-2.0": "0.7.0-preview.1"
+        },
+        "compile": {
+          "lib/net9.0/GObject-2.0.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/GObject-2.0.dll": {}
+        }
+      },
+      "GirCore.Graphene-1.0/0.7.0-preview.1": {
+        "type": "package",
+        "dependencies": {
+          "GirCore.GObject-2.0": "0.7.0-preview.1"
+        },
+        "compile": {
+          "lib/net9.0/Graphene-1.0.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Graphene-1.0.dll": {}
+        }
+      },
+      "GirCore.Gsk-4.0/0.7.0-preview.1": {
+        "type": "package",
+        "dependencies": {
+          "GirCore.Gdk-4.0": "0.7.0-preview.1",
+          "GirCore.Graphene-1.0": "0.7.0-preview.1"
+        },
+        "compile": {
+          "lib/net9.0/Gsk-4.0.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Gsk-4.0.dll": {}
+        }
+      },
+      "GirCore.Gst-1.0/0.7.0-preview.1": {
+        "type": "package",
+        "dependencies": {
+          "GirCore.GLib-2.0": "0.7.0-preview.1",
+          "GirCore.GObject-2.0": "0.7.0-preview.1"
+        },
+        "compile": {
+          "lib/net9.0/Gst-1.0.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Gst-1.0.dll": {}
+        }
+      },
+      "GirCore.Gtk-4.0/0.7.0-preview.1": {
+        "type": "package",
+        "dependencies": {
+          "GirCore.Gdk-4.0": "0.7.0-preview.1",
+          "GirCore.Gsk-4.0": "0.7.0-preview.1"
+        },
+        "compile": {
+          "lib/net9.0/Gtk-4.0.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Gtk-4.0.dll": {}
+        }
+      },
+      "GirCore.HarfBuzz-0.0/0.7.0-preview.1": {
+        "type": "package",
+        "dependencies": {
+          "GirCore.FreeType2-2.0": "0.7.0-preview.1",
+          "GirCore.GObject-2.0": "0.7.0-preview.1"
+        },
+        "compile": {
+          "lib/net9.0/HarfBuzz-0.0.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/HarfBuzz-0.0.dll": {}
+        }
+      },
+      "GirCore.Pango-1.0/0.7.0-preview.1": {
+        "type": "package",
+        "dependencies": {
+          "GirCore.Cairo-1.0": "0.7.0-preview.1",
+          "GirCore.GObject-2.0": "0.7.0-preview.1",
+          "GirCore.Gio-2.0": "0.7.0-preview.1",
+          "GirCore.HarfBuzz-0.0": "0.7.0-preview.1"
+        },
+        "compile": {
+          "lib/net9.0/Pango-1.0.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Pango-1.0.dll": {}
+        }
+      },
+      "GirCore.PangoCairo-1.0/0.7.0-preview.1": {
+        "type": "package",
+        "dependencies": {
+          "GirCore.Cairo-1.0": "0.7.0-preview.1",
+          "GirCore.GObject-2.0": "0.7.0-preview.1",
+          "GirCore.Pango-1.0": "0.7.0-preview.1"
+        },
+        "compile": {
+          "lib/net9.0/PangoCairo-1.0.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/PangoCairo-1.0.dll": {}
+        }
+      },
+      "GirCore.Secret-1/0.7.0-preview.1": {
+        "type": "package",
+        "dependencies": {
+          "GirCore.GObject-2.0": "0.7.0-preview.1",
+          "GirCore.Gio-2.0": "0.7.0-preview.1"
+        },
+        "compile": {
+          "lib/net9.0/Secret-1.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/Secret-1.dll": {}
+        }
+      },
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
@@ -1105,16 +1310,127 @@
           "buildTransitive/net8.0/System.Text.Json.targets": {}
         }
       },
+      "Vanara.Core/4.1.6": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/Vanara.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/Vanara.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net7.0/fr/Vanara.Core.resources.dll": {
+            "locale": "fr"
+          }
+        }
+      },
+      "Vanara.PInvoke.CredUI/4.1.6": {
+        "type": "package",
+        "dependencies": {
+          "Vanara.PInvoke.Kernel32": "4.1.6",
+          "Vanara.PInvoke.Security": "4.1.6"
+        },
+        "compile": {
+          "lib/net7.0/Vanara.PInvoke.CredUI.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/Vanara.PInvoke.CredUI.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Vanara.PInvoke.Cryptography/4.1.6": {
+        "type": "package",
+        "dependencies": {
+          "Vanara.PInvoke.Shared": "4.1.6"
+        },
+        "compile": {
+          "lib/net7.0/Vanara.PInvoke.Cryptography.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/Vanara.PInvoke.Cryptography.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Vanara.PInvoke.Kernel32/4.1.6": {
+        "type": "package",
+        "dependencies": {
+          "Vanara.PInvoke.Shared": "4.1.6"
+        },
+        "compile": {
+          "lib/net7.0/Vanara.PInvoke.Kernel32.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/Vanara.PInvoke.Kernel32.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Vanara.PInvoke.Security/4.1.6": {
+        "type": "package",
+        "dependencies": {
+          "Vanara.PInvoke.Cryptography": "4.1.6",
+          "Vanara.PInvoke.Kernel32": "4.1.6"
+        },
+        "compile": {
+          "lib/net7.0/Vanara.PInvoke.Security.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/Vanara.PInvoke.Security.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Vanara.PInvoke.Shared/4.1.6": {
+        "type": "package",
+        "dependencies": {
+          "Vanara.Core": "4.1.6"
+        },
+        "compile": {
+          "lib/net7.0/Vanara.PInvoke.Shared.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/Vanara.PInvoke.Shared.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "TicketSalesApp.Core/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
+          "GirCore.Adw-1": "0.7.0-preview.1",
+          "GirCore.Cairo-1.0": "0.7.0-preview.1",
+          "GirCore.Gst-1.0": "0.7.0-preview.1",
+          "GirCore.Gtk-4.0": "0.7.0-preview.1",
+          "GirCore.Secret-1": "0.7.0-preview.1",
           "Microsoft.EntityFrameworkCore": "9.0.1",
           "Microsoft.EntityFrameworkCore.Sqlite": "9.0.1",
           "Serilog": "4.2.1-dev-02337",
           "Serilog.Settings.Configuration": "9.0.1-dev-02317",
           "Serilog.Sinks.File": "6.0.0",
-          "System.Text.Json": "9.0.1"
+          "System.Text.Json": "9.0.1",
+          "Vanara.Core": "4.1.6",
+          "Vanara.PInvoke.CredUI": "4.1.6",
+          "Vanara.PInvoke.Cryptography": "4.1.6",
+          "Vanara.PInvoke.Kernel32": "4.1.6",
+          "Vanara.PInvoke.Security": "4.1.6",
+          "Vanara.PInvoke.Shared": "4.1.6"
         },
         "compile": {
           "bin/placeholder/TicketSalesApp.Core.dll": {}
@@ -1152,6 +1468,246 @@
         "lib/netstandard2.0/CsvHelper.xml",
         "lib/netstandard2.1/CsvHelper.dll",
         "lib/netstandard2.1/CsvHelper.xml"
+      ]
+    },
+    "GirCore.Adw-1/0.7.0-preview.1": {
+      "sha512": "4czZyXTJWhg/GD4XiCtjQUDGF6PYyRgs59tjwPIZlffAHqZl8J2iSk+bKCJLh1B3iI7tx2iw986R8Bkw/t+2/g==",
+      "type": "package",
+      "path": "gircore.adw-1/0.7.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NugetReadme.md",
+        "gircore.adw-1.0.7.0-preview.1.nupkg.sha512",
+        "gircore.adw-1.nuspec",
+        "lib/net8.0/Adw-1.dll",
+        "lib/net9.0/Adw-1.dll",
+        "logo-128.png"
+      ]
+    },
+    "GirCore.Cairo-1.0/0.7.0-preview.1": {
+      "sha512": "xhmvnhFpIa/Q6jzVK/D7CiTYDr3/B2iQ654ZOXKYMHLWQsGVtV+u3P2rBs8u/8Mb/RAtgazU4hNEggsDf1sCwA==",
+      "type": "package",
+      "path": "gircore.cairo-1.0/0.7.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NugetReadme.md",
+        "gircore.cairo-1.0.0.7.0-preview.1.nupkg.sha512",
+        "gircore.cairo-1.0.nuspec",
+        "lib/net8.0/cairo-1.0.dll",
+        "lib/net9.0/cairo-1.0.dll",
+        "logo-128.png"
+      ]
+    },
+    "GirCore.FreeType2-2.0/0.7.0-preview.1": {
+      "sha512": "FVE1Nc7krxNhtHwNFmm3PfFpG8KYrL1zrhIApWqTU25A/edadhR3KKnEM0B1PmP6ZuY0L+2BTmF0lbq8cpDwnw==",
+      "type": "package",
+      "path": "gircore.freetype2-2.0/0.7.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NugetReadme.md",
+        "gircore.freetype2-2.0.0.7.0-preview.1.nupkg.sha512",
+        "gircore.freetype2-2.0.nuspec",
+        "lib/net8.0/freetype2-2.0.dll",
+        "lib/net9.0/freetype2-2.0.dll",
+        "logo-128.png"
+      ]
+    },
+    "GirCore.Gdk-4.0/0.7.0-preview.1": {
+      "sha512": "1Txl/YJ8/th6G1aTENVgSuZc9DD/nGdW4fODNgBVzTkfvBFbpDLTOxhKaM1yCRuxxU9UQLq1R5hQz762YcW9yw==",
+      "type": "package",
+      "path": "gircore.gdk-4.0/0.7.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NugetReadme.md",
+        "gircore.gdk-4.0.0.7.0-preview.1.nupkg.sha512",
+        "gircore.gdk-4.0.nuspec",
+        "lib/net8.0/Gdk-4.0.dll",
+        "lib/net9.0/Gdk-4.0.dll",
+        "logo-128.png"
+      ]
+    },
+    "GirCore.GdkPixbuf-2.0/0.7.0-preview.1": {
+      "sha512": "27BxjzwnNoqYzQ3jXGVmbR7UsrKChxo0PaGU6npaniqyJO0ebN3itUARd8+SFrBd1M/bGVzkr/VXQm9EWRouLg==",
+      "type": "package",
+      "path": "gircore.gdkpixbuf-2.0/0.7.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NugetReadme.md",
+        "gircore.gdkpixbuf-2.0.0.7.0-preview.1.nupkg.sha512",
+        "gircore.gdkpixbuf-2.0.nuspec",
+        "lib/net8.0/GdkPixbuf-2.0.dll",
+        "lib/net9.0/GdkPixbuf-2.0.dll",
+        "logo-128.png"
+      ]
+    },
+    "GirCore.Gio-2.0/0.7.0-preview.1": {
+      "sha512": "10jwixoKbPjsiVJHW9vdryPkDXYca20z3oiiIYamXduBYo3LYjyvvwM79WZfAMPFQ1O6GW/cfBL5Wy+g5/pXcA==",
+      "type": "package",
+      "path": "gircore.gio-2.0/0.7.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NugetReadme.md",
+        "gircore.gio-2.0.0.7.0-preview.1.nupkg.sha512",
+        "gircore.gio-2.0.nuspec",
+        "lib/net8.0/Gio-2.0.dll",
+        "lib/net9.0/Gio-2.0.dll",
+        "logo-128.png"
+      ]
+    },
+    "GirCore.GLib-2.0/0.7.0-preview.1": {
+      "sha512": "liGgi94WdOP/lozjnQVvR+vu3G4l8iBmyODu44oHHdJfTNxl2fWh4m1llgZ7STPmueYWg32ckxBp89hooNe+CA==",
+      "type": "package",
+      "path": "gircore.glib-2.0/0.7.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NugetReadme.md",
+        "gircore.glib-2.0.0.7.0-preview.1.nupkg.sha512",
+        "gircore.glib-2.0.nuspec",
+        "lib/net8.0/GLib-2.0.dll",
+        "lib/net9.0/GLib-2.0.dll",
+        "logo-128.png"
+      ]
+    },
+    "GirCore.GObject-2.0/0.7.0-preview.1": {
+      "sha512": "iweSO1nQTd7h7l0U7SoM/2hJGF/NLF2ljszt7ToYT01TLpcvOJSkRX+FWX6sAVh+C9pqzQAaoR8B51PbFFIH+A==",
+      "type": "package",
+      "path": "gircore.gobject-2.0/0.7.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NugetReadme.md",
+        "gircore.gobject-2.0.0.7.0-preview.1.nupkg.sha512",
+        "gircore.gobject-2.0.nuspec",
+        "lib/net8.0/GObject-2.0.dll",
+        "lib/net9.0/GObject-2.0.dll",
+        "logo-128.png"
+      ]
+    },
+    "GirCore.Graphene-1.0/0.7.0-preview.1": {
+      "sha512": "80uEqGiFd7MUBrys+aeW/wc/0iNwUNODxygNMysVfQqlqBpSBHikyvsWprEACNv30BfEy0mei7mgeL0SB6yXJQ==",
+      "type": "package",
+      "path": "gircore.graphene-1.0/0.7.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NugetReadme.md",
+        "gircore.graphene-1.0.0.7.0-preview.1.nupkg.sha512",
+        "gircore.graphene-1.0.nuspec",
+        "lib/net8.0/Graphene-1.0.dll",
+        "lib/net9.0/Graphene-1.0.dll",
+        "logo-128.png"
+      ]
+    },
+    "GirCore.Gsk-4.0/0.7.0-preview.1": {
+      "sha512": "3avQHuZT+4aqpFq6y7kH/5whSq/zRnId/QpmltPzRijLgCQP1B6OjdJrJwr7UYv9m11HQb/Q0w7EopgjeBscjw==",
+      "type": "package",
+      "path": "gircore.gsk-4.0/0.7.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NugetReadme.md",
+        "gircore.gsk-4.0.0.7.0-preview.1.nupkg.sha512",
+        "gircore.gsk-4.0.nuspec",
+        "lib/net8.0/Gsk-4.0.dll",
+        "lib/net9.0/Gsk-4.0.dll",
+        "logo-128.png"
+      ]
+    },
+    "GirCore.Gst-1.0/0.7.0-preview.1": {
+      "sha512": "+dM0dHymZUtg0keyTTniNJ7R8CdZ9vhDUyIX+AZmDoWNqXSTLyLBzj73OKURXcUKf27mqt1sW0rAw5v6LSNURQ==",
+      "type": "package",
+      "path": "gircore.gst-1.0/0.7.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NugetReadme.md",
+        "gircore.gst-1.0.0.7.0-preview.1.nupkg.sha512",
+        "gircore.gst-1.0.nuspec",
+        "lib/net8.0/Gst-1.0.dll",
+        "lib/net9.0/Gst-1.0.dll",
+        "logo-128.png"
+      ]
+    },
+    "GirCore.Gtk-4.0/0.7.0-preview.1": {
+      "sha512": "tZfckpQ39v4gLKYUiGnpHJf/YkoHxegMmqJZgd/db3TrFkUlsyjuln5DpepvLWz4ceSLh65+5SJ7f583oxXnnw==",
+      "type": "package",
+      "path": "gircore.gtk-4.0/0.7.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NugetReadme.md",
+        "gircore.gtk-4.0.0.7.0-preview.1.nupkg.sha512",
+        "gircore.gtk-4.0.nuspec",
+        "lib/net8.0/Gtk-4.0.dll",
+        "lib/net9.0/Gtk-4.0.dll",
+        "logo-128.png"
+      ]
+    },
+    "GirCore.HarfBuzz-0.0/0.7.0-preview.1": {
+      "sha512": "y/lK3u9JglZEHSlNHPEaGn80hkEbUFQ+qmqGTPWuGmICio4mygSULRTv0upeaO2tmYxDU22AGTYettww6xqjtw==",
+      "type": "package",
+      "path": "gircore.harfbuzz-0.0/0.7.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NugetReadme.md",
+        "gircore.harfbuzz-0.0.0.7.0-preview.1.nupkg.sha512",
+        "gircore.harfbuzz-0.0.nuspec",
+        "lib/net8.0/HarfBuzz-0.0.dll",
+        "lib/net9.0/HarfBuzz-0.0.dll",
+        "logo-128.png"
+      ]
+    },
+    "GirCore.Pango-1.0/0.7.0-preview.1": {
+      "sha512": "Hj0vWfwqt3ZhX2bFIIayu8Fivl026PQ8rSxq+pb4FlQ6RVPM/UIXZdE6uodZY2yZNTAcpDvT8dkamfNVAVypeg==",
+      "type": "package",
+      "path": "gircore.pango-1.0/0.7.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NugetReadme.md",
+        "gircore.pango-1.0.0.7.0-preview.1.nupkg.sha512",
+        "gircore.pango-1.0.nuspec",
+        "lib/net8.0/Pango-1.0.dll",
+        "lib/net9.0/Pango-1.0.dll",
+        "logo-128.png"
+      ]
+    },
+    "GirCore.PangoCairo-1.0/0.7.0-preview.1": {
+      "sha512": "wywd2EWpwbA+edLvmAiFy0ZmbF77GPligob1qwnr4n2dEXzpLOZ9WtxNLD1a5Wrtqg7s6AeGEdizPjTvV4WNuA==",
+      "type": "package",
+      "path": "gircore.pangocairo-1.0/0.7.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NugetReadme.md",
+        "gircore.pangocairo-1.0.0.7.0-preview.1.nupkg.sha512",
+        "gircore.pangocairo-1.0.nuspec",
+        "lib/net8.0/PangoCairo-1.0.dll",
+        "lib/net9.0/PangoCairo-1.0.dll",
+        "logo-128.png"
+      ]
+    },
+    "GirCore.Secret-1/0.7.0-preview.1": {
+      "sha512": "7xejEFGBc//eYqCgiBjkpgLprmJxz60k/xCGai2EpNr/19fIlDKYQith7tYOpdV/bGUPvEyEcCUDeeb1j6MGFA==",
+      "type": "package",
+      "path": "gircore.secret-1/0.7.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NugetReadme.md",
+        "gircore.secret-1.0.7.0-preview.1.nupkg.sha512",
+        "gircore.secret-1.nuspec",
+        "lib/net8.0/Secret-1.dll",
+        "lib/net9.0/Secret-1.dll",
+        "logo-128.png"
       ]
     },
     "Humanizer.Core/2.14.1": {
@@ -3162,6 +3718,201 @@
         "system.text.json.9.0.1.nupkg.sha512",
         "system.text.json.nuspec",
         "useSharedDesignerContext.txt"
+      ]
+    },
+    "Vanara.Core/4.1.6": {
+      "sha512": "6ofXAXvywY223+1cRs2uOiWWzBsy9o/m5Bh6txvF3weYSsLI18Pbaz6YCq4oLEEHD7UtE/l4qHkSMdZx9s/6LA==",
+      "type": "package",
+      "path": "vanara.core/4.1.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Vanara64x64.png",
+        "lib/net48/Vanara.Core.dll",
+        "lib/net48/Vanara.Core.xml",
+        "lib/net48/fr/Vanara.Core.resources.dll",
+        "lib/net5.0/Vanara.Core.dll",
+        "lib/net5.0/Vanara.Core.xml",
+        "lib/net5.0/fr/Vanara.Core.resources.dll",
+        "lib/net6.0/Vanara.Core.dll",
+        "lib/net6.0/Vanara.Core.xml",
+        "lib/net6.0/fr/Vanara.Core.resources.dll",
+        "lib/net7.0/Vanara.Core.dll",
+        "lib/net7.0/Vanara.Core.xml",
+        "lib/net7.0/fr/Vanara.Core.resources.dll",
+        "lib/net8.0-windows7.0/Vanara.Core.dll",
+        "lib/net8.0-windows7.0/Vanara.Core.xml",
+        "lib/net8.0-windows7.0/fr/Vanara.Core.resources.dll",
+        "lib/net9.0-windows7.0/Vanara.Core.dll",
+        "lib/net9.0-windows7.0/Vanara.Core.xml",
+        "lib/net9.0-windows7.0/fr/Vanara.Core.resources.dll",
+        "lib/netcoreapp3.1/Vanara.Core.dll",
+        "lib/netcoreapp3.1/Vanara.Core.xml",
+        "lib/netcoreapp3.1/fr/Vanara.Core.resources.dll",
+        "lib/netstandard2.0/Vanara.Core.dll",
+        "lib/netstandard2.0/Vanara.Core.xml",
+        "lib/netstandard2.0/fr/Vanara.Core.resources.dll",
+        "lib/netstandard2.1/Vanara.Core.dll",
+        "lib/netstandard2.1/Vanara.Core.xml",
+        "lib/netstandard2.1/fr/Vanara.Core.resources.dll",
+        "pkgreadme.md",
+        "vanara.core.4.1.6.nupkg.sha512",
+        "vanara.core.nuspec"
+      ]
+    },
+    "Vanara.PInvoke.CredUI/4.1.6": {
+      "sha512": "QZK/5yXhT+XgbQliYHICOMz2tK4NNVB/4j7XZx6VZ4qfV+g0BW5HPaRKcqKC0Aa0yiswtHA1NIgNnnIAwQYZBw==",
+      "type": "package",
+      "path": "vanara.pinvoke.credui/4.1.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Vanara64x64.png",
+        "lib/net48/Vanara.PInvoke.CredUI.dll",
+        "lib/net48/Vanara.PInvoke.CredUI.xml",
+        "lib/net5.0/Vanara.PInvoke.CredUI.dll",
+        "lib/net5.0/Vanara.PInvoke.CredUI.xml",
+        "lib/net6.0/Vanara.PInvoke.CredUI.dll",
+        "lib/net6.0/Vanara.PInvoke.CredUI.xml",
+        "lib/net7.0/Vanara.PInvoke.CredUI.dll",
+        "lib/net7.0/Vanara.PInvoke.CredUI.xml",
+        "lib/net8.0-windows7.0/Vanara.PInvoke.CredUI.dll",
+        "lib/net8.0-windows7.0/Vanara.PInvoke.CredUI.xml",
+        "lib/net9.0-windows7.0/Vanara.PInvoke.CredUI.dll",
+        "lib/net9.0-windows7.0/Vanara.PInvoke.CredUI.xml",
+        "lib/netcoreapp3.1/Vanara.PInvoke.CredUI.dll",
+        "lib/netcoreapp3.1/Vanara.PInvoke.CredUI.xml",
+        "lib/netstandard2.0/Vanara.PInvoke.CredUI.dll",
+        "lib/netstandard2.0/Vanara.PInvoke.CredUI.xml",
+        "lib/netstandard2.1/Vanara.PInvoke.CredUI.dll",
+        "lib/netstandard2.1/Vanara.PInvoke.CredUI.xml",
+        "pkgreadme.md",
+        "vanara.pinvoke.credui.4.1.6.nupkg.sha512",
+        "vanara.pinvoke.credui.nuspec"
+      ]
+    },
+    "Vanara.PInvoke.Cryptography/4.1.6": {
+      "sha512": "W/dDJOlvu6nvTC/LgfEpfPEuktwa/K29146J3RcbyHyrAHvIpyxiMR++QxT0MVV1R034nbh52svB70AMOZfLUw==",
+      "type": "package",
+      "path": "vanara.pinvoke.cryptography/4.1.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Vanara64x64.png",
+        "lib/net48/Vanara.PInvoke.Cryptography.dll",
+        "lib/net48/Vanara.PInvoke.Cryptography.xml",
+        "lib/net5.0/Vanara.PInvoke.Cryptography.dll",
+        "lib/net5.0/Vanara.PInvoke.Cryptography.xml",
+        "lib/net6.0/Vanara.PInvoke.Cryptography.dll",
+        "lib/net6.0/Vanara.PInvoke.Cryptography.xml",
+        "lib/net7.0/Vanara.PInvoke.Cryptography.dll",
+        "lib/net7.0/Vanara.PInvoke.Cryptography.xml",
+        "lib/net8.0-windows7.0/Vanara.PInvoke.Cryptography.dll",
+        "lib/net8.0-windows7.0/Vanara.PInvoke.Cryptography.xml",
+        "lib/net9.0-windows7.0/Vanara.PInvoke.Cryptography.dll",
+        "lib/net9.0-windows7.0/Vanara.PInvoke.Cryptography.xml",
+        "lib/netcoreapp3.1/Vanara.PInvoke.Cryptography.dll",
+        "lib/netcoreapp3.1/Vanara.PInvoke.Cryptography.xml",
+        "lib/netstandard2.0/Vanara.PInvoke.Cryptography.dll",
+        "lib/netstandard2.0/Vanara.PInvoke.Cryptography.xml",
+        "lib/netstandard2.1/Vanara.PInvoke.Cryptography.dll",
+        "lib/netstandard2.1/Vanara.PInvoke.Cryptography.xml",
+        "pkgreadme.md",
+        "vanara.pinvoke.cryptography.4.1.6.nupkg.sha512",
+        "vanara.pinvoke.cryptography.nuspec"
+      ]
+    },
+    "Vanara.PInvoke.Kernel32/4.1.6": {
+      "sha512": "15WEAjnXvncyo9BJjzFzLz6IiHGuSQSYQeUL6cfisrR2zz0/g7u+H7AoWAPHqT3sNVei1ad8JyRGY+v7ZwF8Tg==",
+      "type": "package",
+      "path": "vanara.pinvoke.kernel32/4.1.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Vanara64x64.png",
+        "lib/net48/Vanara.PInvoke.Kernel32.dll",
+        "lib/net48/Vanara.PInvoke.Kernel32.xml",
+        "lib/net5.0/Vanara.PInvoke.Kernel32.dll",
+        "lib/net5.0/Vanara.PInvoke.Kernel32.xml",
+        "lib/net6.0/Vanara.PInvoke.Kernel32.dll",
+        "lib/net6.0/Vanara.PInvoke.Kernel32.xml",
+        "lib/net7.0/Vanara.PInvoke.Kernel32.dll",
+        "lib/net7.0/Vanara.PInvoke.Kernel32.xml",
+        "lib/net8.0-windows7.0/Vanara.PInvoke.Kernel32.dll",
+        "lib/net8.0-windows7.0/Vanara.PInvoke.Kernel32.xml",
+        "lib/net9.0-windows7.0/Vanara.PInvoke.Kernel32.dll",
+        "lib/net9.0-windows7.0/Vanara.PInvoke.Kernel32.xml",
+        "lib/netcoreapp3.1/Vanara.PInvoke.Kernel32.dll",
+        "lib/netcoreapp3.1/Vanara.PInvoke.Kernel32.xml",
+        "lib/netstandard2.0/Vanara.PInvoke.Kernel32.dll",
+        "lib/netstandard2.0/Vanara.PInvoke.Kernel32.xml",
+        "lib/netstandard2.1/Vanara.PInvoke.Kernel32.dll",
+        "lib/netstandard2.1/Vanara.PInvoke.Kernel32.xml",
+        "pkgreadme.md",
+        "vanara.pinvoke.kernel32.4.1.6.nupkg.sha512",
+        "vanara.pinvoke.kernel32.nuspec"
+      ]
+    },
+    "Vanara.PInvoke.Security/4.1.6": {
+      "sha512": "2WdhMQrwWv6ch1OfZpaDacFdZTKl68nyP8/4AJ1aNntkxIEoCUJlSd8Gc0fdNi4hbmfqYU5mhTMBPDKIv17cUg==",
+      "type": "package",
+      "path": "vanara.pinvoke.security/4.1.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Vanara64x64.png",
+        "lib/net48/Vanara.PInvoke.Security.dll",
+        "lib/net48/Vanara.PInvoke.Security.xml",
+        "lib/net5.0/Vanara.PInvoke.Security.dll",
+        "lib/net5.0/Vanara.PInvoke.Security.xml",
+        "lib/net6.0/Vanara.PInvoke.Security.dll",
+        "lib/net6.0/Vanara.PInvoke.Security.xml",
+        "lib/net7.0/Vanara.PInvoke.Security.dll",
+        "lib/net7.0/Vanara.PInvoke.Security.xml",
+        "lib/net8.0-windows7.0/Vanara.PInvoke.Security.dll",
+        "lib/net8.0-windows7.0/Vanara.PInvoke.Security.xml",
+        "lib/net9.0-windows7.0/Vanara.PInvoke.Security.dll",
+        "lib/net9.0-windows7.0/Vanara.PInvoke.Security.xml",
+        "lib/netcoreapp3.1/Vanara.PInvoke.Security.dll",
+        "lib/netcoreapp3.1/Vanara.PInvoke.Security.xml",
+        "lib/netstandard2.0/Vanara.PInvoke.Security.dll",
+        "lib/netstandard2.0/Vanara.PInvoke.Security.xml",
+        "lib/netstandard2.1/Vanara.PInvoke.Security.dll",
+        "lib/netstandard2.1/Vanara.PInvoke.Security.xml",
+        "pkgreadme.md",
+        "vanara.pinvoke.security.4.1.6.nupkg.sha512",
+        "vanara.pinvoke.security.nuspec"
+      ]
+    },
+    "Vanara.PInvoke.Shared/4.1.6": {
+      "sha512": "mmoYuZMtJ70h0Q7jxpQdeYeCcE3rjPHS+AwkgdzURg+zMHR9GQpRg5e978YtDj6msNCxeWD+F9jgzKPxDivQ1w==",
+      "type": "package",
+      "path": "vanara.pinvoke.shared/4.1.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Vanara64x64.png",
+        "lib/net48/Vanara.PInvoke.Shared.dll",
+        "lib/net48/Vanara.PInvoke.Shared.xml",
+        "lib/net5.0/Vanara.PInvoke.Shared.dll",
+        "lib/net5.0/Vanara.PInvoke.Shared.xml",
+        "lib/net6.0/Vanara.PInvoke.Shared.dll",
+        "lib/net6.0/Vanara.PInvoke.Shared.xml",
+        "lib/net7.0/Vanara.PInvoke.Shared.dll",
+        "lib/net7.0/Vanara.PInvoke.Shared.xml",
+        "lib/net8.0-windows7.0/Vanara.PInvoke.Shared.dll",
+        "lib/net8.0-windows7.0/Vanara.PInvoke.Shared.xml",
+        "lib/net9.0-windows7.0/Vanara.PInvoke.Shared.dll",
+        "lib/net9.0-windows7.0/Vanara.PInvoke.Shared.xml",
+        "lib/netcoreapp3.1/Vanara.PInvoke.Shared.dll",
+        "lib/netcoreapp3.1/Vanara.PInvoke.Shared.xml",
+        "lib/netstandard2.0/Vanara.PInvoke.Shared.dll",
+        "lib/netstandard2.0/Vanara.PInvoke.Shared.xml",
+        "lib/netstandard2.1/Vanara.PInvoke.Shared.dll",
+        "lib/netstandard2.1/Vanara.PInvoke.Shared.xml",
+        "pkgreadme.md",
+        "vanara.pinvoke.shared.4.1.6.nupkg.sha512",
+        "vanara.pinvoke.shared.nuspec"
       ]
     },
     "TicketSalesApp.Core/1.0.0": {

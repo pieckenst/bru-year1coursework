@@ -1,7 +1,8 @@
 {
   "NumericalAccentColor": 4294918979,
   "PreferUserAccentColor": false,
-  "Theme": 1,
+  "Theme": "System",
+  "CustomThemeId": null,
   "WindowSettings": {
     "EnableBlur": true,
     "EnableCustomTitleBar": true,

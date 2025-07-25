@@ -557,6 +557,195 @@
           }
         }
       },
+      "GirCore.Adw-1/0.7.0-preview.1": {
+        "dependencies": {
+          "GirCore.Gio-2.0": "0.7.0-preview.1",
+          "GirCore.Gtk-4.0": "0.7.0-preview.1"
+        },
+        "runtime": {
+          "lib/net9.0/Adw-1.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
+      "GirCore.Cairo-1.0/0.7.0-preview.1": {
+        "dependencies": {
+          "GirCore.GObject-2.0": "0.7.0-preview.1"
+        },
+        "runtime": {
+          "lib/net9.0/cairo-1.0.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
+      "GirCore.FreeType2-2.0/0.7.0-preview.1": {
+        "dependencies": {
+          "GirCore.GLib-2.0": "0.7.0-preview.1",
+          "GirCore.GObject-2.0": "0.7.0-preview.1"
+        },
+        "runtime": {
+          "lib/net9.0/freetype2-2.0.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
+      "GirCore.Gdk-4.0/0.7.0-preview.1": {
+        "dependencies": {
+          "GirCore.Cairo-1.0": "0.7.0-preview.1",
+          "GirCore.GdkPixbuf-2.0": "0.7.0-preview.1",
+          "GirCore.Gio-2.0": "0.7.0-preview.1",
+          "GirCore.Pango-1.0": "0.7.0-preview.1",
+          "GirCore.PangoCairo-1.0": "0.7.0-preview.1"
+        },
+        "runtime": {
+          "lib/net9.0/Gdk-4.0.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
+      "GirCore.GdkPixbuf-2.0/0.7.0-preview.1": {
+        "dependencies": {
+          "GirCore.Gio-2.0": "0.7.0-preview.1"
+        },
+        "runtime": {
+          "lib/net9.0/GdkPixbuf-2.0.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
+      "GirCore.Gio-2.0/0.7.0-preview.1": {
+        "dependencies": {
+          "GirCore.GObject-2.0": "0.7.0-preview.1"
+        },
+        "runtime": {
+          "lib/net9.0/Gio-2.0.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
+      "GirCore.GLib-2.0/0.7.0-preview.1": {
+        "runtime": {
+          "lib/net9.0/GLib-2.0.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
+      "GirCore.GObject-2.0/0.7.0-preview.1": {
+        "dependencies": {
+          "GirCore.GLib-2.0": "0.7.0-preview.1"
+        },
+        "runtime": {
+          "lib/net9.0/GObject-2.0.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
+      "GirCore.Graphene-1.0/0.7.0-preview.1": {
+        "dependencies": {
+          "GirCore.GObject-2.0": "0.7.0-preview.1"
+        },
+        "runtime": {
+          "lib/net9.0/Graphene-1.0.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
+      "GirCore.Gsk-4.0/0.7.0-preview.1": {
+        "dependencies": {
+          "GirCore.Gdk-4.0": "0.7.0-preview.1",
+          "GirCore.Graphene-1.0": "0.7.0-preview.1"
+        },
+        "runtime": {
+          "lib/net9.0/Gsk-4.0.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
+      "GirCore.Gst-1.0/0.7.0-preview.1": {
+        "dependencies": {
+          "GirCore.GLib-2.0": "0.7.0-preview.1",
+          "GirCore.GObject-2.0": "0.7.0-preview.1"
+        },
+        "runtime": {
+          "lib/net9.0/Gst-1.0.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
+      "GirCore.Gtk-4.0/0.7.0-preview.1": {
+        "dependencies": {
+          "GirCore.Gdk-4.0": "0.7.0-preview.1",
+          "GirCore.Gsk-4.0": "0.7.0-preview.1"
+        },
+        "runtime": {
+          "lib/net9.0/Gtk-4.0.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
+      "GirCore.HarfBuzz-0.0/0.7.0-preview.1": {
+        "dependencies": {
+          "GirCore.FreeType2-2.0": "0.7.0-preview.1",
+          "GirCore.GObject-2.0": "0.7.0-preview.1"
+        },
+        "runtime": {
+          "lib/net9.0/HarfBuzz-0.0.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
+      "GirCore.Pango-1.0/0.7.0-preview.1": {
+        "dependencies": {
+          "GirCore.Cairo-1.0": "0.7.0-preview.1",
+          "GirCore.GObject-2.0": "0.7.0-preview.1",
+          "GirCore.Gio-2.0": "0.7.0-preview.1",
+          "GirCore.HarfBuzz-0.0": "0.7.0-preview.1"
+        },
+        "runtime": {
+          "lib/net9.0/Pango-1.0.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
+      "GirCore.PangoCairo-1.0/0.7.0-preview.1": {
+        "dependencies": {
+          "GirCore.Cairo-1.0": "0.7.0-preview.1",
+          "GirCore.GObject-2.0": "0.7.0-preview.1",
+          "GirCore.Pango-1.0": "0.7.0-preview.1"
+        },
+        "runtime": {
+          "lib/net9.0/PangoCairo-1.0.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
+      "GirCore.Secret-1/0.7.0-preview.1": {
+        "dependencies": {
+          "GirCore.GObject-2.0": "0.7.0-preview.1",
+          "GirCore.Gio-2.0": "0.7.0-preview.1"
+        },
+        "runtime": {
+          "lib/net9.0/Secret-1.dll": {
+            "assemblyVersion": "0.7.0.0",
+            "fileVersion": "0.7.0.0"
+          }
+        }
+      },
       "HarfBuzzSharp/7.3.0.3": {
         "dependencies": {
           "HarfBuzzSharp.NativeAssets.Win32": "7.3.0.3",
@@ -1928,6 +2117,76 @@
           }
         }
       },
+      "Vanara.Core/4.1.6": {
+        "runtime": {
+          "lib/net7.0/Vanara.Core.dll": {
+            "assemblyVersion": "4.1.6.0",
+            "fileVersion": "4.1.6.0"
+          }
+        },
+        "resources": {
+          "lib/net7.0/fr/Vanara.Core.resources.dll": {
+            "locale": "fr"
+          }
+        }
+      },
+      "Vanara.PInvoke.CredUI/4.1.6": {
+        "dependencies": {
+          "Vanara.PInvoke.Kernel32": "4.1.6",
+          "Vanara.PInvoke.Security": "4.1.6"
+        },
+        "runtime": {
+          "lib/net7.0/Vanara.PInvoke.CredUI.dll": {
+            "assemblyVersion": "4.1.6.0",
+            "fileVersion": "4.1.6.0"
+          }
+        }
+      },
+      "Vanara.PInvoke.Cryptography/4.1.6": {
+        "dependencies": {
+          "Vanara.PInvoke.Shared": "4.1.6"
+        },
+        "runtime": {
+          "lib/net7.0/Vanara.PInvoke.Cryptography.dll": {
+            "assemblyVersion": "4.1.6.0",
+            "fileVersion": "4.1.6.0"
+          }
+        }
+      },
+      "Vanara.PInvoke.Kernel32/4.1.6": {
+        "dependencies": {
+          "Vanara.PInvoke.Shared": "4.1.6"
+        },
+        "runtime": {
+          "lib/net7.0/Vanara.PInvoke.Kernel32.dll": {
+            "assemblyVersion": "4.1.6.0",
+            "fileVersion": "4.1.6.0"
+          }
+        }
+      },
+      "Vanara.PInvoke.Security/4.1.6": {
+        "dependencies": {
+          "Vanara.PInvoke.Cryptography": "4.1.6",
+          "Vanara.PInvoke.Kernel32": "4.1.6"
+        },
+        "runtime": {
+          "lib/net7.0/Vanara.PInvoke.Security.dll": {
+            "assemblyVersion": "4.1.6.0",
+            "fileVersion": "4.1.6.0"
+          }
+        }
+      },
+      "Vanara.PInvoke.Shared/4.1.6": {
+        "dependencies": {
+          "Vanara.Core": "4.1.6"
+        },
+        "runtime": {
+          "lib/net7.0/Vanara.PInvoke.Shared.dll": {
+            "assemblyVersion": "4.1.6.0",
+            "fileVersion": "4.1.6.0"
+          }
+        }
+      },
       "SuperNova/1.0.0": {
         "dependencies": {
           "Avalonia": "11.2.3",
@@ -1967,7 +2226,8 @@
           "System.IdentityModel.Tokens.Jwt": "7.4.0",
           "System.Text.Json": "9.0.1",
           "TicketSalesApp.Core": "1.0.0",
-          "TicketSalesApp.Services": "1.0.0"
+          "TicketSalesApp.Services": "1.0.0",
+          "Vanara.PInvoke.CredUI": "4.1.6"
         },
         "runtime": {
           "SuperNova.dll": {
@@ -1994,12 +2254,23 @@
       },
       "TicketSalesApp.Core/1.0.0": {
         "dependencies": {
+          "GirCore.Adw-1": "0.7.0-preview.1",
+          "GirCore.Cairo-1.0": "0.7.0-preview.1",
+          "GirCore.Gst-1.0": "0.7.0-preview.1",
+          "GirCore.Gtk-4.0": "0.7.0-preview.1",
+          "GirCore.Secret-1": "0.7.0-preview.1",
           "Microsoft.EntityFrameworkCore": "9.0.1",
           "Microsoft.EntityFrameworkCore.Sqlite": "9.0.1",
           "Serilog": "4.2.1-dev-02337",
           "Serilog.Settings.Configuration": "9.0.1-dev-02317",
           "Serilog.Sinks.File": "6.0.0",
-          "System.Text.Json": "9.0.1"
+          "System.Text.Json": "9.0.1",
+          "Vanara.Core": "4.1.6",
+          "Vanara.PInvoke.CredUI": "4.1.6",
+          "Vanara.PInvoke.Cryptography": "4.1.6",
+          "Vanara.PInvoke.Kernel32": "4.1.6",
+          "Vanara.PInvoke.Security": "4.1.6",
+          "Vanara.PInvoke.Shared": "4.1.6"
         },
         "runtime": {
           "TicketSalesApp.Core.dll": {
@@ -2303,6 +2574,118 @@
       "sha512": "sha512-Mn1+fU/jqxgONEJq8KLQPGWEi7g/hUVTbjZyn4QM0sWWDAVOHPO9WjXWORSykwdfg/6S3GM15qsfz+2EvO+QAQ==",
       "path": "dynamicdata/8.4.1",
       "hashPath": "dynamicdata.8.4.1.nupkg.sha512"
+    },
+    "GirCore.Adw-1/0.7.0-preview.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4czZyXTJWhg/GD4XiCtjQUDGF6PYyRgs59tjwPIZlffAHqZl8J2iSk+bKCJLh1B3iI7tx2iw986R8Bkw/t+2/g==",
+      "path": "gircore.adw-1/0.7.0-preview.1",
+      "hashPath": "gircore.adw-1.0.7.0-preview.1.nupkg.sha512"
+    },
+    "GirCore.Cairo-1.0/0.7.0-preview.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xhmvnhFpIa/Q6jzVK/D7CiTYDr3/B2iQ654ZOXKYMHLWQsGVtV+u3P2rBs8u/8Mb/RAtgazU4hNEggsDf1sCwA==",
+      "path": "gircore.cairo-1.0/0.7.0-preview.1",
+      "hashPath": "gircore.cairo-1.0.0.7.0-preview.1.nupkg.sha512"
+    },
+    "GirCore.FreeType2-2.0/0.7.0-preview.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FVE1Nc7krxNhtHwNFmm3PfFpG8KYrL1zrhIApWqTU25A/edadhR3KKnEM0B1PmP6ZuY0L+2BTmF0lbq8cpDwnw==",
+      "path": "gircore.freetype2-2.0/0.7.0-preview.1",
+      "hashPath": "gircore.freetype2-2.0.0.7.0-preview.1.nupkg.sha512"
+    },
+    "GirCore.Gdk-4.0/0.7.0-preview.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1Txl/YJ8/th6G1aTENVgSuZc9DD/nGdW4fODNgBVzTkfvBFbpDLTOxhKaM1yCRuxxU9UQLq1R5hQz762YcW9yw==",
+      "path": "gircore.gdk-4.0/0.7.0-preview.1",
+      "hashPath": "gircore.gdk-4.0.0.7.0-preview.1.nupkg.sha512"
+    },
+    "GirCore.GdkPixbuf-2.0/0.7.0-preview.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-27BxjzwnNoqYzQ3jXGVmbR7UsrKChxo0PaGU6npaniqyJO0ebN3itUARd8+SFrBd1M/bGVzkr/VXQm9EWRouLg==",
+      "path": "gircore.gdkpixbuf-2.0/0.7.0-preview.1",
+      "hashPath": "gircore.gdkpixbuf-2.0.0.7.0-preview.1.nupkg.sha512"
+    },
+    "GirCore.Gio-2.0/0.7.0-preview.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-10jwixoKbPjsiVJHW9vdryPkDXYca20z3oiiIYamXduBYo3LYjyvvwM79WZfAMPFQ1O6GW/cfBL5Wy+g5/pXcA==",
+      "path": "gircore.gio-2.0/0.7.0-preview.1",
+      "hashPath": "gircore.gio-2.0.0.7.0-preview.1.nupkg.sha512"
+    },
+    "GirCore.GLib-2.0/0.7.0-preview.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-liGgi94WdOP/lozjnQVvR+vu3G4l8iBmyODu44oHHdJfTNxl2fWh4m1llgZ7STPmueYWg32ckxBp89hooNe+CA==",
+      "path": "gircore.glib-2.0/0.7.0-preview.1",
+      "hashPath": "gircore.glib-2.0.0.7.0-preview.1.nupkg.sha512"
+    },
+    "GirCore.GObject-2.0/0.7.0-preview.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-iweSO1nQTd7h7l0U7SoM/2hJGF/NLF2ljszt7ToYT01TLpcvOJSkRX+FWX6sAVh+C9pqzQAaoR8B51PbFFIH+A==",
+      "path": "gircore.gobject-2.0/0.7.0-preview.1",
+      "hashPath": "gircore.gobject-2.0.0.7.0-preview.1.nupkg.sha512"
+    },
+    "GirCore.Graphene-1.0/0.7.0-preview.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-80uEqGiFd7MUBrys+aeW/wc/0iNwUNODxygNMysVfQqlqBpSBHikyvsWprEACNv30BfEy0mei7mgeL0SB6yXJQ==",
+      "path": "gircore.graphene-1.0/0.7.0-preview.1",
+      "hashPath": "gircore.graphene-1.0.0.7.0-preview.1.nupkg.sha512"
+    },
+    "GirCore.Gsk-4.0/0.7.0-preview.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3avQHuZT+4aqpFq6y7kH/5whSq/zRnId/QpmltPzRijLgCQP1B6OjdJrJwr7UYv9m11HQb/Q0w7EopgjeBscjw==",
+      "path": "gircore.gsk-4.0/0.7.0-preview.1",
+      "hashPath": "gircore.gsk-4.0.0.7.0-preview.1.nupkg.sha512"
+    },
+    "GirCore.Gst-1.0/0.7.0-preview.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+dM0dHymZUtg0keyTTniNJ7R8CdZ9vhDUyIX+AZmDoWNqXSTLyLBzj73OKURXcUKf27mqt1sW0rAw5v6LSNURQ==",
+      "path": "gircore.gst-1.0/0.7.0-preview.1",
+      "hashPath": "gircore.gst-1.0.0.7.0-preview.1.nupkg.sha512"
+    },
+    "GirCore.Gtk-4.0/0.7.0-preview.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tZfckpQ39v4gLKYUiGnpHJf/YkoHxegMmqJZgd/db3TrFkUlsyjuln5DpepvLWz4ceSLh65+5SJ7f583oxXnnw==",
+      "path": "gircore.gtk-4.0/0.7.0-preview.1",
+      "hashPath": "gircore.gtk-4.0.0.7.0-preview.1.nupkg.sha512"
+    },
+    "GirCore.HarfBuzz-0.0/0.7.0-preview.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-y/lK3u9JglZEHSlNHPEaGn80hkEbUFQ+qmqGTPWuGmICio4mygSULRTv0upeaO2tmYxDU22AGTYettww6xqjtw==",
+      "path": "gircore.harfbuzz-0.0/0.7.0-preview.1",
+      "hashPath": "gircore.harfbuzz-0.0.0.7.0-preview.1.nupkg.sha512"
+    },
+    "GirCore.Pango-1.0/0.7.0-preview.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Hj0vWfwqt3ZhX2bFIIayu8Fivl026PQ8rSxq+pb4FlQ6RVPM/UIXZdE6uodZY2yZNTAcpDvT8dkamfNVAVypeg==",
+      "path": "gircore.pango-1.0/0.7.0-preview.1",
+      "hashPath": "gircore.pango-1.0.0.7.0-preview.1.nupkg.sha512"
+    },
+    "GirCore.PangoCairo-1.0/0.7.0-preview.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wywd2EWpwbA+edLvmAiFy0ZmbF77GPligob1qwnr4n2dEXzpLOZ9WtxNLD1a5Wrtqg7s6AeGEdizPjTvV4WNuA==",
+      "path": "gircore.pangocairo-1.0/0.7.0-preview.1",
+      "hashPath": "gircore.pangocairo-1.0.0.7.0-preview.1.nupkg.sha512"
+    },
+    "GirCore.Secret-1/0.7.0-preview.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7xejEFGBc//eYqCgiBjkpgLprmJxz60k/xCGai2EpNr/19fIlDKYQith7tYOpdV/bGUPvEyEcCUDeeb1j6MGFA==",
+      "path": "gircore.secret-1/0.7.0-preview.1",
+      "hashPath": "gircore.secret-1.0.7.0-preview.1.nupkg.sha512"
     },
     "HarfBuzzSharp/7.3.0.3": {
       "type": "package",
@@ -2982,6 +3365,48 @@
       "sha512": "sha512-2gkt2kuYPhDKd8gtl34jZSJOnn4nRJfFngCDcTZT/uySbK++ua0YQx2418l9Rn1Y4dE5XNq6zG9ZsE5ltLlNNw==",
       "path": "tmds.dbus.protocol/0.20.0",
       "hashPath": "tmds.dbus.protocol.0.20.0.nupkg.sha512"
+    },
+    "Vanara.Core/4.1.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6ofXAXvywY223+1cRs2uOiWWzBsy9o/m5Bh6txvF3weYSsLI18Pbaz6YCq4oLEEHD7UtE/l4qHkSMdZx9s/6LA==",
+      "path": "vanara.core/4.1.6",
+      "hashPath": "vanara.core.4.1.6.nupkg.sha512"
+    },
+    "Vanara.PInvoke.CredUI/4.1.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QZK/5yXhT+XgbQliYHICOMz2tK4NNVB/4j7XZx6VZ4qfV+g0BW5HPaRKcqKC0Aa0yiswtHA1NIgNnnIAwQYZBw==",
+      "path": "vanara.pinvoke.credui/4.1.6",
+      "hashPath": "vanara.pinvoke.credui.4.1.6.nupkg.sha512"
+    },
+    "Vanara.PInvoke.Cryptography/4.1.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-W/dDJOlvu6nvTC/LgfEpfPEuktwa/K29146J3RcbyHyrAHvIpyxiMR++QxT0MVV1R034nbh52svB70AMOZfLUw==",
+      "path": "vanara.pinvoke.cryptography/4.1.6",
+      "hashPath": "vanara.pinvoke.cryptography.4.1.6.nupkg.sha512"
+    },
+    "Vanara.PInvoke.Kernel32/4.1.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-15WEAjnXvncyo9BJjzFzLz6IiHGuSQSYQeUL6cfisrR2zz0/g7u+H7AoWAPHqT3sNVei1ad8JyRGY+v7ZwF8Tg==",
+      "path": "vanara.pinvoke.kernel32/4.1.6",
+      "hashPath": "vanara.pinvoke.kernel32.4.1.6.nupkg.sha512"
+    },
+    "Vanara.PInvoke.Security/4.1.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2WdhMQrwWv6ch1OfZpaDacFdZTKl68nyP8/4AJ1aNntkxIEoCUJlSd8Gc0fdNi4hbmfqYU5mhTMBPDKIv17cUg==",
+      "path": "vanara.pinvoke.security/4.1.6",
+      "hashPath": "vanara.pinvoke.security.4.1.6.nupkg.sha512"
+    },
+    "Vanara.PInvoke.Shared/4.1.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mmoYuZMtJ70h0Q7jxpQdeYeCcE3rjPHS+AwkgdzURg+zMHR9GQpRg5e978YtDj6msNCxeWD+F9jgzKPxDivQ1w==",
+      "path": "vanara.pinvoke.shared/4.1.6",
+      "hashPath": "vanara.pinvoke.shared.4.1.6.nupkg.sha512"
     },
     "SuperNova/1.0.0": {
       "type": "project",

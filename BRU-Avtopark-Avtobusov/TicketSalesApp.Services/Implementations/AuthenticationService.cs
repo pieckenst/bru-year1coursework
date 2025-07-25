@@ -1,11 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using TicketSalesApp.Core.Data;
 using TicketSalesApp.Core.Models;
+using TicketSalesApp.Services.Configuration;
 using TicketSalesApp.Services.Interfaces;
 
 namespace TicketSalesApp.Services.Implementations
@@ -15,12 +19,18 @@ namespace TicketSalesApp.Services.Implementations
         private readonly AppDbContext _context;
         private readonly IRoleService _roleService;
         private readonly ILogger<AuthenticationService> _logger;
+        private readonly Configuration.WindowsAuthSettings _windowsAuthSettings;
 
-        public AuthenticationService(AppDbContext context, IRoleService roleService, ILogger<AuthenticationService> logger)
+        public AuthenticationService(
+            AppDbContext context, 
+            IRoleService roleService, 
+            ILogger<AuthenticationService> logger,
+            IOptions<WindowsAuthSettings> windowsAuthSettings = null)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _roleService = roleService ?? throw new ArgumentNullException(nameof(roleService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _windowsAuthSettings = windowsAuthSettings?.Value ?? new WindowsAuthSettings();
         }
 
         public async Task<User?> AuthenticateAsync(string login, string password)
@@ -59,6 +69,69 @@ namespace TicketSalesApp.Services.Implementations
             }
         }
 
+        public async Task<User> AuthenticateWindowsUserAsync(string windowsIdentity)
+        {
+            try
+            {
+                _logger.LogInformation("Attempting to authenticate Windows user: {WindowsIdentity}", windowsIdentity);
+
+                if (string.IsNullOrEmpty(windowsIdentity))
+                {
+                    _logger.LogWarning("Windows authentication failed: Empty Windows identity provided");
+                    return null;
+                }
+
+                // Find existing user by Windows identity
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.WindowsIdentity == windowsIdentity);
+
+                if (user != null)
+                {
+                    _logger.LogInformation("Found existing user for Windows identity: {WindowsIdentity}", windowsIdentity);
+                    return user;
+                }
+
+                // Auto-provision new user if enabled
+                if (!_windowsAuthSettings.Enabled || !_windowsAuthSettings.AutoProvisionUsers)
+                {
+                    _logger.LogWarning("Auto-provisioning is disabled for Windows user: {WindowsIdentity}", windowsIdentity);
+                    return null;
+                }
+
+                // Create a new user for Windows authentication
+                var username = GetUsernameFromWindowsIdentity(windowsIdentity);
+                var defaultRole = await _roleService.GetRoleByLegacyIdAsync(_windowsAuthSettings.DefaultRole)
+                    ?? await _roleService.GetRoleByLegacyIdAsync(0); // Fallback to user role
+
+                if (defaultRole == null)
+                {
+                    _logger.LogError("Windows authentication failed: Could not find default role");
+                    return null;
+                }
+
+                user = new User
+                {
+                    Login = username,
+                    WindowsIdentity = windowsIdentity,
+                    IsWindowsAuth = true,
+                    Role = defaultRole.LegacyRoleId,
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                await _context.Users.AddAsync(user);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Auto-provisioned new user for Windows identity: {WindowsIdentity}", windowsIdentity);
+                return user;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during Windows authentication for identity: {WindowsIdentity}", windowsIdentity);
+                throw new ApplicationException("An error occurred during Windows authentication", ex);
+            }
+        }
+
         public async Task<bool> RegisterAsync(string login, string password, int role)
         {
             try
@@ -91,7 +164,8 @@ namespace TicketSalesApp.Services.Implementations
                     Login = login,
                     PasswordHash = HashPassword(password),
                     Role = role,
-                    IsActive = true
+                    IsActive = true,
+                    IsWindowsAuth = false
                 };
 
                 await _context.Users.AddAsync(user);
@@ -127,16 +201,64 @@ namespace TicketSalesApp.Services.Implementations
             }
         }
 
-        private bool VerifyPassword(string password, string hash)
+        private bool VerifyPassword(string password, string storedHash)
         {
             try
             {
-                return HashPassword(password) == hash;
+                return HashPassword(password) == storedHash;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while verifying password");
                 throw new Exception("Failed to verify password", ex);
+            }
+        }
+
+        private string GetUsernameFromWindowsIdentity(string windowsIdentity)
+        {
+            // Extract the username part from DOMAIN\username format
+            var parts = windowsIdentity.Split('\\');
+            return parts.Length > 1 ? parts[1] : windowsIdentity;
+        }
+
+        public async Task<bool> LinkWindowsIdentityAsync(int userId, string windowsIdentity)
+        {
+            try
+            {
+                _logger.LogInformation("Linking Windows identity {WindowsIdentity} to user ID {UserId}", 
+                    windowsIdentity, userId);
+
+                var user = await _context.Users.FindAsync(userId);
+                if (user == null)
+                {
+                    _logger.LogWarning("User with ID {UserId} not found for Windows identity linking", userId);
+                    return false;
+                }
+
+                // Check if the Windows identity is already linked to another user
+                var existingUser = await _context.Users
+                    .FirstOrDefaultAsync(u => u.WindowsIdentity == windowsIdentity && u.UserId != userId);
+
+                if (existingUser != null)
+                {
+                    _logger.LogWarning("Windows identity {WindowsIdentity} is already linked to user ID {ExistingUserId}", 
+                        windowsIdentity, existingUser.UserId);
+                    return false;
+                }
+
+                user.WindowsIdentity = windowsIdentity;
+                user.IsWindowsAuth = true;
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Successfully linked Windows identity {WindowsIdentity} to user ID {UserId}", 
+                    windowsIdentity, userId);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error linking Windows identity {WindowsIdentity} to user ID {UserId}", 
+                    windowsIdentity, userId);
+                throw new ApplicationException("An error occurred while linking Windows identity", ex);
             }
         }
 

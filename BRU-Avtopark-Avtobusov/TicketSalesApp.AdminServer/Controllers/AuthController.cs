@@ -4,17 +4,24 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.DirectoryServices.AccountManagement;
+using System.DirectoryServices;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using TicketSalesApp.Core.Models;
 using TicketSalesApp.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using TicketSalesApp.Core.Data;
 using Serilog;
 using Microsoft.Extensions.Caching.Memory;
+using System.Linq;
 
 namespace TicketSalesApp.AdminServer.Controllers
 {
@@ -22,7 +29,7 @@ namespace TicketSalesApp.AdminServer.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthenticationService _authService;
+        private readonly TicketSalesApp.Services.Interfaces.IAuthenticationService _authService; // only to fix error caused by using Microsoft.AspNetCore.Authentication;
         private readonly IQRAuthenticationService _qrAuthService;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
@@ -31,7 +38,7 @@ namespace TicketSalesApp.AdminServer.Controllers
         private readonly IMemoryCache _cache;
 
         public AuthController(
-            IAuthenticationService authService, 
+            TicketSalesApp.Services.Interfaces.IAuthenticationService authService,
             IQRAuthenticationService qrAuthService,
             IConfiguration configuration,
             IWebHostEnvironment environment,
@@ -47,6 +54,194 @@ namespace TicketSalesApp.AdminServer.Controllers
             _context = context;
             _cache = cache;
         }
+
+        private bool HasBlankPassword(string username, bool isMachine = false)
+        {
+            try
+            {
+                var contextType = isMachine ? ContextType.Machine : ContextType.Domain;
+                Console.WriteLine($"[DEBUG] Checking blank password for '{username}' (IsMachine: {isMachine})");
+
+                using var context = new PrincipalContext(contextType);
+
+                using var user = UserPrincipal.FindByIdentity(context, IdentityType.SamAccountName, username);
+                if (user == null)
+                {
+                    Console.WriteLine($"[DEBUG] User not found: {username}");
+                    _logger.LogWarning("User not found: {Username}", username);
+                    return false;
+                }
+
+                if (!isMachine)
+                {
+                    using var de = (DirectoryEntry)user.GetUnderlyingObject();
+                    if (de.Properties.Contains("userAccountControl"))
+                    {
+                        int uac = (int)de.Properties["userAccountControl"].Value;
+                        Console.WriteLine($"[DEBUG] UAC for domain user {username}: {uac}");
+
+                        const int PASSWD_NOTREQD = 0x0020;
+                        if ((uac & PASSWD_NOTREQD) != 0)
+                        {
+                            Console.WriteLine($"[DEBUG] PASSWD_NOTREQD flag detected for user {username}");
+                            _logger.LogWarning("Domain user {Username} has PASSWD_NOTREQD flag set", username);
+                            return true; // пароль не требуется
+                        }
+                    }
+                }
+
+                // Проверка с пустым паролем (без Sign/Seal для локальных)
+                var options = isMachine
+                    ? ContextOptions.Negotiate // fix: only option allowed for local
+                    : ContextOptions.Negotiate | ContextOptions.Signing | ContextOptions.Sealing;
+
+                bool acceptsBlankPassword = context.ValidateCredentials(
+                    user.SamAccountName,
+                    string.Empty,
+                    options);
+
+                Console.WriteLine($"[DEBUG] ValidateCredentials(empty) returned {acceptsBlankPassword} for {username}");
+
+                if (acceptsBlankPassword)
+                {
+                    _logger.LogWarning("User {Username} accepted empty password", username);
+                }
+
+                return acceptsBlankPassword;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Exception during blank password check for {username}: {ex.Message}");
+                _logger.LogError(ex, "Error in HasBlankPassword for {Username}", username);
+                // Treat any exception as “insecure/no password” so we block the login
+                return true;
+            }
+        }
+
+
+
+
+
+        [Route("windows-login")]
+        [Authorize(AuthenticationSchemes = "Windows")]
+        [HttpGet]
+        public async Task<IActionResult> WindowsLogin()
+        {
+            try
+            {
+                // 1) If the user isn’t yet Windows‑authenticated, trigger a Negotiate challenge
+                if (!(User.Identity is WindowsIdentity wi) || !wi.IsAuthenticated)
+                {
+                    Console.WriteLine("[DEBUG] Triggering Windows auth challenge");
+                    // This will return a 401 + WWW‑Authenticate: Negotiate, NTLM header,
+                    // causing the client to show the credentials prompt.
+                    return Challenge(
+                        new AuthenticationProperties(),
+                        NegotiateDefaults.AuthenticationScheme
+                    );
+                }
+
+                // 2) User is now authenticated by Windows
+                var windowsUsername = wi.Name;
+                var isMachineAccount = windowsUsername.StartsWith(
+                    Environment.MachineName + "\\",
+                    StringComparison.OrdinalIgnoreCase
+                );
+
+                Console.WriteLine($"[DEBUG] Windows user authenticated: {windowsUsername}");
+                _logger.LogInformation(
+                    "Windows user authenticated: {WindowsUsername}",
+                    windowsUsername
+                );
+
+                // 3) Lookup or provision in your DB
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.WindowsIdentity == windowsUsername);
+
+                // 4) Blank‑password block → Teapot 418
+                if (HasBlankPassword(windowsUsername, isMachineAccount))
+                {
+                    Console.WriteLine(
+                        $"[DEBUG] '{windowsUsername}' blocked due to blank password"
+                    );
+                    _logger.LogWarning(
+                        "User {WindowsUsername} blocked: blank or unset password",
+                        windowsUsername
+                    );
+
+                    return StatusCode(418, new
+                    {
+                        message = "Access denied: Your account is not securely configured. " +
+                                        "Please set a password in Windows settings and try again.",
+                        codedtest = 418,
+                        secondaryText = "I’m a teapot—not really, but your account looks like one."
+                    });
+                }
+
+                if (user == null)
+                {
+                    Console.WriteLine($"[DEBUG] Provisioning new user '{windowsUsername}'");
+                    var username = windowsUsername.Split('\\', 2).Last();
+                    user = new User
+                    {
+                        Login = username,
+                        WindowsIdentity = windowsUsername,
+                        IsWindowsAuth = true,
+                        Role = 0,
+                        IsActive = true,
+                        CreatedAt = DateTime.UtcNow
+                    };
+                    _context.Users.Add(user);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation(
+                        "New user '{Username}' created for Windows identity '{WindowsUsername}'",
+                        user.Login, windowsUsername
+                    );
+                }
+                else
+                {
+                    Console.WriteLine($"[DEBUG] Found existing user '{user.Login}'");
+                    _logger.LogInformation(
+                        "Found existing user '{Username}' for Windows identity '{WindowsUsername}'",
+                        user.Login, windowsUsername
+                    );
+                }
+
+                // 5) Issue JWT and return success
+                user.LastLoginAt = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+
+                var token = GenerateJwtToken(user);
+                Console.WriteLine($"[DEBUG] JWT token issued for: {user.Login}");
+                _logger.LogInformation(
+                    "JWT token generated for user '{Username}'", user.Login
+                );
+
+                return Ok(new
+                {
+                    token,
+                    user = new
+                    {
+                        user.UserId,
+                        user.Login,
+                        user.Email,
+                        user.Role,
+                        IsWindowsAuth = true
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Unexpected exception in WindowsLogin: {ex.Message}");
+                _logger.LogError(ex, "An unexpected error occurred during Windows authentication.");
+                return StatusCode(500, new
+                {
+                    message = "An internal server error occurred during authentication."
+                });
+            }
+        }
+
+
 
         [Route("login")]
         [HttpGet]
@@ -880,7 +1075,7 @@ namespace TicketSalesApp.AdminServer.Controllers
 
             if (!ModelState.IsValid)
             {
-                Log.Warning("Invalid model state for login request: {ValidationErrors}", 
+                Log.Warning("Invalid model state for login request: {ValidationErrors}",
                     ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
                 return BadRequest(ModelState);
             }
@@ -945,7 +1140,7 @@ namespace TicketSalesApp.AdminServer.Controllers
                 }
 
                 // Now validate the token properly
-                var keyString = _configuration["JwtSettings:Secret"] ?? 
+                var keyString = _configuration["JwtSettings:Secret"] ??
                     throw new InvalidOperationException("JWT secret is not configured");
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
 
@@ -961,7 +1156,7 @@ namespace TicketSalesApp.AdminServer.Controllers
                 try
                 {
                     var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out _);
-                    Log.Debug("Token validation successful for registration request by {Username}", 
+                    Log.Debug("Token validation successful for registration request by {Username}",
                         principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value);
                 }
                 catch (Exception ex)
@@ -1038,7 +1233,7 @@ namespace TicketSalesApp.AdminServer.Controllers
                     await _context.SaveChangesAsync();
                 }
 
-                Log.Information("User {Login} successfully registered with role {Role} by {RegisteredBy}", 
+                Log.Information("User {Login} successfully registered with role {Role} by {RegisteredBy}",
                     model.Login, model.Role, jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value);
 
                 return Ok(new
@@ -1064,7 +1259,7 @@ namespace TicketSalesApp.AdminServer.Controllers
             {
                 _logger.LogError(ex, "Registration failed");
                 Log.Error(ex, "Registration failed for {Login}. Error: {ErrorMessage}", model.Login, ex.Message);
-                
+
                 return StatusCode(500, new
                 {
                     success = false,
@@ -1088,13 +1283,13 @@ namespace TicketSalesApp.AdminServer.Controllers
                 });
             }
         }
-        
+
         private string GenerateJwtToken(User user)
         {
             Log.Information("Starting JWT token generation for user {Login}", user.Login);
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var keyString = _configuration["JwtSettings:Secret"] ?? 
+            var keyString = _configuration["JwtSettings:Secret"] ??
                 throw new InvalidOperationException("JWT secret is not configured");
 
             // Ensure the key is at least 32 bytes
@@ -1112,22 +1307,28 @@ namespace TicketSalesApp.AdminServer.Controllers
 
             var key = new SymmetricSecurityKey(keyBytes);
             var expirationMinutes = double.Parse(_configuration["JwtSettings:ExpirationInMinutes"] ?? "120");
-            
-            Log.Debug("Creating token descriptor for user {Login} with expiration in {ExpirationMinutes} minutes", 
+
+            Log.Debug("Creating token descriptor for user {Login} with expiration in {ExpirationMinutes} minutes",
                 user.Login, expirationMinutes);
+
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(ClaimTypes.Name, user.Login),
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
+                new Claim("role", user.Role.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("is_windows_auth", user.IsWindowsAuth ? "true" : "false", ClaimValueTypes.Boolean)
+            };
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, user.Login),
-                    new Claim("role", user.Role.ToString())
-                }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddMinutes(double.Parse(_configuration["JwtSettings:ExpirationInMinutes"] ?? "120")),
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
             };
 
-            Log.Information("Successfully generated JWT token for user {Login} with expiration at {Expiration}", 
+            Log.Information("Successfully generated JWT token for user {Login} with expiration at {Expiration}",
                 user.Login, tokenDescriptor.Expires);
 
 
@@ -1161,13 +1362,13 @@ namespace TicketSalesApp.AdminServer.Controllers
 
                 // Generate QR code
                 var (qrCodeBase64, rawData) = await _qrAuthService.GenerateQRCodeWithDataAsync(user);
-                
+
                 var response = new
                 {
                     qrCode = qrCodeBase64,
                     rawData = _environment.IsDevelopment() ? rawData : null
                 };
-                
+
                 Log.Information("Successfully generated QR code for user {Login}", userLogin);
                 return Ok(response);
             }
@@ -1215,7 +1416,7 @@ namespace TicketSalesApp.AdminServer.Controllers
         {
             try
             {
-                Log.Information("Generating direct login QR code for user {Username} on device type {DeviceType}", 
+                Log.Information("Generating direct login QR code for user {Username} on device type {DeviceType}",
                     username, deviceType);
 
                 // Validate user exists
@@ -1227,13 +1428,13 @@ namespace TicketSalesApp.AdminServer.Controllers
                 }
 
                 var (qrCode, rawData) = await _qrAuthService.GenerateDirectLoginQRCodeAsync(username, deviceType);
-                
+
                 var response = new
                 {
                     qrCode,
                     rawData = _environment.IsDevelopment() ? rawData : null
                 };
-                
+
                 Log.Information("Successfully generated direct login QR code for user {Username}", username);
                 return Ok(response);
             }
@@ -1338,4 +1539,4 @@ namespace TicketSalesApp.AdminServer.Controllers
         public required string DeviceType { get; set; }
         public bool IsDesktopLogin { get; set; }
     }
-} 
+}

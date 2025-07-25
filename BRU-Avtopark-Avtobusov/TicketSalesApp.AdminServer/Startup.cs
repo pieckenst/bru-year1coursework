@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Negotiate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using TicketSalesApp.AdminServer.Security;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,19 +17,20 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Net;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Threading.RateLimiting;
 using System.Threading.Tasks;
 using TicketSalesApp.AdminServer.Configuration;
 using TicketSalesApp.Core.Data;
+using TicketSalesApp.Core.Models;
 using TicketSalesApp.Services.Implementations;
 using TicketSalesApp.Services.Interfaces;
 using App.Metrics;
 using App.Metrics.Formatters.Prometheus;
 using App.Metrics.Reporting;
 using App.Metrics.AspNetCore;
-
 using App.Metrics.AspNetCore.Endpoints;
 using Prometheus;
 using Serilog;
@@ -164,20 +168,24 @@ namespace TicketSalesApp.AdminServer
             // Configure Authentication
             try
             {
+                // Configure JWT Authentication
                 var jwtSettings = Configuration.GetSection("JwtSettings");
                 var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"] ??
                     throw new InvalidOperationException("JWT Secret is not configured in appsettings.json"));
 
-                services.AddAuthentication(x =>
+                // Configure Windows Authentication
+                services.AddAuthentication(options =>
                 {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    // Set default schemes
+                    options.DefaultAuthenticateScheme = NegotiateDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = NegotiateDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-                .AddJwtBearer(x =>
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
-                    x.RequireHttpsMetadata = !Environment.IsDevelopment(); // Don't require HTTPS in development
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
+                    options.RequireHttpsMetadata = !Environment.IsDevelopment();
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -186,13 +194,39 @@ namespace TicketSalesApp.AdminServer
                         ClockSkew = TimeSpan.Zero,
                         RoleClaimType = "role"
                     };
+                })
+                // Add Windows Authentication (Negotiate)
+                .AddNegotiate("Windows", options =>
+                {
+                    // Require either Kerberos or NTLM with enhanced security
+                    options.PersistKerberosCredentials=false;
+                    options.PersistNtlmCredentials=false;
                 });
+
+                // Add our custom authorization handler for Windows Authentication security
+                services.AddSingleton<IAuthorizationHandler, WindowsAuthSecurityHandler>();
+                services.AddHttpContextAccessor();
 
                 // Add authorization policies
                 services.AddAuthorization(options =>
                 {
+                    // Existing JWT policy
                     options.AddPolicy("AdminOnly", policy =>
                         policy.RequireClaim("role", "1"));
+                        
+                    // Windows Authentication policy with enhanced security
+                    options.AddPolicy("WindowsAuth", policy =>
+                    {
+                        policy.RequireAuthenticatedUser()
+                              .AddAuthenticationSchemes("Windows")
+                              .AddRequirements(new WindowsAuthSecurityRequirement());
+                    });
+
+                    // Combined policy that allows either JWT or Windows auth
+                    options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme, "Windows")
+                        .RequireAuthenticatedUser()
+                        .Build();
                 });
             }
             catch (Exception ex)

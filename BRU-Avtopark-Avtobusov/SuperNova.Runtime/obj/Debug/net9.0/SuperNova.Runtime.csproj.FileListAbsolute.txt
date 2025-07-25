@@ -12,3 +12,6 @@ G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\Av
 G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\Avalonia\SuperNova.Runtime.pdb
 G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\refint\Avalonia\SuperNova.Runtime.dll
 G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\ref\SuperNova.Runtime.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\SuperNova.Runtime.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\refint\SuperNova.Runtime.dll
+G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Runtime\obj\Debug\net9.0\SuperNova.Runtime.pdb
