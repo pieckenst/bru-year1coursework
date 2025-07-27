@@ -1,0 +1,158 @@
+[2025-07-28 00:02:23.842] [FTL] [] CRITICAL: Unhandled exception in Avalonia startup
+System.InvalidCastException: Unable to cast object of type 'SuperNova.Forms.ViewModels.MainWindowViewModel' to type 'SuperNova.MainViewViewModel'.
+   at CompiledAvaloniaXaml.XamlIlTrampolines.SuperNova:SuperNova.MainViewViewModel+About_0!CommandExecuteTrampoline(Object, Object)
+   at Avalonia.Data.Core.ExpressionNodes.MethodCommandNode.Command.Execute(Object parameter)
+   at Avalonia.Labs.Input.CommandBinding.OnExecutedRedirect(Object sender, ExecutedRoutedEventArgs e) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\CommandBinding.cs:line 168
+   at Avalonia.Labs.Input.CommandBinding.OnExecuted(Object sender, ExecutedRoutedEventArgs e) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\CommandBinding.cs:line 139
+   at Avalonia.Labs.Input.CommandManager.ExecutedEventHandler(InputElement inputElement, ExecutedRoutedEventArgs args) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\CommandManager.cs:line 233
+   at Avalonia.Reactive.LightweightObservableBase`1.PublishNext(T value)
+   at Avalonia.Interactivity.EventRoute.RaiseEventImpl(RoutedEventArgs e)
+   at Avalonia.Interactivity.Interactive.RaiseEvent(RoutedEventArgs e)
+   at Avalonia.Labs.Input.RoutedCommand.ExecuteCore(Object parameter, IInputElement target) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\RoutedCommand.cs:line 156
+   at Avalonia.Labs.Input.RoutedCommand.System.Windows.Input.ICommand.Execute(Object parameter) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\RoutedCommand.cs:line 121
+   at Avalonia.Controls.MenuItem.OnClick(RoutedEventArgs e)
+   at Avalonia.Controls.MenuItem.<>c.<.cctor>b__23_0(MenuItem x, RoutedEventArgs e)
+   at Avalonia.Reactive.LightweightObservableBase`1.PublishNext(T value)
+   at Avalonia.Interactivity.EventRoute.RaiseEventImpl(RoutedEventArgs e)
+   at Avalonia.Interactivity.Interactive.RaiseEvent(RoutedEventArgs e)
+   at Avalonia.Controls.MenuItem.Avalonia.Controls.IMenuItem.RaiseClick()
+   at Avalonia.Controls.Platform.DefaultMenuInteractionHandler.Click(IMenuItem item)
+   at Avalonia.Controls.Platform.DefaultMenuInteractionHandler.PointerReleased(Object sender, PointerReleasedEventArgs e)
+   at Avalonia.Interactivity.EventRoute.RaiseEventImpl(RoutedEventArgs e)
+   at Avalonia.Interactivity.Interactive.RaiseEvent(RoutedEventArgs e)
+   at Avalonia.Input.MouseDevice.MouseUp(IMouseDevice device, UInt64 timestamp, IInputRoot root, Point p, PointerPointProperties props, KeyModifiers inputModifiers, IInputElement hitTest)
+   at Avalonia.Input.MouseDevice.ProcessRawEvent(RawPointerEventArgs e)
+   at Avalonia.Threading.Dispatcher.Send(SendOrPostCallback action, Object arg, Nullable`1 priority)
+   at Avalonia.Controls.TopLevel.HandleInput(RawInputEventArgs e)
+   at Avalonia.Win32.WindowImpl.AppWndProc(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.PopupImpl.WndProc(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.WindowImpl.WndProcMessageHandler(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.Interop.UnmanagedMethods.DispatchMessage(MSG& lpmsg)
+   at Avalonia.Win32.Win32DispatcherImpl.RunLoop(CancellationToken cancellationToken)
+   at Avalonia.Threading.DispatcherFrame.Run(IControlledDispatcherImpl impl)
+   at Avalonia.Threading.Dispatcher.PushFrame(DispatcherFrame frame)
+   at Avalonia.Threading.Dispatcher.MainLoop(CancellationToken cancellationToken)
+   at Avalonia.Controls.ApplicationLifetimes.ClassicDesktopStyleApplicationLifetime.StartCore(String[] args)
+   at Avalonia.Controls.ApplicationLifetimes.ClassicDesktopStyleApplicationLifetime.Start(String[] args)
+   at Avalonia.ClassicDesktopStyleApplicationLifetimeExtensions.StartWithClassicDesktopLifetime(AppBuilder builder, String[] args, ShutdownMode shutdownMode)
+   at SuperNova.Desktop.Program.SafeStartAvalonia(String[] args) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Desktop\Program.cs:line 196
+[2025-07-28 00:02:23.882] [FTL] [] Exception type: InvalidCastException
+[2025-07-28 00:02:23.883] [FTL] [] Exception message: Unable to cast object of type 'SuperNova.Forms.ViewModels.MainWindowViewModel' to type 'SuperNova.MainViewViewModel'.
+[2025-07-28 00:02:23.884] [FTL] [] Stack trace:    at CompiledAvaloniaXaml.XamlIlTrampolines.SuperNova:SuperNova.MainViewViewModel+About_0!CommandExecuteTrampoline(Object, Object)
+   at Avalonia.Data.Core.ExpressionNodes.MethodCommandNode.Command.Execute(Object parameter)
+   at Avalonia.Labs.Input.CommandBinding.OnExecutedRedirect(Object sender, ExecutedRoutedEventArgs e) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\CommandBinding.cs:line 168
+   at Avalonia.Labs.Input.CommandBinding.OnExecuted(Object sender, ExecutedRoutedEventArgs e) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\CommandBinding.cs:line 139
+   at Avalonia.Labs.Input.CommandManager.ExecutedEventHandler(InputElement inputElement, ExecutedRoutedEventArgs args) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\CommandManager.cs:line 233
+   at Avalonia.Reactive.LightweightObservableBase`1.PublishNext(T value)
+   at Avalonia.Interactivity.EventRoute.RaiseEventImpl(RoutedEventArgs e)
+   at Avalonia.Interactivity.Interactive.RaiseEvent(RoutedEventArgs e)
+   at Avalonia.Labs.Input.RoutedCommand.ExecuteCore(Object parameter, IInputElement target) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\RoutedCommand.cs:line 156
+   at Avalonia.Labs.Input.RoutedCommand.System.Windows.Input.ICommand.Execute(Object parameter) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\RoutedCommand.cs:line 121
+   at Avalonia.Controls.MenuItem.OnClick(RoutedEventArgs e)
+   at Avalonia.Controls.MenuItem.<>c.<.cctor>b__23_0(MenuItem x, RoutedEventArgs e)
+   at Avalonia.Reactive.LightweightObservableBase`1.PublishNext(T value)
+   at Avalonia.Interactivity.EventRoute.RaiseEventImpl(RoutedEventArgs e)
+   at Avalonia.Interactivity.Interactive.RaiseEvent(RoutedEventArgs e)
+   at Avalonia.Controls.MenuItem.Avalonia.Controls.IMenuItem.RaiseClick()
+   at Avalonia.Controls.Platform.DefaultMenuInteractionHandler.Click(IMenuItem item)
+   at Avalonia.Controls.Platform.DefaultMenuInteractionHandler.PointerReleased(Object sender, PointerReleasedEventArgs e)
+   at Avalonia.Interactivity.EventRoute.RaiseEventImpl(RoutedEventArgs e)
+   at Avalonia.Interactivity.Interactive.RaiseEvent(RoutedEventArgs e)
+   at Avalonia.Input.MouseDevice.MouseUp(IMouseDevice device, UInt64 timestamp, IInputRoot root, Point p, PointerPointProperties props, KeyModifiers inputModifiers, IInputElement hitTest)
+   at Avalonia.Input.MouseDevice.ProcessRawEvent(RawPointerEventArgs e)
+   at Avalonia.Threading.Dispatcher.Send(SendOrPostCallback action, Object arg, Nullable`1 priority)
+   at Avalonia.Controls.TopLevel.HandleInput(RawInputEventArgs e)
+   at Avalonia.Win32.WindowImpl.AppWndProc(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.PopupImpl.WndProc(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.WindowImpl.WndProcMessageHandler(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.Interop.UnmanagedMethods.DispatchMessage(MSG& lpmsg)
+   at Avalonia.Win32.Win32DispatcherImpl.RunLoop(CancellationToken cancellationToken)
+   at Avalonia.Threading.DispatcherFrame.Run(IControlledDispatcherImpl impl)
+   at Avalonia.Threading.Dispatcher.PushFrame(DispatcherFrame frame)
+   at Avalonia.Threading.Dispatcher.MainLoop(CancellationToken cancellationToken)
+   at Avalonia.Controls.ApplicationLifetimes.ClassicDesktopStyleApplicationLifetime.StartCore(String[] args)
+   at Avalonia.Controls.ApplicationLifetimes.ClassicDesktopStyleApplicationLifetime.Start(String[] args)
+   at Avalonia.ClassicDesktopStyleApplicationLifetimeExtensions.StartWithClassicDesktopLifetime(AppBuilder builder, String[] args, ShutdownMode shutdownMode)
+   at SuperNova.Desktop.Program.SafeStartAvalonia(String[] args) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Desktop\Program.cs:line 196
+[2025-07-28 00:05:33.026] [FTL] [] CRITICAL: Unhandled exception in Avalonia startup
+System.InvalidCastException: Unable to cast object of type 'SuperNova.Forms.ViewModels.MainWindowViewModel' to type 'SuperNova.MainViewViewModel'.
+   at CompiledAvaloniaXaml.XamlIlTrampolines.SuperNova:SuperNova.MainViewViewModel+About_0!CommandExecuteTrampoline(Object, Object)
+   at Avalonia.Data.Core.ExpressionNodes.MethodCommandNode.Command.Execute(Object parameter)
+   at Avalonia.Labs.Input.CommandBinding.OnExecutedRedirect(Object sender, ExecutedRoutedEventArgs e) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\CommandBinding.cs:line 168
+   at Avalonia.Labs.Input.CommandBinding.OnExecuted(Object sender, ExecutedRoutedEventArgs e) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\CommandBinding.cs:line 139
+   at Avalonia.Labs.Input.CommandManager.ExecutedEventHandler(InputElement inputElement, ExecutedRoutedEventArgs args) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\CommandManager.cs:line 233
+   at Avalonia.Reactive.LightweightObservableBase`1.PublishNext(T value)
+   at Avalonia.Interactivity.EventRoute.RaiseEventImpl(RoutedEventArgs e)
+   at Avalonia.Interactivity.Interactive.RaiseEvent(RoutedEventArgs e)
+   at Avalonia.Labs.Input.RoutedCommand.ExecuteCore(Object parameter, IInputElement target) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\RoutedCommand.cs:line 156
+   at Avalonia.Labs.Input.RoutedCommand.System.Windows.Input.ICommand.Execute(Object parameter) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\RoutedCommand.cs:line 121
+   at Avalonia.Controls.MenuItem.OnClick(RoutedEventArgs e)
+   at Avalonia.Controls.MenuItem.<>c.<.cctor>b__23_0(MenuItem x, RoutedEventArgs e)
+   at Avalonia.Reactive.LightweightObservableBase`1.PublishNext(T value)
+   at Avalonia.Interactivity.EventRoute.RaiseEventImpl(RoutedEventArgs e)
+   at Avalonia.Interactivity.Interactive.RaiseEvent(RoutedEventArgs e)
+   at Avalonia.Controls.MenuItem.Avalonia.Controls.IMenuItem.RaiseClick()
+   at Avalonia.Controls.Platform.DefaultMenuInteractionHandler.Click(IMenuItem item)
+   at Avalonia.Controls.Platform.DefaultMenuInteractionHandler.PointerReleased(Object sender, PointerReleasedEventArgs e)
+   at Avalonia.Interactivity.Interactive.<AddHandler>g__InvokeAdapter|4_0[TEventArgs](Delegate baseHandler, Object sender, RoutedEventArgs args)
+   at Avalonia.Interactivity.Interactive.<>c__4`1.<AddHandler>b__4_1(Delegate baseHandler, Object sender, RoutedEventArgs args)
+   at Avalonia.Interactivity.EventRoute.RaiseEventImpl(RoutedEventArgs e)
+   at Avalonia.Interactivity.Interactive.RaiseEvent(RoutedEventArgs e)
+   at Avalonia.Input.MouseDevice.MouseUp(IMouseDevice device, UInt64 timestamp, IInputRoot root, Point p, PointerPointProperties props, KeyModifiers inputModifiers, IInputElement hitTest)
+   at Avalonia.Input.MouseDevice.ProcessRawEvent(RawPointerEventArgs e)
+   at Avalonia.Threading.Dispatcher.Send(SendOrPostCallback action, Object arg, Nullable`1 priority)
+   at Avalonia.Controls.TopLevel.HandleInput(RawInputEventArgs e)
+   at Avalonia.Win32.WindowImpl.AppWndProc(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.WindowImpl.WndProc(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.PopupImpl.WndProc(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.WindowImpl.WndProcMessageHandler(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.Interop.UnmanagedMethods.DispatchMessage(MSG& lpmsg)
+   at Avalonia.Win32.Win32DispatcherImpl.RunLoop(CancellationToken cancellationToken)
+   at Avalonia.Threading.DispatcherFrame.Run(IControlledDispatcherImpl impl)
+   at Avalonia.Threading.Dispatcher.PushFrame(DispatcherFrame frame)
+   at Avalonia.Threading.Dispatcher.MainLoop(CancellationToken cancellationToken)
+   at Avalonia.Controls.ApplicationLifetimes.ClassicDesktopStyleApplicationLifetime.StartCore(String[] args)
+   at Avalonia.Controls.ApplicationLifetimes.ClassicDesktopStyleApplicationLifetime.Start(String[] args)
+   at Avalonia.ClassicDesktopStyleApplicationLifetimeExtensions.StartWithClassicDesktopLifetime(AppBuilder builder, String[] args, ShutdownMode shutdownMode)
+   at SuperNova.Desktop.Program.SafeStartAvalonia(String[] args) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Desktop\Program.cs:line 196
+[2025-07-28 00:05:33.057] [FTL] [] Exception type: InvalidCastException
+[2025-07-28 00:05:33.058] [FTL] [] Exception message: Unable to cast object of type 'SuperNova.Forms.ViewModels.MainWindowViewModel' to type 'SuperNova.MainViewViewModel'.
+[2025-07-28 00:05:33.060] [FTL] [] Stack trace:    at CompiledAvaloniaXaml.XamlIlTrampolines.SuperNova:SuperNova.MainViewViewModel+About_0!CommandExecuteTrampoline(Object, Object)
+   at Avalonia.Data.Core.ExpressionNodes.MethodCommandNode.Command.Execute(Object parameter)
+   at Avalonia.Labs.Input.CommandBinding.OnExecutedRedirect(Object sender, ExecutedRoutedEventArgs e) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\CommandBinding.cs:line 168
+   at Avalonia.Labs.Input.CommandBinding.OnExecuted(Object sender, ExecutedRoutedEventArgs e) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\CommandBinding.cs:line 139
+   at Avalonia.Labs.Input.CommandManager.ExecutedEventHandler(InputElement inputElement, ExecutedRoutedEventArgs args) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\CommandManager.cs:line 233
+   at Avalonia.Reactive.LightweightObservableBase`1.PublishNext(T value)
+   at Avalonia.Interactivity.EventRoute.RaiseEventImpl(RoutedEventArgs e)
+   at Avalonia.Interactivity.Interactive.RaiseEvent(RoutedEventArgs e)
+   at Avalonia.Labs.Input.RoutedCommand.ExecuteCore(Object parameter, IInputElement target) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\RoutedCommand.cs:line 156
+   at Avalonia.Labs.Input.RoutedCommand.System.Windows.Input.ICommand.Execute(Object parameter) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\AvaloniaLabs.CommandManager\RoutedCommand.cs:line 121
+   at Avalonia.Controls.MenuItem.OnClick(RoutedEventArgs e)
+   at Avalonia.Controls.MenuItem.<>c.<.cctor>b__23_0(MenuItem x, RoutedEventArgs e)
+   at Avalonia.Reactive.LightweightObservableBase`1.PublishNext(T value)
+   at Avalonia.Interactivity.EventRoute.RaiseEventImpl(RoutedEventArgs e)
+   at Avalonia.Interactivity.Interactive.RaiseEvent(RoutedEventArgs e)
+   at Avalonia.Controls.MenuItem.Avalonia.Controls.IMenuItem.RaiseClick()
+   at Avalonia.Controls.Platform.DefaultMenuInteractionHandler.Click(IMenuItem item)
+   at Avalonia.Controls.Platform.DefaultMenuInteractionHandler.PointerReleased(Object sender, PointerReleasedEventArgs e)
+   at Avalonia.Interactivity.Interactive.<AddHandler>g__InvokeAdapter|4_0[TEventArgs](Delegate baseHandler, Object sender, RoutedEventArgs args)
+   at Avalonia.Interactivity.Interactive.<>c__4`1.<AddHandler>b__4_1(Delegate baseHandler, Object sender, RoutedEventArgs args)
+   at Avalonia.Interactivity.EventRoute.RaiseEventImpl(RoutedEventArgs e)
+   at Avalonia.Interactivity.Interactive.RaiseEvent(RoutedEventArgs e)
+   at Avalonia.Input.MouseDevice.MouseUp(IMouseDevice device, UInt64 timestamp, IInputRoot root, Point p, PointerPointProperties props, KeyModifiers inputModifiers, IInputElement hitTest)
+   at Avalonia.Input.MouseDevice.ProcessRawEvent(RawPointerEventArgs e)
+   at Avalonia.Threading.Dispatcher.Send(SendOrPostCallback action, Object arg, Nullable`1 priority)
+   at Avalonia.Controls.TopLevel.HandleInput(RawInputEventArgs e)
+   at Avalonia.Win32.WindowImpl.AppWndProc(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.WindowImpl.WndProc(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.PopupImpl.WndProc(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.WindowImpl.WndProcMessageHandler(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam)
+   at Avalonia.Win32.Interop.UnmanagedMethods.DispatchMessage(MSG& lpmsg)
+   at Avalonia.Win32.Win32DispatcherImpl.RunLoop(CancellationToken cancellationToken)
+   at Avalonia.Threading.DispatcherFrame.Run(IControlledDispatcherImpl impl)
+   at Avalonia.Threading.Dispatcher.PushFrame(DispatcherFrame frame)
+   at Avalonia.Threading.Dispatcher.MainLoop(CancellationToken cancellationToken)
+   at Avalonia.Controls.ApplicationLifetimes.ClassicDesktopStyleApplicationLifetime.StartCore(String[] args)
+   at Avalonia.Controls.ApplicationLifetimes.ClassicDesktopStyleApplicationLifetime.Start(String[] args)
+   at Avalonia.ClassicDesktopStyleApplicationLifetimeExtensions.StartWithClassicDesktopLifetime(AppBuilder builder, String[] args, ShutdownMode shutdownMode)
+   at SuperNova.Desktop.Program.SafeStartAvalonia(String[] args) in G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Desktop\Program.cs:line 196

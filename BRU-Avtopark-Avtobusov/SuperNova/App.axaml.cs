@@ -172,7 +172,10 @@ public partial class App : Application
             //Log.Information("Forced light theme variant");
 
             var rootViewModel = new DISetup().Root;
+            var mainViewViewModel = DISetup.DesignTimeMainViewRoot;
+
             Static.RootViewModel = rootViewModel;
+            Static.MainViewViewModel = mainViewViewModel;
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
@@ -229,18 +232,28 @@ public partial class App : Application
                     if (Static.ForceSingleView)
                     {
                         Static.SingleView = true;
+                        
+                        // Create MainView with MainViewViewModel as DataContext
                         Static.MainView = new MainView
                         {
-                            DataContext = rootViewModel
+                            DataContext = mainViewViewModel
                         };
+                        
+                        // Initialize the view model
+                        Static.MainView.WindowInitialized();
 
+                        // Create and set up the main window
                         desktop.MainWindow = new PleasantWindow()
                         {
-                            Content = Static.MainView
+                            Content = Static.MainView,
+                            DataContext = rootViewModel // Set MainWindow's DataContext to MainWindowViewModel
                         };
+                        
+                        // Store references for global access
+                        Static.RootViewModel = rootViewModel;
+                        Static.MainViewViewModel = mainViewViewModel;
 
-                        rootViewModel.ObservePropertyChanged(x => x.Title)
-                            .Subscribe(title => desktop.MainWindow.Title = title);
+                       
 
 #if DEBUG
                         desktop.MainWindow.AttachDevTools();

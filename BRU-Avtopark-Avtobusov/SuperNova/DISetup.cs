@@ -9,6 +9,7 @@ using static Pure.DI.Lifetime;
 using MdiWindowManager = SuperNova.IDE.MdiWindowManager;
 using SuperNova.Tools.Reports;
 using SuperNova.Tools.Navigation;
+using SuperNova.Forms.ViewModels;
 
 namespace SuperNova;
 
@@ -17,6 +18,7 @@ public partial class DISetup
     [Conditional("DI")]
     static void Setup() =>
         DI.Setup()
+            // Common tools/viewmodels as singletons
             .Bind().As(Singleton).To<ToolBoxToolViewModel>()
             .Bind().As(Singleton).To<PropertiesToolViewModel>()
             .Bind().As(Singleton).To<ProjectToolViewModel>()
@@ -28,6 +30,8 @@ public partial class DISetup
             .Bind().As(Singleton).To<NavigationToolViewModel>()
             .Bind().As(Singleton).To<ReportsToolViewModel>()
             .Bind().As(Singleton).To<MDIControllerViewModel>()
+
+            // Infrastructure and services
             .Bind().As(Singleton).To<MdiWindowManager>()
             .Bind().As(Singleton).To<WindowManager>()
             .Bind().As(Singleton).To<ProjectManager>()
@@ -37,7 +41,20 @@ public partial class DISetup
             .Bind().As(Singleton).To<ProjectRunnerService>()
             .Bind().As(Singleton).To<ProjectService>()
             .Bind().As(Singleton).To<FocusedProjectUtil>()
-            .Root<MainViewViewModel>("Root");
 
-    public static MainViewViewModel DesignTimeRootViewModel => new DISetup().Root;
+            // ViewModel Roots
+            .Bind().As(Singleton).To<MainWindowViewModel>()
+            .Bind().As(Singleton).To<MainViewViewModel>()
+
+            // Declare multiple roots
+            .Root<MainWindowViewModel>("Root")
+            .Root<MainViewViewModel>("MainViewRoot");
+
+
+    // Design-time fallback only for MainWindowViewModel
+    public static MainWindowViewModel DesignTimeRootViewModel => new DISetup().Root;
+
+    // Optional helpers to get other roots
+    public static MainViewViewModel DesignTimeMainViewRoot => new DISetup().MainViewRoot;
+    
 }

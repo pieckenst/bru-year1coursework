@@ -287,6 +287,3 @@ G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Desktop\bin\Debug\net9.0\Ha
 G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Desktop\bin\Debug\net9.0\Pango-1.0.dll
 G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Desktop\bin\Debug\net9.0\PangoCairo-1.0.dll
 G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Desktop\bin\Debug\net9.0\Secret-1.dll
-G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Desktop\obj\Debug\net9.0\SuperNova.Desktop.dll
-G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Desktop\obj\Debug\net9.0\refint\SuperNova.Desktop.dll
-G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova.Desktop\obj\Debug\net9.0\SuperNova.Desktop.pdb

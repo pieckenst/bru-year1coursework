@@ -23,6 +23,3 @@ G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\bin\Debug\net9.0\TicketSale
 G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\obj\Debug\net9.0\SuperNova.csproj.Up2Date
 G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\obj\Debug\net9.0\SuperNova.genruntimeconfig.cache
 G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\obj\Debug\net9.0\ref\SuperNova.dll
-G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\obj\Debug\net9.0\SuperNova.dll
-G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\obj\Debug\net9.0\refint\SuperNova.dll
-G:\codesecondfolder\BRU-Avtopark-Avtobusov\SuperNova\obj\Debug\net9.0\SuperNova.pdb

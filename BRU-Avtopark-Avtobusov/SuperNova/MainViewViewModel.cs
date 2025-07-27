@@ -60,7 +60,7 @@ public partial class MainViewViewModel : ObservableObject, IMainViewViewModel
     public ColorPaletteToolViewModel ColorPalette { get; }
     public NavigationToolViewModel Navigation { get; }
     public ReportsToolViewModel Reports { get; }
-    public required IFocusedProjectUtil FocusedProjectUtil { get; init; }
+    public  IFocusedProjectUtil FocusedProjectUtil { get; init; }
 
     public IRootDock Layout { get; }
 
@@ -307,7 +307,7 @@ public partial class MainViewViewModel : ObservableObject, IMainViewViewModel
         Navigation = navigation;
         Reports = reports;
         FocusedProjectUtil = focusedProjectUtil;
-
+        
         Layout = dockFactory.CreateLayout();
         dockFactory.InitLayout(Layout);
 

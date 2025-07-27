@@ -35,16 +35,7 @@ public class PropertyFontBox : TemplatedControl
 
     private void OnButtonClick(object? sender, RoutedEventArgs e)
     {
-        async Task OpenFontWindow()
-        {
-            var result = await Static.RootViewModel.WindowManager.ShowFontDialog(new FontDialogResult(Font.FontFamily, Font.Style, Font.Weight, Font.Size));
-            if (result != null)
-            {
-                SetCurrentValue(FontProperty, new VBFont(result.Family, (int)result.Size, result.Weight, result.Style));
-            }
-        }
-
-        OpenFontWindow().ListenErrors();
+        
     }
 
     static PropertyFontBox()

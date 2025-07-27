@@ -1,3 +1,4 @@
+using SuperNova.Forms.ViewModels;
 using System;
 
 namespace SuperNova;
@@ -16,5 +17,6 @@ public class Static
 
     public static MainView MainView { get; set; } = null!;
 
-    public static MainViewViewModel RootViewModel { get; set; } = null!;
+    public static MainWindowViewModel RootViewModel { get; set; } = null!;
+    public static MainViewViewModel MainViewViewModel { get; set; } = null!;
 }
