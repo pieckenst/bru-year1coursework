@@ -139,7 +139,7 @@ WinForms + DevExpress интерфейс для Windows — классическ
 2. **Откройте нужное решение (.sln) в Visual Studio.**
 3. **Восстановите NuGet-пакеты.**
 4. **Соберите и запустите нужный проект:**
-   - Для SuperNova, TicketSalesApp.UI.Avalonia — .NET 6/7 + Avalonia SDK
+   - Для SuperNova, TicketSalesApp.UI.Avalonia — .NET 9 + Avalonia SDK
    - Для мобильного приложения — .NET MAUI + Android/iOS SDK
    - Для LegacyForms — .NET Framework 4.7+, DevExpress
 
