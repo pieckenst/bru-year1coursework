@@ -44,6 +44,10 @@
       {
         "Path": "TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj",
         "Action": "Start"
+      },
+      {
+        "Path": "SuperNova.Desktop\\SuperNova.Desktop.csproj",
+        "Action": "Start"
       }
     ]
   }

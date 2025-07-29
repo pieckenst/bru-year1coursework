@@ -1,16 +1,16 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Avalonia.ReactiveUI;
-using ReactiveUI;
+using PleasantUI.Controls;
 using SuperNova.Forms.ViewModels;
 using System;
-using System.Threading.Tasks;
 
 namespace SuperNova.Forms.Views
 {
-    public partial class WindowsAccountLinkConfirmationDialog : Window
+    public partial class WindowsAccountLinkConfirmationDialog : PleasantWindow
     {
+        private readonly WindowsAccountLinkConfirmationViewModel _viewModel;
+
         public WindowsAccountLinkConfirmationDialog()
         {
             InitializeComponent();
@@ -25,14 +25,13 @@ namespace SuperNova.Forms.Views
 #if DEBUG
             this.AttachDevTools();
 #endif
-            
-            var viewModel = new WindowsAccountLinkConfirmationViewModel(windowsUsername, username);
-            DataContext = viewModel;
+
+            _viewModel = new WindowsAccountLinkConfirmationViewModel(windowsUsername, username);
+            DataContext = _viewModel;
 
             // Handle dialog result
-            viewModel.ConfirmCommand.Subscribe(_ => Close(true));
-            viewModel.CancelCommand.Subscribe(_ => Close(false));
-            
+            _viewModel.DialogResult += (_, result) => Close(result);
+
             // Set window properties
             CanResize = false;
             SizeToContent = Avalonia.Controls.SizeToContent.Height;

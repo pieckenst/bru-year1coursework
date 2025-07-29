@@ -1318,7 +1318,8 @@ namespace TicketSalesApp.AdminServer.Controllers
                 new Claim(ClaimTypes.Role, user.Role.ToString()),
                 new Claim("role", user.Role.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("is_windows_auth", user.IsWindowsAuth ? "true" : "false", ClaimValueTypes.Boolean)
+                new Claim("is_windows_auth", user.IsWindowsAuth ? "true" : "false", ClaimValueTypes.Boolean),
+                new Claim("does_windows_account_need_linking", user.DoesWindowsAccountNeedLinking ? "true" : "false", ClaimValueTypes.Boolean)
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor

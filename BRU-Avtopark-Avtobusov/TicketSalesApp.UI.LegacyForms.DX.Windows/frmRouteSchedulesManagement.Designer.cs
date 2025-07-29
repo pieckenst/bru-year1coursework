@@ -93,38 +93,29 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             layoutControl1.Controls.Add(btnRefresh);
             layoutControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             layoutControl1.Location = new System.Drawing.Point(0, 0);
-            layoutControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             layoutControl1.Name = "layoutControl1";
             layoutControl1.Root = Root;
-            layoutControl1.Size = new System.Drawing.Size(1148, 690);
+            layoutControl1.Size = new System.Drawing.Size(960, 561);
             layoutControl1.TabIndex = 0;
             layoutControl1.Text = "layoutControl1";
             // 
             // gridControlSchedules
             // 
             gridControlSchedules.DataSource = routeScheduleBindingSource;
-            gridControlSchedules.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
-            gridControlSchedules.Location = new System.Drawing.Point(14, 45);
+            gridControlSchedules.Location = new System.Drawing.Point(12, 38);
             gridControlSchedules.MainView = gridViewSchedules;
-            gridControlSchedules.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             gridControlSchedules.Name = "gridControlSchedules";
             gridControlSchedules.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] { repositoryItemCheckEdit1 });
-            gridControlSchedules.Size = new System.Drawing.Size(1120, 599);
+            gridControlSchedules.Size = new System.Drawing.Size(936, 485);
             gridControlSchedules.TabIndex = 4;
             gridControlSchedules.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridViewSchedules });
-            // 
-            // routeScheduleBindingSource
-            // 
-            routeScheduleBindingSource.DataSource = typeof(Core.Models.RouteSchedules);
             // 
             // gridViewSchedules
             // 
             gridViewSchedules.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colRouteScheduleId, colRouteStartPoint, colRouteEndPoint, colRouteStopsDisplay, colDepartureTime, colArrivalTime, colPrice, colAvailableSeats, colIsActive });
-            gridViewSchedules.DetailHeight = 431;
             gridViewSchedules.GridControl = gridControlSchedules;
             gridViewSchedules.Name = "gridViewSchedules";
             gridViewSchedules.OptionsBehavior.Editable = false;
-            gridViewSchedules.OptionsEditForm.PopupEditFormWidth = 933;
             gridViewSchedules.OptionsView.ShowGroupPanel = false;
             gridViewSchedules.FocusedRowChanged += gridViewSchedules_FocusedRowChanged;
             gridViewSchedules.CustomUnboundColumnData += gridViewSchedules_CustomUnboundColumnData;
@@ -133,47 +124,43 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             // 
             colRouteScheduleId.Caption = "ID";
             colRouteScheduleId.FieldName = "RouteScheduleId";
-            colRouteScheduleId.MinWidth = 23;
             colRouteScheduleId.Name = "colRouteScheduleId";
             colRouteScheduleId.Visible = true;
             colRouteScheduleId.VisibleIndex = 0;
-            colRouteScheduleId.Width = 47;
+            colRouteScheduleId.Width = 40;
             // 
             // colRouteStartPoint
             // 
             colRouteStartPoint.Caption = "Маршрут (Начало)";
             colRouteStartPoint.FieldName = "Marshut.StartPoint";
-            colRouteStartPoint.MinWidth = 23;
             colRouteStartPoint.Name = "colRouteStartPoint";
             colRouteStartPoint.OptionsColumn.AllowEdit = false;
             colRouteStartPoint.UnboundType = DevExpress.Data.UnboundColumnType.String;
             colRouteStartPoint.Visible = true;
             colRouteStartPoint.VisibleIndex = 1;
-            colRouteStartPoint.Width = 175;
+            colRouteStartPoint.Width = 150;
             // 
             // colRouteEndPoint
             // 
             colRouteEndPoint.Caption = "Маршрут (Конец)";
             colRouteEndPoint.FieldName = "Marshut.EndPoint";
-            colRouteEndPoint.MinWidth = 23;
             colRouteEndPoint.Name = "colRouteEndPoint";
             colRouteEndPoint.OptionsColumn.AllowEdit = false;
             colRouteEndPoint.UnboundType = DevExpress.Data.UnboundColumnType.String;
             colRouteEndPoint.Visible = true;
             colRouteEndPoint.VisibleIndex = 2;
-            colRouteEndPoint.Width = 175;
+            colRouteEndPoint.Width = 150;
             // 
             // colRouteStopsDisplay
             // 
             colRouteStopsDisplay.Caption = "Остановки";
             colRouteStopsDisplay.FieldName = "RouteStopsDisplayString";
-            colRouteStopsDisplay.MinWidth = 23;
             colRouteStopsDisplay.Name = "colRouteStopsDisplay";
             colRouteStopsDisplay.OptionsColumn.AllowEdit = false;
             colRouteStopsDisplay.UnboundType = DevExpress.Data.UnboundColumnType.String;
             colRouteStopsDisplay.Visible = true;
             colRouteStopsDisplay.VisibleIndex = 3;
-            colRouteStopsDisplay.Width = 292;
+            colRouteStopsDisplay.Width = 250;
             // 
             // colDepartureTime
             // 
@@ -181,11 +168,10 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             colDepartureTime.DisplayFormat.FormatString = "dd.MM.yyyy HH:mm";
             colDepartureTime.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             colDepartureTime.FieldName = "DepartureTime";
-            colDepartureTime.MinWidth = 23;
             colDepartureTime.Name = "colDepartureTime";
             colDepartureTime.Visible = true;
             colDepartureTime.VisibleIndex = 4;
-            colDepartureTime.Width = 140;
+            colDepartureTime.Width = 120;
             // 
             // colArrivalTime
             // 
@@ -193,11 +179,10 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             colArrivalTime.DisplayFormat.FormatString = "dd.MM.yyyy HH:mm";
             colArrivalTime.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             colArrivalTime.FieldName = "ArrivalTime";
-            colArrivalTime.MinWidth = 23;
             colArrivalTime.Name = "colArrivalTime";
             colArrivalTime.Visible = true;
             colArrivalTime.VisibleIndex = 5;
-            colArrivalTime.Width = 140;
+            colArrivalTime.Width = 120;
             // 
             // colPrice
             // 
@@ -205,32 +190,29 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             colPrice.DisplayFormat.FormatString = "C2";
             colPrice.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             colPrice.FieldName = "Price";
-            colPrice.MinWidth = 23;
             colPrice.Name = "colPrice";
             colPrice.Visible = true;
             colPrice.VisibleIndex = 6;
-            colPrice.Width = 93;
+            colPrice.Width = 80;
             // 
             // colAvailableSeats
             // 
             colAvailableSeats.Caption = "Места";
             colAvailableSeats.FieldName = "AvailableSeats";
-            colAvailableSeats.MinWidth = 23;
             colAvailableSeats.Name = "colAvailableSeats";
             colAvailableSeats.Visible = true;
             colAvailableSeats.VisibleIndex = 7;
-            colAvailableSeats.Width = 93;
+            colAvailableSeats.Width = 80;
             // 
             // colIsActive
             // 
             colIsActive.Caption = "Активен";
             colIsActive.ColumnEdit = repositoryItemCheckEdit1;
             colIsActive.FieldName = "IsActive";
-            colIsActive.MinWidth = 23;
             colIsActive.Name = "colIsActive";
             colIsActive.Visible = true;
             colIsActive.VisibleIndex = 8;
-            colIsActive.Width = 70;
+            colIsActive.Width = 60;
             // 
             // repositoryItemCheckEdit1
             // 
@@ -239,42 +221,35 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             // 
             // lueRouteFilter
             // 
-            lueRouteFilter.Location = new System.Drawing.Point(14, 14);
-            lueRouteFilter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            lueRouteFilter.Location = new System.Drawing.Point(12, 12);
             lueRouteFilter.Name = "lueRouteFilter";
             lueRouteFilter.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
-            lueRouteFilter.Properties.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] { new DevExpress.XtraEditors.Controls.LookUpColumnInfo("RouteId", "ID", 47, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default), new DevExpress.XtraEditors.Controls.LookUpColumnInfo("StartPoint", "Начало", 175, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default), new DevExpress.XtraEditors.Controls.LookUpColumnInfo("EndPoint", "Конец", 175, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default) });
+            lueRouteFilter.Properties.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] { new DevExpress.XtraEditors.Controls.LookUpColumnInfo("RouteId", "ID", 40, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default), new DevExpress.XtraEditors.Controls.LookUpColumnInfo("StartPoint", "Начало", 150, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default), new DevExpress.XtraEditors.Controls.LookUpColumnInfo("EndPoint", "Конец", 150, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Default, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default) });
             lueRouteFilter.Properties.DataSource = routeBindingSource;
             lueRouteFilter.Properties.DisplayMember = "StartPoint";
             lueRouteFilter.Properties.NullText = "[Все маршруты]";
             lueRouteFilter.Properties.ValueMember = "RouteId";
-            lueRouteFilter.Size = new System.Drawing.Size(429, 22);
+            lueRouteFilter.Size = new System.Drawing.Size(358, 20);
             lueRouteFilter.StyleController = layoutControl1;
             lueRouteFilter.TabIndex = 5;
-            // 
-            // routeBindingSource
-            // 
-            routeBindingSource.DataSource = typeof(Core.Models.Marshut);
             // 
             // dateFilter
             // 
             dateFilter.EditValue = null;
-            dateFilter.Location = new System.Drawing.Point(447, 14);
-            dateFilter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            dateFilter.Location = new System.Drawing.Point(374, 12);
             dateFilter.Name = "dateFilter";
             dateFilter.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
             dateFilter.Properties.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
             dateFilter.Properties.NullText = "[Все даты]";
-            dateFilter.Size = new System.Drawing.Size(328, 22);
+            dateFilter.Size = new System.Drawing.Size(274, 20);
             dateFilter.StyleController = layoutControl1;
             dateFilter.TabIndex = 6;
             // 
             // btnAdd
             // 
-            btnAdd.Location = new System.Drawing.Point(779, 14);
-            btnAdd.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            btnAdd.Location = new System.Drawing.Point(652, 12);
             btnAdd.Name = "btnAdd";
-            btnAdd.Size = new System.Drawing.Size(138, 27);
+            btnAdd.Size = new System.Drawing.Size(120, 22);
             btnAdd.StyleController = layoutControl1;
             btnAdd.TabIndex = 7;
             btnAdd.Text = "Добавить расписание";
@@ -282,10 +257,9 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             // 
             // btnEdit
             // 
-            btnEdit.Location = new System.Drawing.Point(889, 648);
-            btnEdit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            btnEdit.Location = new System.Drawing.Point(739, 527);
             btnEdit.Name = "btnEdit";
-            btnEdit.Size = new System.Drawing.Size(120, 28);
+            btnEdit.Size = new System.Drawing.Size(102, 22);
             btnEdit.StyleController = layoutControl1;
             btnEdit.TabIndex = 8;
             btnEdit.Text = "Редактировать";
@@ -293,10 +267,9 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             // 
             // btnDelete
             // 
-            btnDelete.Location = new System.Drawing.Point(1013, 648);
-            btnDelete.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            btnDelete.Location = new System.Drawing.Point(845, 527);
             btnDelete.Name = "btnDelete";
-            btnDelete.Size = new System.Drawing.Size(121, 28);
+            btnDelete.Size = new System.Drawing.Size(103, 22);
             btnDelete.StyleController = layoutControl1;
             btnDelete.TabIndex = 9;
             btnDelete.Text = "Удалить";
@@ -304,10 +277,9 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             // 
             // btnRefresh
             // 
-            btnRefresh.Location = new System.Drawing.Point(921, 14);
-            btnRefresh.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            btnRefresh.Location = new System.Drawing.Point(776, 12);
             btnRefresh.Name = "btnRefresh";
-            btnRefresh.Size = new System.Drawing.Size(213, 27);
+            btnRefresh.Size = new System.Drawing.Size(172, 22);
             btnRefresh.StyleController = layoutControl1;
             btnRefresh.TabIndex = 10;
             btnRefresh.Text = "Обновить";
@@ -319,15 +291,15 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             Root.GroupBordersVisible = false;
             Root.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { layoutControlItemGrid, layoutControlGroupFilters, layoutControlItemEdit, layoutControlItemDelete, emptySpaceItemButtons });
             Root.Name = "Root";
-            Root.Size = new System.Drawing.Size(1148, 690);
+            Root.Size = new System.Drawing.Size(960, 561);
             Root.TextVisible = false;
             // 
             // layoutControlItemGrid
             // 
             layoutControlItemGrid.Control = gridControlSchedules;
-            layoutControlItemGrid.Location = new System.Drawing.Point(0, 31);
+            layoutControlItemGrid.Location = new System.Drawing.Point(0, 26);
             layoutControlItemGrid.Name = "layoutControlItemGrid";
-            layoutControlItemGrid.Size = new System.Drawing.Size(1124, 603);
+            layoutControlItemGrid.Size = new System.Drawing.Size(940, 489);
             layoutControlItemGrid.TextVisible = false;
             // 
             // layoutControlGroupFilters
@@ -336,8 +308,8 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             layoutControlGroupFilters.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { layoutControlItemRouteFilter, layoutControlItemDateFilter, layoutControlItemAdd, layoutControlItemRefresh });
             layoutControlGroupFilters.Location = new System.Drawing.Point(0, 0);
             layoutControlGroupFilters.Name = "layoutControlGroupFilters";
-            layoutControlGroupFilters.Size = new System.Drawing.Size(1124, 31);
-            layoutControlGroupFilters.Spacing = new DevExpress.XtraLayout.Utils.Padding(14, 14, 20, 12);
+            layoutControlGroupFilters.Size = new System.Drawing.Size(940, 26);
+            layoutControlGroupFilters.Spacing = new DevExpress.XtraLayout.Utils.Padding(12, 12, 16, 10);
             layoutControlGroupFilters.Text = "Фильтры";
             // 
             // layoutControlItemRouteFilter
@@ -345,70 +317,69 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             layoutControlItemRouteFilter.Control = lueRouteFilter;
             layoutControlItemRouteFilter.Location = new System.Drawing.Point(0, 0);
             layoutControlItemRouteFilter.Name = "layoutControlItemRouteFilter";
-            layoutControlItemRouteFilter.Size = new System.Drawing.Size(433, 31);
+            layoutControlItemRouteFilter.Size = new System.Drawing.Size(362, 26);
             layoutControlItemRouteFilter.Text = "Маршрут:";
             layoutControlItemRouteFilter.TextVisible = false;
             // 
             // layoutControlItemDateFilter
             // 
             layoutControlItemDateFilter.Control = dateFilter;
-            layoutControlItemDateFilter.Location = new System.Drawing.Point(433, 0);
+            layoutControlItemDateFilter.Location = new System.Drawing.Point(362, 0);
             layoutControlItemDateFilter.Name = "layoutControlItemDateFilter";
-            layoutControlItemDateFilter.Size = new System.Drawing.Size(332, 31);
+            layoutControlItemDateFilter.Size = new System.Drawing.Size(278, 26);
             layoutControlItemDateFilter.Text = "Дата:";
             layoutControlItemDateFilter.TextVisible = false;
             // 
             // layoutControlItemAdd
             // 
             layoutControlItemAdd.Control = btnAdd;
-            layoutControlItemAdd.Location = new System.Drawing.Point(765, 0);
+            layoutControlItemAdd.Location = new System.Drawing.Point(640, 0);
             layoutControlItemAdd.Name = "layoutControlItemAdd";
-            layoutControlItemAdd.Size = new System.Drawing.Size(142, 31);
+            layoutControlItemAdd.Size = new System.Drawing.Size(124, 26);
             layoutControlItemAdd.TextVisible = false;
             // 
             // layoutControlItemRefresh
             // 
             layoutControlItemRefresh.Control = btnRefresh;
-            layoutControlItemRefresh.Location = new System.Drawing.Point(907, 0);
+            layoutControlItemRefresh.Location = new System.Drawing.Point(764, 0);
             layoutControlItemRefresh.Name = "layoutControlItemRefresh";
-            layoutControlItemRefresh.Size = new System.Drawing.Size(217, 31);
+            layoutControlItemRefresh.Size = new System.Drawing.Size(176, 26);
             layoutControlItemRefresh.TextVisible = false;
             // 
             // layoutControlItemEdit
             // 
             layoutControlItemEdit.Control = btnEdit;
-            layoutControlItemEdit.Location = new System.Drawing.Point(875, 634);
-            layoutControlItemEdit.MaxSize = new System.Drawing.Size(124, 32);
-            layoutControlItemEdit.MinSize = new System.Drawing.Size(124, 32);
+            layoutControlItemEdit.Location = new System.Drawing.Point(727, 515);
+            layoutControlItemEdit.MaxSize = new System.Drawing.Size(106, 26);
+            layoutControlItemEdit.MinSize = new System.Drawing.Size(106, 26);
             layoutControlItemEdit.Name = "layoutControlItemEdit";
-            layoutControlItemEdit.Size = new System.Drawing.Size(124, 32);
+            layoutControlItemEdit.Size = new System.Drawing.Size(106, 26);
             layoutControlItemEdit.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
             layoutControlItemEdit.TextVisible = false;
             // 
             // layoutControlItemDelete
             // 
             layoutControlItemDelete.Control = btnDelete;
-            layoutControlItemDelete.Location = new System.Drawing.Point(999, 634);
-            layoutControlItemDelete.MaxSize = new System.Drawing.Size(125, 32);
-            layoutControlItemDelete.MinSize = new System.Drawing.Size(125, 32);
+            layoutControlItemDelete.Location = new System.Drawing.Point(833, 515);
+            layoutControlItemDelete.MaxSize = new System.Drawing.Size(107, 26);
+            layoutControlItemDelete.MinSize = new System.Drawing.Size(107, 26);
             layoutControlItemDelete.Name = "layoutControlItemDelete";
-            layoutControlItemDelete.Size = new System.Drawing.Size(125, 32);
+            layoutControlItemDelete.Size = new System.Drawing.Size(107, 26);
             layoutControlItemDelete.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
             layoutControlItemDelete.TextVisible = false;
             // 
             // emptySpaceItemButtons
             // 
-            emptySpaceItemButtons.Location = new System.Drawing.Point(0, 634);
+            emptySpaceItemButtons.Location = new System.Drawing.Point(0, 515);
             emptySpaceItemButtons.Name = "emptySpaceItemButtons";
-            emptySpaceItemButtons.Size = new System.Drawing.Size(875, 32);
+            emptySpaceItemButtons.Size = new System.Drawing.Size(727, 26);
             // 
             // frmRouteSchedulesManagement
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
+            AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(1148, 690);
+            ClientSize = new System.Drawing.Size(960, 561);
             Controls.Add(layoutControl1);
-            Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             Name = "frmRouteSchedulesManagement";
             Text = "Управление расписанием маршрутов";
             Load += frmRouteSchedulesManagement_Load;

@@ -1,56 +1,46 @@
 using System;
 using System.Reactive;
-using System.Reactive.Disposables;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
 
 namespace SuperNova.Forms.ViewModels
 {
-    public class WindowsAccountLinkConfirmationViewModel : ReactiveObject, IDisposable
+    public class WindowsAccountLinkConfirmationViewModel : ReactiveObject
     {
-        private readonly CompositeDisposable _disposables = new();
-        
+        private readonly System.Reactive.Disposables.CompositeDisposable _disposables = new();
+
         public string WindowsUsername { get; }
         public string Username { get; }
         
-        public ReactiveCommand<Unit, Unit> ConfirmCommand { get; }
-        public ReactiveCommand<Unit, Unit> CancelCommand { get; }
+        public IRelayCommand ConfirmCommand { get; }
+        public IRelayCommand CancelCommand { get; }
         
-        public Interaction<Unit, Unit> CloseWindow { get; } = new();
+        public event EventHandler<bool>? DialogResult;
 
         public WindowsAccountLinkConfirmationViewModel(string windowsUsername, string username)
         {
             WindowsUsername = windowsUsername;
             Username = username;
             
-            ConfirmCommand = ReactiveCommand.CreateFromTask(ConfirmAsync);
-            CancelCommand = ReactiveCommand.CreateFromTask(CancelAsync);
-            
-            this.WhenActivated(disposables =>
-            {
-                // Handle any additional activation logic here
-                Disposable
-                    .Create(() =>
-                    {
-                        // Cleanup code when deactivated
-                    })
-                    .DisposeWith(disposables);
-            });
+            ConfirmCommand = new RelayCommand(OnConfirm);
+            CancelCommand = new RelayCommand(OnCancel);
+        }
+
+        private void OnConfirm()
+        {
+            DialogResult?.Invoke(this, true);
         }
         
-        private async Task ConfirmAsync()
+        private void OnCancel()
         {
-            await CloseWindow.Handle(Unit.Default);
-        }
-        
-        private async Task CancelAsync()
-        {
-            await CloseWindow.Handle(Unit.Default);
+            DialogResult?.Invoke(this, false);
         }
         
         public void Dispose()
         {
             _disposables.Dispose();
-            ConfirmCommand?.Dispose();
-            CancelCommand?.Dispose();
         }
+    }
 }

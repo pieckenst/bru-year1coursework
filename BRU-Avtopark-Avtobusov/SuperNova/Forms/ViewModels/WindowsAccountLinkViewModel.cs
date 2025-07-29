@@ -2,22 +2,27 @@ using System;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia;
 using Avalonia.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 using ReactiveUI;
-using SuperNova.Forms.Services;
 using SuperNova.Forms.Views;
 
 namespace SuperNova.Forms.ViewModels
 {
-    public class WindowsAccountLinkViewModel : ReactiveObject
+    public class WindowsAccountLinkViewModel : ReactiveObject, IDisposable
     {
-        private readonly IAuthenticationService _authService;
+        private readonly System.Reactive.Disposables.CompositeDisposable _disposables = new();
         private string _username = string.Empty;
         private string _password = string.Empty;
         private string _windowsUsername = string.Empty;
         private bool _isBusy;
         private string _statusMessage = string.Empty;
         private bool _showSuccess;
+        private Window? _ownerWindow;
 
         public string Username
         {
@@ -34,42 +39,47 @@ namespace SuperNova.Forms.ViewModels
         public string WindowsUsername
         {
             get => _windowsUsername;
-            set => this.RaiseAndSetIfChanged(ref _windowsUsername, value);
+            private set => this.RaiseAndSetIfChanged(ref _windowsUsername, value);
         }
 
         public bool IsBusy
         {
             get => _isBusy;
-            set => this.RaiseAndSetIfChanged(ref _isBusy, value);
+            private set => this.RaiseAndSetIfChanged(ref _isBusy, value);
         }
 
         public string StatusMessage
         {
             get => _statusMessage;
-            set => this.RaiseAndSetIfChanged(ref _statusMessage, value);
+            private set => this.RaiseAndSetIfChanged(ref _statusMessage, value);
         }
 
         public bool ShowSuccess
         {
             get => _showSuccess;
-            set => this.RaiseAndSetIfChanged(ref _showSuccess, value);
+            private set => this.RaiseAndSetIfChanged(ref _showSuccess, value);
         }
 
-        public ReactiveCommand<Unit, Unit> LinkAccountCommand { get; }
-        public ReactiveCommand<Unit, Unit> CancelCommand { get; }
+        public ICommand LinkAccountCommand { get; }
+        public ICommand CancelCommand { get; }
 
-        public Interaction<Unit, bool> ShowConfirmation { get; } = new();
-        public Interaction<Unit, Unit> CloseWindow { get; } = new();
+        public event EventHandler? RequestClose;
 
-        public WindowsAccountLinkViewModel(IAuthenticationService authService = null)
+        public WindowsAccountLinkViewModel(Window? ownerWindow = null)
         {
-            _authService = authService;
-            
-            LinkAccountCommand = ReactiveCommand.CreateFromTask(LinkAccountAsync);
-            CancelCommand = ReactiveCommand.CreateFromTask(CancelAsync);
-            
-            // Set the Windows username from environment
+            _ownerWindow = ownerWindow;
             WindowsUsername = $"{Environment.UserDomainName}\\{Environment.UserName}";
+
+            LinkAccountCommand = new RelayCommand(
+                execute: async () => await LinkAccountAsync(),
+                canExecute: () => !IsBusy && !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password));
+
+            CancelCommand = new RelayCommand(() => RequestClose?.Invoke(this, EventArgs.Empty));
+        }
+
+        public void SetOwnerWindow(Window ownerWindow)
+        {
+            _ownerWindow = ownerWindow;
         }
 
         private async Task LinkAccountAsync()
@@ -86,8 +96,8 @@ namespace SuperNova.Forms.ViewModels
                 StatusMessage = "Verifying credentials...";
 
                 // Show confirmation dialog
-                var dialog = new WindowsAccountLinkConfirmationDialog(WindowsUsername, Username);
-                var confirmed = await dialog.ShowDialog<bool>((Window)TopLevel.GetTopLevel((Control)VisualRoot));
+                var confirmDialog = new WindowsAccountLinkConfirmationDialog(WindowsUsername, Username);
+                var confirmed = await confirmDialog.ShowDialog<bool>(_ownerWindow);
                 
                 if (!confirmed)
                 {
@@ -104,14 +114,28 @@ namespace SuperNova.Forms.ViewModels
                 
                 // Show success dialog
                 var successDialog = new WindowsAccountLinkSuccessDialog(WindowsUsername);
-                await successDialog.ShowDialog((Window)TopLevel.GetTopLevel((Control)VisualRoot));
+                await successDialog.ShowDialog(_ownerWindow);
                 
-                // Close window after success
-                await CloseWindow.Handle(Unit.Default);
+                // Close the window
+                RequestClose?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
                 StatusMessage = $"An error occurred: {ex.Message}";
+                var errorDialog = MessageBoxManager.GetMessageBoxStandard(
+                    "Error",
+                    $"Failed to link accounts: {ex.Message}",
+                    ButtonEnum.Ok,
+                    Icon.Error);
+                
+                if (_ownerWindow != null)
+                {
+                    await errorDialog.ShowWindowDialogAsync(_ownerWindow);
+                }
+                else
+                {
+                    await errorDialog.ShowAsync();
+                }
             }
             finally
             {
@@ -119,9 +143,9 @@ namespace SuperNova.Forms.ViewModels
             }
         }
 
-        private async Task CancelAsync()
+        public void Dispose()
         {
-            await CloseWindow.Handle(Unit.Default);
+            _disposables.Dispose();
         }
     }
 }

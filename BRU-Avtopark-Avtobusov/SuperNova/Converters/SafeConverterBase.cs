@@ -1,10 +1,29 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using Avalonia.Data.Converters;
 
 namespace SuperNova.Converters;
+
+// Add this to your Converters folder
+public class BoolToStringConverter : IMultiValueConverter
+{
+    public static readonly BoolToStringConverter Instance = new();
+
+    public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (values.Count >= 3 && 
+            values[0] is bool isVisible && 
+            values[1] is string trueValue && 
+            values[2] is string falseValue)
+        {
+            return isVisible ? trueValue : falseValue;
+        }
+        return values.Count > 2 ? values[2] : "Link Account";
+    }
+}
 
 /// <summary>
 /// Base class for safe value converters that prevent recursive conversion loops and stack overflow

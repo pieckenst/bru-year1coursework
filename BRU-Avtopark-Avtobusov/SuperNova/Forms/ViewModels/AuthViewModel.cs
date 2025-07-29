@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -203,7 +204,18 @@ namespace SuperNova.Forms.ViewModels
                         
                         // Show Windows account link dialog - AS DEMO FOR NOW , NEEDS ITS OWN CHECK IN IF FOR BACKEND JWT CLAIM THAT SAYS IF ACCOUNT NEEDS LINKING
                         var linkWindow = new WindowsAccountLinkWindow();
-                        await linkWindow.ShowDialog<Unit>((Window)Application.Current?.GetMainWindow());
+                        var mainWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                            ? desktop.MainWindow
+                            : null;
+
+                        if (mainWindow != null)
+                        {
+                            await linkWindow.ShowDialog(mainWindow);
+                        }
+                    else
+                    {
+                        Log.Warning("Could not find main window for showing account link dialog");
+                    }
 
                         if (roleClaim?.Value != "1") // Not an admin
                         {

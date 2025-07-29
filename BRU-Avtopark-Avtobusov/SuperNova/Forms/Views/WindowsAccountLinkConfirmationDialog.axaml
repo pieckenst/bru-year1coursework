@@ -3,116 +3,110 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="350"
+        xmlns:vm="using:SuperNova.Forms.ViewModels"
         x:Class="SuperNova.Forms.Views.WindowsAccountLinkConfirmationDialog"
+        x:DataType="vm:WindowsAccountLinkConfirmationViewModel"
         Title="Windows Security"
         Width="450" Height="350"
         WindowStartupLocation="CenterOwner"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaTitleBarHeightHint="40"
         ExtendClientAreaChromeHints="NoChrome">
-        
-    <PleasantWindow.TitleContent>
-        <Panel>
-            <TextBlock Text="Windows Security" 
-                     VerticalAlignment="Center"
-                     Margin="20,0,0,0"
-                     FontSize="12"/>
-        </Panel>
-    </PleasantWindow.TitleContent>
 
-    <Grid RowDefinitions="Auto,*,Auto" Margin="0">
-        <!-- Header -->
-        <Border Grid.Row="0" Height="40" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}">
-            <TextBlock Text="Windows Security" 
+	
+
+	<Grid RowDefinitions="Auto,*,Auto" Margin="0">
+		<!-- Header -->
+		<Border Grid.Row="0" Height="40" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}">
+			<TextBlock Text="Windows Security"
                      VerticalAlignment="Center"
                      HorizontalAlignment="Center"
                      FontSize="12"
                      FontWeight="SemiBold"/>
-        </Border>
-        
-        <!-- Content -->
-        <ScrollViewer Grid.Row="1" Padding="24">
-            <StackPanel Spacing="24">
-                <StackPanel Spacing="16">
-                    <TextBlock Text="Link Windows Account" 
-                             FontSize="20" 
+		</Border>
+
+		<!-- Content -->
+		<ScrollViewer Grid.Row="1" Padding="24">
+			<StackPanel Spacing="24">
+				<StackPanel Spacing="16">
+					<TextBlock Text="Link Windows Account"
+                             FontSize="20"
                              FontWeight="SemiBold"
                              Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                    
-                    <TextBlock Text="You are about to link the following accounts. This will allow you to sign in with your Windows account."
+
+					<TextBlock Text="You are about to link the following accounts. This will allow you to sign in with your Windows account."
                              TextWrapping="Wrap"
                              Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
-                </StackPanel>
+				</StackPanel>
 
-                <!-- Account Info -->
-                <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+				<!-- Account Info -->
+				<Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
                         CornerRadius="4"
                         Padding="16">
-                    <StackPanel Spacing="16">
-                        <StackPanel Spacing="8">
-                            <TextBlock Text="Windows Account"
+					<StackPanel Spacing="16">
+						<StackPanel Spacing="8">
+							<TextBlock Text="Windows Account"
                                      Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
                                      FontSize="12" />
-                            <TextBlock Text="{Binding WindowsUsername}"
+							<TextBlock Text="{Binding WindowsUsername}"
                                      FontWeight="SemiBold"
                                      FontSize="14" />
-                        </StackPanel>
+						</StackPanel>
 
-                        <Path Data="M19,13H5V11H19V13Z" 
+						<Path Data="M19,13H5V11H19V13Z"
                               Fill="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
                               HorizontalAlignment="Center"
                               Width="24" Height="24"/>
 
-                        <StackPanel Spacing="8">
-                            <TextBlock Text="Application Account"
+						<StackPanel Spacing="8">
+							<TextBlock Text="Application Account"
                                      Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
                                      FontSize="12" />
-                            <TextBlock Text="{Binding Username}"
+							<TextBlock Text="{Binding Username}"
                                      FontWeight="SemiBold"
                                      FontSize="14" />
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
+						</StackPanel>
+					</StackPanel>
+				</Border>
 
-                <!-- Warning -->
-                <Border Background="{DynamicResource SystemAccentColor}20"
+				<!-- Warning -->
+				<Border Background="{DynamicResource SystemAccentColor}20"
                         BorderThickness="1"
                         BorderBrush="{DynamicResource SystemAccentColor}40"
                         CornerRadius="4"
                         Padding="16">
-                    <StackPanel Spacing="8">
-                        <TextBlock Text="Security Notice"
+					<StackPanel Spacing="8">
+						<TextBlock Text="Security Notice"
                                  FontWeight="SemiBold"
                                  Foreground="{DynamicResource SystemAccentColor}" />
-                        <TextBlock Text="This will grant your Windows account the same permissions as the application account. Only continue if you trust this action." 
+						<TextBlock Text="This will grant your Windows account the same permissions as the application account. Only continue if you trust this action."
                                  TextWrapping="Wrap"
                                  Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-        </ScrollViewer>
-        </Border>
+					</StackPanel>
+				</Border>
+			</StackPanel>
+		</ScrollViewer>
 
-        <!-- Footer -->
-        <Border Grid.Row="2"
+		<!-- Footer -->
+		<Border Grid.Row="2"
                 BorderThickness="0,1,0,0"
                 BorderBrush="{DynamicResource SystemControlBackgroundBaseMediumLowBrush}"
                 Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
                 Padding="24">
-            <Grid ColumnDefinitions="*,Auto,Auto">
-                <Button Content="Cancel"
+			<Grid ColumnDefinitions="*,Auto,Auto">
+				<Button Content="Cancel"
                        Command="{Binding CancelCommand}"
                        MinWidth="100"
                        HorizontalAlignment="Right"
-                       Theme="SecondaryButton"
+                       
                        Margin="0,0,8,0" />
-                
-                <Button Content="Link accounts"
+
+				<Button Content="Link accounts"
                        Command="{Binding ConfirmCommand}"
                        MinWidth="100"
                        HorizontalAlignment="Right"
-                       Theme="PrimaryButton" />
-            </Grid>
-        </Border>
-    </Grid>
+                       />
+			</Grid>
+		</Border>
+	</Grid>
 </PleasantWindow>

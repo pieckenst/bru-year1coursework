@@ -1,5 +1,7 @@
 using System;
 using System.Reactive;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
 
 namespace SuperNova.Forms.ViewModels
@@ -8,12 +10,12 @@ namespace SuperNova.Forms.ViewModels
     {
         public string Username { get; }
         public string SuccessMessage { get; } = "Your Windows account has been successfully linked to your application account.";
-        public ReactiveCommand<Unit, Unit> CloseCommand { get; }
+        public ICommand CloseCommand { get; }
 
         public WindowsAccountLinkSuccessViewModel(string username, Action closeAction)
         {
             Username = username;
-            CloseCommand = ReactiveCommand.Create(closeAction);
+            CloseCommand = new RelayCommand(closeAction);
         }
     }
 }

@@ -6,6 +6,7 @@
         xmlns:icons="using:Material.Icons.Avalonia"
         mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="500"
         x:Class="SuperNova.Forms.Views.WindowsAccountLinkWindow"
+        xmlns:converters="using:SuperNova.Converters"
         x:DataType="vm:WindowsAccountLinkViewModel"
         Title="Windows Security"
         Width="450" Height="500"
@@ -15,147 +16,147 @@
         ExtendClientAreaTitleBarHeightHint="40"
         ExtendClientAreaChromeHints="NoChrome">
 
-    <PleasantWindow.TitleContent>
-        <Panel>
-            <TextBlock Text="Windows Security" 
-                     VerticalAlignment="Center"
-                     Margin="20,0,0,0"
-                     FontSize="12"/>
-        </Panel>
-    </PleasantWindow.TitleContent>
+	<PleasantWindow.Resources>
+		<converters:BoolToStringConverter x:Key="BoolToStringConverter" />
+	</PleasantWindow.Resources>
 
-    <Design.DataContext>
-        <vm:WindowsAccountLinkViewModel />
-    </Design.DataContext>
+	<Design.DataContext>
+		<vm:WindowsAccountLinkViewModel />
+	</Design.DataContext>
 
-    <Grid RowDefinitions="Auto,*,Auto" Margin="0">
-        <!-- Header with Windows 11 style -->
-        <Border Grid.Row="0" Height="40" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}">
-            <TextBlock Text="Windows Security" 
+	<Grid RowDefinitions="Auto,*,Auto" Margin="0">
+		<!-- Header with Windows 11 style -->
+		<Border Grid.Row="0" Height="40" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}">
+			<TextBlock Text="Windows Security"
                      VerticalAlignment="Center"
                      HorizontalAlignment="Center"
                      FontSize="12"
                      FontWeight="SemiBold"/>
-        </Border>
-        
-        <!-- Main Content -->
-        <ScrollViewer Grid.Row="1" Padding="24">
-            <StackPanel Spacing="24">
-                <StackPanel Spacing="16">
-                    <TextBlock Text="Link Windows Account" 
-                             FontSize="20" 
+		</Border>
+
+		<!-- Main Content -->
+		<ScrollViewer Grid.Row="1" Padding="24">
+			<StackPanel Spacing="24">
+				<StackPanel Spacing="16">
+					<TextBlock Text="Link Windows Account"
+                             FontSize="20"
                              FontWeight="SemiBold"
                              Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-                    
-                    <TextBlock Text="Link your Windows account to an existing application account to enable single sign-on."
+
+					<TextBlock Text="Link your Windows account to an existing application account to enable single sign-on."
                              TextWrapping="Wrap"
                              Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
-                </StackPanel>
+				</StackPanel>
 
-        <!-- Form -->
-        <StackPanel Grid.Row="1" Spacing="16">
-            <!-- Windows Account Info -->
-            <Border Theme="{StaticResource ModernCard}" Padding="16">
-                <StackPanel Spacing="12">
-                    <TextBlock Text="Windows Account" 
-                             FontWeight="SemiBold"
-                             FontSize="14"/>
-                    <TextBox Watermark="DOMAIN\username" 
-                            Text="{Binding WindowsUsername, Mode=TwoWay}"
-                            IsReadOnly="True"
-                            Theme="{StaticResource ModernTextBox}" />
-                </StackPanel>
-            </Border>
+				<!-- Form -->
+				<StackPanel Grid.Row="1" Spacing="16">
+					<!-- Windows Account Info -->
+					<Border Theme="{StaticResource ModernCard}" Padding="16">
+						<StackPanel Spacing="12">
+							<TextBlock Text="Windows Account"
+									 FontWeight="SemiBold"
+									 FontSize="14"/>
+							<TextBox Watermark="DOMAIN\username"
+									Text="{Binding WindowsUsername, Mode=TwoWay}"
+									IsReadOnly="True"
+									Theme="{StaticResource ModernTextBox}" />
+						</StackPanel>
+					</Border>
 
-            <!-- Application Account -->
-            <Border Theme="{StaticResource ModernCard}" Padding="16">
-                <StackPanel Spacing="12">
-                    <TextBlock Text="Application Account" 
-                             FontWeight="SemiBold"
-                             FontSize="14"/>
-                    
-                    <TextBox Watermark="Username" 
-                            Text="{Binding Username, Mode=TwoWay}"
-                            Theme="{StaticResource ModernTextBox}" />
-                    
-                    <PasswordBox Watermark="Password" 
-                               Password="{Binding Password, Mode=TwoWay}"
-                               Theme="{StaticResource ModernPasswordBox}" />
-                </StackPanel>
-            </Border>
+					<!-- Application Account -->
+					<Border Theme="{StaticResource ModernCard}" Padding="16">
+						<StackPanel Spacing="12">
+							<TextBlock Text="Application Account"
+									 FontWeight="SemiBold"
+									 FontSize="14"/>
 
-            <!-- Status Message -->
-            <Border Theme="{StaticResource SuccessCard}" 
-                   IsVisible="{Binding ShowSuccess}"
-                   Padding="12">
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                    <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" 
-                             Fill="{DynamicResource SuccessColor}"
-                             Width="16" 
-                             Height="16"/>
-                    <TextBlock Text="{Binding StatusMessage}" 
-                              Foreground="{DynamicResource SuccessColor}" />
-                </StackPanel>
-            </Border>
-            
-            <Border Theme="{StaticResource ErrorCard}" 
-                   IsVisible="{Binding $data[StatusMessage] != '' &amp;&amp; !ShowSuccess}"
-                   Padding="12">
-                <TextBlock Text="{Binding StatusMessage}" 
-                         Foreground="{DynamicResource ErrorColor}" />
-            </Border>
-        </StackPanel>
+							<TextBox Watermark="Username"
+									Text="{Binding Username, Mode=TwoWay}"
+									Theme="{StaticResource ModernTextBox}" />
 
-            </StackPanel>
-        </ScrollViewer>
-        
-        <!-- Footer with Buttons -->
-        <Border Grid.Row="2" 
+							<TextBox Watermark="Password"
+									   Text="{Binding Password, Mode=TwoWay}"
+									   Theme="{StaticResource ModernPasswordBox}" />
+						</StackPanel>
+					</Border>
+
+					<!-- Status Message -->
+					<Border Theme="{StaticResource SuccessCard}"
+						   IsVisible="{Binding ShowSuccess}"
+						   Padding="12">
+						<StackPanel Orientation="Horizontal" Spacing="8">
+							<PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
+									 
+									 Width="16"
+									 Height="16"/>
+							<TextBlock Text="{Binding StatusMessage}"
+									  Foreground="{DynamicResource SuccessColor}" />
+						</StackPanel>
+					</Border>
+
+					<Border Theme="{StaticResource ErrorCard}"
+				IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+				Padding="12">
+						<TextBlock Text="{Binding StatusMessage}"
+								  Foreground="{DynamicResource ErrorColor}" />
+					</Border>
+				</StackPanel>
+
+			</StackPanel>
+		</ScrollViewer>
+
+		<!-- Footer with Buttons -->
+		<Border Grid.Row="2"
                 BorderThickness="0,1,0,0"
                 BorderBrush="{DynamicResource SystemControlBackgroundBaseMediumLowBrush}"
                 Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
                 Padding="24">
-            <Grid ColumnDefinitions="*,Auto,Auto" VerticalAlignment="Center">
-                <TextBlock Text="{Binding StatusMessage}" 
+			<Grid ColumnDefinitions="*,Auto,Auto" VerticalAlignment="Center">
+				<TextBlock Text="{Binding StatusMessage}"
                          Foreground="{DynamicResource SystemControlHighlightAccentBrush}"
                          VerticalAlignment="Center"
                          IsVisible="{Binding !ShowSuccess}" />
-                
-                <StackPanel Grid.Column="1" 
-                           Orientation="Horizontal" 
+
+				<StackPanel Grid.Column="1"
+                           Orientation="Horizontal"
                            HorizontalAlignment="Right"
                            Spacing="8">
-                    <Button Content="Cancel"
+					<Button Content="Cancel"
                            Command="{Binding CancelCommand}"
                            MinWidth="100"
                            IsEnabled="{Binding !IsBusy}"
-                           Theme="SecondaryButton" />
-                    
-                    <Button Content="{Binding #BusyIndicator, Path=IsVisible, Converter={x:Static BoolToStringConverter.Instance}, ConverterParameter='Linking...|Link Account'}"
-                           Command="{Binding LinkAccountCommand}"
-                           MinWidth="100"
-                           IsEnabled="{Binding !IsBusy}"
-                           Theme="PrimaryButton">
-                        <Button.Styles>
-                            <Style Selector="Button:disabled">
-                                <Setter Property="Opacity" Value="1" />
-                            </Style>
-                        </Button.Styles>
-                        <Button.Content>
-                            <DockPanel>
-                                <ProgressRing Name="BusyIndicator"
-                                            IsVisible="{Binding IsBusy}"
-                                            Width="16"
-                                            Height="16"
-                                            DockPanel.Dock="Left"
-                                            Margin="0,0,8,0"
-                                            Foreground="White"/>
-                                <TextBlock Text="{Binding $parent[Button].Content}" />
-                            </DockPanel>
-                        </Button.Content>
-                    </Button>
-                </StackPanel>
-            </Grid>
-        </Border>
-    </Grid>
+                           />
+
+					<Button Command="{Binding LinkAccountCommand}"
+        MinWidth="100"
+        IsEnabled="{Binding !IsBusy}">
+    <Button.Styles>
+        <Style Selector="Button:disabled">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+    </Button.Styles>
+    <DockPanel>
+        <ProgressRing Name="BusyIndicator"
+                     Width="16"
+                     Height="16"
+                     IsIndeterminate="True"
+                     IsVisible="{Binding IsBusy}"
+                     DockPanel.Dock="Left"
+                     Margin="0,0,8,0"
+                     Foreground="White"/>
+        <TextBlock>
+            <TextBlock.Text>
+                <MultiBinding Converter="{StaticResource BoolToStringConverter}">
+                    <Binding ElementName="BusyIndicator" Path="IsVisible" />
+                    <Binding Source="Linking..." />
+                    <Binding Source="Link Account" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+    </DockPanel>
+</Button>
+				</StackPanel>
+			</Grid>
+		</Border>
+	</Grid>
 </PleasantWindow>

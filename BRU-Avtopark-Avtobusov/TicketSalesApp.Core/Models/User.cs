@@ -62,5 +62,13 @@ namespace TicketSalesApp.Core.Models
 
         public string? WindowsIdentity { get; set; }  // Store Windows SID or username
         public bool IsWindowsAuth { get; set; }      // Flag for Windows auth users
+        public bool DoesWindowsAccountNeedLinking { get; set; } = false; // Status of account linking
+        public string LinkedRegularAccountUsername { get; set; } = string.Empty; // Username of linked regular account
+        public string LinkedAccountToken { get; set; } = string.Empty; 
+        /* Comment for LinkedAccountToken
+         Token for linked account - this will be used one time only during link and stored permanently in database
+         and be a random server generated pin combined
+         with first 3 characters of the Windows username and random number+ string combo
+         */
     }
 }

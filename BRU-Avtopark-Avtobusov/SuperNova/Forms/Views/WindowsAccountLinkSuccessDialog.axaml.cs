@@ -1,13 +1,14 @@
-using System;
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using PleasantUI.Controls;
 using SuperNova.Forms.ViewModels;
+using System;
+using System.Threading.Tasks;
 
 namespace SuperNova.Forms.Views
 {
-    public partial class WindowsAccountLinkSuccessDialog : Window
+    public partial class WindowsAccountLinkSuccessDialog : PleasantWindow
     {
         public WindowsAccountLinkSuccessDialog()
         {
