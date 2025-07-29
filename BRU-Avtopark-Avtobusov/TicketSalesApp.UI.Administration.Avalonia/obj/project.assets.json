@@ -7696,11 +7696,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\codesecondfolder\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj",
+      "projectUniqueName": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj",
       "projectName": "TicketSalesApp.UI.Administration.Avalonia",
-      "projectPath": "G:\\codesecondfolder\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj",
+      "projectPath": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj",
       "packagesPath": "C:\\Users\\andrej\\.nuget\\packages\\",
-      "outputPath": "G:\\codesecondfolder\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\obj\\",
+      "outputPath": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\DevExpress 24.2\\Components\\Offline Packages",
@@ -7725,11 +7725,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "G:\\codesecondfolder\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj": {
-              "projectPath": "G:\\codesecondfolder\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj"
+            "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj": {
+              "projectPath": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj"
             },
-            "G:\\codesecondfolder\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj": {
-              "projectPath": "G:\\codesecondfolder\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj"
+            "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj": {
+              "projectPath": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj"
             }
           }
         }

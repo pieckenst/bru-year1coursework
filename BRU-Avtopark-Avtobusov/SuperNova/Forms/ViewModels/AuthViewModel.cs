@@ -8,16 +8,21 @@ using ReactiveUI;
 using Serilog;
 using SuperNova;
 using SuperNova.Forms.Services;
+using SuperNova.Forms.Views;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TicketSalesApp.Core;
-
 
 namespace SuperNova.Forms.ViewModels
 {
@@ -195,6 +200,10 @@ namespace SuperNova.Forms.ViewModels
                         var tokenHandler = new JwtSecurityTokenHandler();
                         var token = tokenHandler.ReadJwtToken(result.Token);
                         var roleClaim = token.Claims.FirstOrDefault(c => c.Type == "role");
+                        
+                        // Show Windows account link dialog - AS DEMO FOR NOW , NEEDS ITS OWN CHECK IN IF FOR BACKEND JWT CLAIM THAT SAYS IF ACCOUNT NEEDS LINKING
+                        var linkWindow = new WindowsAccountLinkWindow();
+                        await linkWindow.ShowDialog<Unit>((Window)Application.Current?.GetMainWindow());
 
                         if (roleClaim?.Value != "1") // Not an admin
                         {

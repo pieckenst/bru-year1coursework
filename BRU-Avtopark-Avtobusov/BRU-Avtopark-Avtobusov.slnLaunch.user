@@ -37,5 +37,14 @@
         "Action": "Start"
       }
     ]
+  },
+  {
+    "Name": "SUPERNOVA UI + ADMIN SERVER",
+    "Projects": [
+      {
+        "Path": "TicketSalesApp.AdminServer\\TicketSalesApp.AdminServer.csproj",
+        "Action": "Start"
+      }
+    ]
   }
 ]
