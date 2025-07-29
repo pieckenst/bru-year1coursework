@@ -202,20 +202,22 @@ namespace SuperNova.Forms.ViewModels
                         var token = tokenHandler.ReadJwtToken(result.Token);
                         var roleClaim = token.Claims.FirstOrDefault(c => c.Type == "role");
                         
-                        // Show Windows account link dialog - AS DEMO FOR NOW , NEEDS ITS OWN CHECK IN IF FOR BACKEND JWT CLAIM THAT SAYS IF ACCOUNT NEEDS LINKING
+                        // Show Windows account link dialog
                         var linkWindow = new WindowsAccountLinkWindow();
-                        var mainWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
-                            ? desktop.MainWindow
+                        
+                        // Get the current AuthWindow from the application's windows collection
+                        var currentWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                            ? desktop.Windows.OfType<AuthWindow>().FirstOrDefault()
                             : null;
 
-                        if (mainWindow != null)
+                        if (currentWindow != null)
                         {
-                            await linkWindow.ShowDialog(mainWindow);
+                            await linkWindow.ShowDialog(currentWindow);
                         }
-                    else
-                    {
-                        Log.Warning("Could not find main window for showing account link dialog");
-                    }
+                        else
+                        {
+                            Log.Warning("Could not find AuthWindow for showing account link dialog");
+                        }
 
                         if (roleClaim?.Value != "1") // Not an admin
                         {
