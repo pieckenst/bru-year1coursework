@@ -1,4 +1,4 @@
-﻿#if MODERN
+#if MODERN
 using Microsoft.EntityFrameworkCore;
 using System;
 using TicketSalesApp.Core.Models;
@@ -29,6 +29,7 @@ namespace TicketSalesApp.Core.Data
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<RouteSchedules> RouteSchedules { get; set; }
+        public DbSet<FormDefinition> FormDefinitions { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

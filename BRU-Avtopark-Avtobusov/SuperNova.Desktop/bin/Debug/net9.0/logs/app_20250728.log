@@ -988,3 +988,407 @@ System.InvalidCastException: Unable to cast object of type 'SuperNova.Forms.View
 [2025-07-28 00:12:03.709] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000410"
 [2025-07-28 00:12:04.165] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 1
 [2025-07-28 00:12:04.167] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0001385"
+[2025-07-28 00:13:40.381] [DBG] [] Adding embedded font collection...
+[2025-07-28 00:13:40.404] [DBG] [] Embedded font collection added successfully
+[2025-07-28 00:13:40.465] [INF] [] Application framework initialization starting
+[2025-07-28 00:13:40.684] [DBG] [] Creating splash screen
+[2025-07-28 00:13:40.889] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 00:13:40.895] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0021346"
+[2025-07-28 00:13:40.995] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 3 To arrange: 0
+[2025-07-28 00:13:40.997] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0008515"
+[2025-07-28 00:13:42.031] [DBG] [] Checking server availability
+[2025-07-28 00:13:42.157] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:42.160] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0006605"
+[2025-07-28 00:13:44.356] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:44.359] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0004486"
+[2025-07-28 00:13:47.397] [DBG] [] Splash screen closed
+[2025-07-28 00:13:47.398] [DBG] [] Creating authentication window
+[2025-07-28 00:13:47.579] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 00:13:47.584] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000034"
+[2025-07-28 00:13:47.824] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 00:13:47.825] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000141"
+[2025-07-28 00:13:47.830] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:47.832] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0008659"
+[2025-07-28 00:13:47.847] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 00:13:47.849] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003826"
+[2025-07-28 00:13:48.611] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 1
+[2025-07-28 00:13:48.613] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0007492"
+[2025-07-28 00:13:48.833] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 3 To arrange: 0
+[2025-07-28 00:13:48.839] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003573"
+[2025-07-28 00:13:49.036] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:49.038] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002254"
+[2025-07-28 00:13:49.425] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:49.427] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002486"
+[2025-07-28 00:13:49.782] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:49.784] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002204"
+[2025-07-28 00:13:49.980] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:49.982] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002636"
+[2025-07-28 00:13:50.151] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 1
+[2025-07-28 00:13:50.159] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0059552"
+[2025-07-28 00:13:50.409] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 3 To arrange: 0
+[2025-07-28 00:13:50.411] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002269"
+[2025-07-28 00:13:50.596] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:50.598] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002458"
+[2025-07-28 00:13:50.661] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:50.662] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002532"
+[2025-07-28 00:13:50.846] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:50.848] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002193"
+[2025-07-28 00:13:51.023] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:51.025] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002865"
+[2025-07-28 00:13:52.092] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 6 To arrange: 0
+[2025-07-28 00:13:52.093] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002384"
+[2025-07-28 00:13:52.258] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 00:13:52.260] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0007957"
+[2025-07-28 00:13:54.885] [INF] [] Administrator successfully authenticated
+[2025-07-28 00:13:54.902] [DBG] [] Auth window closed with result: true
+[2025-07-28 00:13:54.904] [INF] [] Authentication successful, initializing main window
+[2025-07-28 00:13:54.977] [INF] [] Main window initialized
+[2025-07-28 00:13:54.980] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 00:13:54.981] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000037"
+[2025-07-28 00:13:55.036] [WRN] [] [Binding] [Avalonia.Controls.Primitives.Popup] An error occurred binding MinWidth to $parent[TextBox].Bounds.Width at $parent[TextBox]: Ancestor not found.
+[2025-07-28 00:13:55.042] [WRN] [] [Binding] [Avalonia.Controls.Primitives.Popup] An error occurred binding MinWidth to $parent[TextBox].Bounds.Width at $parent[TextBox]: Ancestor not found.
+[2025-07-28 00:13:55.044] [WRN] [] [Binding] [Avalonia.Controls.Primitives.Popup] An error occurred binding MinWidth to $parent[TextBox].Bounds.Width at $parent[TextBox]: Ancestor not found.
+[2025-07-28 00:13:55.045] [WRN] [] [Binding] [Avalonia.Controls.Primitives.Popup] An error occurred binding MinWidth to $parent[TextBox].Bounds.Width at $parent[TextBox]: Ancestor not found.
+[2025-07-28 00:13:55.047] [WRN] [] [Binding] [Avalonia.Controls.Primitives.Popup] An error occurred binding MinWidth to $parent[TextBox].Bounds.Width at $parent[TextBox]: Ancestor not found.
+[2025-07-28 00:13:55.049] [WRN] [] [Binding] [Avalonia.Controls.Primitives.Popup] An error occurred binding MinWidth to $parent[TextBox].Bounds.Width at $parent[TextBox]: Ancestor not found.
+[2025-07-28 00:13:55.106] [WRN] [] [Binding] [Dock.Avalonia.Controls.ToolPinnedControl] An error occurred binding IsVisible to !!LeftPinnedDockables.Count at LeftPinnedDockables: Value is null.
+[2025-07-28 00:13:55.107] [WRN] [] [Binding] [Dock.Avalonia.Controls.ToolPinnedControl] An error occurred binding IsVisible to !!RightPinnedDockables.Count at RightPinnedDockables: Value is null.
+[2025-07-28 00:13:55.109] [WRN] [] [Binding] [Dock.Avalonia.Controls.ToolPinnedControl] An error occurred binding IsVisible to !!TopPinnedDockables.Count at TopPinnedDockables: Value is null.
+[2025-07-28 00:13:55.110] [WRN] [] [Binding] [Dock.Avalonia.Controls.ToolPinnedControl] An error occurred binding IsVisible to !!BottomPinnedDockables.Count at BottomPinnedDockables: Value is null.
+[2025-07-28 00:13:55.113] [WRN] [] [Binding] [Dock.Avalonia.Controls.PinnedDockControl] An error occurred binding PinnedDockAlignment to PinnedDock.Alignment at PinnedDock: Value is null.
+[2025-07-28 00:13:55.282] [WRN] [] [Binding] [Avalonia.Controls.Grid] An error occurred binding IsVisible to !PinnedDock.IsEmpty at PinnedDock: Value is null.
+[2025-07-28 00:13:55.310] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 34 To arrange: 0
+[2025-07-28 00:13:55.313] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0012381"
+[2025-07-28 00:13:55.316] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:55.322] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0033512"
+[2025-07-28 00:13:55.336] [INF] [] Application framework initialization completed
+[2025-07-28 00:13:55.349] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 5 To arrange: 2
+[2025-07-28 00:13:55.351] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0007226"
+[2025-07-28 00:13:55.380] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 8 To arrange: 0
+[2025-07-28 00:13:55.385] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0025939"
+[2025-07-28 00:13:55.387] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 00:13:55.395] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0060694"
+[2025-07-28 00:13:55.397] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:55.402] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0027678"
+[2025-07-28 00:13:55.410] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:55.413] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000404"
+[2025-07-28 00:13:55.418] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 00:13:55.420] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000714"
+[2025-07-28 00:13:55.497] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:55.502] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0032044"
+[2025-07-28 00:13:55.520] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:55.522] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000645"
+[2025-07-28 00:13:56.511] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:56.516] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0022690"
+[2025-07-28 00:13:56.587] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 00:13:56.592] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0025297"
+[2025-07-28 00:13:57.662] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 3 To arrange: 0
+[2025-07-28 00:13:57.663] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000417"
+[2025-07-28 00:13:57.668] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 1
+[2025-07-28 00:13:57.669] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000462"
+[2025-07-28 00:13:58.521] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 00:13:58.523] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000021"
+[2025-07-28 00:13:58.533] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 00:13:58.534] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000057"
+[2025-07-28 00:13:58.575] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:58.578] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0008835"
+[2025-07-28 00:13:58.596] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 5 To arrange: 2
+[2025-07-28 00:13:58.600] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0001859"
+[2025-07-28 00:13:58.602] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 00:13:58.605] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0007385"
+[2025-07-28 00:13:59.516] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:59.518] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000261"
+[2025-07-28 00:13:59.720] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:13:59.722] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000202"
+[2025-07-28 00:13:59.723] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 6 To arrange: 0
+[2025-07-28 00:13:59.725] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000303"
+[2025-07-28 00:13:59.866] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 1
+[2025-07-28 00:13:59.868] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0001758"
+[2025-07-28 00:14:00.743] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:14:00.745] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000156"
+[2025-07-28 00:14:00.748] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 00:14:00.750] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000346"
+[2025-07-28 00:14:00.979] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:14:00.985] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000231"
+[2025-07-28 00:14:00.991] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 00:14:00.993] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000492"
+[2025-07-28 00:14:01.400] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 7 To arrange: 0
+[2025-07-28 00:14:01.403] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0010340"
+[2025-07-28 00:14:01.406] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 00:14:01.408] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000413"
+[2025-07-28 00:14:02.449] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 00:14:02.450] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000021"
+[2025-07-28 00:14:02.471] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 13 To arrange: 0
+[2025-07-28 00:14:02.473] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000761"
+[2025-07-28 00:14:02.492] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:14:02.494] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003681"
+[2025-07-28 00:14:02.501] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 5 To arrange: 1
+[2025-07-28 00:14:02.503] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0001905"
+[2025-07-28 00:14:02.504] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 00:14:02.506] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000987"
+[2025-07-28 00:14:05.645] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:14:05.700] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0494224"
+[2025-07-28 00:14:06.109] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:14:06.111] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000247"
+[2025-07-28 00:14:06.429] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:14:06.431] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000190"
+[2025-07-28 00:14:06.576] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 1
+[2025-07-28 00:14:06.577] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0001468"
+[2025-07-28 00:14:06.813] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 00:14:06.815] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000659"
+[2025-07-28 00:14:06.820] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:14:06.826] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000604"
+[2025-07-28 00:14:06.898] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:14:06.899] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000524"
+[2025-07-28 00:14:07.327] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:14:07.329] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000114"
+[2025-07-28 00:14:08.727] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 00:14:08.729] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000473"
+[2025-07-28 16:38:14.355] [DBG] [] Adding embedded font collection...
+[2025-07-28 16:38:14.382] [DBG] [] Embedded font collection added successfully
+[2025-07-28 16:38:14.466] [INF] [] Application framework initialization starting
+[2025-07-28 16:38:14.712] [DBG] [] Creating splash screen
+[2025-07-28 16:38:14.938] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 16:38:14.943] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0015984"
+[2025-07-28 16:38:15.090] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 3 To arrange: 0
+[2025-07-28 16:38:15.093] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0010393"
+[2025-07-28 16:38:16.129] [DBG] [] Checking server availability
+[2025-07-28 16:38:16.224] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 16:38:16.226] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0006840"
+[2025-07-28 16:38:18.452] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 16:38:18.454] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0004743"
+[2025-07-28 16:38:21.485] [DBG] [] Splash screen closed
+[2025-07-28 16:38:21.487] [DBG] [] Creating authentication window
+[2025-07-28 16:38:21.670] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 16:38:21.672] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000026"
+[2025-07-28 16:38:21.863] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 16:38:21.865] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000089"
+[2025-07-28 16:38:21.870] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 16:38:21.872] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0007276"
+[2025-07-28 16:38:21.885] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 16:38:21.887] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002545"
+[2025-07-28 16:38:22.832] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 16:38:22.836] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0004657"
+[2025-07-28 16:39:45.399] [DBG] [] Adding embedded font collection...
+[2025-07-28 16:39:45.421] [DBG] [] Embedded font collection added successfully
+[2025-07-28 16:39:45.471] [INF] [] Application framework initialization starting
+[2025-07-28 16:39:45.659] [DBG] [] Creating splash screen
+[2025-07-28 16:39:45.882] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 16:39:45.888] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0024721"
+[2025-07-28 16:39:46.000] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 3 To arrange: 0
+[2025-07-28 16:39:46.002] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0010872"
+[2025-07-28 16:41:38.009] [DBG] [] Adding embedded font collection...
+[2025-07-28 16:41:38.030] [DBG] [] Embedded font collection added successfully
+[2025-07-28 16:41:38.052] [INF] [] Application framework initialization starting
+[2025-07-28 16:41:38.250] [DBG] [] Creating splash screen
+[2025-07-28 16:41:38.464] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 16:41:38.469] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0024277"
+[2025-07-28 16:41:38.552] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 3 To arrange: 0
+[2025-07-28 16:41:38.554] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0007055"
+[2025-07-28 16:45:40.647] [DBG] [] Adding embedded font collection...
+[2025-07-28 16:45:40.669] [DBG] [] Embedded font collection added successfully
+[2025-07-28 16:45:40.700] [INF] [] Application framework initialization starting
+[2025-07-28 16:45:40.870] [DBG] [] Creating splash screen
+[2025-07-28 16:45:41.062] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 16:45:41.068] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0023594"
+[2025-07-28 16:45:41.177] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 3 To arrange: 0
+[2025-07-28 16:45:41.179] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0006693"
+[2025-07-28 16:45:42.209] [DBG] [] Checking server availability
+[2025-07-28 16:45:42.308] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 16:45:42.311] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0005999"
+[2025-07-28 16:45:44.462] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 16:45:44.465] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0005800"
+[2025-07-28 16:45:47.514] [DBG] [] Splash screen closed
+[2025-07-28 16:45:47.517] [DBG] [] Creating authentication window
+[2025-07-28 16:45:47.618] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 16:45:47.620] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000030"
+[2025-07-28 16:45:47.781] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 16:45:47.782] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000092"
+[2025-07-28 16:45:47.787] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 16:45:47.789] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0007118"
+[2025-07-28 16:45:47.803] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 16:45:47.805] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003382"
+[2025-07-28 16:45:47.937] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 16:45:47.940] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002310"
+[2025-07-28 16:46:03.654] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 16:46:03.657] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003910"
+[2025-07-28 16:46:05.171] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 6 To arrange: 0
+[2025-07-28 16:46:05.175] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0022055"
+[2025-07-28 16:46:05.478] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 16:46:05.480] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003067"
+[2025-07-28 16:46:12.413] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 16:46:12.415] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0004749"
+[2025-07-28 16:46:18.280] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 16:46:18.283] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0004251"
+[2025-07-28 16:46:25.286] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 16:46:25.289] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0004032"
+[2025-07-28 16:46:25.943] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 16:46:25.945] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000228"
+[2025-07-28 16:46:25.954] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 16:46:25.955] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002005"
+[2025-07-28 16:46:28.975] [DBG] [] Auth window closed with result: false
+[2025-07-28 16:46:28.976] [INF] [] Authentication failed or cancelled
+[2025-07-28 16:46:28.983] [INF] [] Avalonia application completed with exit code: 0
+[2025-07-28 16:46:28.985] [INF] [] === APPLICATION SHUTDOWN INITIATED ===
+[2025-07-28 16:46:28.987] [INF] [] Closing and flushing logs...
+[2025-07-28 18:00:56.545] [DBG] [] Adding embedded font collection...
+[2025-07-28 18:00:56.572] [DBG] [] Embedded font collection added successfully
+[2025-07-28 18:00:56.635] [INF] [] Application framework initialization starting
+[2025-07-28 18:00:56.867] [DBG] [] Creating splash screen
+[2025-07-28 18:00:57.088] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 18:00:57.092] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0016949"
+[2025-07-28 18:00:57.191] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 3 To arrange: 0
+[2025-07-28 18:00:57.193] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0009229"
+[2025-07-28 18:00:58.221] [DBG] [] Checking server availability
+[2025-07-28 18:00:58.332] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 18:00:58.335] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0005406"
+[2025-07-28 18:01:00.508] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 18:01:00.511] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003453"
+[2025-07-28 18:01:03.553] [DBG] [] Splash screen closed
+[2025-07-28 18:01:03.555] [DBG] [] Creating authentication window
+[2025-07-28 18:01:03.707] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 18:01:03.708] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000032"
+[2025-07-28 18:01:03.872] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 18:01:03.873] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000098"
+[2025-07-28 18:01:03.878] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 18:01:03.880] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0007203"
+[2025-07-28 18:01:03.895] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:01:03.896] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002410"
+[2025-07-28 18:01:05.512] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:01:05.515] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003725"
+[2025-07-28 18:01:49.695] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:01:49.698] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002855"
+[2025-07-28 18:01:50.806] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:01:50.811] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0006350"
+[2025-07-28 18:04:26.531] [DBG] [] Adding embedded font collection...
+[2025-07-28 18:04:26.548] [DBG] [] Embedded font collection added successfully
+[2025-07-28 18:04:26.569] [INF] [] Application framework initialization starting
+[2025-07-28 18:04:26.764] [DBG] [] Creating splash screen
+[2025-07-28 18:04:26.969] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 18:04:26.973] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0021941"
+[2025-07-28 18:04:27.061] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 3 To arrange: 0
+[2025-07-28 18:04:27.063] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0008396"
+[2025-07-28 18:04:28.090] [DBG] [] Checking server availability
+[2025-07-28 18:04:28.185] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 18:04:28.187] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0006980"
+[2025-07-28 18:04:30.386] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 18:04:30.390] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0004087"
+[2025-07-28 18:04:33.430] [DBG] [] Splash screen closed
+[2025-07-28 18:04:33.432] [DBG] [] Creating authentication window
+[2025-07-28 18:04:33.525] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 18:04:33.531] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000062"
+[2025-07-28 18:04:33.716] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 18:04:33.718] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000098"
+[2025-07-28 18:04:33.723] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 18:04:33.726] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0008282"
+[2025-07-28 18:04:33.741] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:04:33.744] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0004059"
+[2025-07-28 18:04:34.388] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:04:34.391] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0005715"
+[2025-07-28 18:04:58.648] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:04:58.651] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0005688"
+[2025-07-28 18:04:59.470] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:04:59.472] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002519"
+[2025-07-28 18:06:16.408] [DBG] [] Adding embedded font collection...
+[2025-07-28 18:06:16.426] [DBG] [] Embedded font collection added successfully
+[2025-07-28 18:06:16.447] [INF] [] Application framework initialization starting
+[2025-07-28 18:06:16.661] [DBG] [] Creating splash screen
+[2025-07-28 18:06:16.855] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 18:06:16.860] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0017324"
+[2025-07-28 18:06:17.000] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 3 To arrange: 0
+[2025-07-28 18:06:17.005] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0011593"
+[2025-07-28 18:06:18.080] [DBG] [] Checking server availability
+[2025-07-28 18:06:18.282] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 18:06:18.317] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0007292"
+[2025-07-28 18:06:20.481] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 18:06:20.483] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0005207"
+[2025-07-28 18:06:23.513] [DBG] [] Splash screen closed
+[2025-07-28 18:06:23.514] [DBG] [] Creating authentication window
+[2025-07-28 18:06:23.596] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 18:06:23.597] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000029"
+[2025-07-28 18:06:23.763] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 18:06:23.765] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000089"
+[2025-07-28 18:06:23.769] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 18:06:23.771] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0006757"
+[2025-07-28 18:06:23.786] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:06:23.788] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003993"
+[2025-07-28 18:06:24.360] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:06:24.361] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002517"
+[2025-07-28 18:06:30.727] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:06:30.729] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003134"
+[2025-07-28 18:06:31.119] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:06:31.122] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0007484"
+[2025-07-28 18:07:02.072] [DBG] [] Adding embedded font collection...
+[2025-07-28 18:07:02.092] [DBG] [] Embedded font collection added successfully
+[2025-07-28 18:07:02.114] [INF] [] Application framework initialization starting
+[2025-07-28 18:07:02.274] [DBG] [] Creating splash screen
+[2025-07-28 18:07:02.458] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 18:07:02.462] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0016509"
+[2025-07-28 18:07:02.547] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 3 To arrange: 0
+[2025-07-28 18:07:02.549] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0007694"
+[2025-07-28 18:07:03.580] [DBG] [] Checking server availability
+[2025-07-28 18:07:03.709] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 18:07:03.711] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0008420"
+[2025-07-28 18:07:05.933] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 18:07:05.936] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0006040"
+[2025-07-28 18:07:08.977] [DBG] [] Splash screen closed
+[2025-07-28 18:07:08.978] [DBG] [] Creating authentication window
+[2025-07-28 18:07:09.060] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 18:07:09.061] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000034"
+[2025-07-28 18:07:09.240] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 18:07:09.242] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000101"
+[2025-07-28 18:07:09.248] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 18:07:09.250] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0007181"
+[2025-07-28 18:07:09.268] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:07:09.270] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002519"
+[2025-07-28 18:07:09.781] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:07:09.783] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002964"
+[2025-07-28 18:09:18.283] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:09:18.286] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0006472"
+[2025-07-28 18:09:19.594] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:09:19.596] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003877"
+[2025-07-28 18:09:42.778] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:09:42.780] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003451"
+[2025-07-28 18:09:43.631] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:09:43.635] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0006322"
+[2025-07-28 18:09:44.486] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:09:44.488] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003709"
+[2025-07-28 18:09:45.118] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:09:45.119] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003003"
+[2025-07-28 18:23:46.569] [DBG] [] Adding embedded font collection...
+[2025-07-28 18:23:46.590] [DBG] [] Embedded font collection added successfully
+[2025-07-28 18:23:46.640] [INF] [] Application framework initialization starting
+[2025-07-28 18:23:46.852] [DBG] [] Creating splash screen
+[2025-07-28 18:23:47.034] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 18:23:47.038] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0015633"
+[2025-07-28 18:23:47.124] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 3 To arrange: 0
+[2025-07-28 18:23:47.127] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0008097"
+[2025-07-28 18:23:48.167] [DBG] [] Checking server availability
+[2025-07-28 18:23:48.264] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 18:23:48.267] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0005683"
+[2025-07-28 18:23:50.459] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 18:23:50.461] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003564"
+[2025-07-28 18:23:53.496] [DBG] [] Splash screen closed
+[2025-07-28 18:23:53.497] [DBG] [] Creating authentication window
+[2025-07-28 18:23:53.577] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 0 To arrange: 0
+[2025-07-28 18:23:53.579] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000028"
+[2025-07-28 18:23:53.746] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 2 To arrange: 0
+[2025-07-28 18:23:53.748] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0000139"
+[2025-07-28 18:23:53.754] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 1 To arrange: 0
+[2025-07-28 18:23:53.757] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0008796"
+[2025-07-28 18:23:53.773] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:23:53.776] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003288"
+[2025-07-28 18:23:54.470] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:23:54.473] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003633"
+[2025-07-28 18:25:12.098] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:25:12.102] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0007798"
+[2025-07-28 18:25:12.996] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:25:12.998] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003025"
+[2025-07-28 18:25:14.242] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:25:14.245] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0004750"
+[2025-07-28 18:25:14.662] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:25:14.664] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0003382"
+[2025-07-28 18:35:37.896] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:35:37.898] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0005697"
+[2025-07-28 18:35:38.996] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Started layout pass. To measure: 4 To arrange: 0
+[2025-07-28 18:35:38.999] [INF] [] [Layout] [Avalonia.Layout.LayoutManager] Layout pass finished in "00:00:00.0002948"
