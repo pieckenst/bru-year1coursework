@@ -75,26 +75,29 @@
             panelUsername.Controls.Add(lblWelcome);
             panelUsername.Dock = System.Windows.Forms.DockStyle.Fill;
             panelUsername.Location = new System.Drawing.Point(0, 0);
+            panelUsername.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             panelUsername.Name = "panelUsername";
-            panelUsername.Padding = new System.Windows.Forms.Padding(32);
-            panelUsername.Size = new System.Drawing.Size(392, 600);
+            panelUsername.Padding = new System.Windows.Forms.Padding(37, 39, 37, 39);
+            panelUsername.Size = new System.Drawing.Size(457, 738);
             panelUsername.TabIndex = 0;
             // 
             // btnContinueWithUsername
             // 
-            btnContinueWithUsername.Location = new System.Drawing.Point(32, 175);
+            btnContinueWithUsername.Location = new System.Drawing.Point(37, 215);
+            btnContinueWithUsername.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             btnContinueWithUsername.Name = "btnContinueWithUsername";
-            btnContinueWithUsername.Size = new System.Drawing.Size(328, 43);
+            btnContinueWithUsername.Size = new System.Drawing.Size(383, 53);
             btnContinueWithUsername.TabIndex = 0;
             btnContinueWithUsername.Text = "Продолжить";
             btnContinueWithUsername.Click += btnContinueWithUsername_Click;
             // 
             // txtUsernameInput
             // 
-            txtUsernameInput.Location = new System.Drawing.Point(75, 131);
+            txtUsernameInput.Location = new System.Drawing.Point(88, 161);
+            txtUsernameInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             txtUsernameInput.Name = "txtUsernameInput";
             txtUsernameInput.Properties.AutoHeight = false;
-            txtUsernameInput.Size = new System.Drawing.Size(250, 36);
+            txtUsernameInput.Size = new System.Drawing.Size(292, 44);
             txtUsernameInput.TabIndex = 4;
             // 
             // lblUsernameSubtitle
@@ -106,10 +109,11 @@
             lblUsernameSubtitle.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             lblUsernameSubtitle.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblUsernameSubtitle.Dock = System.Windows.Forms.DockStyle.Top;
-            lblUsernameSubtitle.Location = new System.Drawing.Point(32, 82);
+            lblUsernameSubtitle.Location = new System.Drawing.Point(37, 101);
+            lblUsernameSubtitle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             lblUsernameSubtitle.Name = "lblUsernameSubtitle";
-            lblUsernameSubtitle.Padding = new System.Windows.Forms.Padding(0, 8, 0, 24);
-            lblUsernameSubtitle.Size = new System.Drawing.Size(328, 54);
+            lblUsernameSubtitle.Padding = new System.Windows.Forms.Padding(0, 10, 0, 30);
+            lblUsernameSubtitle.Size = new System.Drawing.Size(383, 66);
             lblUsernameSubtitle.TabIndex = 1;
             lblUsernameSubtitle.Text = "Введите имя пользователя для продолжения";
             // 
@@ -121,23 +125,25 @@
             lblWelcome.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             lblWelcome.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblWelcome.Dock = System.Windows.Forms.DockStyle.Top;
-            lblWelcome.Location = new System.Drawing.Point(32, 32);
+            lblWelcome.Location = new System.Drawing.Point(37, 39);
+            lblWelcome.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             lblWelcome.Name = "lblWelcome";
-            lblWelcome.Padding = new System.Windows.Forms.Padding(0, 20, 0, 0);
-            lblWelcome.Size = new System.Drawing.Size(328, 50);
+            lblWelcome.Padding = new System.Windows.Forms.Padding(0, 25, 0, 0);
+            lblWelcome.Size = new System.Drawing.Size(383, 62);
             lblWelcome.TabIndex = 0;
             lblWelcome.Text = "Добро пожаловать";
             // 
             // txtUsername
             // 
             txtUsername.Dock = System.Windows.Forms.DockStyle.Top;
-            txtUsername.Location = new System.Drawing.Point(32, 102);
+            txtUsername.Location = new System.Drawing.Point(37, 125);
+            txtUsername.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             txtUsername.Name = "txtUsername";
             txtUsername.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             txtUsername.Properties.Appearance.Options.UseFont = true;
             txtUsername.Properties.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
             txtUsername.Properties.NullText = "Имя пользователя";
-            txtUsername.Size = new System.Drawing.Size(328, 24);
+            txtUsername.Size = new System.Drawing.Size(383, 28);
             txtUsername.TabIndex = 2;
             // 
             // panelQRCode
@@ -153,9 +159,10 @@
             panelQRCode.Controls.Add(lblQRTitle);
             panelQRCode.Dock = System.Windows.Forms.DockStyle.Fill;
             panelQRCode.Location = new System.Drawing.Point(0, 0);
+            panelQRCode.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             panelQRCode.Name = "panelQRCode";
-            panelQRCode.Padding = new System.Windows.Forms.Padding(32);
-            panelQRCode.Size = new System.Drawing.Size(392, 600);
+            panelQRCode.Padding = new System.Windows.Forms.Padding(37, 39, 37, 39);
+            panelQRCode.Size = new System.Drawing.Size(457, 738);
             panelQRCode.TabIndex = 1;
             panelQRCode.Visible = false;
             // 
@@ -166,18 +173,20 @@
             lblQRUsername.Appearance.Options.UseTextOptions = true;
             lblQRUsername.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             lblQRUsername.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-            lblQRUsername.Location = new System.Drawing.Point(32, 504);
+            lblQRUsername.Location = new System.Drawing.Point(37, 620);
+            lblQRUsername.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             lblQRUsername.Name = "lblQRUsername";
-            lblQRUsername.Size = new System.Drawing.Size(336, 20);
+            lblQRUsername.Size = new System.Drawing.Size(392, 25);
             lblQRUsername.TabIndex = 5;
             // 
             // btnSwitchToPassword
             // 
             btnSwitchToPassword.Appearance.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             btnSwitchToPassword.Appearance.Options.UseFont = true;
-            btnSwitchToPassword.Location = new System.Drawing.Point(32, 456);
+            btnSwitchToPassword.Location = new System.Drawing.Point(37, 561);
+            btnSwitchToPassword.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             btnSwitchToPassword.Name = "btnSwitchToPassword";
-            btnSwitchToPassword.Size = new System.Drawing.Size(336, 40);
+            btnSwitchToPassword.Size = new System.Drawing.Size(392, 49);
             btnSwitchToPassword.TabIndex = 4;
             btnSwitchToPassword.Text = "Или войти с использованием пароля";
             btnSwitchToPassword.Click += btnSwitchToPassword_Click;
@@ -186,9 +195,10 @@
             // 
             btnRefreshQR.Appearance.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             btnRefreshQR.Appearance.Options.UseFont = true;
-            btnRefreshQR.Location = new System.Drawing.Point(32, 408);
+            btnRefreshQR.Location = new System.Drawing.Point(37, 502);
+            btnRefreshQR.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             btnRefreshQR.Name = "btnRefreshQR";
-            btnRefreshQR.Size = new System.Drawing.Size(336, 40);
+            btnRefreshQR.Size = new System.Drawing.Size(392, 49);
             btnRefreshQR.TabIndex = 3;
             btnRefreshQR.Text = "Обновить QR-код";
             btnRefreshQR.Click += btnRefreshQR_Click;
@@ -197,9 +207,10 @@
             // 
             pictureBoxQR.BackColor = System.Drawing.Color.White;
             pictureBoxQR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            pictureBoxQR.Location = new System.Drawing.Point(75, 142);
+            pictureBoxQR.Location = new System.Drawing.Point(88, 175);
+            pictureBoxQR.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             pictureBoxQR.Name = "pictureBoxQR";
-            pictureBoxQR.Size = new System.Drawing.Size(250, 250);
+            pictureBoxQR.Size = new System.Drawing.Size(291, 307);
             pictureBoxQR.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             pictureBoxQR.TabIndex = 2;
             pictureBoxQR.TabStop = false;
@@ -213,10 +224,11 @@
             lblQRSubtitle.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             lblQRSubtitle.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblQRSubtitle.Dock = System.Windows.Forms.DockStyle.Top;
-            lblQRSubtitle.Location = new System.Drawing.Point(32, 82);
+            lblQRSubtitle.Location = new System.Drawing.Point(37, 101);
+            lblQRSubtitle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             lblQRSubtitle.Name = "lblQRSubtitle";
-            lblQRSubtitle.Padding = new System.Windows.Forms.Padding(0, 8, 0, 24);
-            lblQRSubtitle.Size = new System.Drawing.Size(328, 60);
+            lblQRSubtitle.Padding = new System.Windows.Forms.Padding(0, 10, 0, 30);
+            lblQRSubtitle.Size = new System.Drawing.Size(383, 74);
             lblQRSubtitle.TabIndex = 1;
             lblQRSubtitle.Text = "Отсканируйте QR-код с помощью мобильного приложения";
             // 
@@ -228,10 +240,11 @@
             lblQRTitle.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             lblQRTitle.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblQRTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            lblQRTitle.Location = new System.Drawing.Point(32, 32);
+            lblQRTitle.Location = new System.Drawing.Point(37, 39);
+            lblQRTitle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             lblQRTitle.Name = "lblQRTitle";
-            lblQRTitle.Padding = new System.Windows.Forms.Padding(0, 20, 0, 0);
-            lblQRTitle.Size = new System.Drawing.Size(328, 50);
+            lblQRTitle.Padding = new System.Windows.Forms.Padding(0, 25, 0, 0);
+            lblQRTitle.Size = new System.Drawing.Size(383, 62);
             lblQRTitle.TabIndex = 0;
             lblQRTitle.Text = "QR-код для входа";
             // 
@@ -248,9 +261,10 @@
             panelPassword.Controls.Add(lblLoginTitle);
             panelPassword.Dock = System.Windows.Forms.DockStyle.Fill;
             panelPassword.Location = new System.Drawing.Point(0, 0);
+            panelPassword.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             panelPassword.Name = "panelPassword";
-            panelPassword.Padding = new System.Windows.Forms.Padding(32);
-            panelPassword.Size = new System.Drawing.Size(392, 600);
+            panelPassword.Padding = new System.Windows.Forms.Padding(37, 39, 37, 39);
+            panelPassword.Size = new System.Drawing.Size(457, 738);
             panelPassword.TabIndex = 2;
             panelPassword.Visible = false;
             // 
@@ -258,9 +272,10 @@
             // 
             btnSwitchToQR.Appearance.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             btnSwitchToQR.Appearance.Options.UseFont = true;
-            btnSwitchToQR.Location = new System.Drawing.Point(32, 296);
+            btnSwitchToQR.Location = new System.Drawing.Point(37, 364);
+            btnSwitchToQR.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             btnSwitchToQR.Name = "btnSwitchToQR";
-            btnSwitchToQR.Size = new System.Drawing.Size(336, 40);
+            btnSwitchToQR.Size = new System.Drawing.Size(392, 49);
             btnSwitchToQR.TabIndex = 5;
             btnSwitchToQR.Text = "Вернуться к QR-коду";
             btnSwitchToQR.Click += btnSwitchToQR_Click;
@@ -269,9 +284,10 @@
             // 
             btnLogin.Appearance.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             btnLogin.Appearance.Options.UseFont = true;
-            btnLogin.Location = new System.Drawing.Point(32, 248);
+            btnLogin.Location = new System.Drawing.Point(37, 305);
+            btnLogin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             btnLogin.Name = "btnLogin";
-            btnLogin.Size = new System.Drawing.Size(336, 40);
+            btnLogin.Size = new System.Drawing.Size(392, 49);
             btnLogin.TabIndex = 4;
             btnLogin.Text = "Войти";
             btnLogin.Click += btnLogin_Click;
@@ -285,22 +301,24 @@
             lblError.Appearance.Options.UseTextOptions = true;
             lblError.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
             lblError.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-            lblError.Location = new System.Drawing.Point(32, 200);
+            lblError.Location = new System.Drawing.Point(37, 246);
+            lblError.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             lblError.Name = "lblError";
-            lblError.Size = new System.Drawing.Size(336, 40);
+            lblError.Size = new System.Drawing.Size(392, 49);
             lblError.TabIndex = 3;
             lblError.Visible = false;
             // 
             // txtPassword
             // 
-            txtPassword.Location = new System.Drawing.Point(32, 152);
+            txtPassword.Location = new System.Drawing.Point(37, 187);
+            txtPassword.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             txtPassword.Name = "txtPassword";
             txtPassword.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             txtPassword.Properties.Appearance.Options.UseFont = true;
             txtPassword.Properties.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
             txtPassword.Properties.NullText = "Пароль";
             txtPassword.Properties.PasswordChar = '●';
-            txtPassword.Size = new System.Drawing.Size(336, 24);
+            txtPassword.Size = new System.Drawing.Size(392, 28);
             txtPassword.TabIndex = 2;
             txtPassword.KeyPress += txtPassword_KeyPress;
             // 
@@ -312,10 +330,11 @@
             lblLoginTitle.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             lblLoginTitle.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             lblLoginTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            lblLoginTitle.Location = new System.Drawing.Point(32, 32);
+            lblLoginTitle.Location = new System.Drawing.Point(37, 39);
+            lblLoginTitle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             lblLoginTitle.Name = "lblLoginTitle";
-            lblLoginTitle.Padding = new System.Windows.Forms.Padding(0, 20, 0, 20);
-            lblLoginTitle.Size = new System.Drawing.Size(328, 70);
+            lblLoginTitle.Padding = new System.Windows.Forms.Padding(0, 25, 0, 25);
+            lblLoginTitle.Size = new System.Drawing.Size(383, 86);
             lblLoginTitle.TabIndex = 0;
             lblLoginTitle.Text = "Вход в систему";
             // 
@@ -328,8 +347,9 @@
             progressPanel.Controls.Add(progressIndicator);
             progressPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             progressPanel.Location = new System.Drawing.Point(0, 0);
+            progressPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             progressPanel.Name = "progressPanel";
-            progressPanel.Size = new System.Drawing.Size(392, 600);
+            progressPanel.Size = new System.Drawing.Size(457, 738);
             progressPanel.TabIndex = 3;
             progressPanel.Visible = false;
             // 
@@ -342,9 +362,10 @@
             lblLoading.Appearance.Options.UseTextOptions = true;
             lblLoading.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             lblLoading.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-            lblLoading.Location = new System.Drawing.Point(100, 350);
+            lblLoading.Location = new System.Drawing.Point(117, 431);
+            lblLoading.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             lblLoading.Name = "lblLoading";
-            lblLoading.Size = new System.Drawing.Size(200, 20);
+            lblLoading.Size = new System.Drawing.Size(233, 25);
             lblLoading.TabIndex = 1;
             lblLoading.Text = "Подождите...";
             // 
@@ -354,17 +375,18 @@
             progressIndicator.Appearance.ForeColor = System.Drawing.Color.White;
             progressIndicator.Appearance.Options.UseBackColor = true;
             progressIndicator.Appearance.Options.UseForeColor = true;
-            progressIndicator.Location = new System.Drawing.Point(100, 248);
+            progressIndicator.Location = new System.Drawing.Point(117, 305);
+            progressIndicator.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             progressIndicator.Name = "progressIndicator";
-            progressIndicator.Size = new System.Drawing.Size(250, 100);
+            progressIndicator.Size = new System.Drawing.Size(292, 123);
             progressIndicator.TabIndex = 0;
             progressIndicator.Text = "progressPanel1";
             // 
             // frmLogin
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(392, 600);
+            ClientSize = new System.Drawing.Size(457, 738);
             Controls.Add(progressPanel);
             Controls.Add(panelUsername);
             Controls.Add(panelQRCode);
@@ -372,6 +394,7 @@
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             LookAndFeel.SkinName = "DevExpress Style";
             LookAndFeel.UseDefaultLookAndFeel = false;
+            Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "frmLogin";

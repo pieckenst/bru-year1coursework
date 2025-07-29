@@ -117,7 +117,8 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             // 
             // colEmpId
             // 
-            this.colEmpId.FieldName = "EmpId";
+            this.colEmpId.FieldName = "UnboundEmpId";
+            this.colEmpId.UnboundType = DevExpress.Data.UnboundColumnType.Integer;
             this.colEmpId.Name = "colEmpId";
             this.colEmpId.Visible = true;
             this.colEmpId.VisibleIndex = 0;
