@@ -2,89 +2,107 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
+        mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="540"
         xmlns:vm="using:SuperNova.Forms.ViewModels"
+        xmlns:icons="using:Material.Icons.Avalonia"
         x:DataType="vm:WindowsAccountLinkSuccessViewModel"
         x:Class="SuperNova.Forms.Views.WindowsAccountLinkSuccessDialog"
-        Title="Windows Security"
-        Width="400" Height="300"
+        
+        Title=""
+        CaptionButtons="Close"
+        Width="480" Height="560"
+        SystemDecorations="None"
         WindowStartupLocation="CenterOwner"
+        EnableTitleBarMargin="False"
+        MinWidth="460" MinHeight="530"
+        CanResize="False"
         ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaTitleBarHeightHint="40"
-        ExtendClientAreaChromeHints="NoChrome">
+        ExtendClientAreaChromeHints="NoChrome"
+        
+        Padding="1">
 
-	
+    <Design.DataContext>
+        <vm:WindowsAccountLinkSuccessViewModel />
+    </Design.DataContext>
+    
+    <!-- Main window border for rounded corners and light background -->
+    <Border Background="Transparent"
+            CornerRadius="8"
+            ClipToBounds="True">
 
-	<Grid RowDefinitions="Auto,*,Auto" Margin="0">
-		<!-- Header -->
-		<Border Grid.Row="0" Height="40" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}">
-			<TextBlock Text="Windows Security"
-                     VerticalAlignment="Center"
-                     HorizontalAlignment="Center"
-                     FontSize="12"
-                     FontWeight="SemiBold"/>
-		</Border>
+        <Grid RowDefinitions="Auto,*,Auto">
+            
+            <!-- Custom Title Bar Area with Icon -->
+            <Grid Grid.Row="0"
+                  Height="48"
+                  Background="Transparent"
+                  >
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" Margin="16,0,0,0">
+                    <icons:MaterialIcon Kind="ShieldCheck"
+                                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                        Width="16" Height="16"/>
+                    <TextBlock Text="Windows Security"
+                               VerticalAlignment="Center"
+                               FontSize="12"/>
+                </StackPanel>
+            </Grid>
 
-		<!-- Content -->
-		<ScrollViewer Grid.Row="1" Padding="24">
-			<StackPanel Spacing="24" HorizontalAlignment="Center" VerticalAlignment="Center">
-				<!-- Success Icon -->
-				<Border Width="80"
-                        Height="80"
-                        Background="{DynamicResource SystemAccentColor}"
-                        CornerRadius="40"
-                        HorizontalAlignment="Center">
-					<PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
-                            Width="36"
-                            Height="36"
-                            Foreground="White"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"/>
-				</Border>
+            <!-- Main Content -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
+                <StackPanel Spacing="16" Margin="48,24,48,24" VerticalAlignment="Center">
+                    
+                    <TextBlock Text="Accounts successfully linked"
+                               FontSize="28"
+                               FontWeight="SemiBold"
+                               TextWrapping="Wrap"
+                               HorizontalAlignment="Left"/>
+                    
+                    <TextBlock TextWrapping="Wrap" HorizontalAlignment="Left" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}">
+                        <TextBlock.Inlines>
+                            <Run Text="Your Windows account is now linked to the application account "/>
+                            <Run Text="{Binding Username}" FontWeight="SemiBold"/>
+                            <Run Text="."/>
+                        </TextBlock.Inlines>
+                    </TextBlock>
+                    <TextBlock Text="This request came from the app “SuperNova.exe” by “SuperNova Security”." TextWrapping="Wrap" HorizontalAlignment="Left" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
 
-				<!-- Success Message -->
-				<StackPanel Spacing="8" HorizontalAlignment="Center" >
-					<TextBlock Text="Account Linked"
-                             FontSize="24"
-                             FontWeight="SemiBold"
-                             HorizontalAlignment="Center"
-                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <!-- Centered Icon and Status Text Block -->
+                    <StackPanel Spacing="16" Margin="0,48,0,48" HorizontalAlignment="Center">
+                        <!-- Composite Icon -->
+                        <Grid Width="80" Height="80" HorizontalAlignment="Center">
+                            <icons:MaterialIcon Kind="Smartphone" Width="80" Height="80" />
+                            <icons:MaterialIcon Kind="CheckCircle"
+                                              Width="36" Height="36"
+                                              HorizontalAlignment="Right"
+                                              VerticalAlignment="Bottom"
+                                              Foreground="{DynamicResource SystemControlBackgroundAccentBrush}"
+                                              Margin="0,0,-4,-4"/>
+                        </Grid>
+                        
+                        <!-- Status Text -->
+                        <StackPanel Spacing="4" HorizontalAlignment="Center">
+                            <TextBlock Text="Link complete!" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding SuccessMessage}"
+									  TextWrapping="Wrap"
+									  TextAlignment="Center"
+									  HorizontalAlignment="Center"
+									  Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
 
-					<TextBlock Text="{Binding SuccessMessage}"
-                             TextWrapping="Wrap"
-                             HorizontalAlignment="Center"
-                             Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
-				</StackPanel>
-
-				<!-- Linked Account Info -->
-				<Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
-                        CornerRadius="4"
-                        Padding="16">
-					<StackPanel Spacing="12">
-						<TextBlock Text="Your Windows account is now linked to:"
-                                 Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
-                                 FontSize="12"/>
-
-						<TextBlock Text="{Binding Username}"
-                                 FontWeight="SemiBold"/>
-					</StackPanel>
-				</Border>
-			</StackPanel>
-		</ScrollViewer>
-
-		<!-- Footer -->
-		<Border Grid.Row="2"
-                BorderThickness="0,1,0,0"
-                BorderBrush="{DynamicResource SystemControlBackgroundBaseMediumLowBrush}"
-                Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
-                Padding="24">
-			<Grid ColumnDefinitions="*,Auto">
-				<Button Content="Close"
-                       HorizontalAlignment="Right"
-                       MinWidth="100"
-                       Command="{Binding CloseCommand}"
-                      />
-			</Grid>
-		</Border>
-	</Grid>
+            <!-- Footer Button Bar -->
+            <Grid Grid.Row="2"
+                  Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                  Height="80">
+                <Button Content="Close"
+                        Command="{Binding CloseCommand}"
+                        MinWidth="120"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Theme="{StaticResource SubtleButtonStyle}"/>
+            </Grid>
+        </Grid>
+    </Border>
 </PleasantWindow>

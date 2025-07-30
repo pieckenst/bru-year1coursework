@@ -109,6 +109,10 @@ public class ApplicationCommands
     public static readonly RoutedCommand OpenCalendarCommand = new RoutedCommand(nameof(OpenCalendarCommand));
     public static readonly RoutedCommand AdvancedSearchCommand = new RoutedCommand(nameof(AdvancedSearchCommand));
     public static readonly RoutedCommand ExitCommand = new RoutedCommand(nameof(ExitCommand));
+    public static readonly RoutedCommand LinkAccountCommand = new RoutedCommand(nameof(LinkAccountCommand));
+    public static readonly RoutedCommand CancelCommand = new RoutedCommand(nameof(CancelCommand));
+    public static readonly RoutedCommand CloseCommand = new RoutedCommand(nameof(CloseCommand));
+    public static readonly RoutedCommand ConfirmCommand = new RoutedCommand(nameof(ConfirmCommand));
 
     public static readonly RoutedCommand OpenCommand = new RoutedCommand(nameof(OpenCommand));
     public static readonly RoutedCommand AddCommand = new RoutedCommand(nameof(AddCommand));

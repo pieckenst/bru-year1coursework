@@ -201,24 +201,28 @@ namespace SuperNova.Forms.ViewModels
                         var tokenHandler = new JwtSecurityTokenHandler();
                         var token = tokenHandler.ReadJwtToken(result.Token);
                         var roleClaim = token.Claims.FirstOrDefault(c => c.Type == "role");
+                        var doeswindowsaccneedlinking = token.Claims.FirstOrDefault(c => c.Type == "does_windows_account_need_linking");
                         
-                        // Show Windows account link dialog
-                        var linkWindow = new WindowsAccountLinkWindow();
-                        
-                        // Get the current AuthWindow from the application's windows collection
-                        var currentWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                        if (doeswindowsaccneedlinking?.Value == "true")
+                        { 
+                            // Show Windows account link dialog
+                            var linkWindow = new WindowsAccountLinkWindow();
+                            
+                            // Get the current AuthWindow from the application's windows collection
+                            var currentWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
                             ? desktop.Windows.OfType<AuthWindow>().FirstOrDefault()
                             : null;
 
-                        if (currentWindow != null)
-                        {
-                            await linkWindow.ShowDialog(currentWindow);
+                            if (currentWindow != null)
+                            {
+                                await linkWindow.ShowDialog(currentWindow);
+                            }
+                            else
+                            {
+                                Log.Warning("Could not find AuthWindow for showing account link dialog");
+                            }
                         }
-                        else
-                        {
-                            Log.Warning("Could not find AuthWindow for showing account link dialog");
-                        }
-
+                         
                         if (roleClaim?.Value != "1") // Not an admin
                         {
                             var messageBox = MessageBoxManager

@@ -1,9 +1,11 @@
 using System;
+using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MsBox.Avalonia;
@@ -27,13 +29,29 @@ namespace SuperNova.Forms.ViewModels
         public string Username
         {
             get => _username;
-            set => this.RaiseAndSetIfChanged(ref _username, value);
+            set 
+            {
+                if (_username != value)
+                {
+                    _username = value;
+                    this.RaisePropertyChanged();
+                    (LinkAccountCommand as RelayCommand)?.NotifyCanExecuteChanged();
+                }
+            }
         }
 
         public string Password
         {
             get => _password;
-            set => this.RaiseAndSetIfChanged(ref _password, value);
+            set 
+            {
+                if (_password != value)
+                {
+                    _password = value;
+                    this.RaisePropertyChanged();
+                    (LinkAccountCommand as RelayCommand)?.NotifyCanExecuteChanged();
+                }
+            }
         }
 
         public string WindowsUsername
@@ -90,6 +108,20 @@ namespace SuperNova.Forms.ViewModels
                 return;
             }
 
+            if (_ownerWindow == null)
+            {
+                // Try to find the owner window if not set
+                _ownerWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                    ? desktop.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive) ?? desktop.MainWindow
+                    : null;
+
+                if (_ownerWindow == null)
+                {
+                    StatusMessage = "Error: Could not determine parent window";
+                    return;
+                }
+            }
+
             try
             {
                 IsBusy = true;
@@ -101,20 +133,35 @@ namespace SuperNova.Forms.ViewModels
                 
                 if (!confirmed)
                 {
-                    StatusMessage = "Account linking cancelled";
+                    StatusMessage = "Account linking was cancelled.";
                     return;
                 }
+
+                // Here you would typically verify the credentials with your backend
+                // For now, we'll simulate a successful verification
+                await Task.Delay(1000); // Simulate API call
+
+                // Show success dialog
+                var successDialog = new WindowsAccountLinkSuccessDialog(Username);
+                await successDialog.ShowDialog(_ownerWindow);
+                
+                // Update UI to show success
+                ShowSuccess = true;
+                StatusMessage = "Your Windows account has been successfully linked!";
+                
+                // Clear the form
+                Username = string.Empty;
+                Password = string.Empty;
+                
+                // Close the window after a short delay
+                await Task.Delay(1000);
+                RequestClose?.Invoke(this, EventArgs.Empty);
 
                 // Simulate API call
                 await Task.Delay(1500);
                 
-                // Show success state
-                ShowSuccess = true;
-                StatusMessage = "Your Windows account has been successfully linked!";
-                
-                // Show success dialog
-                var successDialog = new WindowsAccountLinkSuccessDialog(WindowsUsername);
-                await successDialog.ShowDialog(_ownerWindow);
+               
+               
                 
                 // Close the window
                 RequestClose?.Invoke(this, EventArgs.Empty);

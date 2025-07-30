@@ -122,6 +122,170 @@ namespace TicketSalesApp.AdminServer.Controllers
 
 
 
+        [Route("check-windows-link-status")]
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> CheckWindowsLinkStatus()
+        {
+            try
+            {
+                var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                var user = await _context.Users.FindAsync(userId);
+
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found" });
+                }
+
+                return Ok(new 
+                { 
+                    isLinked = !string.IsNullOrEmpty(user.WindowsIdentity),
+                    windowsIdentity = user.WindowsIdentity,
+                    needsLinking = user.DoesWindowsAccountNeedLinking
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error checking Windows account link status");
+                return StatusCode(500, new { message = "An error occurred while checking Windows account link status" });
+            }
+        }
+
+        [Route("link-windows-account")]
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> LinkWindowsAccount([FromBody] LinkWindowsAccountModel model)
+        {
+            try
+            {
+                var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                var user = await _context.Users.FindAsync(userId);
+
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found" });
+                }
+
+                // Check if already linked
+                if (!string.IsNullOrEmpty(user.WindowsIdentity))
+                {
+                    return BadRequest(new { message = "This account is already linked to a Windows account" });
+                }
+
+                // Generate a secure token for verification
+                var token = $"{Guid.NewGuid()}{DateTime.UtcNow.Ticks}";
+                var hashedToken = BCrypt.Net.BCrypt.HashString(token);
+                
+                // Store the token and mark that this account needs linking
+                user.LinkedAccountToken = hashedToken;
+                user.DoesWindowsAccountNeedLinking = true;
+                user.LinkedRegularAccountUsername = user.Login;
+                
+                await _context.SaveChangesAsync();
+
+                return Ok(new 
+                { 
+                    verificationToken = token,
+                    message = "Please complete the linking process by signing in with your Windows account"
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error initiating Windows account linking");
+                return StatusCode(500, new { message = "An error occurred while initiating Windows account linking" });
+            }
+        }
+
+        [Route("complete-windows-link")]
+        [Authorize(AuthenticationSchemes = "Windows")]
+        [HttpPost]
+        public async Task<IActionResult> CompleteWindowsLink([FromBody] CompleteWindowsLinkModel model)
+        {
+            try
+            {
+                if (!(User.Identity is WindowsIdentity wi) || !wi.IsAuthenticated)
+                {
+                    return Unauthorized(new { message = "Windows authentication required" });
+                }
+
+                var windowsUsername = wi.Name;
+                
+                // Find the user account that needs linking
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.DoesWindowsAccountNeedLinking && 
+                                           u.LinkedRegularAccountUsername == model.Username);
+
+                if (user == null)
+                {
+                    return BadRequest(new { message = "No pending Windows account link found for this user" });
+                }
+
+                // Verify the token
+                if (!BCrypt.Net.BCrypt.Verify(model.Token, user.LinkedAccountToken))
+                {
+                    return BadRequest(new { message = "Invalid verification token" });
+                }
+
+                // Complete the linking
+                user.WindowsIdentity = windowsUsername;
+                user.IsWindowsAuth = true;
+                user.DoesWindowsAccountNeedLinking = false;
+                user.LinkedAccountToken = string.Empty; // Clear the token after use
+                
+                await _context.SaveChangesAsync();
+
+                return Ok(new 
+                { 
+                    message = "Windows account linked successfully",
+                    username = user.Login,
+                    windowsIdentity = user.WindowsIdentity
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error completing Windows account linking");
+                return StatusCode(500, new { message = "An error occurred while completing Windows account linking" });
+            }
+        }
+
+        [Route("unlink-windows-account")]
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> UnlinkWindowsAccount()
+        {
+            try
+            {
+                var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                var user = await _context.Users.FindAsync(userId);
+
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found" });
+                }
+
+                if (string.IsNullOrEmpty(user.WindowsIdentity))
+                {
+                    return BadRequest(new { message = "This account is not linked to a Windows account" });
+                }
+
+                // Unlink the Windows account
+                user.WindowsIdentity = string.Empty;
+                user.IsWindowsAuth = false;
+                user.DoesWindowsAccountNeedLinking = false;
+                user.LinkedAccountToken = string.Empty;
+                user.LinkedRegularAccountUsername = string.Empty;
+                
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Windows account unlinked successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error unlinking Windows account");
+                return StatusCode(500, new { message = "An error occurred while unlinking Windows account" });
+            }
+        }
+
         [Route("windows-login")]
         [Authorize(AuthenticationSchemes = "Windows")]
         [HttpGet]
@@ -178,6 +342,7 @@ namespace TicketSalesApp.AdminServer.Controllers
                     });
                 }
 
+                var isNewUser = false;
                 if (user == null)
                 {
                     Console.WriteLine($"[DEBUG] Provisioning new user '{windowsUsername}'");
@@ -189,10 +354,11 @@ namespace TicketSalesApp.AdminServer.Controllers
                         IsWindowsAuth = true,
                         Role = 0,
                         IsActive = true,
-                        CreatedAt = DateTime.UtcNow
+                        CreatedAt = DateTime.UtcNow,
+                        DoesWindowsAccountNeedLinking = true // New users need to link their account
                     };
                     _context.Users.Add(user);
-                    await _context.SaveChangesAsync();
+                    isNewUser = true;
                     _logger.LogInformation(
                         "New user '{Username}' created for Windows identity '{WindowsUsername}'",
                         user.Login, windowsUsername
@@ -205,12 +371,23 @@ namespace TicketSalesApp.AdminServer.Controllers
                         "Found existing user '{Username}' for Windows identity '{WindowsUsername}'",
                         user.Login, windowsUsername
                     );
+                    
+                    // If this is an existing Windows auth user who hasn't completed linking yet,
+                    // we'll prompt them again unless they've explicitly declined
+                    if (user.DoesWindowsAccountNeedLinking && 
+                        string.IsNullOrEmpty(user.LinkedRegularAccountUsername) && 
+                        string.IsNullOrEmpty(user.LinkedAccountToken))
+                    {
+                        // Only set to false if they've already been prompted once
+                        user.DoesWindowsAccountNeedLinking = false;
+                    }
                 }
 
-                // 5) Issue JWT and return success
+                // 5) Update last login time and save changes
                 user.LastLoginAt = DateTime.UtcNow;
                 await _context.SaveChangesAsync();
 
+                // 6) Generate JWT token with appropriate claims
                 var token = GenerateJwtToken(user);
                 Console.WriteLine($"[DEBUG] JWT token issued for: {user.Login}");
                 _logger.LogInformation(
@@ -226,7 +403,8 @@ namespace TicketSalesApp.AdminServer.Controllers
                         user.Login,
                         user.Email,
                         user.Role,
-                        IsWindowsAuth = true
+                        IsWindowsAuth = true,
+                        DoesWindowsAccountNeedLinking = user.DoesWindowsAccountNeedLinking
                     }
                 });
             }
@@ -1536,8 +1714,19 @@ namespace TicketSalesApp.AdminServer.Controllers
 
     public class DirectQRLoginModel
     {
-        public required string Token { get; set; }
-        public required string DeviceType { get; set; }
+        public string Token { get; set; }
+        public string DeviceId { get; set; }
         public bool IsDesktopLogin { get; set; }
+    }
+
+    public class LinkWindowsAccountModel
+    {
+        public string Username { get; set; }
+    }
+
+    public class CompleteWindowsLinkModel
+    {
+        public string Username { get; set; }
+        public string Token { get; set; }
     }
 }
