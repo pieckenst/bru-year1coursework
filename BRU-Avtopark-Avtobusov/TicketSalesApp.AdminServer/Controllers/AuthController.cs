@@ -152,34 +152,90 @@ namespace TicketSalesApp.AdminServer.Controllers
         }
 
         [Route("link-windows-account")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Windows")]
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> LinkWindowsAccount([FromBody] LinkWindowsAccountModel model)
         {
             try
             {
-                var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                var user = await _context.Users.FindAsync(userId);
+                string windowsUsername;
+                
+                // If we have a Windows identity from authentication
+                if (User.Identity is WindowsIdentity wi && wi.IsAuthenticated)
+                {
+                    windowsUsername = wi.Name;
+                }
+                // Otherwise use the provided WindowsUsername
+                else if (!string.IsNullOrEmpty(model?.WindowsUsername))
+                {
+                    windowsUsername = model.WindowsUsername;
+                }
+                else
+                {
+                    return BadRequest(new { message = "Windows authentication or WindowsUsername is required" });
+                }
+
+                // If we have an authenticated user (from JWT)
+                User user = null;
+                if (long.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId))
+                {
+                    user = await _context.Users.FindAsync(userId);
+                }
+                // Otherwise try to find by username
+                else if (!string.IsNullOrEmpty(model?.Username))
+                {
+                    user = await _context.Users.FirstOrDefaultAsync(u => u.Login == model.Username);
+                }
 
                 if (user == null)
                 {
                     return NotFound(new { message = "User not found" });
                 }
 
-                // Check if already linked
-                if (!string.IsNullOrEmpty(user.WindowsIdentity))
+                // Find or create Windows account
+                var windowsAccount = await _context.Users
+                    .FirstOrDefaultAsync(u => u.WindowsIdentity == windowsUsername);
+
+                if (windowsAccount == null)
                 {
-                    return BadRequest(new { message = "This account is already linked to a Windows account" });
+                    // Create a new Windows account if it doesn't exist
+                    windowsAccount = new User
+                    {
+                        Login = $"win_{windowsUsername.Replace("\\", "_")}",
+                        WindowsIdentity = windowsUsername,
+                        IsWindowsAuth = true,
+                        CreatedAt = DateTime.UtcNow,
+                        IsActive = true
+                    };
+                    _context.Users.Add(windowsAccount);
                 }
 
-                // Generate a secure token for verification
-                var token = $"{Guid.NewGuid()}{DateTime.UtcNow.Ticks}";
+                // Check if Windows account is already linked to another account
+                if (!string.IsNullOrEmpty(windowsAccount.LinkedRegularAccountUsername))
+                {
+                    return BadRequest(new { message = "This Windows account is already linked to another account" });
+                }
+
+                // Generate a secure token with PIN, username prefix, and random string
+                var random = new Random();
+                var pin = random.Next(1000, 10000).ToString();
+                var usernamePrefix = user.Login.Length >= 3 
+                    ? user.Login.Substring(0, 3) 
+                    : user.Login.PadRight(3, '_');
+                var randomString = Path.GetRandomFileName().Replace(".", "");
+                
+                // Combine components and hash with BCrypt
+                var token = $"{pin}{usernamePrefix}{randomString}";
                 var hashedToken = BCrypt.Net.BCrypt.HashString(token);
                 
-                // Store the token and mark that this account needs linking
-                user.LinkedAccountToken = hashedToken;
-                user.DoesWindowsAccountNeedLinking = true;
-                user.LinkedRegularAccountUsername = user.Login;
+                // Store linking info on the Windows account
+                windowsAccount.LinkedAccountToken = hashedToken;
+                windowsAccount.DoesWindowsAccountNeedLinking = true;
+                windowsAccount.LinkedRegularAccountUsername = user.Login;
+                
+                // For debugging/logging only - don't log the actual token in production
+                _logger.LogInformation("Generated token for user {Username}", user.Login);
                 
                 await _context.SaveChangesAsync();
 
@@ -198,47 +254,99 @@ namespace TicketSalesApp.AdminServer.Controllers
 
         [Route("complete-windows-link")]
         [Authorize(AuthenticationSchemes = "Windows")]
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> CompleteWindowsLink([FromBody] CompleteWindowsLinkModel model)
         {
             try
             {
-                if (!(User.Identity is WindowsIdentity wi) || !wi.IsAuthenticated)
+                if (model == null)
                 {
-                    return Unauthorized(new { message = "Windows authentication required" });
+                    return BadRequest(new { message = "Invalid request data" });
                 }
 
-                var windowsUsername = wi.Name;
+                string windowsUsername;
                 
-                // Find the user account that needs linking
-                var user = await _context.Users
-                    .FirstOrDefaultAsync(u => u.DoesWindowsAccountNeedLinking && 
+                // If we have a Windows identity from authentication
+                if (User.Identity is WindowsIdentity wi && wi.IsAuthenticated)
+                {
+                    windowsUsername = wi.Name;
+                }
+                // Otherwise use the provided WindowsUsername
+                else if (!string.IsNullOrEmpty(model.WindowsUsername))
+                {
+                    windowsUsername = model.WindowsUsername;
+                }
+                else
+                {
+                    return BadRequest(new { message = "Windows authentication or WindowsUsername is required" });
+                }
+                
+                // Find the Windows account that needs linking
+                var windowsAccount = await _context.Users
+                    .FirstOrDefaultAsync(u => u.WindowsIdentity == windowsUsername &&
+                                           u.DoesWindowsAccountNeedLinking &&
+                                           u.LinkedAccountToken != null &&
                                            u.LinkedRegularAccountUsername == model.Username);
 
-                if (user == null)
+                if (windowsAccount == null)
                 {
                     return BadRequest(new { message = "No pending Windows account link found for this user" });
                 }
 
                 // Verify the token
-                if (!BCrypt.Net.BCrypt.Verify(model.Token, user.LinkedAccountToken))
+                if (!BCrypt.Net.BCrypt.Verify(model.Token, windowsAccount.LinkedAccountToken))
                 {
-                    return BadRequest(new { message = "Invalid verification token" });
+                    return BadRequest(new { message = "Invalid or expired token" });
+                }
+
+                // Find the regular account being linked
+                var regularAccount = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Login == model.Username);
+
+                if (regularAccount == null)
+                {
+                    return BadRequest(new { message = "Linked regular account not found" });
+                }
+
+                // Get all roles from the regular account
+                var regularAccountRoles = await _context.UserRoles
+                    .Include(ur => ur.Role)
+                    .Where(ur => ur.UserId == regularAccount.GuidId)
+                    .ToListAsync();
+
+                // Determine the highest legacy role (1 for admin, 0 for user)
+                var highestLegacyRole = regularAccountRoles.Any(ur => ur.Role?.LegacyRoleId == 1) ? 1 : 0;
+
+                // Remove any existing roles from the Windows account
+                var existingWindowsRoles = _context.UserRoles
+                    .Where(ur => ur.UserId == windowsAccount.GuidId);
+                _context.UserRoles.RemoveRange(existingWindowsRoles);
+
+                // Copy all roles from the regular account to the Windows account
+                foreach (var role in regularAccountRoles)
+                {
+                    _context.UserRoles.Add(new UserRole
+                    {
+                        UserId = windowsAccount.GuidId,
+                        RoleId = role.RoleId,
+                        AssignedAt = DateTime.UtcNow,
+                        AssignedBy = "System"
+                    });
                 }
 
                 // Complete the linking
-                user.WindowsIdentity = windowsUsername;
-                user.IsWindowsAuth = true;
-                user.DoesWindowsAccountNeedLinking = false;
-                user.LinkedAccountToken = string.Empty; // Clear the token after use
+                windowsAccount.Role = highestLegacyRole;
+                windowsAccount.DoesWindowsAccountNeedLinking = false;
+                // Keep the LinkedRegularAccountUsername to maintain the relationship
                 
                 await _context.SaveChangesAsync();
 
                 return Ok(new 
                 { 
                     message = "Windows account linked successfully",
-                    username = user.Login,
-                    windowsIdentity = user.WindowsIdentity
+                    username = windowsAccount.Login,
+                    windowsIdentity = windowsAccount.WindowsIdentity
                 });
             }
             catch (Exception ex)
@@ -248,32 +356,88 @@ namespace TicketSalesApp.AdminServer.Controllers
             }
         }
 
+       
+
+        [Route("decline-windows-link")]
+        [Authorize(AuthenticationSchemes = "Windows")]
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> DeclineWindowsLink([FromBody] DeclineWindowsLinkModel model = null)
+        {
+            try
+            {
+                string windowsUsername = null;
+                
+                // Get Windows identity from authentication if available
+                if (User.Identity is WindowsIdentity wi && wi.IsAuthenticated)
+                {
+                    windowsUsername = wi.Name;
+                }
+                // Otherwise use the provided WindowsUsername from the model
+                else if (model != null && !string.IsNullOrEmpty(model.WindowsUsername))
+                {
+                    windowsUsername = model.WindowsUsername;
+                }
+                else
+                {
+                    return BadRequest(new { message = "Windows authentication or WindowsUsername is required" });
+                }
+
+                // Find the Windows account
+                var windowsAccount = await _context.Users
+                    .FirstOrDefaultAsync(u => u.WindowsIdentity == windowsUsername);
+
+                if (windowsAccount == null)
+                {
+                    return NotFound(new { message = "Windows account not found" });
+                }
+
+                // Set a special token to indicate the user has explicitly declined
+                windowsAccount.LinkedAccountToken = "DECLINED";
+                windowsAccount.DoesWindowsAccountNeedLinking = false;
+                
+                
+                
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("User {UserId} has declined Windows account linking", windowsAccount.UserId);
+                return Ok(new { message = "Windows account linking prompt has been dismissed. You can still link your account manually later." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing Windows account linking decline");
+                return StatusCode(500, new { message = "An error occurred while processing your request" });
+            }
+        }
+
         [Route("unlink-windows-account")]
-        [Authorize]
+        [Authorize] // This will be called with JWT from the regular account
         [HttpPost]
         public async Task<IActionResult> UnlinkWindowsAccount()
         {
             try
             {
                 var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                var user = await _context.Users.FindAsync(userId);
+                var regularAccount = await _context.Users.FindAsync(userId);
 
-                if (user == null)
+                if (regularAccount == null)
                 {
                     return NotFound(new { message = "User not found" });
                 }
 
-                if (string.IsNullOrEmpty(user.WindowsIdentity))
+                // Find the Windows account that's linked to this regular account
+                var windowsAccount = await _context.Users
+                    .FirstOrDefaultAsync(u => u.LinkedRegularAccountUsername == regularAccount.Login);
+
+                if (windowsAccount == null)
                 {
-                    return BadRequest(new { message = "This account is not linked to a Windows account" });
+                    return BadRequest(new { message = "No linked Windows account found" });
                 }
 
-                // Unlink the Windows account
-                user.WindowsIdentity = string.Empty;
-                user.IsWindowsAuth = false;
-                user.DoesWindowsAccountNeedLinking = false;
-                user.LinkedAccountToken = string.Empty;
-                user.LinkedRegularAccountUsername = string.Empty;
+                // Clear the linking information from the Windows account
+                windowsAccount.LinkedAccountToken = string.Empty;
+                windowsAccount.LinkedRegularAccountUsername = string.Empty;
+                windowsAccount.DoesWindowsAccountNeedLinking = false;
                 
                 await _context.SaveChangesAsync();
 
@@ -291,14 +455,13 @@ namespace TicketSalesApp.AdminServer.Controllers
         [HttpGet]
         public async Task<IActionResult> WindowsLogin()
         {
+            Console.WriteLine("[WindowsLogin] Starting Windows authentication flow");
             try
             {
-                // 1) If the user isn’t yet Windows‑authenticated, trigger a Negotiate challenge
+                Console.WriteLine("[WindowsLogin] Checking Windows authentication status");
                 if (!(User.Identity is WindowsIdentity wi) || !wi.IsAuthenticated)
                 {
-                    Console.WriteLine("[DEBUG] Triggering Windows auth challenge");
-                    // This will return a 401 + WWW‑Authenticate: Negotiate, NTLM header,
-                    // causing the client to show the credentials prompt.
+                    Console.WriteLine("[WindowsLogin] User not authenticated, triggering Windows auth challenge");
                     return Challenge(
                         new AuthenticationProperties(),
                         NegotiateDefaults.AuthenticationScheme
@@ -307,31 +470,32 @@ namespace TicketSalesApp.AdminServer.Controllers
 
                 // 2) User is now authenticated by Windows
                 var windowsUsername = wi.Name;
+                Console.WriteLine($"[WindowsLogin] Windows user authenticated: {windowsUsername}");
+                
                 var isMachineAccount = windowsUsername.StartsWith(
                     Environment.MachineName + "\\",
                     StringComparison.OrdinalIgnoreCase
                 );
+                Console.WriteLine($"[WindowsLogin] Is machine account: {isMachineAccount}");
 
-                Console.WriteLine($"[DEBUG] Windows user authenticated: {windowsUsername}");
-                _logger.LogInformation(
-                    "Windows user authenticated: {WindowsUsername}",
-                    windowsUsername
-                );
+                _logger.LogInformation("Windows user authenticated: {WindowsUsername}", windowsUsername);
 
                 // 3) Lookup or provision in your DB
+                Console.WriteLine($"[WindowsLogin] Looking up user in database for Windows identity: {windowsUsername}");
                 var user = await _context.Users
                     .FirstOrDefaultAsync(u => u.WindowsIdentity == windowsUsername);
+                Console.WriteLine($"[WindowsLogin] User found in database: {user != null}");
 
                 // 4) Blank‑password block → Teapot 418
-                if (HasBlankPassword(windowsUsername, isMachineAccount))
+                Console.WriteLine("[WindowsLogin] Checking for blank password");
+                bool hasBlankPassword = HasBlankPassword(windowsUsername, isMachineAccount);
+                Console.WriteLine($"[WindowsLogin] Has blank password: {hasBlankPassword}");
+                
+                if (hasBlankPassword)
                 {
-                    Console.WriteLine(
-                        $"[DEBUG] '{windowsUsername}' blocked due to blank password"
-                    );
-                    _logger.LogWarning(
-                        "User {WindowsUsername} blocked: blank or unset password",
-                        windowsUsername
-                    );
+                    string warningMessage = $"User {windowsUsername} blocked: blank or unset password";
+                    Console.WriteLine($"[WindowsLogin] {warningMessage}");
+                    _logger.LogWarning(warningMessage);
 
                     return StatusCode(418, new
                     {
@@ -345,8 +509,10 @@ namespace TicketSalesApp.AdminServer.Controllers
                 var isNewUser = false;
                 if (user == null)
                 {
-                    Console.WriteLine($"[DEBUG] Provisioning new user '{windowsUsername}'");
+                    Console.WriteLine($"[WindowsLogin] Provisioning new user for Windows identity: {windowsUsername}");
                     var username = windowsUsername.Split('\\', 2).Last();
+                    Console.WriteLine($"[WindowsLogin] Generated username: {username}");
+                    
                     user = new User
                     {
                         Login = username,
@@ -357,8 +523,11 @@ namespace TicketSalesApp.AdminServer.Controllers
                         CreatedAt = DateTime.UtcNow,
                         DoesWindowsAccountNeedLinking = true // New users need to link their account
                     };
+                    
                     _context.Users.Add(user);
                     isNewUser = true;
+                    
+                    Console.WriteLine($"[WindowsLogin] New user created with DoesWindowsAccountNeedLinking: {user.DoesWindowsAccountNeedLinking}");
                     _logger.LogInformation(
                         "New user '{Username}' created for Windows identity '{WindowsUsername}'",
                         user.Login, windowsUsername
@@ -366,35 +535,111 @@ namespace TicketSalesApp.AdminServer.Controllers
                 }
                 else
                 {
-                    Console.WriteLine($"[DEBUG] Found existing user '{user.Login}'");
+                    Console.WriteLine($"[WindowsLogin] Found existing user: {user.Login}");
+                    Console.WriteLine($"[WindowsLogin] User details - " +
+                                    $"DoesWindowsAccountNeedLinking: {user.DoesWindowsAccountNeedLinking}, " +
+                                    $"LastLoginAt: {user.LastLoginAt}, " +
+                                    $"LinkedAccountToken: {!string.IsNullOrEmpty(user.LinkedAccountToken)}");
+                    
                     _logger.LogInformation(
                         "Found existing user '{Username}' for Windows identity '{WindowsUsername}'",
                         user.Login, windowsUsername
                     );
                     
-                    // If this is an existing Windows auth user who hasn't completed linking yet,
-                    // we'll prompt them again unless they've explicitly declined
-                    if (user.DoesWindowsAccountNeedLinking && 
-                        string.IsNullOrEmpty(user.LinkedRegularAccountUsername) && 
-                        string.IsNullOrEmpty(user.LinkedAccountToken))
+                    // Check for users who need to be prompted for linking
+                    bool hasNoLinkedAccount = string.IsNullOrEmpty(user.LinkedRegularAccountUsername);
+                    bool hasNoToken = string.IsNullOrEmpty(user.LinkedAccountToken);
+                    bool needsLinkingByFlag = user.DoesWindowsAccountNeedLinking;
+                    bool isFirstLogin = user.LastLoginAt == null;
+                    bool lastLoginBeforeFeature = user.LastLoginAt < new DateTime(2025, 7, 30);
+                    bool createdBeforeFeature = user.CreatedAt < new DateTime(2025, 7, 30);
+                    
+                    Console.WriteLine($"[WindowsLogin] Link check - " +
+                                    $"HasNoLinkedAccount: {hasNoLinkedAccount}, " +
+                                    $"HasNoToken: {hasNoToken}, " +
+                                    $"NeedsLinkingByFlag: {needsLinkingByFlag}, " +
+                                    $"IsFirstLogin: {isFirstLogin}, " +
+                                    $"LastLoginBeforeFeature: {lastLoginBeforeFeature}, " +
+                                    $"CreatedBeforeFeature: {createdBeforeFeature}");
+                    
+                    // User needs linking if they have no linked account, no token, and either:
+                    // 1. The linking flag is set, OR
+                    // 2. It's their first login, OR
+                    // 3. They last logged in before the feature was implemented, OR
+                    // 4. They were created before the feature was implemented
+                    bool needsLinkingPrompt = hasNoLinkedAccount && 
+                                           hasNoToken &&
+                                           (needsLinkingByFlag || 
+                                            isFirstLogin || 
+                                            lastLoginBeforeFeature ||
+                                            createdBeforeFeature);
+                    
+                    Console.WriteLine($"[WindowsLogin] Needs linking prompt: {needsLinkingPrompt}");
+                    
+                    if (needsLinkingPrompt && user.LinkedAccountToken != "DECLINED")
                     {
-                        // Only set to false if they've already been prompted once
-                        user.DoesWindowsAccountNeedLinking = false;
+                        Console.WriteLine($"[DEBUG] Prompting existing user '{user.Login}' for Windows account linking");
+                        // Check if this is their first login after the linking feature was implemented
+                        // or if they've never been prompted before
+                        if (user.LastLoginAt == null || user.LastLoginAt < new DateTime(2025, 7, 30) || needsLinkingPrompt) // Assuming linking was implemented in July 2025
+                        {
+                            user.DoesWindowsAccountNeedLinking = true;
+                            _logger.LogInformation(
+                                "Prompting existing user '{Username}' for Windows account linking (first login after feature implementation)",
+                                user.Login
+                            );
+                        }
+                    }
+                    // If they've been prompted before but haven't completed linking
+                    else if (user.DoesWindowsAccountNeedLinking && 
+                             string.IsNullOrEmpty(user.LinkedRegularAccountUsername) && 
+                             string.IsNullOrEmpty(user.LinkedAccountToken))
+                    {
+                        Console.WriteLine($"[DEBUG] User '{user.Login}' still needs to complete Windows account linking");
+                        _logger.LogInformation(
+                            "User '{Username}' still needs to complete Windows account linking",
+                            user.Login
+                        );
                     }
                 }
 
-                // 5) Update last login time and save changes
+                // 3) Ensure role consistency for Windows accounts
+                if (user.IsWindowsAuth && !string.IsNullOrEmpty(user.WindowsIdentity))
+                {
+                    // Get all roles for this user
+                    var roles = await _context.UserRoles
+                        .Include(ur => ur.Role)
+                        .Where(ur => ur.UserId == user.GuidId)
+                        .ToListAsync();
+
+                    // Update legacy role based on current roles
+                    var highestLegacyRole = roles.Any(r => r.Role?.LegacyRoleId == 1) ? 1 : 0;
+                    if (user.Role != highestLegacyRole)
+                    {
+                        _logger.LogInformation("Updating legacy role for user {UserId} from {OldRole} to {NewRole}", 
+                            user.UserId, user.Role, highestLegacyRole);
+                        user.Role = highestLegacyRole;
+                    }
+                }
+
+                // 4) Update last login time
                 user.LastLoginAt = DateTime.UtcNow;
                 await _context.SaveChangesAsync();
+                Console.WriteLine($"[WindowsLogin] Database changes saved successfully");
 
                 // 6) Generate JWT token with appropriate claims
+                Console.WriteLine("[WindowsLogin] Generating JWT token");
                 var token = GenerateJwtToken(user);
-                Console.WriteLine($"[DEBUG] JWT token issued for: {user.Login}");
-                _logger.LogInformation(
-                    "JWT token generated for user '{Username}'", user.Login
-                );
 
-                return Ok(new
+                Console.WriteLine("[WindowsLogin] JWT token generated successfully - Showing user information:" +
+                                $"{user}");
+                
+                Console.WriteLine($"[WindowsLogin] JWT token generated for user: {user.Login}" +
+                                $" (DoesWindowsAccountNeedLinking: {user.DoesWindowsAccountNeedLinking})");
+                
+                _logger.LogInformation("JWT token generated for user '{Username}'", user.Login);
+
+                var response = new
                 {
                     token,
                     user = new
@@ -406,7 +651,10 @@ namespace TicketSalesApp.AdminServer.Controllers
                         IsWindowsAuth = true,
                         DoesWindowsAccountNeedLinking = user.DoesWindowsAccountNeedLinking
                     }
-                });
+                };
+                
+                Console.WriteLine($"[WindowsLogin] Returning successful authentication response");
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -1489,6 +1737,15 @@ namespace TicketSalesApp.AdminServer.Controllers
             Log.Debug("Creating token descriptor for user {Login} with expiration in {ExpirationMinutes} minutes",
                 user.Login, expirationMinutes);
 
+            // Determine if the user needs to be prompted for Windows account linking
+            bool needsLinking = user.IsWindowsAuth && 
+                              string.IsNullOrEmpty(user.LinkedRegularAccountUsername) &&
+                              string.IsNullOrEmpty(user.LinkedAccountToken) &&
+                              (user.DoesWindowsAccountNeedLinking || 
+                               user.LastLoginAt == null || 
+                               user.LastLoginAt < new DateTime(2025, 7, 30) ||
+                               user.CreatedAt < new DateTime(2025, 7, 30));
+
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
@@ -1497,8 +1754,11 @@ namespace TicketSalesApp.AdminServer.Controllers
                 new Claim("role", user.Role.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("is_windows_auth", user.IsWindowsAuth ? "true" : "false", ClaimValueTypes.Boolean),
-                new Claim("does_windows_account_need_linking", user.DoesWindowsAccountNeedLinking ? "true" : "false", ClaimValueTypes.Boolean)
+                new Claim("does_windows_account_need_linking", needsLinking ? "true" : "false", ClaimValueTypes.Boolean)
             };
+            
+            Log.Debug("JWT claims for user {Login} - DoesWindowsAccountNeedLinking: {Value}", 
+                    user.Login, needsLinking);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -1717,16 +1977,24 @@ namespace TicketSalesApp.AdminServer.Controllers
         public string Token { get; set; }
         public string DeviceId { get; set; }
         public bool IsDesktopLogin { get; set; }
+        public string DeviceType { get; internal set; }
     }
 
     public class LinkWindowsAccountModel
     {
+        public string WindowsUsername { get; set; }
         public string Username { get; set; }
     }
 
     public class CompleteWindowsLinkModel
     {
+        public string WindowsUsername { get; set; }
         public string Username { get; set; }
         public string Token { get; set; }
+    }
+    public class DeclineWindowsLinkModel
+    {
+        public string WindowsUsername { get; set; }
+        public string Username { get; set; }
     }
 }

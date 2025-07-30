@@ -3,11 +3,14 @@ using System.Reactive;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
+using System.Reactive.Disposables;
 
 namespace SuperNova.Forms.ViewModels
 {
-    public class WindowsAccountLinkSuccessViewModel : ReactiveObject
+    public class WindowsAccountLinkSuccessViewModel : ReactiveObject, IDisposable
     {
+        private readonly CompositeDisposable _disposables = new();
+        
         public string Username { get; }
         public string SuccessMessage { get; } = "Your Windows account has been successfully linked to your application account.";
         public ICommand CloseCommand { get; }
@@ -16,6 +19,11 @@ namespace SuperNova.Forms.ViewModels
         {
             Username = username;
             CloseCommand = new RelayCommand(closeAction);
+        }
+        
+        public void Dispose()
+        {
+            _disposables.Dispose();
         }
     }
 }

@@ -120,10 +120,40 @@
                             CornerRadius="4"
                             Padding="16"
                             IsVisible="{Binding #ShowMoreToggle.IsChecked}">
-                        <StackPanel Spacing="8">
-                            <TextBlock Text="Security Publisher" FontWeight="SemiBold" />
-                            <TextBlock Text="SuperNova Authentication Broker" TextWrapping="Wrap" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
-                            <TextBlock Text="This action is managed by the application's security provider. If you do not recognize this request, cancel the operation and contact your administrator." TextWrapping="Wrap" Margin="0,8,0,0"/>
+                        <StackPanel Spacing="12">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="Security Publisher" FontWeight="SemiBold" />
+                                <TextBlock Text="SuperNova Authentication Broker" TextWrapping="Wrap" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
+                            </StackPanel>
+                            
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="Verification Token" FontWeight="SemiBold" />
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBox Text="{Binding Token, Mode=OneWay}"
+                                             IsReadOnly="True"
+                                             Padding="8,6"
+                                             Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                                             BorderThickness="1"
+                                             BorderBrush="{DynamicResource SystemControlBackgroundListMediumBrush}"
+                                             FontFamily="Consolas, Courier New, monospace"/>
+                                    <Button Grid.Column="1"
+                                            Command="{Binding CopyTokenCommand}"
+                                            Margin="8,0,0,0"
+                                            MinWidth="80"
+                                            Content="Copy"
+                                            Theme="{StaticResource DefaultButtonStyle}"
+                                            Padding="12,0"/>
+                                </Grid>
+                                <TextBlock Text="Please provide this token to the application to complete the linking process." 
+                                           TextWrapping="Wrap" 
+                                           Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                           FontSize="12"/>
+                            </StackPanel>
+                            
+                            <TextBlock Text="This action is managed by the application's security provider. If you do not recognize this request, cancel the operation and contact your administrator." 
+                                       TextWrapping="Wrap" 
+                                       Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                       FontSize="12"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>

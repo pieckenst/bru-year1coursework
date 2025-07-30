@@ -1,6 +1,9 @@
 using System;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Reactive;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
@@ -18,6 +21,7 @@ namespace SuperNova.Forms.ViewModels
     public class WindowsAccountLinkViewModel : ReactiveObject, IDisposable
     {
         private readonly System.Reactive.Disposables.CompositeDisposable _disposables = new();
+        private readonly HttpClient _httpClient;
         private string _username = string.Empty;
         private string _password = string.Empty;
         private string _windowsUsername = string.Empty;
@@ -83,9 +87,10 @@ namespace SuperNova.Forms.ViewModels
 
         public event EventHandler? RequestClose;
 
-        public WindowsAccountLinkViewModel(Window? ownerWindow = null)
+        public WindowsAccountLinkViewModel(Window? ownerWindow = null, HttpClient? httpClient = null)
         {
             _ownerWindow = ownerWindow;
+            _httpClient = httpClient ?? new HttpClient { BaseAddress = new Uri("https://localhost:5001/api/") };
             WindowsUsername = $"{Environment.UserDomainName}\\{Environment.UserName}";
 
             LinkAccountCommand = new RelayCommand(
@@ -125,10 +130,26 @@ namespace SuperNova.Forms.ViewModels
             try
             {
                 IsBusy = true;
-                StatusMessage = "Verifying credentials...";
+                StatusMessage = "Initiating account linking...";
 
-                // Show confirmation dialog
-                var confirmDialog = new WindowsAccountLinkConfirmationDialog(WindowsUsername, Username);
+                // Step 1: Get the linking token from the server
+                var linkResponse = await _httpClient.PostAsJsonAsync("auth/link-windows-account", new 
+                {
+                    WindowsUsername = WindowsUsername,
+                    Username = Username
+                });
+                
+                if (!linkResponse.IsSuccessStatusCode)
+                {
+                    var error = await linkResponse.Content.ReadAsStringAsync();
+                    throw new Exception($"Failed to initiate account linking: {error}");
+                }
+
+                var linkResult = await linkResponse.Content.ReadFromJsonAsync<JsonElement>();
+                var token = linkResult.GetProperty("verificationToken").GetString() ?? throw new Exception("No token received from server");
+
+                // Step 2: Show confirmation dialog with the token
+                var confirmDialog = new WindowsAccountLinkConfirmationDialog(WindowsUsername, Username, token);
                 var confirmed = await confirmDialog.ShowDialog<bool>(_ownerWindow);
                 
                 if (!confirmed)
@@ -137,9 +158,21 @@ namespace SuperNova.Forms.ViewModels
                     return;
                 }
 
-                // Here you would typically verify the credentials with your backend
-                // For now, we'll simulate a successful verification
-                await Task.Delay(1000); // Simulate API call
+                // Step 3: Complete the linking process
+                StatusMessage = "Completing account linking...";
+                
+                var completeResponse = await _httpClient.PostAsJsonAsync("auth/complete-windows-link", new 
+                {
+                    WindowsUsername = WindowsUsername,
+                    Username = Username,
+                    Token = token
+                });
+
+                if (!completeResponse.IsSuccessStatusCode)
+                {
+                    var error = await completeResponse.Content.ReadAsStringAsync();
+                    throw new Exception($"Failed to complete account linking: {error}");
+                }
 
                 // Show success dialog
                 var successDialog = new WindowsAccountLinkSuccessDialog(Username);
@@ -154,16 +187,7 @@ namespace SuperNova.Forms.ViewModels
                 Password = string.Empty;
                 
                 // Close the window after a short delay
-                await Task.Delay(1000);
-                RequestClose?.Invoke(this, EventArgs.Empty);
-
-                // Simulate API call
-                await Task.Delay(1500);
-                
-               
-               
-                
-                // Close the window
+                await Task.Delay(2000);
                 RequestClose?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)

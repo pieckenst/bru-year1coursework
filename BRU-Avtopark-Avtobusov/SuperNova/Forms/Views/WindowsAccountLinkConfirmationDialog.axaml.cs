@@ -19,14 +19,14 @@ namespace SuperNova.Forms.Views
 #endif
         }
 
-        public WindowsAccountLinkConfirmationDialog(string windowsUsername, string username)
+        public WindowsAccountLinkConfirmationDialog(string windowsUsername, string username, string token)
         {
             InitializeComponent();
 #if DEBUG
             this.AttachDevTools();
 #endif
 
-            _viewModel = new WindowsAccountLinkConfirmationViewModel(windowsUsername, username);
+            _viewModel = new WindowsAccountLinkConfirmationViewModel(windowsUsername, username, token);
             DataContext = _viewModel;
 
             // Handle dialog result
