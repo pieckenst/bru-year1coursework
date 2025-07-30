@@ -1,4 +1,4 @@
-﻿// API/Controllers/UsersController.cs
+// API/Controllers/UsersController.cs
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -48,7 +48,7 @@ namespace TicketSalesApp.AdminServer.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<object>>> GetUsers()
         {
             if (!IsAdmin())
             {
@@ -56,13 +56,58 @@ namespace TicketSalesApp.AdminServer.Controllers
                 return Forbid();
             }
             Log.Information("Fetching all users");
-            var users = await _context.Users.ToListAsync();
+            
+            var users = await _context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .Select(u => new
+                {
+                    u.UserId,
+                    u.GuidId,
+                    u.Login,
+                    u.PhoneNumber,
+                    u.Email,
+                    u.Role,
+                    u.CreatedAt,
+                    u.LastLoginAt,
+                    u.IsActive,
+                    u.WindowsIdentity,
+                    u.IsWindowsAuth,
+                    u.DoesWindowsAccountNeedLinking,
+                    u.LinkedRegularAccountUsername,
+                    UserRoles = u.UserRoles.Select(ur => ur.Role).ToList()
+                })
+                .ToListAsync();
+                
             Log.Debug("Retrieved {UserCount} users", users.Count);
-            return users;
+            return Ok(users);
+        }
+
+
+        [HttpGet("api-stats")]
+        [AllowAnonymous]
+        public IActionResult GetApiStats()
+        {
+            var process = System.Diagnostics.Process.GetCurrentProcess();
+            var stats = new
+            {
+                ServerTime = DateTime.UtcNow,
+                ProcessStartTime = process.StartTime.ToUniversalTime(),
+                MemoryUsageMB = process.WorkingSet64 / (1024 * 1024),
+                ThreadCount = process.Threads.Count,
+                CpuTime = process.TotalProcessorTime,
+                UserProcessorTime = process.UserProcessorTime,
+                MachineName = Environment.MachineName,
+                OSVersion = Environment.OSVersion.ToString(),
+                ProcessorCount = Environment.ProcessorCount,
+                Is64BitProcess = Environment.Is64BitProcess
+            };
+
+            return Ok(stats);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(long id)
+        public async Task<ActionResult<object>> GetUser(long id)
         {
             if (!IsAdmin())
             {
@@ -70,14 +115,36 @@ namespace TicketSalesApp.AdminServer.Controllers
                 return Forbid();
             }
             Log.Information("Fetching user with ID {UserId}", id);
-            var user = await _context.Users.FindAsync(id);
+            
+            var user = await _context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .Select(u => new
+                {
+                    u.UserId,
+                    u.GuidId,
+                    u.Login,
+                    u.PhoneNumber,
+                    u.Email,
+                    u.Role,
+                    u.CreatedAt,
+                    u.LastLoginAt,
+                    u.IsActive,
+                    u.WindowsIdentity,
+                    u.IsWindowsAuth,
+                    u.DoesWindowsAccountNeedLinking,
+                    u.LinkedRegularAccountUsername,
+                    UserRoles = u.UserRoles.Select(ur => ur.Role).ToList()
+                })
+                .FirstOrDefaultAsync(u => u.UserId == id);
+                
             if (user == null)
             {
                 Log.Warning("User with ID {UserId} not found", id);
                 return NotFound();
             }
             Log.Debug("Successfully retrieved user with ID {UserId}", id);
-            return user;
+            return Ok(user);
         }
 
         [HttpPost]
@@ -104,7 +171,14 @@ namespace TicketSalesApp.AdminServer.Controllers
                 PhoneNumber = model.PhoneNumber ?? "+375333000000",
                 Email = model.Email ?? "placeholderemail@mogilev.by",
                 CreatedAt = DateTime.UtcNow,
-                IsActive = true
+                IsActive = true,
+                IsWindowsAuth = model.IsWindowsAuth,
+                WindowsIdentity = model.WindowsIdentity,
+                DoesWindowsAccountNeedLinking = model.IsWindowsAuth, // If it's a Windows auth user, it needs linking by default
+                LinkedRegularAccountUsername = model.LinkedRegularAccountUsername ?? string.Empty,
+                LinkedAccountToken = model.IsWindowsAuth ? 
+                    $"{Guid.NewGuid().ToString("N").Substring(0, 8)}-{model.Login?.Substring(0, Math.Min(3, model.Login?.Length ?? 0))}" : 
+                    string.Empty
             };
 
             var success = await _authService.RegisterAsync(user.Login, model.Password, user.Role);
@@ -196,6 +270,39 @@ namespace TicketSalesApp.AdminServer.Controllers
             {
                 Log.Information("Updating active status for user {UserId} to {IsActive}", id, model.IsActive.Value);
                 user.IsActive = model.IsActive.Value;
+            }
+
+            // Update Windows account information
+            if (model.IsWindowsAuth.HasValue)
+            {
+                Log.Information("Updating Windows auth status for user {UserId} to {IsWindowsAuth}", id, model.IsWindowsAuth.Value);
+                user.IsWindowsAuth = model.IsWindowsAuth.Value;
+                
+                // If enabling Windows auth and no identity is set yet, use the login as identity
+                if (model.IsWindowsAuth.Value && string.IsNullOrEmpty(user.WindowsIdentity))
+                {
+                    user.WindowsIdentity = user.Login;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(model.WindowsIdentity))
+            {
+                Log.Information("Updating Windows identity for user {UserId}", id);
+                user.WindowsIdentity = model.WindowsIdentity;
+            }
+
+            if (model.DoesWindowsAccountNeedLinking.HasValue)
+            {
+                Log.Information("Updating Windows account linking status for user {UserId} to {NeedsLinking}", 
+                    id, model.DoesWindowsAccountNeedLinking.Value);
+                user.DoesWindowsAccountNeedLinking = model.DoesWindowsAccountNeedLinking.Value;
+            }
+
+            if (!string.IsNullOrEmpty(model.LinkedRegularAccountUsername))
+            {
+                Log.Information("Updating linked regular account for Windows user {UserId} to {LinkedAccount}", 
+                    id, model.LinkedRegularAccountUsername);
+                user.LinkedRegularAccountUsername = model.LinkedRegularAccountUsername;
             }
 
             
@@ -466,6 +573,9 @@ namespace TicketSalesApp.AdminServer.Controllers
         public int Role { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
+        public bool IsWindowsAuth { get; set; } = false;
+        public string? WindowsIdentity { get; set; }
+        public string? LinkedRegularAccountUsername { get; set; }
     }
 
     public class UpdateUserModel
@@ -476,6 +586,10 @@ namespace TicketSalesApp.AdminServer.Controllers
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
         public bool? IsActive { get; set; }
+        public bool? IsWindowsAuth { get; set; }
+        public string? WindowsIdentity { get; set; }
+        public bool? DoesWindowsAccountNeedLinking { get; set; }
+        public string? LinkedRegularAccountUsername { get; set; }
         public DateTime? LastLoginAt { get; set; }
     }
 

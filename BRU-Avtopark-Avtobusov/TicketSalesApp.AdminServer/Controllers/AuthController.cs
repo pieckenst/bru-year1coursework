@@ -632,7 +632,7 @@ namespace TicketSalesApp.AdminServer.Controllers
                 var token = GenerateJwtToken(user);
 
                 Console.WriteLine("[WindowsLogin] JWT token generated successfully - Showing user information:" +
-                                $"{user}");
+                                $"{user.UserId} {user.Login} {user.Email} {user.Role} {user.IsWindowsAuth} {user.DoesWindowsAccountNeedLinking}");
                 
                 Console.WriteLine($"[WindowsLogin] JWT token generated for user: {user.Login}" +
                                 $" (DoesWindowsAccountNeedLinking: {user.DoesWindowsAccountNeedLinking})");
