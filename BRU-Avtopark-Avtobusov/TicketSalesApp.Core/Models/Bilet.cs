@@ -16,7 +16,7 @@ namespace TicketSalesApp.Core.Models
         public long TicketId { get; set; }
         [ForeignKey("Marshut")]
         public long RouteId { get; set; }
-        public Marshut Marshut { get; set; }
+        public Marshut Marshut { gqet; set; }
         [Required]
         public decimal TicketPrice { get; set; }
         public List<Prodazha> Sales { get; set; } = new List<Prodazha>();

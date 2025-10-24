@@ -66,9 +66,9 @@ namespace TicketSalesApp.Core.Models
         public string LinkedRegularAccountUsername { get; set; } = string.Empty; // Username of linked regular account
         public string LinkedAccountToken { get; set; } = string.Empty; 
         /* Comment for LinkedAccountToken
-         Token for linked account - this will be used one time only during link and stored permanently in database
+         Token for linked account - this will be used one time only during the account linking process and stored permanently in database as a historical reference
          and be a random server generated pin combined
-         with first 3 characters of the Windows username and random number+ string combo
+         with first 3 characters of the Windows username and random number+ string combo 
          */
     }
 }
