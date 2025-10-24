@@ -7,8 +7,11 @@ using Classic.CommonControls.Dialogs;
 namespace SuperNova.Runtime.Interpreter;
 
 public class VB6BuiltIns
-{
-    private readonly IBasicStandardLibrary stdLib;
+{ 
+    // i have disabled the vb6 builtns class because frankly it's unsed and unnecessary - i am leaving the original code as commented out shit 
+    // in case the compiler decides that bitchhing about missing shit from here is a good  idea 
+    // the supernova project has the vb6 runtimes usage removed as much as possible ,but maybe i missed something while purging vb6 as useless function
+    /* private readonly IBasicStandardLibrary stdLib;
 
     private static Dictionary<string, Vb6Value> builtInConstants = new Dictionary<string, Vb6Value>(StringComparer.OrdinalIgnoreCase)
     {
@@ -880,5 +883,6 @@ public class VB6BuiltIns
     public bool TryGetBuiltInConstant(string name, out Vb6Value constant)
     {
         return builtInConstants.TryGetValue(name, out constant);
-    }
+    }   
+    */
 }
