@@ -8,6 +8,8 @@
 			 xmlns:viewModels="clr-namespace:TicketSalesApp.UI.Administration.Avalonia.ViewModels"
 			 xmlns:sty="using:FluentAvalonia.Styling"
 			 xmlns:sukiUi="clr-namespace:SukiUI;assembly=SukiUI"
+			 xmlns:pleasant="using:PleasantUI"
+
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -17,6 +19,9 @@
   
     <Application.Styles>
 		<FluentTheme/>
+		
+        <pleasant:PleasantTheme />
+
 		
 		<StyleInclude Source="avares://Classic.CommonControls.Avalonia/Themes/Fluent.axaml" />
 		

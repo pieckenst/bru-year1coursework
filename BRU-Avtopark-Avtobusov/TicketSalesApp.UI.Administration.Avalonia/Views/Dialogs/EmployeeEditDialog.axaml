@@ -1,0 +1,242 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:material="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="680" d:DesignHeight="780"
+        x:Class="TicketSalesApp.UI.Administration.Avalonia.Views.Dialogs.EmployeeEditDialog"
+        Title="Редактирование сотрудника"
+        Width="680" Height="780"
+        Background="Transparent"
+        TransparencyLevelHint="Mica"
+        WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="DialogBackgroundBrush" Color="#191A25"/>
+        <SolidColorBrush x:Key="CardBackgroundBrush" Color="#242638"/>
+        <SolidColorBrush x:Key="CardBorderBrush" Color="#323552"/>
+        <LinearGradientBrush x:Key="AccentBrush" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#7A5CFF" Offset="0"/>
+            <GradientStop Color="#FF6F91" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Resources>
+
+    <Window.Styles>
+        <Style Selector="Border.Card">
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Background" Value="{StaticResource CardBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource CardBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0"/>
+        </Style>
+        <Style Selector="TextBlock.SectionTitle">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="TextBlock.SectionSubtitle">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#A0A8D6"/>
+        </Style>
+        <Style Selector="TextBlock.FieldLabel">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#8C95C7"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+        <Style Selector="TextBox.InputField">
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="Background" Value="#2E3046"/>
+            <Setter Property="BorderBrush" Value="#3E4360"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="ComboBox.InputField">
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="Background" Value="#2E3046"/>
+            <Setter Property="BorderBrush" Value="#3E4360"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="DatePicker.InputField">
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="Background" Value="#2E3046"/>
+            <Setter Property="BorderBrush" Value="#3E4360"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="Button.SecondaryAction">
+            <Setter Property="Background" Value="#2D3044"/>
+            <Setter Property="Foreground" Value="#D5DAFF"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="16,10"/>
+        </Style>
+        <Style Selector="Button.PrimaryAction">
+            <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="16,10"/>
+        </Style>
+    </Window.Styles>
+
+    <Border Background="{StaticResource DialogBackgroundBrush}" CornerRadius="20" Padding="28">
+        <Grid RowDefinitions="Auto,* ,Auto">
+            <!-- Header -->
+            <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                <Border Width="48" Height="48" CornerRadius="14" Background="{StaticResource AccentBrush}">
+                    <material:MaterialIcon Kind="AccountBox" Width="24" Height="24" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel>
+                    <TextBlock Text="Карточка сотрудника" FontSize="20" FontWeight="SemiBold" Foreground="White"/>
+                    <TextBlock Text="Обновите ключевые данные о сотруднике и сопутствующие документы" Foreground="#96A1D9" FontSize="13"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Scrollable Content -->
+            <ScrollViewer Grid.Row="1" Margin="0,24,0,24" VerticalScrollBarVisibility="Auto">
+                <StackPanel Spacing="24">
+                    <!-- Basic Information Card -->
+                    <Border Classes="Card">
+                        <StackPanel Spacing="20">
+                            <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                                <Border Width="36" Height="36" CornerRadius="12" Background="#32365A">
+                                    <material:MaterialIcon Kind="BadgeAccount" Width="20" Height="20" Foreground="#AEB5FF" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel>
+                                    <TextBlock Text="Основная информация" Classes="SectionTitle"/>
+                                    <TextBlock Text="Должность и стаж"
+                                               Classes="SectionSubtitle"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" Margin="0,8,0,0">
+                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,16,12">
+                                    <TextBlock Text="Фамилия" Classes="FieldLabel"/>
+                                    <TextBox x:Name="SurnameBox" Classes="InputField" Watermark="Фамилия сотрудника"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,12">
+                                    <TextBlock Text="Имя" Classes="FieldLabel"/>
+                                    <TextBox x:Name="NameBox" Classes="InputField" Watermark="Имя сотрудника"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,16,12">
+                                    <TextBlock Text="Отчество" Classes="FieldLabel"/>
+                                    <TextBox x:Name="PatronymBox" Classes="InputField" Watermark="По желанию"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,12">
+                                    <TextBlock Text="Дата приёма" Classes="FieldLabel"/>
+                                    <DatePicker x:Name="EmployedSincePicker" Classes="InputField" HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,16,0">
+                                    <TextBlock Text="Должность" Classes="FieldLabel"/>
+                                    <ComboBox x:Name="JobComboBox" Classes="InputField" HorizontalAlignment="Stretch" PlaceholderText="Выберите должность"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="2" Grid.Column="1">
+                                    <TextBlock Text="Отдел" Classes="FieldLabel"/>
+                                    <ComboBox x:Name="DepartmentComboBox" Classes="InputField" HorizontalAlignment="Stretch" PlaceholderText="Выберите отдел"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Personal Information Card -->
+                    <Border Classes="Card">
+                        <StackPanel Spacing="20">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <Border Width="36" Height="36" CornerRadius="12" Background="#2F3352">
+                                    <material:MaterialIcon Kind="BadgeAccountHorizontalOutline" Width="20" Height="20" Foreground="#A4AFFF" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel>
+                                    <TextBlock Text="Личные данные" Classes="SectionTitle"/>
+                                    <TextBlock Text="Документы и контакты" Classes="SectionSubtitle"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" Margin="0,8,0,0">
+                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,16,12">
+                                    <TextBlock Text="Серия паспорта" Classes="FieldLabel"/>
+                                    <TextBox x:Name="PassportSeriesBox" Classes="InputField" Watermark="0000"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,12">
+                                    <TextBlock Text="Номер паспорта" Classes="FieldLabel"/>
+                                    <TextBox x:Name="PassportNumberBox" Classes="InputField" Watermark="000000"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,16,12">
+                                    <TextBlock Text="Дата рождения" Classes="FieldLabel"/>
+                                    <DatePicker x:Name="DateOfBirthPicker" Classes="InputField" HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,12">
+                                    <TextBlock Text="Email" Classes="FieldLabel"/>
+                                    <TextBox x:Name="EmailBox" Classes="InputField" Watermark="user@domain.com"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,16,0">
+                                    <TextBlock Text="Адрес проживания" Classes="FieldLabel"/>
+                                    <TextBox x:Name="AddressBox" Classes="InputField" Watermark="Город, улица, дом"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="2" Grid.Column="1">
+                                    <TextBlock Text="Личный телефон" Classes="FieldLabel"/>
+                                    <TextBox x:Name="PhoneBox" Classes="InputField" Watermark="+7 (999) 000-00-00"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <StackPanel>
+                                <TextBlock Text="СНИЛС" Classes="FieldLabel"/>
+                                <TextBox x:Name="SnilsBox" Classes="InputField" Watermark="123-456-789 01"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Driver & Medical Card -->
+                    <Border Classes="Card">
+                        <StackPanel Spacing="20">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <Border Width="36" Height="36" CornerRadius="12" Background="#2B3551">
+                                    <material:MaterialIcon Kind="Steering" Width="20" Height="20" Foreground="#A9B3FF" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel>
+                                    <TextBlock Text="Водительская и медицинская информация" Classes="SectionTitle"/>
+                                    <TextBlock Text="Контроль сроков действия документов" Classes="SectionSubtitle"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" Margin="0,8,0,0">
+                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,16,12">
+                                    <TextBlock Text="Номер ВУ" Classes="FieldLabel"/>
+                                    <TextBox x:Name="DriverLicenseNumberBox" Classes="InputField" Watermark="00 00 000000"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,12">
+                                    <TextBlock Text="Категория" Classes="FieldLabel"/>
+                                    <TextBox x:Name="DriverLicenseCategoryBox" Classes="InputField" Watermark="B, C"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,16,12">
+                                    <TextBlock Text="Водительское удостоверение действительно до" Classes="FieldLabel"/>
+                                    <DatePicker x:Name="DriverLicenseExpiryPicker" Classes="InputField" HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" Grid.Column="1">
+                                    <TextBlock Text="Медицинская справка действительна до" Classes="FieldLabel"/>
+                                    <DatePicker x:Name="MedicalCertificateExpiryPicker" Classes="InputField" HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <StackPanel>
+                                <TextBlock Text="Номер медицинской справки" Classes="FieldLabel"/>
+                                <TextBox x:Name="MedicalCertificateNumberBox" Classes="InputField" Watermark="MC123456"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Footer Buttons -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="12">
+                <Button x:Name="CancelButton" Content="Отмена" Classes="SecondaryAction" Width="140"/>
+                <Button x:Name="SaveButton" Content="Сохранить" Classes="PrimaryAction" Width="160"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

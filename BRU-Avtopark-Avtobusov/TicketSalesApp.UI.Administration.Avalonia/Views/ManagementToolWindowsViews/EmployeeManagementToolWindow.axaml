@@ -3,85 +3,648 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:TicketSalesApp.UI.Administration.Avalonia.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             xmlns:converters="using:TicketSalesApp.UI.Administration.Avalonia.Converters"
+             xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
+             xmlns:material="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
              x:Class="TicketSalesApp.UI.Administration.Avalonia.Views.ManagementToolWindowsViews.EmployeeManagementToolWindow"
              x:DataType="vm:EmployeeManagementViewModel">
+
+    <UserControl.Resources>
+        <converters:StringToInitialsConverter x:Key="InitialsConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        <converters:StatusToBrushConverter x:Key="StatusToBrushConverter"/>
+        <converters:StringEqualsConverter x:Key="StringEqualsConverter"/>
+    </UserControl.Resources>
 
     <Design.DataContext>
         <vm:EmployeeManagementViewModel/>
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,*" Margin="20">
-        
-            <StackPanel Spacing="20">
-                <!-- Title and Header -->
-                <Grid ColumnDefinitions="*,Auto" MinHeight="20">
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Text="Управление сотрудниками" />
-                        <TextBlock Text="Управление персоналом и их должностями" Foreground="{DynamicResource SecondaryColor}"/>
+    <!-- Modern Master-Detail Layout -->
+    <Grid Margin="16">
+        <!-- Master-Detail Split View -->
+        <Grid ColumnDefinitions="400,*">
+            
+            <!-- Left Panel - Employee List -->
+            <Border Grid.Column="0" 
+                    Background="{DynamicResource CardBackground}"
+                    CornerRadius="12"
+                    BoxShadow="0 2 8 0 #20000000"
+                    Margin="0,0,12,0">
+                <Grid RowDefinitions="Auto,Auto,*,Auto">
+                    
+                    <!-- Header -->
+                    <StackPanel Grid.Row="0" Margin="20,20,20,16">
+                        <TextBlock Text="👥 Сотрудники" 
+                                   FontSize="24" 
+                                   FontWeight="SemiBold"/>
+                        <TextBlock Text="Управление персоналом" 
+                                   FontSize="13" 
+                                   Opacity="0.6"
+                                   Margin="0,4,0,0"/>
                     </StackPanel>
+                    
+                    <!-- Search and Add -->
+                    <StackPanel Grid.Row="1" Margin="20,0,20,16" Spacing="12">
+                        <TextBox Text="{Binding SearchText}"
+                                 Watermark="🔍 Поиск сотрудника..."
+                                 Padding="12,10"
+                                 CornerRadius="8"/>
+                        
+                        <Button Command="{Binding AddCommand}"
+                                HorizontalAlignment="Stretch"
+                                Padding="12,10"
+                                CornerRadius="8">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <material:MaterialIcon Kind="Plus" Width="20" Height="20"/>
+                                <TextBlock Text="Добавить сотрудника"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    
+                    <!-- Employee Cards List -->
+                    <ScrollViewer Grid.Row="2">
+                        <ItemsControl ItemsSource="{Binding Employees}" Margin="12,0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{DynamicResource SemiCardBackground}"
+                                            CornerRadius="10"
+                                            Margin="8,6"
+                                            Padding="16,12"
+                                            Cursor="Hand"
+                                            Tag="{Binding}"
+                                            PointerPressed="Employee_PointerPressed">
+                                        <Border.Styles>
+                                            <Style Selector="Border:pointerover">
+                                                <Setter Property="Background" Value="{DynamicResource ButtonBackgroundPointerOver}"/>
+                                            </Style>
+                                        </Border.Styles>
+                                        <Grid ColumnDefinitions="48,*,Auto">
+                                            <!-- Avatar -->
+                                            <Border Grid.Column="0"
+                                                    Width="48" Height="48"
+                                                    CornerRadius="24"
+                                                    Background="{DynamicResource AccentColor}"
+                                                    Margin="0,0,12,0">
+                                                <TextBlock Text="{Binding Surname, Converter={StaticResource InitialsConverter}}"
+                                                           FontSize="20"
+                                                           FontWeight="SemiBold"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           Foreground="White"/>
+                                            </Border>
+                                            
+                                            <!-- Info -->
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                <TextBlock FontWeight="Medium" FontSize="14">
+                                                    <Run Text="{Binding Surname}"/>
+                                                    <Run Text=" "/>
+                                                    <Run Text="{Binding Name}"/>
+                                                </TextBlock>
+                                                <TextBlock Text="{Binding Job.JobTitle}"
+                                                           FontSize="12"
+                                                           Opacity="0.7"
+                                                           Margin="0,2,0,0"/>
+                                                <TextBlock FontSize="11" Opacity="0.5" Margin="0,2,0,0">
+                                                    <Run Text="ID:"/>
+                                                    <Run Text="{Binding EmpId}"/>
+                                                </TextBlock>
+                                            </StackPanel>
+                                            
+                                            <!-- Arrow -->
+                                            <material:MaterialIcon Grid.Column="2"
+                                                                   Kind="ChevronRight"
+                                                                   Width="20" Height="20"
+                                                                   Opacity="0.4"
+                                                                   VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                    
+                    <!-- Error Message -->
+                    <Border Grid.Row="3"
+                            Background="#FFEBEE"
+                            CornerRadius="8"
+                            Padding="12"
+                            Margin="20,12,20,20"
+                            IsVisible="{Binding HasError}">
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   Foreground="#C62828"
+                                   TextWrapping="Wrap"/>
+                    </Border>
                 </Grid>
-
-                <!-- Controls -->
-                <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,10">
-                    <TextBox Grid.Column="0" 
-                             Text="{Binding SearchText}"
-                             Watermark="Поиск по фамилии, имени, отчеству или должности..."
-                             Margin="0,0,10,0"/>
-                    <Button Grid.Column="1" 
-                            Command="{Binding AddCommand}"
-                            Content="Добавить сотрудника"
-                            IsEnabled="{Binding !IsBusy}"/>
+            </Border>
+            
+            <!-- Right Panel - Employee Details -->
+            <Border Grid.Column="1"
+                    Background="{DynamicResource CardBackground}"
+                    CornerRadius="12"
+                    BoxShadow="0 2 8 0 #20000000"
+                    IsVisible="{Binding SelectedEmployee, Converter={x:Static ObjectConverters.IsNotNull}}">
+                
+                <Grid RowDefinitions="Auto,Auto,*">
+                    <!-- Employee Header -->
+                    <Border Grid.Row="0"
+                            Background="{DynamicResource AccentColor}"
+                            CornerRadius="12,12,0,0"
+                            Padding="24,20">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <!-- Avatar Large -->
+                            <Border Width="80" Height="80"
+                                    CornerRadius="40"
+                                    Background="White"
+                                    Opacity="0.2">
+                                <TextBlock Text="{Binding SelectedEmployee.Surname, Converter={StaticResource InitialsConverter}}"
+                                           FontSize="32"
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Foreground="White"/>
+                            </Border>
+                            
+                            <!-- Employee Info -->
+                            <StackPanel Grid.Column="1" 
+                                        Margin="20,0,0,0"
+                                        VerticalAlignment="Center">
+                                <TextBlock FontSize="24" 
+                                           FontWeight="SemiBold"
+                                           Foreground="White">
+                                    <Run Text="{Binding SelectedEmployee.Surname}"/>
+                                    <Run Text=" "/>
+                                    <Run Text="{Binding SelectedEmployee.Name}"/>
+                                    <Run Text=" "/>
+                                    <Run Text="{Binding SelectedEmployee.Patronym}"/>
+                                </TextBlock>
+                                <TextBlock Text="{Binding SelectedEmployee.Job.JobTitle}"
+                                           FontSize="16"
+                                           Foreground="White"
+                                           Opacity="0.9"
+                                           Margin="0,4,0,0"/>
+                                <TextBlock FontSize="13" 
+                                           Foreground="White"
+                                           Opacity="0.7"
+                                           Margin="0,8,0,0">
+                                    <Run Text="📅 Принят:"/>
+                                    <Run Text="{Binding SelectedEmployee.EmployedSince, StringFormat={}{0:dd.MM.yyyy}}"/>
+                                </TextBlock>
+                            </StackPanel>
+                            
+                            <!-- Actions -->
+                            <StackPanel Grid.Column="2" 
+                                        Orientation="Horizontal" 
+                                        Spacing="8"
+                                        VerticalAlignment="Top">
+                                <Button Command="{Binding EditCommand}"
+                                        Classes="transparent">
+                                    <material:MaterialIcon Kind="Edit" Width="20" Height="20"/>
+                                </Button>
+                                <Button Command="{Binding DeleteCommand}"
+                                        Classes="transparent">
+                                    <material:MaterialIcon Kind="Delete" Width="20" Height="20"/>
+                                </Button>
+                                <Button Command="{Binding ShowListCommand}"
+                                        Classes="transparent">
+                                    <material:MaterialIcon Kind="Close" Width="20" Height="20"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Section Navigation -->
+                    <Border Grid.Row="1" 
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="0,0,0,1"
+                            Padding="24,12">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Button Command="{Binding ShowSectionCommand}" 
+                                    CommandParameter="info"
+                                    Classes="flat">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <material:MaterialIcon Kind="InformationOutline" Width="18" Height="18"/>
+                                    <TextBlock Text="Личные данные"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding ShowSectionCommand}" 
+                                    CommandParameter="documents"
+                                    Classes="flat">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <material:MaterialIcon Kind="FileDocument" Width="18" Height="18"/>
+                                    <TextBlock Text="Документы"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding ShowSectionCommand}" 
+                                    CommandParameter="trainings"
+                                    Classes="flat">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <material:MaterialIcon Kind="School" Width="18" Height="18"/>
+                                    <TextBlock Text="Обучение"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding ShowSectionCommand}" 
+                                    CommandParameter="contacts"
+                                    Classes="flat">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <material:MaterialIcon Kind="Phone" Width="18" Height="18"/>
+                                    <TextBlock Text="Контакты"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding ShowSectionCommand}" 
+                                    CommandParameter="vacations"
+                                    Classes="flat">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <material:MaterialIcon Kind="Beach" Width="18" Height="18"/>
+                                    <TextBlock Text="Отпуска"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Section Content -->
+                    <ScrollViewer Grid.Row="2">
+                        <StackPanel Margin="24" Spacing="20">
+                            
+                            <!-- Personal Information Section -->
+                            <StackPanel IsVisible="{Binding DetailSection, Converter={StaticResource StringEqualsConverter}, ConverterParameter=info}">
+                                <TextBlock Text="📋 Личная информация" 
+                                           FontSize="18" 
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,16"/>
+                                
+                                <Grid ColumnDefinitions="200,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                                    <!-- Passport -->
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Паспорт:" Opacity="0.7"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="1" FontWeight="Medium">
+                                        <Run Text="{Binding SelectedEmployee.PassportSeries}"/>
+                                        <Run Text=" "/>
+                                        <Run Text="{Binding SelectedEmployee.PassportNumber}"/>
+                                    </TextBlock>
+                                    
+                                    <!-- Date of Birth -->
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Дата рождения:" Opacity="0.7"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedEmployee.DateOfBirth, StringFormat={}{0:dd.MM.yyyy}}" FontWeight="Medium"/>
+                                    
+                                    <!-- Address -->
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Адрес:" Opacity="0.7"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedEmployee.Address}" FontWeight="Medium" TextWrapping="Wrap"/>
+                                    
+                                    <!-- Phone -->
+                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Телефон:" Opacity="0.7"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding SelectedEmployee.PersonalPhone}" FontWeight="Medium"/>
+                                    
+                                    <!-- Email -->
+                                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Email:" Opacity="0.7"/>
+                                    <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding SelectedEmployee.Email}" FontWeight="Medium"/>
+                                    
+                                    <!-- INN -->
+                                    <TextBlock Grid.Row="5" Grid.Column="0" Text="ИНН:" Opacity="0.7"/>
+                                    <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding SelectedEmployee.INN}" FontWeight="Medium"/>
+                                    
+                                    <!-- SNILS -->
+                                    <TextBlock Grid.Row="6" Grid.Column="0" Text="СНИЛС:" Opacity="0.7"/>
+                                    <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding SelectedEmployee.SNILS}" FontWeight="Medium"/>
+                                    
+                                    <!-- Department -->
+                                    <TextBlock Grid.Row="7" Grid.Column="0" Text="Отдел:" Opacity="0.7"/>
+                                    <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding SelectedEmployee.Department.DepartmentName}" FontWeight="Medium"/>
+                                    
+                                    <!-- Driver License -->
+                                    <TextBlock Grid.Row="8" Grid.Column="0" Text="Водительские права:" Opacity="0.7"/>
+                                    <StackPanel Grid.Row="8" Grid.Column="1">
+                                        <TextBlock FontWeight="Medium">
+                                            <Run Text="{Binding SelectedEmployee.DriverLicenseNumber}"/>
+                                            <Run Text=" (Категория "/>
+                                            <Run Text="{Binding SelectedEmployee.DriverLicenseCategory}"/>
+                                            <Run Text=")"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="12" Opacity="0.6">
+                                            <Run Text="Действительно до: "/>
+                                            <Run Text="{Binding SelectedEmployee.DriverLicenseExpiryDate, StringFormat={}{0:dd.MM.yyyy}}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    
+                                    <!-- Medical Certificate -->
+                                    <TextBlock Grid.Row="9" Grid.Column="0" Text="Медицинская справка:" Opacity="0.7"/>
+                                    <StackPanel Grid.Row="9" Grid.Column="1">
+                                        <TextBlock Text="{Binding SelectedEmployee.MedicalCertificateNumber}" FontWeight="Medium"/>
+                                        <TextBlock FontSize="12" Opacity="0.6">
+                                            <Run Text="Действительно до: "/>
+                                            <Run Text="{Binding SelectedEmployee.MedicalCertificateExpiryDate, StringFormat={}{0:dd.MM.yyyy}}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                            
+                            <!-- Documents Section -->
+                            <StackPanel IsVisible="{Binding DetailSection, Converter={StaticResource StringEqualsConverter}, ConverterParameter=documents}">
+                                <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+                                    <TextBlock Text="📄 Документы" FontSize="18" FontWeight="SemiBold"/>
+                                    <Button Grid.Column="1" Command="{Binding AddDocumentCommand}">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <material:MaterialIcon Kind="Plus" Width="16" Height="16"/>
+                                            <TextBlock Text="Добавить"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                                
+                                <ItemsControl ItemsSource="{Binding SelectedEmployeeDocuments}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{DynamicResource SemiCardBackground}"
+                                                    CornerRadius="8"
+                                                    Padding="16"
+                                                    Margin="0,0,0,12">
+                                                <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                                    <material:MaterialIcon Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"
+                                                                           Kind="FileDocument"
+                                                                           Width="32" Height="32"
+                                                                           Margin="0,0,12,0"
+                                                                           Opacity="0.6"/>
+                                                    
+                                                    <TextBlock Grid.Row="0" Grid.Column="1" 
+                                                               Text="{Binding DocumentType}" 
+                                                               FontWeight="SemiBold"
+                                                               FontSize="14"/>
+                                                    
+                                                    <TextBlock Grid.Row="1" Grid.Column="1" 
+                                                               FontSize="13"
+                                                               Opacity="0.7">
+                                                        <Run Text="№ "/>
+                                                        <Run Text="{Binding DocumentNumber}"/>
+                                                    </TextBlock>
+                                                    
+                                                    <TextBlock Grid.Row="2" Grid.Column="1" 
+                                                               FontSize="12"
+                                                               Opacity="0.6">
+                                                        <Run Text="Выдан: "/>
+                                                        <Run Text="{Binding IssueDate, StringFormat={}{0:dd.MM.yyyy}}"/>
+                                                        <Run Text=" • До: "/>
+                                                        <Run Text="{Binding ExpiryDate, StringFormat={}{0:dd.MM.yyyy}}"/>
+                                                    </TextBlock>
+                                                    
+                                                    <StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="3"
+                                                                Orientation="Horizontal" 
+                                                                Spacing="4"
+                                                                VerticalAlignment="Center">
+                                                        <Button Classes="icon-only">
+                                                            <material:MaterialIcon Kind="Edit" Width="18" Height="18"/>
+                                                        </Button>
+                                                        <Button Classes="icon-only">
+                                                            <material:MaterialIcon Kind="Delete" Width="18" Height="18"/>
+                                                        </Button>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                            
+                            <!-- Trainings Section -->
+                            <StackPanel IsVisible="{Binding DetailSection, Converter={StaticResource StringEqualsConverter}, ConverterParameter=trainings}">
+                                <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+                                    <TextBlock Text="🎓 Обучение и сертификация" FontSize="18" FontWeight="SemiBold"/>
+                                    <Button Grid.Column="1" Command="{Binding AddTrainingCommand}">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <material:MaterialIcon Kind="Plus" Width="16" Height="16"/>
+                                            <TextBlock Text="Добавить"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                                
+                                <ItemsControl ItemsSource="{Binding SelectedEmployeeTrainings}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{DynamicResource SemiCardBackground}"
+                                                    CornerRadius="8"
+                                                    Padding="16"
+                                                    Margin="0,0,0,12">
+                                                <Grid ColumnDefinitions="Auto,*,Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+                                                    <material:MaterialIcon Grid.Row="0" Grid.Column="0" Grid.RowSpan="4"
+                                                                           Kind="School"
+                                                                           Width="32" Height="32"
+                                                                           Margin="0,0,12,0"
+                                                                           Opacity="0.6"/>
+                                                    
+                                                    <TextBlock Grid.Row="0" Grid.Column="1" 
+                                                               Text="{Binding TrainingName}" 
+                                                               FontWeight="SemiBold"
+                                                               FontSize="14"/>
+                                                    
+                                                    <Border Grid.Row="0" Grid.Column="2"
+                                                            Background="#4CAF50"
+                                                            CornerRadius="4"
+                                                            Padding="6,2"
+                                                            Margin="8,0"
+                                                            IsVisible="{Binding IsMandatory}">
+                                                        <TextBlock Text="Обязательно" 
+                                                                   FontSize="10"
+                                                                   Foreground="White"/>
+                                                    </Border>
+                                                    
+                                                    <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                                               Text="{Binding Description}" 
+                                                               FontSize="12"
+                                                               Opacity="0.7"
+                                                               TextWrapping="Wrap"
+                                                               Margin="0,4,0,0"/>
+                                                    
+                                                    <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+                                                               FontSize="12"
+                                                               Opacity="0.6"
+                                                               Margin="0,4,0,0">
+                                                        <Run Text="Сертификат: "/>
+                                                        <Run Text="{Binding CertificateNumber}"/>
+                                                    </TextBlock>
+                                                    
+                                                    <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
+                                                               FontSize="11"
+                                                               Opacity="0.5"
+                                                               Margin="0,2,0,0">
+                                                        <Run Text="Завершено: "/>
+                                                        <Run Text="{Binding CompletionDate, StringFormat={}{0:dd.MM.yyyy}}"/>
+                                                        <Run Text=" • Выдано: "/>
+                                                        <Run Text="{Binding IssuingOrganization}"/>
+                                                    </TextBlock>
+                                                    
+                                                    <Button Grid.Row="0" Grid.Column="3" Grid.RowSpan="4"
+                                                            Classes="icon-only"
+                                                            VerticalAlignment="Center">
+                                                        <material:MaterialIcon Kind="Delete" Width="18" Height="18"/>
+                                                    </Button>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                            
+                            <!-- Emergency Contacts Section -->
+                            <StackPanel IsVisible="{Binding DetailSection, Converter={StaticResource StringEqualsConverter}, ConverterParameter=contacts}">
+                                <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+                                    <TextBlock Text="🚨 Контакты для экстренной связи" FontSize="18" FontWeight="SemiBold"/>
+                                    <Button Grid.Column="1" Command="{Binding AddContactCommand}">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <material:MaterialIcon Kind="Plus" Width="16" Height="16"/>
+                                            <TextBlock Text="Добавить"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                                
+                                <ItemsControl ItemsSource="{Binding SelectedEmployeeContacts}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{DynamicResource SemiCardBackground}"
+                                                    CornerRadius="8"
+                                                    Padding="16"
+                                                    Margin="0,0,0,12">
+                                                <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+                                                    <material:MaterialIcon Grid.Row="0" Grid.Column="0" Grid.RowSpan="4"
+                                                                           Kind="AccountCircle"
+                                                                           Width="32" Height="32"
+                                                                           Margin="0,0,12,0"
+                                                                           Opacity="0.6"/>
+                                                    
+                                                    <TextBlock Grid.Row="0" Grid.Column="1" 
+                                                               Text="{Binding ContactName}" 
+                                                               FontWeight="SemiBold"
+                                                               FontSize="14"/>
+                                                    
+                                                    <Border Grid.Row="0" Grid.Column="2"
+                                                            Background="#2196F3"
+                                                            CornerRadius="4"
+                                                            Padding="6,2"
+                                                            Margin="8,0"
+                                                            IsVisible="{Binding IsPrimary}">
+                                                        <TextBlock Text="Основной" 
+                                                                   FontSize="10"
+                                                                   Foreground="White"/>
+                                                    </Border>
+                                                    
+                                                    <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                                               FontSize="12"
+                                                               Opacity="0.7"
+                                                               Margin="0,4,0,0">
+                                                        <Run Text="Отношение: "/>
+                                                        <Run Text="{Binding Relationship}"/>
+                                                    </TextBlock>
+                                                    
+                                                    <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+                                                                Margin="0,4,0,0">
+                                                        <TextBlock FontSize="12" Opacity="0.6">
+                                                            <material:MaterialIcon Kind="Phone" Width="12" Height="12"/>
+                                                            <Run Text=" "/>
+                                                            <Run Text="{Binding PhoneNumber}"/>
+                                                        </TextBlock>
+                                                        <TextBlock FontSize="12" 
+                                                                   Opacity="0.6"
+                                                                   IsVisible="{Binding AlternatePhoneNumber, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                                                            <material:MaterialIcon Kind="PhoneOutline" Width="12" Height="12"/>
+                                                            <Run Text=" "/>
+                                                            <Run Text="{Binding AlternatePhoneNumber}"/>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                    
+                                                    <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
+                                                               Text="{Binding Address}"
+                                                               FontSize="11"
+                                                               Opacity="0.5"
+                                                               TextWrapping="Wrap"
+                                                               Margin="0,4,0,0"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                            
+                            <!-- Vacations Section -->
+                            <StackPanel IsVisible="{Binding DetailSection, Converter={StaticResource StringEqualsConverter}, ConverterParameter=vacations}">
+                                <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+                                    <TextBlock Text="🏖️ Отпуска и отгулы" FontSize="18" FontWeight="SemiBold"/>
+                                    <Button Grid.Column="1" Command="{Binding AddVacationCommand}">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <material:MaterialIcon Kind="Plus" Width="16" Height="16"/>
+                                            <TextBlock Text="Создать заявку"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                                
+                                <ItemsControl ItemsSource="{Binding SelectedEmployeeVacations}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{DynamicResource SemiCardBackground}"
+                                                    CornerRadius="8"
+                                                    Padding="16"
+                                                    Margin="0,0,0,12">
+                                                <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+                                                    <material:MaterialIcon Grid.Row="0" Grid.Column="0" Grid.RowSpan="4"
+                                                                           Kind="CalendarMonth"
+                                                                           Width="32" Height="32"
+                                                                           Margin="0,0,12,0"
+                                                                           Opacity="0.6"/>
+                                                    
+                                                    <TextBlock Grid.Row="0" Grid.Column="1" 
+                                                               Text="{Binding VacationType}" 
+                                                               FontWeight="SemiBold"
+                                                               FontSize="14"/>
+                                                    
+                                                    <!-- Status Badge -->
+                                                    <Border Grid.Row="0" Grid.Column="2"
+                                                            Background="{Binding Status, Converter={StaticResource StatusToBrushConverter}}"
+                                                            CornerRadius="4"
+                                                            Padding="8,3"
+                                                            Margin="8,0">
+                                                        <TextBlock Text="{Binding Status}" 
+                                                                   FontSize="11"
+                                                                   FontWeight="SemiBold"
+                                                                   Foreground="White"/>
+                                                    </Border>
+                                                    
+                                                    <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                                               FontSize="13"
+                                                               Opacity="0.7"
+                                                               Margin="0,6,0,0">
+                                                        <Run Text="📅 "/>
+                                                        <Run Text="{Binding StartDate, StringFormat={}{0:dd.MM.yyyy}}"/>
+                                                        <Run Text=" - "/>
+                                                        <Run Text="{Binding EndDate, StringFormat={}{0:dd.MM.yyyy}}"/>
+                                                        <Run Text=" ("/>
+                                                        <Run Text="{Binding DaysRequested}"/>
+                                                        <Run Text=" дней)"/>
+                                                    </TextBlock>
+                                                    
+                                                    <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+                                                               FontSize="12"
+                                                               Opacity="0.6"
+                                                               Margin="0,4,0,0">
+                                                        <Run Text="Причина: "/>
+                                                        <Run Text="{Binding Reason}"/>
+                                                    </TextBlock>
+                                                    
+                                                    <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
+                                                               FontSize="11"
+                                                               Opacity="0.5"
+                                                               Margin="0,4,0,0"
+                                                               IsVisible="{Binding ApprovalNotes, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                                                        <Run Text="Примечание: "/>
+                                                        <Run Text="{Binding ApprovalNotes}"/>
+                                                    </TextBlock>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                            
+                        </StackPanel>
+                    </ScrollViewer>
                 </Grid>
-                <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto">
-            <TextBlock Grid.Column="0" 
-                       Text="{Binding ErrorMessage}"
-                       Foreground="Red"
-                       IsVisible="{Binding HasError}"
-                       VerticalAlignment="Center"/>
-            <Button Grid.Column="1" 
-                    Command="{Binding EditCommand}"
-                    Content="Редактировать"
-                    IsEnabled="{Binding SelectedEmployee, Converter={x:Static ObjectConverters.IsNotNull}}"
-                    Margin="0,0,10,0"/>
-            <Button Grid.Column="2" 
-                    Command="{Binding DeleteCommand}"
-                    Content="Удалить"
-                    IsEnabled="{Binding SelectedEmployee, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            </Border>
         </Grid>
-            </StackPanel>
-
-        <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Employees}"
-                  SelectedItem="{Binding SelectedEmployee}"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  GridLinesVisibility="All"
-                  BorderThickness="1"
-                  BorderBrush="Gray"
-                  Margin="0,0,0,10">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" 
-                                    Binding="{Binding EmpId}"
-                                    Width="Auto"/>
-                <DataGridTextColumn Header="Фамилия" 
-                                    Binding="{Binding Surname}"
-                                    Width="*"/>
-                <DataGridTextColumn Header="Имя" 
-                                    Binding="{Binding Name}"
-                                    Width="*"/>
-                <DataGridTextColumn Header="Отчество" 
-                                    Binding="{Binding Patronym}"
-                                    Width="*"/>
-                <DataGridTextColumn Header="Дата приема" 
-                                    Binding="{Binding EmployedSince, StringFormat={}{0:dd.MM.yyyy}}"
-                                    Width="Auto"/>
-                <DataGridTextColumn Header="Должность" 
-                                    Binding="{Binding Job.JobTitle}"
-                                    Width="*"/>
-            </DataGrid.Columns>
-        </DataGrid>
-
-        
     </Grid>
 </UserControl>

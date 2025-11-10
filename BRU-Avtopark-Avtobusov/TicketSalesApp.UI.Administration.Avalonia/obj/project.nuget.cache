@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "DS5XMs7ig4U=",
+  "dgSpecHash": "H4ndp5f8OtI=",
   "success": true,
   "projectFilePath": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj",
   "expectedPackageFiles": [
@@ -109,6 +109,8 @@
     "C:\\Users\\andrej\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
     "C:\\Users\\andrej\\.nuget\\packages\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",
     "C:\\Users\\andrej\\.nuget\\packages\\mono.texttemplating\\3.0.0\\mono.texttemplating.3.0.0.nupkg.sha512",
+    "C:\\Users\\andrej\\.nuget\\packages\\pleasantui\\5.0.0-alpha2\\pleasantui.5.0.0-alpha2.nupkg.sha512",
+    "C:\\Users\\andrej\\.nuget\\packages\\pleasantui.datagrid\\5.0.0-alpha2\\pleasantui.datagrid.5.0.0-alpha2.nupkg.sha512",
     "C:\\Users\\andrej\\.nuget\\packages\\propertychanged.sourcegenerator\\1.1.0\\propertychanged.sourcegenerator.1.1.0.nupkg.sha512",
     "C:\\Users\\andrej\\.nuget\\packages\\qrcoder\\1.6.0\\qrcoder.1.6.0.nupkg.sha512",
     "C:\\Users\\andrej\\.nuget\\packages\\r3\\1.2.9\\r3.1.2.9.nupkg.sha512",

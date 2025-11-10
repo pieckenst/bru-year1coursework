@@ -52,6 +52,9 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [D:/code/bru-year1coursework/BRU-Avtopark-Avtobusov/TicketSalesApp.UI.Administration.Avalonia/Views/Debug.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[D:/code/bru-year1coursework/BRU-Avtopark-Avtobusov/TicketSalesApp.UI.Administration.Avalonia/Views/Dialogs/EmployeeEditDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [D:/code/bru-year1coursework/BRU-Avtopark-Avtobusov/TicketSalesApp.UI.Administration.Avalonia/Views/EmployeeManagementWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
@@ -140,4 +143,13 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [D:/code/bru-year1coursework/BRU-Avtopark-Avtobusov/TicketSalesApp.UI.Administration.Avalonia/Views/UserManagementWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/code/bru-year1coursework/BRU-Avtopark-Avtobusov/TicketSalesApp.UI.Administration.Avalonia/Views/WindowsAccountLinkConfirmationDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/code/bru-year1coursework/BRU-Avtopark-Avtobusov/TicketSalesApp.UI.Administration.Avalonia/Views/WindowsAccountLinkSuccessDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/code/bru-year1coursework/BRU-Avtopark-Avtobusov/TicketSalesApp.UI.Administration.Avalonia/Views/WindowsAccountLinkWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

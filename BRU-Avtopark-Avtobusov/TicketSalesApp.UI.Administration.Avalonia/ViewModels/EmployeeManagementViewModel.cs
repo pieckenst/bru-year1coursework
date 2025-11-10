@@ -18,6 +18,7 @@ using Serilog;
 using TicketSalesApp.UI.Administration.Avalonia.Services;
 using System.Collections.Generic;
 using Avalonia.Controls.ApplicationLifetimes;
+using TicketSalesApp.UI.Administration.Avalonia.Views.Dialogs;
 
 namespace TicketSalesApp.UI.Administration.Avalonia.ViewModels
 {
@@ -80,6 +81,57 @@ namespace TicketSalesApp.UI.Administration.Avalonia.ViewModels
             set => this.RaiseAndSetIfChanged(ref _hasError, value);
         }
 
+        // HR Data Collections
+        private ObservableCollection<Department> _departments = new();
+        public ObservableCollection<Department> Departments
+        {
+            get => _departments;
+            set => this.RaiseAndSetIfChanged(ref _departments, value);
+        }
+
+        private ObservableCollection<EmployeeDocument> _selectedEmployeeDocuments = new();
+        public ObservableCollection<EmployeeDocument> SelectedEmployeeDocuments
+        {
+            get => _selectedEmployeeDocuments;
+            set => this.RaiseAndSetIfChanged(ref _selectedEmployeeDocuments, value);
+        }
+
+        private ObservableCollection<EmployeeTraining> _selectedEmployeeTrainings = new();
+        public ObservableCollection<EmployeeTraining> SelectedEmployeeTrainings
+        {
+            get => _selectedEmployeeTrainings;
+            set => this.RaiseAndSetIfChanged(ref _selectedEmployeeTrainings, value);
+        }
+
+        private ObservableCollection<EmergencyContact> _selectedEmployeeContacts = new();
+        public ObservableCollection<EmergencyContact> SelectedEmployeeContacts
+        {
+            get => _selectedEmployeeContacts;
+            set => this.RaiseAndSetIfChanged(ref _selectedEmployeeContacts, value);
+        }
+
+        private ObservableCollection<VacationRequest> _selectedEmployeeVacations = new();
+        public ObservableCollection<VacationRequest> SelectedEmployeeVacations
+        {
+            get => _selectedEmployeeVacations;
+            set => this.RaiseAndSetIfChanged(ref _selectedEmployeeVacations, value);
+        }
+
+        // View state
+        private string _currentView = "list";
+        public string CurrentView
+        {
+            get => _currentView;
+            set => this.RaiseAndSetIfChanged(ref _currentView, value);
+        }
+
+        private string _detailSection = "info";
+        public string DetailSection
+        {
+            get => _detailSection;
+            set => this.RaiseAndSetIfChanged(ref _detailSection, value);
+        }
+
         public EmployeeManagementViewModel()
         {
             _httpClient = ApiClientService.Instance.CreateClient();
@@ -99,6 +151,16 @@ namespace TicketSalesApp.UI.Administration.Avalonia.ViewModels
                 // Reload data with the new token
                 LoadData().ConfigureAwait(false);
             };
+
+            // Subscribe to selection changes
+            this.WhenAnyValue(x => x.SelectedEmployee)
+                .Subscribe(async employee =>
+                {
+                    if (employee != null)
+                    {
+                        await LoadEmployeeDetails(employee.EmpId);
+                    }
+                });
 
             LoadData().ConfigureAwait(false);
         }
@@ -121,6 +183,18 @@ namespace TicketSalesApp.UI.Administration.Avalonia.ViewModels
                     if (loadedJobs != null)
                     {
                         Jobs = new ObservableCollection<Job>(loadedJobs);
+                    }
+                }
+
+                // Load departments
+                var deptResponse = await _httpClient.GetAsync($"{_baseUrl}/Departments");
+                if (deptResponse.IsSuccessStatusCode)
+                {
+                    var jsonString = await deptResponse.Content.ReadAsStringAsync();
+                    var loadedDepts = JsonSerializer.Deserialize<List<Department>>(jsonString, _jsonOptions);
+                    if (loadedDepts != null)
+                    {
+                        Departments = new ObservableCollection<Department>(loadedDepts);
                     }
                 }
 
@@ -160,100 +234,8 @@ namespace TicketSalesApp.UI.Administration.Avalonia.ViewModels
         {
             try
             {
-                var dialog = new Window
-                {
-                    Title = "Add Employee",
-                    Width = 400,
-                    Height = 400,
-                    WindowStartupLocation = WindowStartupLocation.CenterOwner
-                };
+                var dialog = new EmployeeEditDialog(null, Jobs, Departments);
 
-                var grid = new Grid
-                {
-                    RowDefinitions = new RowDefinitions("Auto,Auto,Auto,Auto,Auto,Auto,Auto"),
-                    Margin = new Thickness(10)
-                };
-
-                var surnameBox = new TextBox { Watermark = "Surname" };
-                var nameBox = new TextBox { Watermark = "Name" };
-                var patronymBox = new TextBox { Watermark = "Patronym" };
-                var employedSincePicker = new DatePicker { };
-                var jobComboBox = new ComboBox
-                {
-                    ItemsSource = Jobs,
-                    DisplayMemberBinding = new global::Avalonia.Data.Binding("JobTitle")
-                };
-
-                var addButton = new Button
-                {
-                    Content = "Add",
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    Margin = new Thickness(0, 10, 0, 0)
-                };
-
-                grid.Children.Add(surnameBox);
-                Grid.SetRow(surnameBox, 0);
-                grid.Children.Add(nameBox);
-                Grid.SetRow(nameBox, 1);
-                grid.Children.Add(patronymBox);
-                Grid.SetRow(patronymBox, 2);
-                grid.Children.Add(employedSincePicker);
-                Grid.SetRow(employedSincePicker, 3);
-                grid.Children.Add(jobComboBox);
-                Grid.SetRow(jobComboBox, 4);
-                grid.Children.Add(addButton);
-                Grid.SetRow(addButton, 5);
-
-                dialog.Content = grid;
-
-                addButton.Click += async (s, e) =>
-                {
-                    if (string.IsNullOrWhiteSpace(surnameBox.Text) || 
-                        string.IsNullOrWhiteSpace(nameBox.Text) ||
-                        jobComboBox.SelectedItem == null)
-                    {
-                        ErrorMessage = "Surname, name and job are required";
-                        return;
-                    }
-
-                    var selectedJob = jobComboBox.SelectedItem as Job;
-                    var newEmployee = new Employee
-                    {
-                        Surname = surnameBox.Text,
-                        Name = nameBox.Text,
-                        Patronym = patronymBox.Text ?? string.Empty,
-                        EmployedSince = employedSincePicker.SelectedDate?.DateTime ?? DateTime.Now,
-                        JobId = selectedJob.JobId,
-                        Job = selectedJob // Include the Job object for proper serialization
-                    };
-
-                    try 
-                    {
-                        var json = JsonSerializer.Serialize(newEmployee, _jsonOptions);
-                        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                        var response = await _httpClient.PostAsync($"{_baseUrl}/Employees", content);
-                        if (response.IsSuccessStatusCode)
-                        {
-                            await LoadData();
-                            dialog.Close();
-                        }
-                        else
-                        {
-                            var error = await response.Content.ReadAsStringAsync();
-                            ErrorMessage = $"Failed to add employee: {error}";
-                            Log.Error("Failed to add employee. Status: {StatusCode}, Error: {Error}", 
-                                response.StatusCode, error);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        ErrorMessage = $"Error adding employee: {ex.Message}";
-                        Log.Error(ex, "Error adding employee");
-                    }
-                };
-
-                // Get the main window as owner
                 var mainWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
                     ? desktop.MainWindow
                     : null;
@@ -261,6 +243,22 @@ namespace TicketSalesApp.UI.Administration.Avalonia.ViewModels
                 if (mainWindow != null)
                 {
                     await dialog.ShowDialog(mainWindow);
+
+                    if (dialog.IsSaved && dialog.Employee != null)
+                    {
+                        var json = JsonSerializer.Serialize(dialog.Employee, _jsonOptions);
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                        var response = await _httpClient.PostAsync($"{_baseUrl}/Employees", content);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            await LoadData();
+                        }
+                        else
+                        {
+                            ErrorMessage = $"Failed to add employee. Status: {response.StatusCode}";
+                        }
+                    }
                 }
                 else
                 {
@@ -282,88 +280,25 @@ namespace TicketSalesApp.UI.Administration.Avalonia.ViewModels
 
             try
             {
-                var dialog = new Window
+                var dialog = new EmployeeEditDialog(SelectedEmployee, Jobs, Departments);
+
+                var mainWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                    ? desktop.MainWindow
+                    : null;
+
+                if (mainWindow != null)
                 {
-                    Title = "Edit Employee",
-                    Width = 400,
-                    Height = 400,
-                    WindowStartupLocation = WindowStartupLocation.CenterOwner
-                };
+                    await dialog.ShowDialog(mainWindow);
 
-                var grid = new Grid
-                {
-                    RowDefinitions = new RowDefinitions("Auto,Auto,Auto,Auto,Auto,Auto"),
-                    Margin = new Thickness(10)
-                };
-
-                var surnameBox = new TextBox { Text = SelectedEmployee.Surname, Watermark = "Surname" };
-                var nameBox = new TextBox { Text = SelectedEmployee.Name, Watermark = "Name" };
-                var patronymBox = new TextBox { Text = SelectedEmployee.Patronym, Watermark = "Patronym" };
-                var employedSincePicker = new DatePicker 
-                { 
-                    SelectedDate = SelectedEmployee.EmployedSince
-                };
-                var jobComboBox = new ComboBox
-                {
-                    ItemsSource = Jobs,
-                    DisplayMemberBinding = new global::Avalonia.Data.Binding("JobTitle"),
-                    SelectedItem = Jobs.FirstOrDefault(j => j.JobId == SelectedEmployee.JobId)
-                };
-
-                var updateButton = new Button
-                {
-                    Content = "Update",
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    Margin = new Thickness(0, 10, 0, 0)
-                };
-
-                grid.Children.Add(surnameBox);
-                Grid.SetRow(surnameBox, 0);
-                grid.Children.Add(nameBox);
-                Grid.SetRow(nameBox, 1);
-                grid.Children.Add(patronymBox);
-                Grid.SetRow(patronymBox, 2);
-                grid.Children.Add(employedSincePicker);
-                Grid.SetRow(employedSincePicker, 3);
-                grid.Children.Add(jobComboBox);
-                Grid.SetRow(jobComboBox, 4);
-                grid.Children.Add(updateButton);
-                Grid.SetRow(updateButton, 5);
-
-                dialog.Content = grid;
-
-                updateButton.Click += async (s, e) =>
-                {
-                    if (string.IsNullOrWhiteSpace(surnameBox.Text) || 
-                        string.IsNullOrWhiteSpace(nameBox.Text) ||
-                        jobComboBox.SelectedItem == null)
+                    if (dialog.IsSaved && dialog.Employee != null)
                     {
-                        ErrorMessage = "Surname, name and job are required";
-                        return;
-                    }
-
-                    var selectedJob = jobComboBox.SelectedItem as Job;
-                    var updatedEmployee = new Employee
-                    {
-                        EmpId = SelectedEmployee.EmpId,
-                        Surname = surnameBox.Text,
-                        Name = nameBox.Text,
-                        Patronym = patronymBox.Text,
-                        EmployedSince = employedSincePicker.SelectedDate?.DateTime ?? DateTime.Now,
-                        JobId = selectedJob.JobId,
-                        Job = selectedJob // Include the Job object for proper serialization
-                    };
-
-                    try
-                    {
-                        var json = JsonSerializer.Serialize(updatedEmployee, _jsonOptions);
+                        var json = JsonSerializer.Serialize(dialog.Employee, _jsonOptions);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                         var response = await _httpClient.PutAsync($"{_baseUrl}/Employees/{SelectedEmployee.EmpId}", content);
                         if (response.IsSuccessStatusCode)
                         {
                             await LoadData();
-                            dialog.Close();
                         }
                         else
                         {
@@ -373,21 +308,6 @@ namespace TicketSalesApp.UI.Administration.Avalonia.ViewModels
                                 response.StatusCode, error);
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        ErrorMessage = $"Error updating employee: {ex.Message}";
-                        Log.Error(ex, "Error updating employee");
-                    }
-                };
-
-                // Get the main window as owner
-                var mainWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
-                    ? desktop.MainWindow
-                    : null;
-
-                if (mainWindow != null)
-                {
-                    await dialog.ShowDialog(mainWindow);
                 }
                 else
                 {
@@ -397,8 +317,8 @@ namespace TicketSalesApp.UI.Administration.Avalonia.ViewModels
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"Error updating employee: {ex.Message}";
-                Log.Error(ex, "Error updating employee");
+                ErrorMessage = $"Error editing employee: {ex.Message}";
+                Log.Error(ex, "Error editing employee");
             }
         }
 
@@ -506,6 +426,568 @@ namespace TicketSalesApp.UI.Administration.Avalonia.ViewModels
             ).ToList();
 
             Employees = new ObservableCollection<Employee>(filteredEmployees);
+        }
+
+        private async Task LoadEmployeeDetails(long employeeId)
+        {
+            try
+            {
+                // Load documents
+                var docsResponse = await _httpClient.GetAsync($"{_baseUrl}/Employees/{employeeId}/documents");
+                if (docsResponse.IsSuccessStatusCode)
+                {
+                    var jsonString = await docsResponse.Content.ReadAsStringAsync();
+                    var docs = JsonSerializer.Deserialize<List<EmployeeDocument>>(jsonString, _jsonOptions);
+                    SelectedEmployeeDocuments = new ObservableCollection<EmployeeDocument>(docs ?? new List<EmployeeDocument>());
+                }
+
+                // Load trainings
+                var trainingsResponse = await _httpClient.GetAsync($"{_baseUrl}/Employees/{employeeId}/trainings");
+                if (trainingsResponse.IsSuccessStatusCode)
+                {
+                    var jsonString = await trainingsResponse.Content.ReadAsStringAsync();
+                    var trainings = JsonSerializer.Deserialize<List<EmployeeTraining>>(jsonString, _jsonOptions);
+                    SelectedEmployeeTrainings = new ObservableCollection<EmployeeTraining>(trainings ?? new List<EmployeeTraining>());
+                }
+
+                // Load emergency contacts
+                var contactsResponse = await _httpClient.GetAsync($"{_baseUrl}/Employees/{employeeId}/emergency-contacts");
+                if (contactsResponse.IsSuccessStatusCode)
+                {
+                    var jsonString = await contactsResponse.Content.ReadAsStringAsync();
+                    var contacts = JsonSerializer.Deserialize<List<EmergencyContact>>(jsonString, _jsonOptions);
+                    SelectedEmployeeContacts = new ObservableCollection<EmergencyContact>(contacts ?? new List<EmergencyContact>());
+                }
+
+                // Load vacation requests
+                var vacationsResponse = await _httpClient.GetAsync($"{_baseUrl}/Employees/{employeeId}/vacation-requests");
+                if (vacationsResponse.IsSuccessStatusCode)
+                {
+                    var jsonString = await vacationsResponse.Content.ReadAsStringAsync();
+                    var vacations = JsonSerializer.Deserialize<List<VacationRequest>>(jsonString, _jsonOptions);
+                    SelectedEmployeeVacations = new ObservableCollection<VacationRequest>(vacations ?? new List<VacationRequest>());
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error loading employee details for {EmployeeId}", employeeId);
+            }
+        }
+
+        [RelayCommand]
+        private void ShowDetail()
+        {
+            if (SelectedEmployee != null)
+            {
+                CurrentView = "detail";
+            }
+        }
+
+        [RelayCommand]
+        private void ShowList()
+        {
+            CurrentView = "list";
+        }
+
+        [RelayCommand]
+        private void ShowSection(string section)
+        {
+            DetailSection = section;
+        }
+
+        [RelayCommand]
+        private async Task AddDocument()
+        {
+            if (SelectedEmployee == null)
+            {
+                return;
+            }
+
+            var dialog = new Window
+            {
+                Title = "Добавить документ",
+                Width = 520,
+                Height = 520,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
+            var typeBox = new TextBox { Watermark = "Тип документа (паспорт, ВУ и т.д.)" };
+            var numberBox = new TextBox { Watermark = "Номер документа" };
+            var issueDatePicker = new DatePicker();
+            var expiryDatePicker = new DatePicker();
+            var issuedByBox = new TextBox { Watermark = "Кем выдан" };
+            var filePathBox = new TextBox { Watermark = "Путь к файлу / ссылка" };
+            var notesBox = new TextBox { Watermark = "Примечания", AcceptsReturn = true, MinHeight = 80, TextWrapping = TextWrapping.Wrap };
+
+            var saveButton = new Button { Content = "Сохранить", HorizontalAlignment = HorizontalAlignment.Right };
+            var cancelButton = new Button { Content = "Отмена", HorizontalAlignment = HorizontalAlignment.Left };
+
+            var buttonsPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Spacing = 8,
+                Children = { cancelButton, saveButton }
+            };
+
+            var contentPanel = new StackPanel
+            {
+                Margin = new Thickness(20),
+                Spacing = 12,
+                Children =
+                {
+                    new TextBlock { Text = "Тип документа*" },
+                    typeBox,
+                    new TextBlock { Text = "Номер документа*" },
+                    numberBox,
+                    new TextBlock { Text = "Дата выдачи*" },
+                    issueDatePicker,
+                    new TextBlock { Text = "Действителен до" },
+                    expiryDatePicker,
+                    new TextBlock { Text = "Кем выдан" },
+                    issuedByBox,
+                    new TextBlock { Text = "Файл / ссылка" },
+                    filePathBox,
+                    new TextBlock { Text = "Примечания" },
+                    notesBox,
+                    buttonsPanel
+                }
+            };
+
+            dialog.Content = new ScrollViewer { Content = contentPanel };
+
+            cancelButton.Click += (_, _) => dialog.Close();
+
+            saveButton.Click += async (_, _) =>
+            {
+                if (string.IsNullOrWhiteSpace(typeBox.Text) || string.IsNullOrWhiteSpace(numberBox.Text) || !issueDatePicker.SelectedDate.HasValue)
+                {
+                    HasError = true;
+                    ErrorMessage = "Заполните тип, номер и дату выдачи";
+                    return;
+                }
+
+                var newDocument = new EmployeeDocument
+                {
+                    DocumentType = typeBox.Text!,
+                    DocumentNumber = numberBox.Text!,
+                    IssueDate = issueDatePicker.SelectedDate!.Value.DateTime,
+                    ExpiryDate = expiryDatePicker.SelectedDate?.DateTime,
+                    IssuedBy = issuedByBox.Text,
+                    FilePath = filePathBox.Text,
+                    Notes = notesBox.Text
+                };
+
+                try
+                {
+                    var json = JsonSerializer.Serialize(newDocument, _jsonOptions);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    var response = await _httpClient.PostAsync($"{_baseUrl}/Employees/{SelectedEmployee.EmpId}/documents", content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        HasError = false;
+                        ErrorMessage = string.Empty;
+                        await LoadEmployeeDetails(SelectedEmployee.EmpId);
+                        dialog.Close();
+                    }
+                    else
+                    {
+                        var error = await response.Content.ReadAsStringAsync();
+                        HasError = true;
+                        ErrorMessage = $"Не удалось добавить документ: {error}";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    HasError = true;
+                    ErrorMessage = $"Ошибка при добавлении документа: {ex.Message}";
+                    Log.Error(ex, "Error adding employee document");
+                }
+            };
+
+            var owner = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                ? desktop.MainWindow
+                : null;
+
+            if (owner != null)
+            {
+                await dialog.ShowDialog(owner);
+            }
+            else
+            {
+                Log.Error("Could not find main window for AddDocument dialog");
+            }
+        }
+
+        [RelayCommand]
+        private async Task AddTraining()
+        {
+            if (SelectedEmployee == null)
+            {
+                return;
+            }
+
+            var dialog = new Window
+            {
+                Title = "Добавить обучение",
+                Width = 540,
+                Height = 560,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
+            var nameBox = new TextBox { Watermark = "Название курса / сертификата" };
+            var organizationBox = new TextBox { Watermark = "Организация" };
+            var descriptionBox = new TextBox { Watermark = "Описание", AcceptsReturn = true, MinHeight = 80, TextWrapping = TextWrapping.Wrap };
+            var completionPicker = new DatePicker();
+            var expiryPicker = new DatePicker();
+            var certificateBox = new TextBox { Watermark = "Номер сертификата" };
+            var filePathBox = new TextBox { Watermark = "Файл / ссылка" };
+            var isMandatoryCheck = new CheckBox { Content = "Обязательное обучение" };
+            var notesBox = new TextBox { Watermark = "Примечания", AcceptsReturn = true, MinHeight = 70, TextWrapping = TextWrapping.Wrap };
+
+            var saveButton = new Button { Content = "Сохранить" };
+            var cancelButton = new Button { Content = "Отмена" };
+
+            cancelButton.Click += (_, _) => dialog.Close();
+
+            var contentPanel = new StackPanel
+            {
+                Margin = new Thickness(20),
+                Spacing = 12,
+                Children =
+                {
+                    new TextBlock { Text = "Название обучения*" },
+                    nameBox,
+                    new TextBlock { Text = "Организация" },
+                    organizationBox,
+                    new TextBlock { Text = "Описание" },
+                    descriptionBox,
+                    new TextBlock { Text = "Дата прохождения*" },
+                    completionPicker,
+                    new TextBlock { Text = "Действительно до" },
+                    expiryPicker,
+                    new TextBlock { Text = "Номер сертификата" },
+                    certificateBox,
+                    new TextBlock { Text = "Файл / ссылка" },
+                    filePathBox,
+                    isMandatoryCheck,
+                    new TextBlock { Text = "Примечания" },
+                    notesBox,
+                    new StackPanel
+                    {
+                        Orientation = Orientation.Horizontal,
+                        HorizontalAlignment = HorizontalAlignment.Right,
+                        Spacing = 8,
+                        Children = { cancelButton, saveButton }
+                    }
+                }
+            };
+
+            dialog.Content = new ScrollViewer { Content = contentPanel };
+
+            saveButton.Click += async (_, _) =>
+            {
+                if (string.IsNullOrWhiteSpace(nameBox.Text) || !completionPicker.SelectedDate.HasValue)
+                {
+                    HasError = true;
+                    ErrorMessage = "Укажите название обучения и дату прохождения";
+                    return;
+                }
+
+                var newTraining = new EmployeeTraining
+                {
+                    TrainingName = nameBox.Text!,
+                    Description = descriptionBox.Text,
+                    CompletionDate = completionPicker.SelectedDate!.Value.DateTime,
+                    ExpiryDate = expiryPicker.SelectedDate?.DateTime,
+                    CertificateNumber = certificateBox.Text,
+                    IssuingOrganization = organizationBox.Text,
+                    IsMandatory = isMandatoryCheck.IsChecked ?? false,
+                    FilePath = filePathBox.Text,
+                    Notes = notesBox.Text
+                };
+
+                try
+                {
+                    var json = JsonSerializer.Serialize(newTraining, _jsonOptions);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    var response = await _httpClient.PostAsync($"{_baseUrl}/Employees/{SelectedEmployee.EmpId}/trainings", content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        HasError = false;
+                        ErrorMessage = string.Empty;
+                        await LoadEmployeeDetails(SelectedEmployee.EmpId);
+                        dialog.Close();
+                    }
+                    else
+                    {
+                        var error = await response.Content.ReadAsStringAsync();
+                        HasError = true;
+                        ErrorMessage = $"Не удалось добавить обучение: {error}";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    HasError = true;
+                    ErrorMessage = $"Ошибка при добавлении обучения: {ex.Message}";
+                    Log.Error(ex, "Error adding employee training");
+                }
+            };
+
+            var owner = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                ? desktop.MainWindow
+                : null;
+
+            if (owner != null)
+            {
+                await dialog.ShowDialog(owner);
+            }
+            else
+            {
+                Log.Error("Could not find main window for AddTraining dialog");
+            }
+        }
+
+        [RelayCommand]
+        private async Task AddContact()
+        {
+            if (SelectedEmployee == null)
+            {
+                return;
+            }
+
+            var dialog = new Window
+            {
+                Title = "Новый контакт для экстренной связи",
+                Width = 500,
+                Height = 420,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
+            var nameBox = new TextBox { Watermark = "ФИО" };
+            var relationshipBox = new TextBox { Watermark = "Кем приходится" };
+            var phoneBox = new TextBox { Watermark = "+7 (___) ___-__-__" };
+            var altPhoneBox = new TextBox { Watermark = "Доп. телефон" };
+            var addressBox = new TextBox { Watermark = "Адрес", AcceptsReturn = true, MinHeight = 60, TextWrapping = TextWrapping.Wrap };
+            var isPrimaryCheck = new CheckBox { Content = "Основной контакт" };
+
+            var saveButton = new Button { Content = "Сохранить" };
+            var cancelButton = new Button { Content = "Отмена" };
+
+            cancelButton.Click += (_, _) => dialog.Close();
+
+            var contentPanel = new StackPanel
+            {
+                Margin = new Thickness(20),
+                Spacing = 12,
+                Children =
+                {
+                    new TextBlock { Text = "ФИО контакта*" },
+                    nameBox,
+                    new TextBlock { Text = "Отношение*" },
+                    relationshipBox,
+                    new TextBlock { Text = "Телефон*" },
+                    phoneBox,
+                    new TextBlock { Text = "Доп. телефон" },
+                    altPhoneBox,
+                    new TextBlock { Text = "Адрес" },
+                    addressBox,
+                    isPrimaryCheck,
+                    new StackPanel
+                    {
+                        Orientation = Orientation.Horizontal,
+                        HorizontalAlignment = HorizontalAlignment.Right,
+                        Spacing = 8,
+                        Children = { cancelButton, saveButton }
+                    }
+                }
+            };
+
+            dialog.Content = new ScrollViewer { Content = contentPanel };
+
+            saveButton.Click += async (_, _) =>
+            {
+                if (string.IsNullOrWhiteSpace(nameBox.Text) || string.IsNullOrWhiteSpace(relationshipBox.Text) || string.IsNullOrWhiteSpace(phoneBox.Text))
+                {
+                    HasError = true;
+                    ErrorMessage = "Заполните ФИО, отношение и телефон";
+                    return;
+                }
+
+                var newContact = new EmergencyContact
+                {
+                    ContactName = nameBox.Text!,
+                    Relationship = relationshipBox.Text!,
+                    PhoneNumber = phoneBox.Text!,
+                    AlternatePhoneNumber = altPhoneBox.Text,
+                    Address = addressBox.Text,
+                    IsPrimary = isPrimaryCheck.IsChecked ?? false
+                };
+
+                try
+                {
+                    var json = JsonSerializer.Serialize(newContact, _jsonOptions);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    var response = await _httpClient.PostAsync($"{_baseUrl}/Employees/{SelectedEmployee.EmpId}/emergency-contacts", content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        HasError = false;
+                        ErrorMessage = string.Empty;
+                        await LoadEmployeeDetails(SelectedEmployee.EmpId);
+                        dialog.Close();
+                    }
+                    else
+                    {
+                        var error = await response.Content.ReadAsStringAsync();
+                        HasError = true;
+                        ErrorMessage = $"Не удалось добавить контакт: {error}";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    HasError = true;
+                    ErrorMessage = $"Ошибка при добавлении контакта: {ex.Message}";
+                    Log.Error(ex, "Error adding emergency contact");
+                }
+            };
+
+            var owner = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                ? desktop.MainWindow
+                : null;
+
+            if (owner != null)
+            {
+                await dialog.ShowDialog(owner);
+            }
+            else
+            {
+                Log.Error("Could not find main window for AddContact dialog");
+            }
+        }
+
+        [RelayCommand]
+        private async Task AddVacation()
+        {
+            if (SelectedEmployee == null)
+            {
+                return;
+            }
+
+            var dialog = new Window
+            {
+                Title = "Новая заявка на отпуск",
+                Width = 520,
+                Height = 480,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
+            var startDatePicker = new DatePicker();
+            var endDatePicker = new DatePicker();
+            var typeBox = new TextBox { Watermark = "Тип отпуска (ежегодный, больничный и т.п.)" };
+            var reasonBox = new TextBox { Watermark = "Комментарий", AcceptsReturn = true, MinHeight = 100, TextWrapping = TextWrapping.Wrap };
+
+            var saveButton = new Button { Content = "Сохранить" };
+            var cancelButton = new Button { Content = "Отмена" };
+
+            cancelButton.Click += (_, _) => dialog.Close();
+
+            var contentPanel = new StackPanel
+            {
+                Margin = new Thickness(20),
+                Spacing = 12,
+                Children =
+                {
+                    new TextBlock { Text = "Дата начала*" },
+                    startDatePicker,
+                    new TextBlock { Text = "Дата окончания*" },
+                    endDatePicker,
+                    new TextBlock { Text = "Тип отпуска*" },
+                    typeBox,
+                    new TextBlock { Text = "Комментарий" },
+                    reasonBox,
+                    new StackPanel
+                    {
+                        Orientation = Orientation.Horizontal,
+                        HorizontalAlignment = HorizontalAlignment.Right,
+                        Spacing = 8,
+                        Children = { cancelButton, saveButton }
+                    }
+                }
+            };
+
+            dialog.Content = new ScrollViewer { Content = contentPanel };
+
+            saveButton.Click += async (_, _) =>
+            {
+                if (!startDatePicker.SelectedDate.HasValue || !endDatePicker.SelectedDate.HasValue || string.IsNullOrWhiteSpace(typeBox.Text))
+                {
+                    HasError = true;
+                    ErrorMessage = "Укажите даты и тип отпуска";
+                    return;
+                }
+
+                var start = startDatePicker.SelectedDate!.Value.DateTime;
+                var end = endDatePicker.SelectedDate!.Value.DateTime;
+
+                if (end < start)
+                {
+                    HasError = true;
+                    ErrorMessage = "Дата окончания не может быть раньше даты начала";
+                    return;
+                }
+
+                var newRequest = new VacationRequest
+                {
+                    StartDate = start,
+                    EndDate = end,
+                    VacationType = typeBox.Text!,
+                    Reason = reasonBox.Text,
+                    Status = "Pending"
+                };
+
+                try
+                {
+                    var json = JsonSerializer.Serialize(newRequest, _jsonOptions);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    var response = await _httpClient.PostAsync($"{_baseUrl}/Employees/{SelectedEmployee.EmpId}/vacation-requests", content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        HasError = false;
+                        ErrorMessage = string.Empty;
+                        await LoadEmployeeDetails(SelectedEmployee.EmpId);
+                        dialog.Close();
+                    }
+                    else
+                    {
+                        var error = await response.Content.ReadAsStringAsync();
+                        HasError = true;
+                        ErrorMessage = $"Не удалось создать заявку: {error}";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    HasError = true;
+                    ErrorMessage = $"Ошибка при создании заявки: {ex.Message}";
+                    Log.Error(ex, "Error creating vacation request");
+                }
+            };
+
+            var owner = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                ? desktop.MainWindow
+                : null;
+
+            if (owner != null)
+            {
+                await dialog.ShowDialog(owner);
+            }
+            else
+            {
+                Log.Error("Could not find main window for AddVacation dialog");
+            }
         }
     }
 } 

@@ -1943,6 +1943,45 @@
           "buildTransitive/Mono.TextTemplating.targets": {}
         }
       },
+      "PleasantUI/5.0.0-alpha2": {
+        "type": "package",
+        "dependencies": {
+          "Avalonia": "11.2.0",
+          "Avalonia.Controls.ColorPicker": "11.2.0",
+          "Avalonia.Skia": "11.2.0",
+          "CommunityToolkit.Mvvm": "8.3.2",
+          "Serilog": "4.1.0",
+          "SkiaSharp": "2.88.8",
+          "System.Text.Json": "8.0.5"
+        },
+        "compile": {
+          "lib/netstandard2.0/PleasantUI.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/PleasantUI.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "PleasantUI.DataGrid/5.0.0-alpha2": {
+        "type": "package",
+        "dependencies": {
+          "Avalonia.Controls.DataGrid": "11.2.0",
+          "PleasantUI": "5.0.0-alpha2"
+        },
+        "compile": {
+          "lib/netstandard2.0/PleasantUI.DataGrid.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/PleasantUI.DataGrid.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "PropertyChanged.SourceGenerator/1.1.0": {
         "type": "package"
       },
@@ -6129,6 +6168,36 @@
         "readme.md"
       ]
     },
+    "PleasantUI/5.0.0-alpha2": {
+      "sha512": "++LUIMiRA93tCCOx37Db87iqVaye3+fpLUnEhGbSNc7av857iBLCKg382do9JjWS/hd2RnHdThbzvPnsAxwXVA==",
+      "type": "package",
+      "path": "pleasantui/5.0.0-alpha2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "PleasantUIIcon.png",
+        "README.md",
+        "lib/netstandard2.0/PleasantUI.dll",
+        "lib/netstandard2.0/PleasantUI.xml",
+        "pleasantui.5.0.0-alpha2.nupkg.sha512",
+        "pleasantui.nuspec"
+      ]
+    },
+    "PleasantUI.DataGrid/5.0.0-alpha2": {
+      "sha512": "Fej/KSt1pHSEN4uY4VTyaghzVQumUJjAoPKQRxq9gPPIx5+ly+rEQ7doIfZN4rTo8HAO/tXBaFqpNxqmOMxNVw==",
+      "type": "package",
+      "path": "pleasantui.datagrid/5.0.0-alpha2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "PleasantUIIcon.png",
+        "README.md",
+        "lib/netstandard2.0/PleasantUI.DataGrid.dll",
+        "lib/netstandard2.0/PleasantUI.DataGrid.xml",
+        "pleasantui.datagrid.5.0.0-alpha2.nupkg.sha512",
+        "pleasantui.datagrid.nuspec"
+      ]
+    },
     "PropertyChanged.SourceGenerator/1.1.0": {
       "sha512": "6Tham7wPyGM9oZWa+xFVScGwsJ+Of+siIfmpVaClOHU/KfIhw5vep/eP3eSLcNj37l0v/havpsS2UBLD0BeMdA==",
       "type": "package",
@@ -7670,6 +7739,8 @@
       "Microsoft.EntityFrameworkCore >= 9.0.1",
       "Microsoft.EntityFrameworkCore.Sqlite >= 9.0.1",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.1",
+      "PleasantUI >= 5.0.0-alpha2",
+      "PleasantUI.DataGrid >= 5.0.0-alpha2",
       "PropertyChanged.SourceGenerator >= 1.1.0",
       "R3 >= 1.2.9",
       "ReDocking.Avalonia >= 1.0.3",
@@ -7827,6 +7898,14 @@
             "suppressParent": "All",
             "target": "Package",
             "version": "[9.0.1, )"
+          },
+          "PleasantUI": {
+            "target": "Package",
+            "version": "[5.0.0-alpha2, )"
+          },
+          "PleasantUI.DataGrid": {
+            "target": "Package",
+            "version": "[5.0.0-alpha2, )"
           },
           "PropertyChanged.SourceGenerator": {
             "target": "Package",

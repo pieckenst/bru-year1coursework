@@ -381,6 +381,14 @@
               "target": "Package",
               "version": "[9.0.1, )"
             },
+            "PleasantUI": {
+              "target": "Package",
+              "version": "[5.0.0-alpha2, )"
+            },
+            "PleasantUI.DataGrid": {
+              "target": "Package",
+              "version": "[5.0.0-alpha2, )"
+            },
             "PropertyChanged.SourceGenerator": {
               "target": "Package",
               "version": "[1.1.0, )"

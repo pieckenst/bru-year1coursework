@@ -30,6 +30,13 @@ namespace TicketSalesApp.Core.Data
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<RouteSchedules> RouteSchedules { get; set; }
         public DbSet<FormDefinition> FormDefinitions { get; set; }
+        
+        // HR Department DbSets
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<EmployeeDocument> EmployeeDocuments { get; set; }
+        public DbSet<EmployeeTraining> EmployeeTrainings { get; set; }
+        public DbSet<EmergencyContact> EmergencyContacts { get; set; }
+        public DbSet<VacationRequest> VacationRequests { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -93,6 +100,55 @@ namespace TicketSalesApp.Core.Data
                 .HasOne(e => e.Job)
                 .WithMany(j => j.Employees)
                 .HasForeignKey(e => e.JobId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Employee -> Department
+            modelBuilder.Entity<Employee>()
+                .HasOne(e => e.Department)
+                .WithMany(d => d.Employees)
+                .HasForeignKey(e => e.DepartmentId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Employee -> EmployeeDocuments
+            modelBuilder.Entity<EmployeeDocument>()
+                .HasOne(d => d.Employee)
+                .WithMany(e => e.Documents)
+                .HasForeignKey(d => d.EmployeeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Employee -> EmployeeTrainings
+            modelBuilder.Entity<EmployeeTraining>()
+                .HasOne(t => t.Employee)
+                .WithMany(e => e.Trainings)
+                .HasForeignKey(t => t.EmployeeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Employee -> EmergencyContacts
+            modelBuilder.Entity<EmergencyContact>()
+                .HasOne(c => c.Employee)
+                .WithMany(e => e.EmergencyContacts)
+                .HasForeignKey(c => c.EmployeeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Employee -> VacationRequests
+            modelBuilder.Entity<VacationRequest>()
+                .HasOne(v => v.Employee)
+                .WithMany(e => e.VacationRequests)
+                .HasForeignKey(v => v.EmployeeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // VacationRequest -> User (ApprovedBy)
+            modelBuilder.Entity<VacationRequest>()
+                .HasOne(v => v.ApprovedBy)
+                .WithMany()
+                .HasForeignKey(v => v.ApprovedByUserId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Department -> ParentDepartment (self-referencing)
+            modelBuilder.Entity<Department>()
+                .HasOne(d => d.ParentDepartment)
+                .WithMany(d => d.ChildDepartments)
+                .HasForeignKey(d => d.ParentDepartmentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Marshut -> Employee (Driver)

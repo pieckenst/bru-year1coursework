@@ -1,4 +1,4 @@
-﻿#if MODERN
+#if MODERN
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -38,7 +38,13 @@ namespace TicketSalesApp.Core.Data
             { "Permissions", typeof(Permission) },
             { "UserRoles", typeof(UserRole) },
             { "RolePermissions", typeof(RolePermission) },
-            { "RouteSchedules", typeof(RouteSchedules) }
+            { "RouteSchedules", typeof(RouteSchedules) },
+            // HR Department tables
+            { "Departments", typeof(Department) },
+            { "EmployeeDocuments", typeof(EmployeeDocument) },
+            { "EmployeeTrainings", typeof(EmployeeTraining) },
+            { "EmergencyContacts", typeof(EmergencyContact) },
+            { "VacationRequests", typeof(VacationRequest) }
         };
 
         // Helper method for GUID conversion
@@ -1069,6 +1075,449 @@ namespace TicketSalesApp.Core.Data
                     logger?.LogInformation($"Added {routeSchedules.Count} route schedules from {startDate:d} to {endDate:d}");
                     await context.SaveChangesAsync();
                     logger?.LogInformation("Maintenance records seeded successfully.");
+
+                    // === HR DEPARTMENT SEED DATA ===
+                    
+                    // Seed Departments (organizational structure)
+                    var departments = new[]
+                    {
+                        new Department 
+                        { 
+                            DepartmentName = "Отдел эксплуатации", 
+                            DepartmentCode = "ЭКСП", 
+                            Description = "Управление транспортными средствами и маршрутами",
+                            ParentDepartmentId = null,
+                            IsActive = true
+                        },
+                        new Department 
+                        { 
+                            DepartmentName = "Ремонтно-механический цех", 
+                            DepartmentCode = "РМЦ", 
+                            Description = "Техническое обслуживание и ремонт автобусов",
+                            ParentDepartmentId = null,
+                            IsActive = true
+                        },
+                        new Department 
+                        { 
+                            DepartmentName = "Диспетчерская служба", 
+                            DepartmentCode = "ДИСП", 
+                            Description = "Планирование и контроль движения автобусов",
+                            ParentDepartmentId = null,
+                            IsActive = true
+                        },
+                        new Department 
+                        { 
+                            DepartmentName = "Отдел кадров", 
+                            DepartmentCode = "ОК", 
+                            Description = "Управление персоналом и кадровое делопроизводство",
+                            ParentDepartmentId = null,
+                            IsActive = true
+                        },
+                        new Department 
+                        { 
+                            DepartmentName = "Билетная касса", 
+                            DepartmentCode = "КАССА", 
+                            Description = "Продажа проездных билетов",
+                            ParentDepartmentId = null,
+                            IsActive = true
+                        },
+                        new Department 
+                        { 
+                            DepartmentName = "Служба безопасности", 
+                            DepartmentCode = "БЕЗ", 
+                            Description = "Обеспечение безопасности движения и охрана труда",
+                            ParentDepartmentId = null,
+                            IsActive = true
+                        }
+                    };
+                    await context.Departments.AddRangeAsync(departments);
+                    await context.SaveChangesAsync();
+                    logger?.LogInformation("Departments seeded successfully.");
+
+                    // Update existing employees with HR data and assign to departments
+                    employees[0].DepartmentId = departments[0].DepartmentId; // Водитель -> Эксплуатация
+                    employees[0].PassportSeries = "MP";
+                    employees[0].PassportNumber = "3234567";
+                    employees[0].DateOfBirth = new DateTime(1985, 5, 15);
+                    employees[0].Address = "г. Могилев, ул. Ленинская, д. 45, кв. 12";
+                    employees[0].PersonalPhone = "+375293456789";
+                    employees[0].Email = "ivanov@mogilevbus.by";
+                    employees[0].INN = "400123456";
+                    employees[0].SNILS = "112-233-445 67";
+                    employees[0].DriverLicenseNumber = "3AC456789";
+                    employees[0].DriverLicenseCategory = "D";
+                    employees[0].DriverLicenseIssueDate = new DateTime(2015, 3, 10);
+                    employees[0].DriverLicenseExpiryDate = new DateTime(2025, 3, 10);
+                    employees[0].MedicalCertificateNumber = "МС123456";
+                    employees[0].MedicalCertificateIssueDate = new DateTime(2024, 1, 15);
+                    employees[0].MedicalCertificateExpiryDate = new DateTime(2025, 1, 15);
+                    employees[0].LastMedicalCheckDate = new DateTime(2024, 1, 15);
+                    employees[0].NextMedicalCheckDate = new DateTime(2025, 1, 15);
+                    employees[0].HasPassengerTransportCertification = true;
+
+                    employees[1].DepartmentId = departments[0].DepartmentId; // Водитель -> Эксплуатация
+                    employees[1].PassportSeries = "MP";
+                    employees[1].PassportNumber = "3298765";
+                    employees[1].DateOfBirth = new DateTime(1982, 8, 22);
+                    employees[1].Address = "г. Могилев, пр-т Мира, д. 23, кв. 5";
+                    employees[1].PersonalPhone = "+375296543210";
+                    employees[1].Email = "petrov@mogilevbus.by";
+                    employees[1].INN = "400234567";
+                    employees[1].SNILS = "113-344-556 78";
+                    employees[1].DriverLicenseNumber = "3AC987654";
+                    employees[1].DriverLicenseCategory = "D";
+                    employees[1].DriverLicenseIssueDate = new DateTime(2014, 6, 20);
+                    employees[1].DriverLicenseExpiryDate = new DateTime(2024, 6, 20);
+                    employees[1].MedicalCertificateNumber = "МС234567";
+                    employees[1].MedicalCertificateIssueDate = new DateTime(2023, 11, 10);
+                    employees[1].MedicalCertificateExpiryDate = new DateTime(2024, 11, 10);
+                    employees[1].LastMedicalCheckDate = new DateTime(2023, 11, 10);
+                    employees[1].NextMedicalCheckDate = new DateTime(2024, 11, 10);
+                    employees[1].HasPassengerTransportCertification = true;
+
+                    employees[2].DepartmentId = departments[1].DepartmentId; // Механик -> РМЦ
+                    employees[2].PassportSeries = "MP";
+                    employees[2].PassportNumber = "3245678";
+                    employees[2].DateOfBirth = new DateTime(1987, 3, 12);
+                    employees[2].Address = "г. Могилев, ул. Первомайская, д. 67, кв. 8";
+                    employees[2].PersonalPhone = "+375297654321";
+                    employees[2].Email = "sidorov@mogilevbus.by";
+                    employees[2].INN = "400345678";
+                    employees[2].SNILS = "114-455-667 89";
+
+                    employees[3].DepartmentId = departments[2].DepartmentId; // Диспетчер -> Диспетчерская
+                    employees[3].PassportSeries = "MP";
+                    employees[3].PassportNumber = "3267890";
+                    employees[3].DateOfBirth = new DateTime(1990, 11, 5);
+                    employees[3].Address = "г. Могилев, ул. Космонавтов, д. 12, кв. 34";
+                    employees[3].PersonalPhone = "+375298765432";
+                    employees[3].Email = "kozlov@mogilevbus.by";
+                    employees[3].INN = "400456789";
+                    employees[3].SNILS = "115-566-778 90";
+
+                    employees[4].DepartmentId = departments[0].DepartmentId; // Начальник -> Эксплуатация
+                    employees[4].PassportSeries = "MP";
+                    employees[4].PassportNumber = "3212345";
+                    employees[4].DateOfBirth = new DateTime(1975, 7, 18);
+                    employees[4].Address = "г. Могилев, ул. Советская, д. 89, кв. 15";
+                    employees[4].PersonalPhone = "+375299876543";
+                    employees[4].Email = "morozov@mogilevbus.by";
+                    employees[4].INN = "400567890";
+                    employees[4].SNILS = "116-677-889 01";
+
+                    employees[5].DepartmentId = departments[4].DepartmentId; // Кассир -> Касса
+                    employees[5].PassportSeries = "MP";
+                    employees[5].PassportNumber = "3278901";
+                    employees[5].DateOfBirth = new DateTime(1995, 2, 28);
+                    employees[5].Address = "г. Могилев, ул. Пушкинская, д. 34, кв. 21";
+                    employees[5].PersonalPhone = "+375291234567";
+                    employees[5].Email = "novikov@mogilevbus.by";
+                    employees[5].INN = "400678901";
+                    employees[5].SNILS = "117-788-990 12";
+
+                    employees[6].DepartmentId = departments[0].DepartmentId; // Водитель -> Эксплуатация
+                    employees[6].PassportSeries = "MP";
+                    employees[6].PassportNumber = "3289012";
+                    employees[6].DateOfBirth = new DateTime(1988, 9, 14);
+                    employees[6].Address = "г. Могилев, ул. Горького, д. 56, кв. 9";
+                    employees[6].PersonalPhone = "+375292345678";
+                    employees[6].Email = "volkov@mogilevbus.by";
+                    employees[6].INN = "400789012";
+                    employees[6].SNILS = "118-899-001 23";
+                    employees[6].DriverLicenseNumber = "3AC111222";
+                    employees[6].DriverLicenseCategory = "D";
+                    employees[6].DriverLicenseIssueDate = new DateTime(2016, 11, 25);
+                    employees[6].DriverLicenseExpiryDate = new DateTime(2026, 11, 25);
+                    employees[6].MedicalCertificateNumber = "МС345678";
+                    employees[6].MedicalCertificateIssueDate = new DateTime(2024, 3, 20);
+                    employees[6].MedicalCertificateExpiryDate = new DateTime(2025, 3, 20);
+                    employees[6].HasPassengerTransportCertification = true;
+
+                    employees[7].DepartmentId = departments[1].DepartmentId; // Механик -> РМЦ
+                    employees[7].PassportSeries = "MP";
+                    employees[7].PassportNumber = "3290123";
+                    employees[7].DateOfBirth = new DateTime(1986, 6, 30);
+                    employees[7].Address = "г. Могилев, ул. Крупской, д. 78, кв. 45";
+                    employees[7].PersonalPhone = "+375293456780";
+                    employees[7].Email = "solovyev@mogilevbus.by";
+                    employees[7].INN = "400890123";
+                    employees[7].SNILS = "119-900-112 34";
+
+                    employees[8].DepartmentId = departments[0].DepartmentId; // Водитель -> Эксплуатация
+                    employees[8].PassportSeries = "MP";
+                    employees[8].PassportNumber = "3201234";
+                    employees[8].DateOfBirth = new DateTime(1991, 4, 7);
+                    employees[8].Address = "г. Могилев, ул. Чкалова, д. 90, кв. 67";
+                    employees[8].PersonalPhone = "+375294567891";
+                    employees[8].Email = "vasiliev@mogilevbus.by";
+                    employees[8].INN = "400901234";
+                    employees[8].SNILS = "120-011-223 45";
+                    employees[8].DriverLicenseNumber = "3AC333444";
+                    employees[8].DriverLicenseCategory = "D";
+                    employees[8].DriverLicenseIssueDate = new DateTime(2017, 7, 5);
+                    employees[8].DriverLicenseExpiryDate = new DateTime(2027, 7, 5);
+                    employees[8].MedicalCertificateNumber = "МС456789";
+                    employees[8].MedicalCertificateIssueDate = new DateTime(2024, 2, 10);
+                    employees[8].MedicalCertificateExpiryDate = new DateTime(2025, 2, 10);
+                    employees[8].HasPassengerTransportCertification = true;
+
+                    employees[9].DepartmentId = departments[2].DepartmentId; // Диспетчер -> Диспетчерская
+                    employees[9].PassportSeries = "MP";
+                    employees[9].PassportNumber = "3212346";
+                    employees[9].DateOfBirth = new DateTime(1983, 12, 19);
+                    employees[9].Address = "г. Могилев, ул. Менжинского, д. 11, кв. 3";
+                    employees[9].PersonalPhone = "+375295678902";
+                    employees[9].Email = "zaitsev@mogilevbus.by";
+                    employees[9].INN = "401012345";
+                    employees[9].SNILS = "121-122-334 56";
+
+                    await context.SaveChangesAsync();
+                    logger?.LogInformation("Employee HR data updated successfully.");
+
+                    // Seed Employee Documents
+                    var documents = new List<EmployeeDocument>
+                    {
+                        // Driver licenses
+                        new EmployeeDocument
+                        {
+                            EmployeeId = employees[0].EmpId,
+                            DocumentType = "Водительское удостоверение",
+                            DocumentNumber = "3AC456789",
+                            IssueDate = new DateTime(2015, 3, 10),
+                            ExpiryDate = new DateTime(2025, 3, 10),
+                            IssuedBy = "ГАИ УВД Могилевского облисполкома",
+                            Notes = "Категория D - пассажирский транспорт"
+                        },
+                        new EmployeeDocument
+                        {
+                            EmployeeId = employees[1].EmpId,
+                            DocumentType = "Водительское удостоверение",
+                            DocumentNumber = "3AC987654",
+                            IssueDate = new DateTime(2014, 6, 20),
+                            ExpiryDate = new DateTime(2024, 6, 20),
+                            IssuedBy = "ГАИ УВД Могилевского облисполкома",
+                            Notes = "Категория D - требуется продление"
+                        },
+                        // Medical certificates
+                        new EmployeeDocument
+                        {
+                            EmployeeId = employees[0].EmpId,
+                            DocumentType = "Медицинская справка водителя",
+                            DocumentNumber = "МС123456",
+                            IssueDate = new DateTime(2024, 1, 15),
+                            ExpiryDate = new DateTime(2025, 1, 15),
+                            IssuedBy = "Могилевская городская поликлиника №4",
+                            Notes = "Годен к управлению транспортными средствами категории D"
+                        },
+                        new EmployeeDocument
+                        {
+                            EmployeeId = employees[1].EmpId,
+                            DocumentType = "Медицинская справка водителя",
+                            DocumentNumber = "МС234567",
+                            IssueDate = new DateTime(2023, 11, 10),
+                            ExpiryDate = new DateTime(2024, 11, 10),
+                            IssuedBy = "Могилевская городская поликлиника №2",
+                            Notes = "Годен к управлению транспортными средствами категории D"
+                        },
+                        // Passports
+                        new EmployeeDocument
+                        {
+                            EmployeeId = employees[4].EmpId,
+                            DocumentType = "Паспорт",
+                            DocumentNumber = "MP3212345",
+                            IssueDate = new DateTime(2015, 7, 18),
+                            ExpiryDate = new DateTime(2030, 7, 18),
+                            IssuedBy = "Ленинским РОВД г. Могилева",
+                            Notes = "Действителен"
+                        }
+                    };
+                    await context.EmployeeDocuments.AddRangeAsync(documents);
+                    await context.SaveChangesAsync();
+                    logger?.LogInformation("Employee documents seeded successfully.");
+
+                    // Seed Employee Trainings
+                    var trainings = new List<EmployeeTraining>
+                    {
+                        new EmployeeTraining
+                        {
+                            EmployeeId = employees[0].EmpId,
+                            TrainingName = "Безопасность дорожного движения",
+                            Description = "Повышение квалификации водителей пассажирского транспорта",
+                            CompletionDate = new DateTime(2023, 5, 20),
+                            ExpiryDate = new DateTime(2024, 5, 20),
+                            CertificateNumber = "БДД-2023-456",
+                            IssuingOrganization = "Могилевский областной учебно-курсовой комбинат",
+                            IsMandatory = true
+                        },
+                        new EmployeeTraining
+                        {
+                            EmployeeId = employees[0].EmpId,
+                            TrainingName = "Оказание первой медицинской помощи",
+                            Description = "Курс по оказанию первой помощи пострадавшим",
+                            CompletionDate = new DateTime(2023, 9, 15),
+                            ExpiryDate = new DateTime(2026, 9, 15),
+                            CertificateNumber = "ПМП-2023-789",
+                            IssuingOrganization = "Белорусский Красный Крест",
+                            IsMandatory = true
+                        },
+                        new EmployeeTraining
+                        {
+                            EmployeeId = employees[1].EmpId,
+                            TrainingName = "Безопасность дорожного движения",
+                            Description = "Повышение квалификации водителей пассажирского транспорта",
+                            CompletionDate = new DateTime(2022, 8, 10),
+                            ExpiryDate = new DateTime(2024, 12, 1),
+                            CertificateNumber = "БДД-2022-123",
+                            IssuingOrganization = "Могилевский областной учебно-курсовой комбинат",
+                            IsMandatory = true
+                        },
+                        new EmployeeTraining
+                        {
+                            EmployeeId = employees[2].EmpId,
+                            TrainingName = "Ремонт и техническое обслуживание автобусов МАЗ",
+                            Description = "Специализированный курс по ремонту автобусов МАЗ",
+                            CompletionDate = new DateTime(2023, 3, 25),
+                            ExpiryDate = null,
+                            CertificateNumber = "РТО-МАЗ-2023-55",
+                            IssuingOrganization = "Минский автомобильный завод",
+                            IsMandatory = false
+                        },
+                        new EmployeeTraining
+                        {
+                            EmployeeId = employees[5].EmpId,
+                            TrainingName = "Работа с кассовым оборудованием",
+                            Description = "Обучение работе с современными кассовыми аппаратами",
+                            CompletionDate = new DateTime(2022, 11, 5),
+                            ExpiryDate = null,
+                            CertificateNumber = "КО-2022-334",
+                            IssuingOrganization = "Торгово-промышленная палата Могилевской области",
+                            IsMandatory = true
+                        }
+                    };
+                    await context.EmployeeTrainings.AddRangeAsync(trainings);
+                    await context.SaveChangesAsync();
+                    logger?.LogInformation("Employee trainings seeded successfully.");
+
+                    // Seed Emergency Contacts
+                    var emergencyContacts = new List<EmergencyContact>
+                    {
+                        new EmergencyContact
+                        {
+                            EmployeeId = employees[0].EmpId,
+                            ContactName = "Иванова Мария Петровна",
+                            Relationship = "Супруга",
+                            PhoneNumber = "+375293456700",
+                            AlternatePhoneNumber = "+375222123456",
+                            Address = "г. Могилев, ул. Ленинская, д. 45, кв. 12",
+                            IsPrimary = true
+                        },
+                        new EmergencyContact
+                        {
+                            EmployeeId = employees[1].EmpId,
+                            ContactName = "Петрова Елена Ивановна",
+                            Relationship = "Супруга",
+                            PhoneNumber = "+375296543211",
+                            Address = "г. Могилев, пр-т Мира, д. 23, кв. 5",
+                            IsPrimary = true
+                        },
+                        new EmergencyContact
+                        {
+                            EmployeeId = employees[2].EmpId,
+                            ContactName = "Сидорова Ольга Владимировна",
+                            Relationship = "Мать",
+                            PhoneNumber = "+375297654322",
+                            Address = "г. Могилев, ул. Первомайская, д. 65",
+                            IsPrimary = true
+                        },
+                        new EmergencyContact
+                        {
+                            EmployeeId = employees[4].EmpId,
+                            ContactName = "Морозов Владимир Андреевич",
+                            Relationship = "Сын",
+                            PhoneNumber = "+375299876544",
+                            AlternatePhoneNumber = "+375445123456",
+                            Address = "г. Могилев, ул. Советская, д. 89, кв. 15",
+                            IsPrimary = true
+                        }
+                    };
+                    await context.EmergencyContacts.AddRangeAsync(emergencyContacts);
+                    await context.SaveChangesAsync();
+                    logger?.LogInformation("Emergency contacts seeded successfully.");
+
+                    // Seed Vacation Requests
+                    var vacationRequests = new List<VacationRequest>
+                    {
+                        new VacationRequest
+                        {
+                            EmployeeId = employees[0].EmpId,
+                            StartDate = new DateTime(2024, 7, 1),
+                            EndDate = new DateTime(2024, 7, 14),
+                            VacationType = "Ежегодный оплачиваемый отпуск",
+                            Reason = "Плановый отпуск",
+                            Status = "Approved",
+                            ApprovedByUserId = admin.UserId,
+                            ApprovalDate = new DateTime(2024, 5, 15),
+                            ApprovalNotes = "Утверждено",
+                            DaysRequested = 14,
+                            CreatedAt = new DateTime(2024, 5, 1)
+                        },
+                        new VacationRequest
+                        {
+                            EmployeeId = employees[1].EmpId,
+                            StartDate = new DateTime(2024, 8, 10),
+                            EndDate = new DateTime(2024, 8, 24),
+                            VacationType = "Ежегодный оплачиваемый отпуск",
+                            Reason = "Летний отпуск",
+                            Status = "Approved",
+                            ApprovedByUserId = admin.UserId,
+                            ApprovalDate = new DateTime(2024, 6, 20),
+                            ApprovalNotes = "Утверждено",
+                            DaysRequested = 15,
+                            CreatedAt = new DateTime(2024, 6, 10)
+                        },
+                        new VacationRequest
+                        {
+                            EmployeeId = employees[2].EmpId,
+                            StartDate = DateTime.Now.AddDays(30),
+                            EndDate = DateTime.Now.AddDays(44),
+                            VacationType = "Ежегодный оплачиваемый отпуск",
+                            Reason = "Планирую поездку",
+                            Status = "Pending",
+                            DaysRequested = 15,
+                            CreatedAt = DateTime.Now.AddDays(-2)
+                        },
+                        new VacationRequest
+                        {
+                            EmployeeId = employees[5].EmpId,
+                            StartDate = new DateTime(2024, 6, 15),
+                            EndDate = new DateTime(2024, 6, 17),
+                            VacationType = "Отпуск без сохранения заработной платы",
+                            Reason = "Семейные обстоятельства",
+                            Status = "Approved",
+                            ApprovedByUserId = admin.UserId,
+                            ApprovalDate = new DateTime(2024, 6, 10),
+                            ApprovalNotes = "Утверждено по семейным обстоятельствам",
+                            DaysRequested = 3,
+                            CreatedAt = new DateTime(2024, 6, 5)
+                        },
+                        new VacationRequest
+                        {
+                            EmployeeId = employees[4].EmpId,
+                            StartDate = new DateTime(2024, 5, 1),
+                            EndDate = new DateTime(2024, 5, 3),
+                            VacationType = "Больничный лист",
+                            Reason = "ОРВИ",
+                            Status = "Approved",
+                            ApprovedByUserId = admin.UserId,
+                            ApprovalDate = new DateTime(2024, 5, 1),
+                            ApprovalNotes = "Больничный лист предоставлен",
+                            DaysRequested = 3,
+                            CreatedAt = new DateTime(2024, 5, 1)
+                        }
+                    };
+                    await context.VacationRequests.AddRangeAsync(vacationRequests);
+                    await context.SaveChangesAsync();
+                    logger?.LogInformation("Vacation requests seeded successfully.");
 
                     logger?.LogInformation("All initial data seeded successfully.");
                 }

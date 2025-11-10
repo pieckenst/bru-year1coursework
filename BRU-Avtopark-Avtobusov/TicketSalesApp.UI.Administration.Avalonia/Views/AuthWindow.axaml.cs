@@ -1,30 +1,36 @@
 // UI/Avalonia/Views/AuthWindow.cs
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
-using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using MsBox.Avalonia;
+using System;
 using Serilog;
-using TicketSalesApp.UI.Administration.Avalonia.ViewModels;
+using PleasantUI.Controls;
+//using PleasantUI.Controls;
 
-namespace TicketSalesApp.UI.Administration.Avalonia.Views;
-
-public partial class AuthWindow : Window
+namespace TicketSalesApp.UI.Administration.Avalonia.Views
 {
-    public AuthWindow()
+    public partial class AuthWindow : PleasantWindow 
     {
-        InitializeComponent();
-        DataContext = new AuthViewModel();
-        Log.Debug("AuthWindow initialized");
-    }
+        public AuthWindow()
+        {
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "An error occurred during the initialization of AuthWindow.");
+                ShowErrorBox(e.Message);
+            }
+        }
 
-    private async void ShowErrorMessage(string message)
-    {
-        var msBoxStandardWindow = MessageBoxManager
-            .GetMessageBoxStandard("Error", message,
-                ButtonEnum.Ok,
-                MsBox.Avalonia.Enums.Icon.Error);
+        private async void ShowErrorBox(string errorMessage)
+        {
+            var box = MessageBoxManager
+                .GetMessageBoxStandard("Error", errorMessage,
+                    ButtonEnum.YesNo);
 
-        await msBoxStandardWindow.ShowAsync();
+            var result = await box.ShowAsync();
+        }
     }
 }
