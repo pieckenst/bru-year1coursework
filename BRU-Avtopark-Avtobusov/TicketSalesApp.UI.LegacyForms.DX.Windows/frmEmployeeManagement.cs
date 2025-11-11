@@ -77,6 +77,18 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
         public DateTime EmployedSince { get { return EmployeeData.EmployedSince; } }
         public string JobTitle { get { return EmployeeData.Job != null ? EmployeeData.Job.JobTitle : "[N/A]"; } }
         public long JobId { get { return EmployeeData.JobId; } }
+        
+        // New HR fields
+        public string DepartmentName { get { return EmployeeData.Department != null ? EmployeeData.Department.DepartmentName : "[N/A]"; } }
+        public long? DepartmentId { get { return EmployeeData.DepartmentId; } }
+        public string Email { get { return EmployeeData.Email ?? ""; } }
+        public string PersonalPhone { get { return EmployeeData.PersonalPhone ?? ""; } }
+        public string WorkPhone { get { return EmployeeData.WorkPhone ?? ""; } }
+        public string Status { get { return EmployeeData.IsActive ? "Активен" : "Уволен"; } }
+        public DateTime? DateOfBirth { get { return EmployeeData.DateOfBirth; } }
+        public string Address { get { return EmployeeData.Address ?? ""; } }
+        public string DriverLicenseNumber { get { return EmployeeData.DriverLicenseNumber ?? ""; } }
+        public string DriverLicenseCategory { get { return EmployeeData.DriverLicenseCategory ?? ""; } }
     }
 
     public partial class frmEmployeeManagement : DevExpress.XtraEditors.XtraForm
@@ -86,7 +98,13 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
         private readonly string _baseUrl = "http://localhost:5000/api";
         private BindingList<EmployeeViewModel> _employeeViewModels = new BindingList<EmployeeViewModel>();
         private List<Job> _availableJobs = new List<Job>();
+        
+        // Essential fields to preserve during circular reference cleanup
+        private static readonly string[] ESSENTIAL_JOB_FIELDS = new string[] { "jobId", "jobTitle", "salary" };
+        private static readonly string[] ESSENTIAL_DEPARTMENT_FIELDS = new string[] { "departmentId", "departmentName" };
+        private static readonly string[] ESSENTIAL_EMPLOYEE_FIELDS = new string[] { "empId", "surname", "name", "patronym", "email", "personalPhone", "workPhone", "address", "dateOfBirth", "passportSeries", "passportNumber", "inn", "snils", "driverLicenseNumber", "driverLicenseCategory", "driverLicenseIssueDate", "driverLicenseExpiryDate", "medicalCertificateNumber", "medicalCertificateIssueDate", "medicalCertificateExpiryDate", "lastMedicalCheckDate", "nextMedicalCheckDate", "hasPassengerTransportCertification", "hasDangerousGoodsCertification", "employedSince", "isActive", "jobId", "job", "departmentId", "department" };
         private List<Marshut> _availableRoutes = new List<Marshut>();
+        private List<Department> _availableDepartments = new List<Department>();
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
         {
             PreserveReferencesHandling = PreserveReferencesHandling.Objects,
@@ -184,14 +202,17 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             string jobsJsonRaw = null;
             string routesJsonRaw = null;
             string employeesJsonRaw = null;
+            string departmentsJsonRaw = null;
 
             List<Job> loadedJobs = new List<Job>();
             List<Marshut> loadedRoutes = new List<Marshut>();
             List<Employee> loadedEmployees = new List<Employee>();
+            List<Department> loadedDepartments = new List<Department>();
 
             XDocument jobsXml = XDocument.Parse("<Root><Jobs></Jobs></Root>"); // Default empty
             XDocument routesXml = XDocument.Parse("<Root><Routes></Routes></Root>"); // Default empty
             XDocument employeesXml = XDocument.Parse("<Root><Employees></Employees></Root>"); // Default empty
+            XDocument departmentsXml = XDocument.Parse("<Root><Departments></Departments></Root>"); // Default empty
 
             try
             {
@@ -239,8 +260,27 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
 
                 try
                 {
+                    Log.Debug("Fetching Departments synchronously...");
+                    var departmentsApiUrl = string.Format("{0}/Departments", _baseUrl);
+                    HttpResponseMessage departmentsResponse = client.GetAsync(departmentsApiUrl).Result;
+                    if (departmentsResponse.IsSuccessStatusCode)
+                    {
+                        byte[] departmentsBytes = departmentsResponse.Content.ReadAsByteArrayAsync().Result;
+                        departmentsJsonRaw = Encoding.UTF8.GetString(departmentsBytes);
+                        Log.Debug("Departments JSON fetched successfully.");
+                    }
+                    else { throw new Exception("Failed to load Departments: " + departmentsResponse.ReasonPhrase); }
+                }
+                catch (Exception ex)
+                {
+                    string errorMsg = string.Format("Error fetching Departments. Exception: {0}", ex.ToString());
+                    Log.Error(errorMsg); // Log error but continue
+                }
+
+                try
+                {
                     Log.Debug("Fetching Employees synchronously...");
-                    var employeesApiUrl = string.Format("{0}/Employees?includeJob=true&includeRoute=true", _baseUrl);
+                    var employeesApiUrl = string.Format("{0}/Employees?includeJob=true&includeRoute=true&includeDepartment=true", _baseUrl);
                     HttpResponseMessage employeesResponse = client.GetAsync(employeesApiUrl).Result;
                     if (employeesResponse.IsSuccessStatusCode)
                     {
@@ -292,6 +332,24 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                     string errorMsg = string.Format("Error processing Routes JSON to XML. Exception: {0}", ex.ToString());
                     Log.Error(errorMsg);
                     // routesXml retains its default empty value
+                }
+
+                // --- Process Departments ---
+                try
+                {
+                    if (!string.IsNullOrEmpty(departmentsJsonRaw))
+                    {
+                        departmentsXml = ProcessJsonToXml(departmentsJsonRaw, "Departments");
+                        Log.Debug("Departments JSON processed for XML conversion.");
+                    } else {
+                        Log.Warn("departmentsJsonRaw was null or empty, using default empty Departments XML.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string errorMsg = string.Format("Error processing Departments JSON to XML. Exception: {0}", ex.ToString());
+                    Log.Error(errorMsg);
+                    // departmentsXml retains its default empty value
                 }
 
                 // --- Process Employees ---
@@ -391,6 +449,54 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                     Log.Error(errorMsgXml);
                     // Continue with potentially empty loadedJobs
                 }
+
+                 // --- Parse Departments XML ---
+                 try
+                 {
+                     // Iterate directly over <Departments> elements under <Root>
+                     foreach (XElement deptNode in departmentsXml.Root.Elements("Departments"))
+                     {
+                         try
+                         {
+                             if (!deptNode.HasElements)
+                             {
+                                 Log.Debug("Skipping empty <Departments> element.");
+                                 continue;
+                             }
+
+                             Department dept = new Department();
+                             long deptId;
+                             XElement deptIdElement = deptNode.Element("departmentId");
+                             if (deptIdElement != null && long.TryParse(deptIdElement.Value, out deptId))
+                             {
+                                 dept.DepartmentId = deptId;
+                             }
+                             else { Log.Warn(string.Format("Could not parse departmentId for element: {0}. Skipping department.", deptNode.ToString())); continue; }
+
+                             XElement nameElement = deptNode.Element("departmentName");
+                             dept.DepartmentName = (nameElement != null) ? nameElement.Value : string.Empty;
+
+                             XElement codeElement = deptNode.Element("departmentCode");
+                             dept.DepartmentCode = (codeElement != null) ? codeElement.Value : string.Empty;
+
+                             XElement descElement = deptNode.Element("description");
+                             dept.Description = (descElement != null) ? descElement.Value : string.Empty;
+
+                             dept.Employees = new List<Employee>(); // Initialize
+                             dept.ChildDepartments = new List<Department>();
+
+                             loadedDepartments.Add(dept);
+                         }
+                         catch (Exception exNode) { Log.Error(string.Format("Error parsing individual Department XML node: {0}. Node: {1}", exNode.ToString(), deptNode.ToString())); }
+                     }
+                     Log.Debug("Parsed {0} departments from XML.", loadedDepartments.Count);
+                 }
+                 catch (Exception ex)
+                 {
+                     string errorMsgXml = string.Format("Error parsing Departments XML. Exception: {0}", ex.ToString());
+                     Log.Error(errorMsgXml);
+                     // Continue
+                 }
 
                  try
                  {
@@ -527,6 +633,153 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                                 Log.Warn(string.Format("Could not determine JobId for EmpId {0}", emp.EmpId));
                             }
 
+                            // Parse DepartmentId
+                            long departmentId = 0;
+                            XElement deptIdElement = empNode.Element("departmentId");
+                            XElement deptContainerElement = empNode.Element("department");
+                            
+                            if (deptIdElement != null && long.TryParse(deptIdElement.Value, out departmentId))
+                            {
+                                emp.DepartmentId = departmentId;
+                            }
+                            else if (deptContainerElement != null)
+                            {
+                                XElement nestedDeptIdElement = deptContainerElement.Element("departmentId");
+                                if (nestedDeptIdElement != null && long.TryParse(nestedDeptIdElement.Value, out departmentId))
+                                {
+                                    emp.DepartmentId = departmentId;
+                                }
+                            }
+
+                            // Parse other HR fields
+                            XElement emailElement = empNode.Element("email");
+                            emp.Email = (emailElement != null) ? emailElement.Value : null;
+
+                            XElement personalPhoneElement = empNode.Element("personalPhone");
+                            emp.PersonalPhone = (personalPhoneElement != null) ? personalPhoneElement.Value : null;
+
+                            XElement workPhoneElement = empNode.Element("workPhone");
+                            emp.WorkPhone = (workPhoneElement != null) ? workPhoneElement.Value : null;
+
+                            XElement addressElement = empNode.Element("address");
+                            emp.Address = (addressElement != null) ? addressElement.Value : null;
+
+                            // Parse Date of Birth
+                            DateTime dateOfBirth;
+                            XElement dobElement = empNode.Element("dateOfBirth");
+                            if (dobElement != null &&
+                                (DateTime.TryParse(dobElement.Value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out dateOfBirth) ||
+                                 DateTime.TryParse(dobElement.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirth) ||
+                                 DateTime.TryParseExact(dobElement.Value, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirth)))
+                            {
+                                emp.DateOfBirth = dateOfBirth.ToLocalTime();
+                            }
+
+                            // Parse Passport
+                            XElement passportSeriesElement = empNode.Element("passportSeries");
+                            emp.PassportSeries = (passportSeriesElement != null) ? passportSeriesElement.Value : null;
+                            XElement passportNumberElement = empNode.Element("passportNumber");
+                            emp.PassportNumber = (passportNumberElement != null) ? passportNumberElement.Value : null;
+
+                            // Parse INN and SNILS
+                            XElement innElement = empNode.Element("inn");
+                            emp.INN = (innElement != null) ? innElement.Value : null;
+                            XElement snilsElement = empNode.Element("snils");
+                            emp.SNILS = (snilsElement != null) ? snilsElement.Value : null;
+
+                            // Parse Driver License
+                            XElement dlNumberElement = empNode.Element("driverLicenseNumber");
+                            emp.DriverLicenseNumber = (dlNumberElement != null) ? dlNumberElement.Value : null;
+                            XElement dlCategoryElement = empNode.Element("driverLicenseCategory");
+                            emp.DriverLicenseCategory = (dlCategoryElement != null) ? dlCategoryElement.Value : null;
+
+                            DateTime dlIssueDate;
+                            XElement dlIssueDateElement = empNode.Element("driverLicenseIssueDate");
+                            if (dlIssueDateElement != null &&
+                                (DateTime.TryParse(dlIssueDateElement.Value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out dlIssueDate) ||
+                                 DateTime.TryParse(dlIssueDateElement.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out dlIssueDate) ||
+                                 DateTime.TryParseExact(dlIssueDateElement.Value, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out dlIssueDate)))
+                            {
+                                emp.DriverLicenseIssueDate = dlIssueDate.ToLocalTime();
+                            }
+
+                            DateTime dlExpiryDate;
+                            XElement dlExpiryDateElement = empNode.Element("driverLicenseExpiryDate");
+                            if (dlExpiryDateElement != null &&
+                                (DateTime.TryParse(dlExpiryDateElement.Value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out dlExpiryDate) ||
+                                 DateTime.TryParse(dlExpiryDateElement.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out dlExpiryDate) ||
+                                 DateTime.TryParseExact(dlExpiryDateElement.Value, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out dlExpiryDate)))
+                            {
+                                emp.DriverLicenseExpiryDate = dlExpiryDate.ToLocalTime();
+                            }
+
+                            // Parse Medical Certificate
+                            XElement medCertNumberElement = empNode.Element("medicalCertificateNumber");
+                            emp.MedicalCertificateNumber = (medCertNumberElement != null) ? medCertNumberElement.Value : null;
+
+                            DateTime medCertIssueDate;
+                            XElement medCertIssueDateElement = empNode.Element("medicalCertificateIssueDate");
+                            if (medCertIssueDateElement != null &&
+                                (DateTime.TryParse(medCertIssueDateElement.Value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out medCertIssueDate) ||
+                                 DateTime.TryParse(medCertIssueDateElement.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out medCertIssueDate) ||
+                                 DateTime.TryParseExact(medCertIssueDateElement.Value, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out medCertIssueDate)))
+                            {
+                                emp.MedicalCertificateIssueDate = medCertIssueDate.ToLocalTime();
+                            }
+
+                            DateTime medCertExpiryDate;
+                            XElement medCertExpiryDateElement = empNode.Element("medicalCertificateExpiryDate");
+                            if (medCertExpiryDateElement != null &&
+                                (DateTime.TryParse(medCertExpiryDateElement.Value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out medCertExpiryDate) ||
+                                 DateTime.TryParse(medCertExpiryDateElement.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out medCertExpiryDate) ||
+                                 DateTime.TryParseExact(medCertExpiryDateElement.Value, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out medCertExpiryDate)))
+                            {
+                                emp.MedicalCertificateExpiryDate = medCertExpiryDate.ToLocalTime();
+                            }
+
+                            DateTime lastMedCheck;
+                            XElement lastMedCheckElement = empNode.Element("lastMedicalCheckDate");
+                            if (lastMedCheckElement != null &&
+                                (DateTime.TryParse(lastMedCheckElement.Value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out lastMedCheck) ||
+                                 DateTime.TryParse(lastMedCheckElement.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out lastMedCheck) ||
+                                 DateTime.TryParseExact(lastMedCheckElement.Value, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out lastMedCheck)))
+                            {
+                                emp.LastMedicalCheckDate = lastMedCheck.ToLocalTime();
+                            }
+
+                            DateTime nextMedCheck;
+                            XElement nextMedCheckElement = empNode.Element("nextMedicalCheckDate");
+                            if (nextMedCheckElement != null &&
+                                (DateTime.TryParse(nextMedCheckElement.Value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out nextMedCheck) ||
+                                 DateTime.TryParse(nextMedCheckElement.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out nextMedCheck) ||
+                                 DateTime.TryParseExact(nextMedCheckElement.Value, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out nextMedCheck)))
+                            {
+                                emp.NextMedicalCheckDate = nextMedCheck.ToLocalTime();
+                            }
+
+                            // Parse Certifications
+                            XElement hasPassengerCertElement = empNode.Element("hasPassengerTransportCertification");
+                            bool hasPassengerCert;
+                            if (hasPassengerCertElement != null && bool.TryParse(hasPassengerCertElement.Value, out hasPassengerCert))
+                            {
+                                emp.HasPassengerTransportCertification = hasPassengerCert;
+                            }
+
+                            XElement hasDangerousCertElement = empNode.Element("hasDangerousGoodsCertification");
+                            bool hasDangerousCert;
+                            if (hasDangerousCertElement != null && bool.TryParse(hasDangerousCertElement.Value, out hasDangerousCert))
+                            {
+                                emp.HasDangerousGoodsCertification = hasDangerousCert;
+                            }
+
+                            XElement isActiveElement = empNode.Element("isActive");
+                            bool isActive;
+                            if (isActiveElement != null && bool.TryParse(isActiveElement.Value, out isActive))
+                            {
+                                emp.IsActive = isActive;
+                            }
+                            else { emp.IsActive = true; } // Default to active
+
                             loadedEmployees.Add(emp);
                         }
                         catch (Exception exNode) { Log.Error(string.Format("Error parsing individual Employee XML node: {0}. Node: {1}", exNode.ToString(), empNode.ToString())); }
@@ -545,6 +798,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                 Log.Debug("Populating internal collections and UI...");
                 _availableJobs = loadedJobs;
                 _availableRoutes = loadedRoutes;
+                _availableDepartments = loadedDepartments;
 
                 foreach (var emp in loadedEmployees)
                 {
@@ -566,6 +820,22 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                          Log.Debug(logMsg);
                     }
                     // --- END Debug Logging ---
+
+                    // Link Department
+                    if (emp.DepartmentId.HasValue)
+                    {
+                        emp.Department = _availableDepartments.FirstOrDefault(d => d.DepartmentId == emp.DepartmentId.Value);
+                        if (emp.Department != null)
+                        {
+                            string deptLogMsg = string.Format("Successfully linked Department ID {0} ('{1}') to Employee ID {2}.", emp.Department.DepartmentId, emp.Department.DepartmentName, emp.EmpId);
+                            Log.Debug(deptLogMsg);
+                        }
+                        else
+                        {
+                            string deptLogMsg = string.Format("Could not find/link Department with ID {0} for Employee ID {1}.", emp.DepartmentId.Value, emp.EmpId);
+                            Log.Warn(deptLogMsg);
+                        }
+                    }
                 }
 
                 var tempViewModelList = loadedEmployees.Select(emp => new EmployeeViewModel(emp)).ToList();
@@ -583,8 +853,8 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                 if (this.InvokeRequired) { this.BeginInvoke(updateAction); }
                 else { updateAction(); }
 
-                Log.Info("Synchronous data load completed successfully using manual array handling. Loaded {0} jobs, {1} routes, {2} employees.",
-                         _availableJobs.Count, _availableRoutes.Count, _employeeViewModels.Count);
+                Log.Info("Synchronous data load completed successfully using manual array handling. Loaded {0} jobs, {1} routes, {2} departments, {3} employees.",
+                         _availableJobs.Count, _availableRoutes.Count, _availableDepartments.Count, _employeeViewModels.Count);
             }
             catch (Exception ex)
             {
@@ -595,6 +865,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                     if (this.IsDisposed) return;
                      _availableJobs.Clear();
                      _availableRoutes.Clear();
+                     _availableDepartments.Clear();
                 _employeeViewModels.Clear();
                      XtraMessageBox.Show("Произошла критическая ошибка при загрузке данных. См. лог.\n" + ex.Message, "Ошибка Загрузки", MessageBoxButtons.OK, MessageBoxIcon.Error);
                  };
@@ -716,7 +987,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                 // Clean the RESOLVED items
                 foreach (JToken item in resolvedItems)
                 {
-                    JToken cleanedItem = CleanAndTransformJsonToken(item);
+                    JToken cleanedItem = CleanAndTransformJsonToken(item, globalIdMap);
                     if (cleanedItem != null && cleanedItem.Type != JTokenType.Null)
                     {
                         cleanedItems.Add(cleanedItem);
@@ -738,7 +1009,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             else
             {
                 Log.Debug(string.Format("Root token for {0} is not the typical {{$id,$values}} object (Type: {1}). Cleaning token directly.", rootElementName, rootToken.Type));
-                JToken cleanedToken = CleanAndTransformJsonToken(rootToken);
+                JToken cleanedToken = CleanAndTransformJsonToken(rootToken, globalIdMap);
                 
                 // If cleaning resulted in an array, create the structure {RootName: cleanedArray}
                 if (cleanedToken is JArray)
@@ -802,8 +1073,40 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             }
         }
 
+        // Helper method to extract essential fields from an object, including nested essential objects
+        private static JObject ExtractEssentialFields(JObject obj, string[] essentialFields)
+        {
+            if (obj == null) return new JObject();
+            
+            JObject result = new JObject();
+            foreach (string fieldName in essentialFields)
+            {
+                JToken value = obj[fieldName];
+                if (value == null || value.Type == JTokenType.Null) continue;
+                
+                // Copy scalar values directly
+                if (value.Type != JTokenType.Object && value.Type != JTokenType.Array)
+                {
+                    result[fieldName] = value.DeepClone();
+                }
+                // For nested objects, recursively extract their essential fields
+                else if (value.Type == JTokenType.Object)
+                {
+                    JObject nestedObj = (JObject)value;
+                    // Determine which essential fields to use based on nested object type
+                    if (fieldName == "job" || nestedObj["jobTitle"] != null)
+                        result[fieldName] = ExtractEssentialFields(nestedObj, ESSENTIAL_JOB_FIELDS);
+                    else if (fieldName == "department" || nestedObj["departmentName"] != null)
+                        result[fieldName] = ExtractEssentialFields(nestedObj, ESSENTIAL_DEPARTMENT_FIELDS);
+                    // Skip unknown nested objects to avoid infinite recursion
+                }
+                // Skip arrays to avoid recursion
+            }
+            return result;
+        }
+        
         // --- MODIFIED HELPER METHOD for JToken Cleaning ---
-        private static JToken CleanAndTransformJsonToken(JToken token)
+        private static JToken CleanAndTransformJsonToken(JToken token, Dictionary<string, JObject> globalIdMap)
         {
             if (token == null) return null;
 
@@ -815,15 +1118,56 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                     {
                         JObject obj = (JObject)token;
 
-                        // Check for {$ref: "..."} object
+                        // Check for {$ref: "..."} object - resolve it using global map and extract essential fields
                         if (obj.Count == 1 && obj.Property("$ref") != null)
                         {
                              string refValue = obj.Property("$ref").Value.ToString();
                              string originalPropertyName = (token.Parent is JProperty) ? ((JProperty)token.Parent).Name : "";
-                             string refLogMsg = string.Format("Found $ref '{0}' under property '{1}', replacing with empty object {{}}.", refValue, originalPropertyName);
-                             Log.Debug(refLogMsg);
-                             return new JObject(); // Replace ALL $refs with an empty object
+                             
+                             // Try to resolve the reference using global ID map
+                             if (globalIdMap.ContainsKey(refValue))
+                             {
+                                 JObject referencedObj = globalIdMap[refValue];
+                                 Log.Debug("Resolving $ref '{0}' under property '{1}' and extracting essential fields.", refValue, originalPropertyName);
+                                 
+                                 // Extract essential fields based on object type
+                                 if (referencedObj["jobTitle"] != null || originalPropertyName == "job")
+                                     return ExtractEssentialFields(referencedObj, ESSENTIAL_JOB_FIELDS);
+                                 else if (referencedObj["departmentName"] != null || originalPropertyName == "department")
+                                     return ExtractEssentialFields(referencedObj, ESSENTIAL_DEPARTMENT_FIELDS);
+                                 else
+                                 {
+                                     Log.Warn("Could not determine type for $ref '{0}'. Returning empty object.", refValue);
+                                     return new JObject();
+                                 }
+                             }
+                             else
+                             {
+                                 Log.Warn("Could not resolve $ref '{0}' (not found in global map). Returning empty object.", refValue);
+                                 return new JObject(); // Ref not found
+                             }
                          }
+                         
+                        // Detect circular references by checking if we're processing the same object multiple times
+                        // This happens when objects reference each other (Employee -> Job -> Employees)
+                        JProperty idProp = obj.Property("$id");
+                        if (idProp != null)
+                        {
+                            // Object has $id - check if it might contain circular refs based on context
+                            string originalPropertyName = (token.Parent is JProperty) ? ((JProperty)token.Parent).Name : "";
+                            
+                            // If this is a nested Job or Department object, extract essential fields only
+                            if (obj["jobTitle"] != null || originalPropertyName == "job")
+                            {
+                                Log.Debug("Extracting essential fields from Job object (ID: {0}) to prevent circular references.", idProp.Value);
+                                return ExtractEssentialFields(obj, ESSENTIAL_JOB_FIELDS);
+                            }
+                            else if (obj["departmentName"] != null || originalPropertyName == "department")
+                            {
+                                Log.Debug("Extracting essential fields from Department object (ID: {0}) to prevent circular references.", idProp.Value);
+                                return ExtractEssentialFields(obj, ESSENTIAL_DEPARTMENT_FIELDS);
+                            }
+                        }
 
                         // Process regular object properties recursively
                         JObject cleanedObj = new JObject();
@@ -836,7 +1180,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                              }
 
                             // Recursively clean the property's value FIRST
-                            JToken cleanedValue = CleanAndTransformJsonToken(property.Value);
+                            JToken cleanedValue = CleanAndTransformJsonToken(property.Value, globalIdMap);
 
                             // Check for nested $values wrapper in the cleaned value
                             JObject valueObj = cleanedValue as JObject;
@@ -845,7 +1189,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                                 string nestedValuesLogMsg = string.Format("Found nested $values wrapper in property '{0}', replacing with inner array content.", property.Name);
                                 Log.Debug(nestedValuesLogMsg);
                                 // Use the cleaned inner array directly (call CleanAndTransformJsonToken on the value)
-                                cleanedValue = CleanAndTransformJsonToken(valueObj.Property("$values").Value); 
+                                cleanedValue = CleanAndTransformJsonToken(valueObj.Property("$values").Value, globalIdMap); 
                             }
 
                             // Add the property if the cleaned value is not null
@@ -866,7 +1210,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                         JArray cleanedArray = new JArray();
                         foreach (var item in array)
                         {
-                            JToken cleanedItem = CleanAndTransformJsonToken(item); // Recursively clean each item
+                            JToken cleanedItem = CleanAndTransformJsonToken(item, globalIdMap); // Recursively clean each item
                             // Add item if it's not null
                             if (cleanedItem != null && cleanedItem.Type != JTokenType.Null)
                             {
@@ -909,45 +1253,182 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             {
                 bool isAdding = employeeToEdit == null;
                 form.Text = isAdding ? "Добавить сотрудника" : "Редактировать сотрудника";
-                form.Width = 550;
-                form.Height = 450;
+                form.Width = 900;
+                form.Height = 700;
                 form.StartPosition = FormStartPosition.CenterParent;
-                form.FormBorderStyle = FormBorderStyle.FixedDialog;
-                form.MinimizeBox = false;
-                form.MaximizeBox = false;
+                form.FormBorderStyle = FormBorderStyle.Sizable;
+                form.MinimizeBox = true;
+                form.MaximizeBox = true;
 
-                var panel = new Panel { Dock = DockStyle.Fill, Padding = new Padding(10) };
-                form.Controls.Add(panel);
+                // Scrollable panel for all fields
+                var scrollPanel = new Panel { Dock = DockStyle.Fill, AutoScroll = true };
+                form.Controls.Add(scrollPanel);
+                
+                var panel = new Panel { Width = 850, Height = 1500, Location = new System.Drawing.Point(0, 0) };
+                scrollPanel.Controls.Add(panel);
 
                 int yPos = 20;
-                int labelWidth = 150;
-                int controlWidth = 350;
+                int labelWidth = 180;
+                int controlWidth = 250;
                 int spacing = 30;
+                int col1X = 10;
+                int col2X = col1X + labelWidth + controlWidth + 30;
 
-                var surnameLabel = new LabelControl { Text = "Фамилия:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(10, yPos) };
-                var surnameBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(10 + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.Surname : "") };
-                panel.Controls.AddRange(new Control[] { surnameLabel, surnameBox });
+                // === PERSONAL INFO ===
+                var surnameLabel = new LabelControl { Text = "Фамилия:*", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col1X, yPos) };
+                var surnameBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(col1X + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.Surname : "") };
+                var nameLabel = new LabelControl { Text = "Имя:*", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col2X, yPos) };
+                var nameBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(col2X + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.Name : "") };
+                panel.Controls.AddRange(new Control[] { surnameLabel, surnameBox, nameLabel, nameBox });
                 yPos += spacing;
 
-                var nameLabel = new LabelControl { Text = "Имя:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(10, yPos) };
-                var nameBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(10 + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.Name : "") };
-                panel.Controls.AddRange(new Control[] { nameLabel, nameBox });
+                var patronymLabel = new LabelControl { Text = "Отчество:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col1X, yPos) };
+                var patronymBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(col1X + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.Patronym : "") };
+                var emailLabel = new LabelControl { Text = "Email:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col2X, yPos) };
+                var emailBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(col2X + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.Email : "") };
+                panel.Controls.AddRange(new Control[] { patronymLabel, patronymBox, emailLabel, emailBox });
                 yPos += spacing;
 
-                var patronymLabel = new LabelControl { Text = "Отчество:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(10, yPos) };
-                var patronymBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(10 + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.Patronym : "") };
-                panel.Controls.AddRange(new Control[] { patronymLabel, patronymBox });
+                var personalPhoneLabel = new LabelControl { Text = "Личный телефон:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col1X, yPos) };
+                var personalPhoneBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(col1X + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.PersonalPhone : "") };
+                var workPhoneLabel = new LabelControl { Text = "Рабочий телефон:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col2X, yPos) };
+                var workPhoneBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(col2X + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.WorkPhone : "") };
+                panel.Controls.AddRange(new Control[] { personalPhoneLabel, personalPhoneBox, workPhoneLabel, workPhoneBox });
                 yPos += spacing;
 
-                var employedDateLabel = new LabelControl { Text = "Дата приема:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(10, yPos) };
+                var addressLabel = new LabelControl { Text = "Адрес:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col1X, yPos) };
+                var addressBox = new TextEdit { Width = 600, Location = new System.Drawing.Point(col1X + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.Address : "") };
+                panel.Controls.AddRange(new Control[] { addressLabel, addressBox });
+                yPos += spacing;
+
+                // Date of Birth
+                var dobLabel = new LabelControl { Text = "Дата рождения:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col1X, yPos) };
+                var dobEdit = new DateEdit { Width = controlWidth, Location = new System.Drawing.Point(col1X + labelWidth + 10, yPos) };
+                dobEdit.Properties.Mask.EditMask = "dd.MM.yyyy";
+                dobEdit.Properties.Mask.UseMaskAsDisplayFormat = true;
+                dobEdit.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
+                if (employeeToEdit != null && employeeToEdit.DateOfBirth.HasValue && employeeToEdit.DateOfBirth.Value.Year > 1900)
+                    dobEdit.DateTime = employeeToEdit.DateOfBirth.Value;
+                else
+                    dobEdit.EditValue = null;
+                panel.Controls.AddRange(new Control[] { dobLabel, dobEdit });
+                yPos += spacing + 10;
+
+                // === DOCUMENTS SECTION ===
+                var docSectionLabel = new LabelControl { Text = "=== ДОКУМЕНТЫ ===", Font = new Font("Tahoma", 9, FontStyle.Bold), AutoSizeMode = LabelAutoSizeMode.None, Width = 800, Location = new System.Drawing.Point(col1X, yPos) };
+                panel.Controls.Add(docSectionLabel);
+                yPos += spacing;
+
+                // Passport
+                var passportSeriesLabel = new LabelControl { Text = "Серия паспорта:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col1X, yPos) };
+                var passportSeriesBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(col1X + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.PassportSeries : "") };
+                var passportNumberLabel = new LabelControl { Text = "Номер паспорта:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col2X, yPos) };
+                var passportNumberBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(col2X + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.PassportNumber : "") };
+                panel.Controls.AddRange(new Control[] { passportSeriesLabel, passportSeriesBox, passportNumberLabel, passportNumberBox });
+                yPos += spacing;
+
+                // INN / SNILS
+                var innLabel = new LabelControl { Text = "ИНН:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col1X, yPos) };
+                var innBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(col1X + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.INN : "") };
+                var snilsLabel = new LabelControl { Text = "СНИЛС:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col2X, yPos) };
+                var snilsBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(col2X + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.SNILS : "") };
+                panel.Controls.AddRange(new Control[] { innLabel, innBox, snilsLabel, snilsBox });
+                yPos += spacing + 10;
+
+                // === DRIVER LICENSE SECTION ===
+                var driverSectionLabel = new LabelControl { Text = "=== ВОДИТЕЛЬСКОЕ УДОСТОВЕРЕНИЕ ===", Font = new Font("Tahoma", 9, FontStyle.Bold), AutoSizeMode = LabelAutoSizeMode.None, Width = 800, Location = new System.Drawing.Point(col1X, yPos) };
+                panel.Controls.Add(driverSectionLabel);
+                yPos += spacing;
+
+                // DL Number / Category
+                var dlNumberLabel = new LabelControl { Text = "Номер ВУ:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col1X, yPos) };
+                var dlNumberBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(col1X + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.DriverLicenseNumber : "") };
+                var dlCategoryLabel = new LabelControl { Text = "Категория:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col2X, yPos) };
+                var dlCategoryBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(col2X + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.DriverLicenseCategory : "") };
+                panel.Controls.AddRange(new Control[] { dlNumberLabel, dlNumberBox, dlCategoryLabel, dlCategoryBox });
+                yPos += spacing;
+
+                // DL Issue / Expiry
+                var dlIssueDateLabel = new LabelControl { Text = "Дата выдачи ВУ:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col1X, yPos) };
+                var dlIssueDateEdit = new DateEdit { Width = controlWidth, Location = new System.Drawing.Point(col1X + labelWidth + 10, yPos) };
+                dlIssueDateEdit.Properties.Mask.EditMask = "dd.MM.yyyy";
+                dlIssueDateEdit.Properties.Mask.UseMaskAsDisplayFormat = true;
+                dlIssueDateEdit.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
+                if (employeeToEdit != null && employeeToEdit.DriverLicenseIssueDate.HasValue && employeeToEdit.DriverLicenseIssueDate.Value.Year > 1900)
+                    dlIssueDateEdit.DateTime = employeeToEdit.DriverLicenseIssueDate.Value;
+                else
+                    dlIssueDateEdit.EditValue = null;
+
+                var dlExpiryDateLabel = new LabelControl { Text = "Срок действия до:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col2X, yPos) };
+                var dlExpiryDateEdit = new DateEdit { Width = controlWidth, Location = new System.Drawing.Point(col2X + labelWidth + 10, yPos) };
+                dlExpiryDateEdit.Properties.Mask.EditMask = "dd.MM.yyyy";
+                dlExpiryDateEdit.Properties.Mask.UseMaskAsDisplayFormat = true;
+                dlExpiryDateEdit.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
+                if (employeeToEdit != null && employeeToEdit.DriverLicenseExpiryDate.HasValue && employeeToEdit.DriverLicenseExpiryDate.Value.Year > 1900)
+                    dlExpiryDateEdit.DateTime = employeeToEdit.DriverLicenseExpiryDate.Value;
+                else
+                    dlExpiryDateEdit.EditValue = null;
+                panel.Controls.AddRange(new Control[] { dlIssueDateLabel, dlIssueDateEdit, dlExpiryDateLabel, dlExpiryDateEdit });
+                yPos += spacing;
+
+                // Certifications
+                var passengerCertCheck = new CheckEdit { Width = 400, Location = new System.Drawing.Point(col1X + labelWidth + 10, yPos), Text = "Сертификация на перевозку пассажиров" };
+                passengerCertCheck.Checked = (employeeToEdit != null && employeeToEdit.HasPassengerTransportCertification);
+                panel.Controls.Add(passengerCertCheck);
+                yPos += spacing;
+
+                var dangerousGoodsCertCheck = new CheckEdit { Width = 400, Location = new System.Drawing.Point(col1X + labelWidth + 10, yPos), Text = "Сертификация на перевозку опасных грузов" };
+                dangerousGoodsCertCheck.Checked = (employeeToEdit != null && employeeToEdit.HasDangerousGoodsCertification);
+                panel.Controls.Add(dangerousGoodsCertCheck);
+                yPos += spacing + 10;
+
+                // === MEDICAL SECTION ===
+                var medicalSectionLabel = new LabelControl { Text = "=== МЕДИЦИНСКАЯ ИНФОРМАЦИЯ ===", Font = new Font("Tahoma", 9, FontStyle.Bold), AutoSizeMode = LabelAutoSizeMode.None, Width = 800, Location = new System.Drawing.Point(col1X, yPos) };
+                panel.Controls.Add(medicalSectionLabel);
+                yPos += spacing;
+
+                // Medical Cert Number
+                var medCertNumberLabel = new LabelControl { Text = "Номер мед. справки:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col1X, yPos) };
+                var medCertNumberBox = new TextEdit { Width = controlWidth, Location = new System.Drawing.Point(col1X + labelWidth + 10, yPos), Text = (employeeToEdit != null ? employeeToEdit.MedicalCertificateNumber : "") };
+                panel.Controls.AddRange(new Control[] { medCertNumberLabel, medCertNumberBox });
+                yPos += spacing;
+
+                // Medical Cert Issue / Expiry
+                var medCertIssueDateLabel = new LabelControl { Text = "Дата выдачи:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col1X, yPos) };
+                var medCertIssueDateEdit = new DateEdit { Width = controlWidth, Location = new System.Drawing.Point(col1X + labelWidth + 10, yPos) };
+                medCertIssueDateEdit.Properties.Mask.EditMask = "dd.MM.yyyy";
+                medCertIssueDateEdit.Properties.Mask.UseMaskAsDisplayFormat = true;
+                medCertIssueDateEdit.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
+                if (employeeToEdit != null && employeeToEdit.MedicalCertificateIssueDate.HasValue && employeeToEdit.MedicalCertificateIssueDate.Value.Year > 1900)
+                    medCertIssueDateEdit.DateTime = employeeToEdit.MedicalCertificateIssueDate.Value;
+                else
+                    medCertIssueDateEdit.EditValue = null;
+
+                var medCertExpiryDateLabel = new LabelControl { Text = "Срок действия до:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col2X, yPos) };
+                var medCertExpiryDateEdit = new DateEdit { Width = controlWidth, Location = new System.Drawing.Point(col2X + labelWidth + 10, yPos) };
+                medCertExpiryDateEdit.Properties.Mask.EditMask = "dd.MM.yyyy";
+                medCertExpiryDateEdit.Properties.Mask.UseMaskAsDisplayFormat = true;
+                medCertExpiryDateEdit.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
+                if (employeeToEdit != null && employeeToEdit.MedicalCertificateExpiryDate.HasValue && employeeToEdit.MedicalCertificateExpiryDate.Value.Year > 1900)
+                    medCertExpiryDateEdit.DateTime = employeeToEdit.MedicalCertificateExpiryDate.Value;
+                else
+                    medCertExpiryDateEdit.EditValue = null;
+                panel.Controls.AddRange(new Control[] { medCertIssueDateLabel, medCertIssueDateEdit, medCertExpiryDateLabel, medCertExpiryDateEdit });
+                yPos += spacing + 10;
+
+                // === EMPLOYMENT INFO ===
+                var employedDateLabel = new LabelControl { Text = "Дата приема:*", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col1X, yPos) };
                 var employedDateEdit = new DateEdit { Width = controlWidth, Location = new System.Drawing.Point(10 + labelWidth + 10, yPos) };
                 employedDateEdit.DateTime = (employeeToEdit != null && employeeToEdit.EmployedSince > DateTime.MinValue) ? employeeToEdit.EmployedSince : DateTime.Today;
                 employedDateEdit.Properties.Mask.EditMask = "dd.MM.yyyy";
                 employedDateEdit.Properties.Mask.UseMaskAsDisplayFormat = true;
-                panel.Controls.AddRange(new Control[] { employedDateLabel, employedDateEdit });
+                var isActiveLabel = new LabelControl { Text = "Статус:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col2X, yPos) };
+                var isActiveCheck = new CheckEdit { Width = controlWidth, Location = new System.Drawing.Point(col2X + labelWidth + 10, yPos), Text = "Активен" };
+                isActiveCheck.Checked = (employeeToEdit == null || employeeToEdit.IsActive);
+                panel.Controls.AddRange(new Control[] { employedDateLabel, employedDateEdit, isActiveLabel, isActiveCheck });
                 yPos += spacing;
 
-                var jobLabel = new LabelControl { Text = "Должность:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(10, yPos) };
+                var jobLabel = new LabelControl { Text = "Должность:*", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col1X, yPos) };
                 var jobComboBox = new LookUpEdit { Width = controlWidth, Location = new System.Drawing.Point(10 + labelWidth + 10, yPos) };
                 jobComboBox.Properties.DataSource = _availableJobs;
                 jobComboBox.Properties.DisplayMember = "JobTitle";
@@ -957,13 +1438,48 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                 jobComboBox.Properties.NullText = "[Не выбрана]";
                 jobComboBox.Properties.ShowHeader = false;
                 jobComboBox.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.False;
-                if (employeeToEdit != null && _availableJobs.Any(j => j.JobId == employeeToEdit.JobId)) {
+                if (employeeToEdit != null && _availableJobs.Any(j => j.JobId == employeeToEdit.JobId))
                     jobComboBox.EditValue = employeeToEdit.JobId;
-                } else {
+                else
                     jobComboBox.EditValue = null;
+                
+                var deptLabel = new LabelControl { Text = "Отдел:", AutoSizeMode = LabelAutoSizeMode.None, Width = labelWidth, Location = new System.Drawing.Point(col2X, yPos) };
+                var deptComboBox = new LookUpEdit { Width = controlWidth, Location = new System.Drawing.Point(col2X + labelWidth + 10, yPos) };
+                deptComboBox.Properties.DataSource = _availableDepartments;
+                deptComboBox.Properties.DisplayMember = "DepartmentName";
+                deptComboBox.Properties.ValueMember = "DepartmentId";
+                deptComboBox.Properties.Columns.Clear();
+                deptComboBox.Properties.Columns.Add(new DevExpress.XtraEditors.Controls.LookUpColumnInfo("DepartmentName", "Название"));
+                deptComboBox.Properties.NullText = "[Не выбран]";
+                deptComboBox.Properties.ShowHeader = false;
+                deptComboBox.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
+                if (employeeToEdit != null && employeeToEdit.DepartmentId.HasValue && _availableDepartments.Any(d => d.DepartmentId == employeeToEdit.DepartmentId.Value))
+                    deptComboBox.EditValue = employeeToEdit.DepartmentId.Value;
+                else
+                    deptComboBox.EditValue = null;
+                panel.Controls.AddRange(new Control[] { jobLabel, jobComboBox, deptLabel, deptComboBox });
+                yPos += spacing + 20;
+
+                // === SECTION MANAGEMENT BUTTONS (only for existing employees) ===
+                if (!isAdding && employeeToEdit != null)
+                {
+                    var sectionManagementLabel = new LabelControl { Text = "=== УПРАВЛЕНИЕ ДАННЫМИ ===", Font = new Font("Tahoma", 9, FontStyle.Bold), AutoSizeMode = LabelAutoSizeMode.None, Width = 800, Location = new System.Drawing.Point(col1X, yPos) };
+                    panel.Controls.Add(sectionManagementLabel);
+                    yPos += spacing;
+
+                    var btnDocuments = new SimpleButton { Text = "Документы", Width = 180, Location = new System.Drawing.Point(col1X, yPos) };
+                    var btnTrainings = new SimpleButton { Text = "Обучение", Width = 180, Location = new System.Drawing.Point(col1X + 190, yPos) };
+                    var btnContacts = new SimpleButton { Text = "Контакты", Width = 180, Location = new System.Drawing.Point(col1X + 380, yPos) };
+                    var btnVacations = new SimpleButton { Text = "Отпуска", Width = 180, Location = new System.Drawing.Point(col1X + 570, yPos) };
+
+                    btnDocuments.Click += (s, args) => ShowDocumentsDialog(employeeToEdit.EmpId);
+                    btnTrainings.Click += (s, args) => ShowTrainingsDialog(employeeToEdit.EmpId);
+                    btnContacts.Click += (s, args) => ShowContactsDialog(employeeToEdit.EmpId);
+                    btnVacations.Click += (s, args) => ShowVacationsDialog(employeeToEdit.EmpId);
+
+                    panel.Controls.AddRange(new Control[] { btnDocuments, btnTrainings, btnContacts, btnVacations });
+                    yPos += spacing + 20;
                 }
-                panel.Controls.AddRange(new Control[] { jobLabel, jobComboBox });
-                yPos += spacing + 10;
 
                 var saveButton = new SimpleButton { Text = isAdding ? "Добавить" : "Обновить", Width = 100, Location = new System.Drawing.Point(form.ClientSize.Width / 2 - 110, yPos), Anchor = AnchorStyles.Top | AnchorStyles.Left };
                 var cancelButton = new SimpleButton { Text = "Отмена", Width = 100, Location = new System.Drawing.Point(form.ClientSize.Width / 2 + 10, yPos), Anchor = AnchorStyles.Top | AnchorStyles.Left };
@@ -971,7 +1487,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                 panel.Controls.Add(cancelButton);
 
                 form.CancelButton = cancelButton;
-                cancelButton.Click += (s, args) => form.Close();
+                cancelButton.Click += delegate(object s, EventArgs args) { form.Close(); };
 
                 saveButton.Click += async (s, args) =>
                 {
@@ -998,6 +1514,10 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
 
                         long selectedJobId = Convert.ToInt64(jobComboBox.EditValue);
 
+                        long? selectedDeptId = null;
+                        if (deptComboBox.EditValue != null && deptComboBox.EditValue != DBNull.Value && deptComboBox.EditValue is long)
+                            selectedDeptId = (long)deptComboBox.EditValue;
+
                         var employeeData = new Employee
                         {
                             EmpId = isAdding ? 0 : employeeToEdit.EmpId,
@@ -1006,7 +1526,28 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                             Patronym = patronymBox.Text.Trim(),
                             EmployedSince = employedDateEdit.DateTime,
                             JobId = selectedJobId,
-                            Job = null
+                            Job = null,
+                            DepartmentId = selectedDeptId,
+                            Department = null,
+                            Email = emailBox.Text.Trim(),
+                            PersonalPhone = personalPhoneBox.Text.Trim(),
+                            WorkPhone = workPhoneBox.Text.Trim(),
+                            Address = addressBox.Text.Trim(),
+                            IsActive = isActiveCheck.Checked,
+                            DateOfBirth = (dobEdit.EditValue != null && dobEdit.EditValue != DBNull.Value) ? (DateTime?)dobEdit.DateTime : null,
+                            PassportSeries = passportSeriesBox.Text.Trim(),
+                            PassportNumber = passportNumberBox.Text.Trim(),
+                            INN = innBox.Text.Trim(),
+                            SNILS = snilsBox.Text.Trim(),
+                            DriverLicenseNumber = dlNumberBox.Text.Trim(),
+                            DriverLicenseCategory = dlCategoryBox.Text.Trim(),
+                            DriverLicenseIssueDate = (dlIssueDateEdit.EditValue != null && dlIssueDateEdit.EditValue != DBNull.Value) ? (DateTime?)dlIssueDateEdit.DateTime : null,
+                            DriverLicenseExpiryDate = (dlExpiryDateEdit.EditValue != null && dlExpiryDateEdit.EditValue != DBNull.Value) ? (DateTime?)dlExpiryDateEdit.DateTime : null,
+                            HasPassengerTransportCertification = passengerCertCheck.Checked,
+                            HasDangerousGoodsCertification = dangerousGoodsCertCheck.Checked,
+                            MedicalCertificateNumber = medCertNumberBox.Text.Trim(),
+                            MedicalCertificateIssueDate = (medCertIssueDateEdit.EditValue != null && medCertIssueDateEdit.EditValue != DBNull.Value) ? (DateTime?)medCertIssueDateEdit.DateTime : null,
+                            MedicalCertificateExpiryDate = (medCertExpiryDateEdit.EditValue != null && medCertExpiryDateEdit.EditValue != DBNull.Value) ? (DateTime?)medCertExpiryDateEdit.DateTime : null
                         };
 
                         crudClient = _apiClient.CreateClient();
@@ -1246,6 +1787,32 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                 string debugDetails = string.Format("Filter applied. Displaying {0} of {1} employees.", filteredList.Count, originalSource.Count);
                 Log.Debug(debugDetails);
             }
+        }
+
+        // === SECTION MANAGEMENT DIALOGS ===
+
+        private void ShowDocumentsDialog(long employeeId)
+        {
+            XtraMessageBox.Show(string.Format("Управление документами для сотрудника ID: {0}\n\nФункция в разработке.", employeeId), "Документы", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // TODO: Implement full documents management with grid and add/edit/delete
+        }
+
+        private void ShowTrainingsDialog(long employeeId)
+        {
+            XtraMessageBox.Show(string.Format("Управление обучением для сотрудника ID: {0}\n\nФункция в разработке.", employeeId), "Обучение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // TODO: Implement full trainings management with grid and add/edit/delete
+        }
+
+        private void ShowContactsDialog(long employeeId)
+        {
+            XtraMessageBox.Show(string.Format("Управление контактами для сотрудника ID: {0}\n\nФункция в разработке.", employeeId), "Экстренные контакты", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // TODO: Implement full contacts management with grid and add/edit/delete
+        }
+
+        private void ShowVacationsDialog(long employeeId)
+        {
+            XtraMessageBox.Show(string.Format("Управление отпусками для сотрудника ID: {0}\n\nФункция в разработке.", employeeId), "Отпуска", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // TODO: Implement full vacations management with grid and add/edit/delete
         }
     }
 } 

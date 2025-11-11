@@ -94,6 +94,13 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
         private static Dictionary<string, JToken> _fullyCleanedCachebackupfortypeone = new Dictionary<string, JToken>(); //Backup the  Cache for fully processed results by $id - will be sales backup
         private static Dictionary<string, JToken> _fullyCleanedCachebackupfortypetwo = new Dictionary<string, JToken>(); //Backup the  Cache for fully processed results by $id - will be routes backup
         private static string _lastProcessedRootElementName = null; // Track the root element name for cache invalidation
+        
+        // Essential fields to preserve when circular references are detected
+        private static readonly string[] ESSENTIAL_MARSHUT_FIELDS = new string[] { "routeId", "startPoint", "endPoint", "travelTime" };
+        private static readonly string[] ESSENTIAL_BILET_FIELDS = new string[] { "ticketId", "ticketPrice", "seatNumber", "routeId", "marshut" };
+        private static readonly string[] ESSENTIAL_SALE_FIELDS = new string[] { "saleId", "saleDate", "ticketSoldToUser", "ticketSoldToUserPhone", "ticketId", "bilet" };
+        private static readonly string[] ESSENTIAL_EMPLOYEE_FIELDS = new string[] { "empId", "surname", "name", "patronym" };
+        
         private readonly ApiClientService _apiClient; // Changed name
         private readonly JsonSerializerSettings _jsonSettings;
         private readonly string _baseUrl; 
@@ -961,6 +968,40 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
               }
         }
 
+        // Helper method to extract essential fields from an object, including nested essential objects
+        private static JObject ExtractEssentialFields(JObject obj, string[] essentialFields)
+        {
+            if (obj == null) return new JObject();
+            
+            JObject result = new JObject();
+            foreach (string fieldName in essentialFields)
+            {
+                JToken value = obj[fieldName];
+                if (value == null || value.Type == JTokenType.Null) continue;
+                
+                // Copy scalar values directly
+                if (value.Type != JTokenType.Object && value.Type != JTokenType.Array)
+                {
+                    result[fieldName] = value.DeepClone();
+                }
+                // For nested objects, recursively extract their essential fields
+                else if (value.Type == JTokenType.Object)
+                {
+                    JObject nestedObj = (JObject)value;
+                    // Determine which essential fields to use based on nested object type
+                    if (fieldName == "marshut" || nestedObj["startPoint"] != null || nestedObj["endPoint"] != null)
+                        result[fieldName] = ExtractEssentialFields(nestedObj, ESSENTIAL_MARSHUT_FIELDS);
+                    else if (fieldName == "bilet" || nestedObj["ticketPrice"] != null)
+                        result[fieldName] = ExtractEssentialFields(nestedObj, ESSENTIAL_BILET_FIELDS);
+                    else if (fieldName == "employee" || nestedObj["surname"] != null)
+                        result[fieldName] = ExtractEssentialFields(nestedObj, ESSENTIAL_EMPLOYEE_FIELDS);
+                    // Skip unknown nested objects to avoid infinite recursion
+                }
+                // Skip arrays to avoid recursion
+            }
+            return result;
+        }
+        
         private static JToken CleanAndTransformJsonToken(JToken token, HashSet<string> currentlyProcessingRefs)
         {
             if (token == null) return null;
@@ -1000,8 +1041,18 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                         if (idProp != null) {
                             originalId = idProp.Value.ToString();
                             if (!currentlyProcessingRefs.Add(originalId)) {
-                                Log.Warn("Recursion detected for $id = {0}. Returning empty object to break loop.", originalId);
-                                return new JObject(); // Break the loop
+                                Log.Warn("Recursion detected for $id = {0}. Extracting essential fields only to preserve data.", originalId);
+                                // Instead of empty object, extract essential scalar fields based on object type
+                                if (objToken["startPoint"] != null || objToken["endPoint"] != null)
+                                    return ExtractEssentialFields(objToken, ESSENTIAL_MARSHUT_FIELDS);
+                                else if (objToken["ticketPrice"] != null)
+                                    return ExtractEssentialFields(objToken, ESSENTIAL_BILET_FIELDS);
+                                else if (objToken["saleDate"] != null || objToken["ticketSoldToUser"] != null)
+                                    return ExtractEssentialFields(objToken, ESSENTIAL_SALE_FIELDS);
+                                else if (objToken["surname"] != null || objToken["empId"] != null)
+                                    return ExtractEssentialFields(objToken, ESSENTIAL_EMPLOYEE_FIELDS);
+                                else
+                                    return new JObject(); // Fallback for unknown types
                             }
                         }
                         // --- End Recursion Detection ---
@@ -1023,9 +1074,20 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                                   }
                                   // --- Recursion Check for $ref target ---
                                   if (!currentlyProcessingRefs.Add(refValue)) { // Try adding $ref value to tracker
-                                      Log.Warn("Recursion detected: trying to resolve $ref = {0} which is already being processed. Returning empty object.", refValue);
+                                      Log.Warn("Recursion detected: trying to resolve $ref = {0} which is already being processed. Extracting essential fields only.", refValue);
                                       if (originalId != null) currentlyProcessingRefs.Remove(originalId); // Clean up tracking for current level
-                                      return new JObject(); // Break loop
+                                      
+                                      // Extract essential fields from the cached object before breaking the loop
+                                      if (cachedObject["startPoint"] != null || cachedObject["endPoint"] != null)
+                                          return ExtractEssentialFields(cachedObject, ESSENTIAL_MARSHUT_FIELDS);
+                                      else if (cachedObject["ticketPrice"] != null)
+                                          return ExtractEssentialFields(cachedObject, ESSENTIAL_BILET_FIELDS);
+                                      else if (cachedObject["saleDate"] != null || cachedObject["ticketSoldToUser"] != null)
+                                          return ExtractEssentialFields(cachedObject, ESSENTIAL_SALE_FIELDS);
+                                      else if (cachedObject["surname"] != null || cachedObject["empId"] != null)
+                                          return ExtractEssentialFields(cachedObject, ESSENTIAL_EMPLOYEE_FIELDS);
+                                      else
+                                          return new JObject(); // Fallback for unknown types
                                   }
   
                                   Log.Trace("Resolving $ref '{0}' from cache and recursively cleaning...", refValue);

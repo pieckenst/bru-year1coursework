@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -251,11 +252,22 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonString = await response.Content.ReadAsStringAsync();
+                    Log.Debug("[PASSWORD_LOGIN] Login API response JSON: {0}", jsonString);
+                    
                     var result = JsonConvert.DeserializeObject<AuthResponse>(jsonString);
                     
                     if (result != null && !string.IsNullOrEmpty(result.Token)) 
                     {
+                        Log.Debug("[PASSWORD_LOGIN] Received JWT token, length: {0}", result.Token.Length);
+                        Log.Debug("[PASSWORD_LOGIN] Setting auth token in ApiClientService...");
+                        
                         ApiClientService.Instance.AuthToken = result.Token;
+                        
+                        Log.Debug("[PASSWORD_LOGIN] Auth token set. Checking parsed role...");
+                        var parsedRole = ApiClientService.Instance.UserRole;
+                        var parsedName = ApiClientService.Instance.UserName;
+                        Log.Information("[PASSWORD_LOGIN] *** LOGIN COMPLETE - User: {0}, Role: {1} (Expected: 1 for admin) ***", 
+                            parsedName ?? "NULL", parsedRole.HasValue ? parsedRole.Value.ToString() : "NULL");
                         
                         _isAuthenticated = true;
                         Log.Information("User successfully authenticated");
@@ -358,6 +370,124 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             catch (Exception ex)
             {
                 Log.Error(ex, "Error checking QR login status");
+            }
+        }
+
+        private void WindowsAuthLogin()
+        {
+            try
+            {
+                // Show Windows credential dialog
+                var cred = WindowsCredentialHelper.PromptForCredentials(
+                    "Введите учетные данные Windows",
+                    "Пожалуйста, введите ваши учетные данные для входа",
+                    this.Handle);
+
+                if (cred == null)
+                {
+                    // User cancelled
+                    lblError.Text = "Аутентификация отменена пользователем.";
+                    lblError.Visible = true;
+                    return;
+                }
+
+                string domain = cred.Item1;
+                string username = cred.Item2;
+                string password = cred.Item3;
+
+                Log.Information("Windows authentication initiated for user: {0}\\{1}", domain, username);
+
+                IsLoading = true;
+                lblError.Visible = false;
+
+                // Create HttpClientHandler with Windows credentials
+                var handler = new HttpClientHandler
+                {
+                    UseDefaultCredentials = false,
+                    PreAuthenticate = true,
+                    Credentials = new System.Net.NetworkCredential(username, password, domain)
+                };
+
+                using (var httpClient = new HttpClient(handler))
+                {
+                    httpClient.BaseAddress = new Uri(BaseUrl);
+
+                    // Call Windows authentication endpoint
+                    var apiUrl = string.Format("{0}/api/auth/windows-login", BaseUrl);
+                    var response = httpClient.GetAsync(apiUrl).Result;
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonString = response.Content.ReadAsStringAsync().Result;
+                        Log.Debug("[WINDOWS_AUTH] Login API response JSON: {0}", jsonString);
+
+                        var result = JsonConvert.DeserializeObject<AuthResponse>(jsonString);
+
+                        if (result != null && !string.IsNullOrEmpty(result.Token))
+                        {
+                            Log.Debug("[WINDOWS_AUTH] Received JWT token, length: {0}", result.Token.Length);
+
+                            // Check if account needs linking
+                            var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+                            var jwtToken = tokenHandler.ReadJwtToken(result.Token);
+                            var needsLinkingClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "does_windows_account_need_linking");
+
+                            if (needsLinkingClaim != null && needsLinkingClaim.Value.ToLower() == "true")
+                            {
+                                Log.Information("Windows account needs linking. Showing link confirmation dialog.");
+
+                                MessageBox.Show(
+                                    this,
+                                    "Ваш аккаунт Windows не связан с учетной записью пользователя.\n" +
+                                    "Функция связывания учетных записей доступна только в приложении Avalonia.\n" +
+                                    "Пожалуйста, используйте обычный вход по логину и паролю.",
+                                    "Требуется связывание учетной записи",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                                return;
+                            }
+
+                            Log.Debug("[WINDOWS_AUTH] Setting auth token in ApiClientService...");
+                            ApiClientService.Instance.AuthToken = result.Token;
+
+                            Log.Debug("[WINDOWS_AUTH] Auth token set. Checking parsed role...");
+                            var parsedRole = ApiClientService.Instance.UserRole;
+                            var parsedName = ApiClientService.Instance.UserName;
+                            Log.Information("[WINDOWS_AUTH] *** LOGIN COMPLETE - User: {0}, Role: {1} ***",
+                                parsedName ?? "NULL", parsedRole.HasValue ? parsedRole.Value.ToString() : "NULL");
+
+                            _isAuthenticated = true;
+                            Log.Information("User successfully authenticated via Windows");
+
+                            WriteLoginUnitXML();
+                            this.DialogResult = DialogResult.OK;
+                            this.Close();
+                        }
+                        else
+                        {
+                            Log.Warning("Windows authentication succeeded but token was null or empty.");
+                            lblError.Text = "Ошибка авторизации: Не удалось получить токен.";
+                            lblError.Visible = true;
+                        }
+                    }
+                    else
+                    {
+                        var error = response.Content.ReadAsStringAsync().Result;
+                        lblError.Text = string.Format("Ошибка Windows-авторизации: {0}", error);
+                        lblError.Visible = true;
+                        Log.Warning("Windows authentication failed: {Error}", error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = string.Format("Произошла ошибка при Windows-авторизации: {0}", ex.Message);
+                lblError.Visible = true;
+                Log.Error(ex, "Windows authentication error");
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
@@ -488,6 +618,11 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
         private void btnLogin_Click(object sender, EventArgs e)
         {
             AuthenticateUser();
+        }
+
+        private void btnWindowsAuth_Click(object sender, EventArgs e)
+        {
+            WindowsAuthLogin();
         }
 
         private void btnQrLogin_Click(object sender, EventArgs e)

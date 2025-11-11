@@ -1,4 +1,4 @@
-﻿namespace TicketSalesApp.UI.LegacyForms.DX.Windows
+namespace TicketSalesApp.UI.LegacyForms.DX.Windows
 {
     partial class frmLogin
     {
@@ -50,6 +50,7 @@
             progressPanel = new DevExpress.XtraEditors.PanelControl();
             lblLoading = new DevExpress.XtraEditors.LabelControl();
             progressIndicator = new DevExpress.XtraWaitForm.ProgressPanel();
+            btnWindowsAuth = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)panelUsername).BeginInit();
             panelUsername.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)txtUsernameInput.Properties).BeginInit();
@@ -240,6 +241,7 @@
             panelPassword.Appearance.BackColor = System.Drawing.Color.White;
             panelPassword.Appearance.Options.UseBackColor = true;
             panelPassword.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            panelPassword.Controls.Add(btnWindowsAuth);
             panelPassword.Controls.Add(btnSwitchToQR);
             panelPassword.Controls.Add(btnLogin);
             panelPassword.Controls.Add(lblError);
@@ -253,6 +255,17 @@
             panelPassword.Size = new System.Drawing.Size(392, 600);
             panelPassword.TabIndex = 2;
             panelPassword.Visible = false;
+            // 
+            // btnWindowsAuth
+            // 
+            btnWindowsAuth.Appearance.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            btnWindowsAuth.Appearance.Options.UseFont = true;
+            btnWindowsAuth.Location = new System.Drawing.Point(32, 344);
+            btnWindowsAuth.Name = "btnWindowsAuth";
+            btnWindowsAuth.Size = new System.Drawing.Size(336, 40);
+            btnWindowsAuth.TabIndex = 6;
+            btnWindowsAuth.Text = "Войти через Windows";
+            btnWindowsAuth.Click += btnWindowsAuth_Click;
             // 
             // btnSwitchToQR
             // 
@@ -415,6 +428,7 @@
         private DevExpress.XtraEditors.LabelControl lblError;
         private DevExpress.XtraEditors.SimpleButton btnLogin;
         private DevExpress.XtraEditors.SimpleButton btnSwitchToQR;
+        private DevExpress.XtraEditors.SimpleButton btnWindowsAuth;
         
         private DevExpress.XtraWaitForm.ProgressPanel progressIndicator;
         private DevExpress.XtraEditors.LabelControl lblLoading;

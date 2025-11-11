@@ -1,0 +1,424 @@
+import { Button, VerticalBox, HorizontalBox, LineEdit } from "std-widgets.slint";
+import { MaterialWindow, FilledCard, TextField, FilledButton, TonalButton, HorizontalDivider, MaterialText, ScrollView } from "../material-1.0/material.slint";
+import { MaterialPalette } from "../material-1.0/ui/styling/material_palette.slint";
+import { AppNavigation } from "navigation.slint";
+import { EmployeeDialog, DeleteConfirmDialog, JobData } from "employee_dialogs.slint";
+
+// Employee data structure
+export struct EmployeeData {
+    id: int,
+    surname: string,
+    name: string,
+    department: string,
+    position: string,
+}
+
+// Login Window
+export component LoginWindow inherits Window {
+    title: "Авторизация - Автопарк автобусов";
+    width: 400px;
+    height: 300px;
+    default-font-family: "Arial";
+    
+    in-out property <string> username;
+    in-out property <string> password;
+    in-out property <string> error-message;
+    in-out property <bool> is-loading: false;
+    
+    callback login-clicked();
+    
+    VerticalBox {
+        padding: 20px;
+        spacing: 15px;
+        
+        Text {
+            text: "Вход для админа";
+            font-size: 24px;
+            font-weight: 700;
+            horizontal-alignment: center;
+        }
+        
+        VerticalBox {
+            spacing: 10px;
+            
+            Text {
+                text: "Имя пользователя:";
+                font-size: 14px;
+            }
+            
+            LineEdit {
+                text <=> root.username;
+                placeholder-text: "admin";
+                enabled: !root.is-loading;
+            }
+            
+            Text {
+                text: "Пароль:";
+                font-size: 14px;
+            }
+            
+            LineEdit {
+                text <=> root.password;
+                input-type: InputType.password;
+                placeholder-text: "Введите пароль";
+                enabled: !root.is-loading;
+            }
+        }
+        
+        if root.error-message != "": Text {
+            text: root.error-message;
+            color: #ff0000;
+            font-size: 12px;
+            horizontal-alignment: center;
+        }
+        
+        Button {
+            text: root.is-loading ? "Загрузка..." : "Войти";
+            enabled: !root.is-loading && root.username != "" && root.password != "";
+            clicked => {
+                root.login-clicked();
+            }
+        }
+    }
+}
+
+// Main Application Window
+export component AppWindow inherits Window {
+    title: "Система управления автопарком";
+    width: 1600px;
+    height: 980px;
+    default-font-family: "Arial";
+    
+    in-out property <string> current-user: "";
+    in-out property <[EmployeeData]> employees;
+    in-out property <int> current-nav-group: 1;
+    in-out property <int> current-nav-index: 0;
+    in-out property <bool> drawer-open: true;
+    
+    // Employee dialog state - Basic
+    in-out property <bool> show-employee-dialog: false;
+    in-out property <string> dialog-mode: "add";
+    in-out property <string> dialog-title: "";
+    in-out property <int> employee-id: 0;
+    in-out property <string> employee-surname: "";
+    in-out property <string> employee-name: "";
+    in-out property <string> employee-patronym: "";
+    in-out property <int> selected-job-id: -1;
+    in-out property <int> selected-department-id: -1;
+    // Personal info
+    in-out property <string> passport-series: "";
+    in-out property <string> passport-number: "";
+    in-out property <string> date-of-birth: "";
+    in-out property <string> email: "";
+    in-out property <string> address: "";
+    in-out property <string> personal-phone: "";
+    in-out property <string> snils: "";
+    // Driver info
+    in-out property <string> driver-license-number: "";
+    in-out property <string> driver-license-category: "";
+    in-out property <string> driver-license-issue-date: "";
+    // Medical info
+    in-out property <string> medical-cert-number: "";
+    in-out property <string> medical-cert-issue-date: "";
+    in-out property <string> employee-error: "";
+    
+    // Delete dialog state
+    in-out property <bool> show-delete-dialog: false;
+    in-out property <int> delete-employee-id: 0;
+    in-out property <string> delete-employee-name: "";
+    
+    callback logout-clicked();
+    callback refresh-employees();
+    callback add-employee-clicked();
+    callback edit-employee-clicked(int);
+    callback delete-employee-clicked(int);
+    callback navigation-changed(int, int);
+    callback save-employee();
+    callback confirm-delete();
+    
+    AppNavigation {
+        current-user: root.current-user;
+        current-group: root.current-nav-group;
+        current-index: root.current-nav-index;
+        drawer-open: root.drawer-open;
+        
+        navigation-selected(group, index) => {
+            root.current-nav-group = group;
+            root.current-nav-index = index;
+            root.navigation-changed(group, index);
+        }
+        
+        logout => {
+            root.logout-clicked();
+        }
+        
+        // Content based on navigation - Employees view (Group 1, Index 0)
+        if root.current-nav-group == 1 && root.current-nav-index == 0: VerticalBox {
+                
+                VerticalBox {
+                    padding: 10px;
+                    
+                    // Toolbar
+                    HorizontalBox {
+                        padding: 16px;
+                        spacing: 12px;
+                        alignment: start;
+                        
+                        FilledButton {
+                            text: "Добавить сотрудника";
+                            clicked => {
+                                root.add-employee-clicked();
+                            }
+                        }
+                        
+                        TonalButton {
+                            text: "Обновить";
+                            clicked => {
+                                root.refresh-employees();
+                            }
+                        }
+                        
+                        Rectangle {
+                            horizontal-stretch: 1;
+                        }
+                    }
+                    
+                    HorizontalDivider {}
+                    
+                    // Employee list with Material Design
+                    ScrollView {
+                        VerticalBox {
+                            spacing: 0px;
+                            
+                            // Table header
+                            Rectangle {
+                                height: 48px;
+                                background: MaterialPalette.surface_container_high;
+                                
+                                HorizontalBox {
+                                    padding-left: 16px;
+                                    padding-right: 16px;
+                                    spacing: 12px;
+                                    
+                                    MaterialText {
+                                        width: 50px;
+                                        text: "ID";
+                                        font-weight: 700;
+                                        vertical-alignment: center;
+                                    }
+                                    MaterialText {
+                                        width: 150px;
+                                        text: "Фамилия";
+                                        font-weight: 700;
+                                        vertical-alignment: center;
+                                    }
+                                    MaterialText {
+                                        width: 150px;
+                                        text: "Имя";
+                                        font-weight: 700;
+                                        vertical-alignment: center;
+                                    }
+                                    MaterialText {
+                                        width: 180px;
+                                        text: "Отдел";
+                                        font-weight: 700;
+                                        vertical-alignment: center;
+                                    }
+                                    MaterialText {
+                                        horizontal-stretch: 1;
+                                        text: "Должность";
+                                        font-weight: 700;
+                                        vertical-alignment: center;
+                                    }
+                                }
+                            }
+                            
+                            // Employee rows with Material Design styling
+                            for employee[index] in root.employees: Rectangle {
+                                height: 56px;
+                                background: touch.has-hover ? MaterialPalette.surface_container_highest : (mod(index, 2) == 0 ? MaterialPalette.surface_container : MaterialPalette.surface_container_low);
+                                
+                                touch := TouchArea {}
+                                
+                                HorizontalBox {
+                                    padding-left: 16px;
+                                    padding-right: 16px;
+                                    spacing: 12px;
+                                    
+                                    MaterialText {
+                                        width: 50px;
+                                        text: employee.id;
+                                        vertical-alignment: center;
+                                    }
+                                    MaterialText {
+                                        width: 150px;
+                                        text: employee.surname;
+                                        vertical-alignment: center;
+                                    }
+                                    MaterialText {
+                                        width: 150px;
+                                        text: employee.name;
+                                        vertical-alignment: center;
+                                    }
+                                    MaterialText {
+                                        width: 180px;
+                                        text: employee.department;
+                                        vertical-alignment: center;
+                                    }
+                                    MaterialText {
+                                        horizontal-stretch: 1;
+                                        text: employee.position;
+                                        vertical-alignment: center;
+                                    }
+                                    
+                                    // Action buttons
+                                    HorizontalBox {
+                                        spacing: 8px;
+                                        alignment: center;
+                                        
+                                        // Edit button
+                                        Rectangle {
+                                            width: 40px;
+                                            height: 40px;
+                                            border-radius: 20px;
+                                            background: edit-touch.has-hover ? MaterialPalette.secondary_container : transparent;
+                                            
+                                            edit-touch := TouchArea {
+                                                clicked => {
+                                                    root.edit-employee-clicked(employee.id);
+                                                }
+                                            }
+                                            
+                                            MaterialText {
+                                                text: "✏️";
+                                                font-size: 18px;
+                                                vertical-alignment: center;
+                                                horizontal-alignment: center;
+                                            }
+                                        }
+                                        
+                                        // Delete button
+                                        Rectangle {
+                                            width: 40px;
+                                            height: 40px;
+                                            border-radius: 20px;
+                                            background: delete-touch.has-hover ? MaterialPalette.error_container : transparent;
+                                            
+                                            delete-touch := TouchArea {
+                                                clicked => {
+                                                    root.delete-employee-clicked(employee.id);
+                                                }
+                                            }
+                                            
+                                            MaterialText {
+                                                text: "🗑️";
+                                                font-size: 18px;
+                                                vertical-alignment: center;
+                                                horizontal-alignment: center;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        
+        // Placeholder for other navigation routes
+        if root.current-nav-group == 0 && root.current-nav-index == 0: VerticalBox {
+            padding: 40px;
+            MaterialText {
+                text: "Панель управления";
+                font-size: 24px;
+                font-weight: 700;
+                horizontal-alignment: center;
+            }
+            Rectangle { vertical-stretch: 1; }
+            MaterialText {
+                text: "В разработке";
+                horizontal-alignment: center;
+            }
+        }
+        
+        if root.current-nav-group == 1 && root.current-nav-index != 0: VerticalBox {
+            padding: 40px;
+            MaterialText {
+                text: "Раздел персонала";
+                font-size: 24px;
+                font-weight: 700;
+                horizontal-alignment: center;
+            }
+            Rectangle { vertical-stretch: 1; }
+            MaterialText {
+                text: "В разработке";
+                horizontal-alignment: center;
+            }
+        }
+        
+        if root.current-nav-group >= 2: VerticalBox {
+            padding: 40px;
+            MaterialText {
+                text: "Раздел в разработке";
+                font-size: 24px;
+                font-weight: 700;
+                horizontal-alignment: center;
+            }
+            Rectangle { vertical-stretch: 1; }
+            MaterialText {
+                text: "Скоро будет реализовано";
+                horizontal-alignment: center;
+            }
+        }
+    }
+    
+    // Employee Add/Edit Dialog
+    if root.show-employee-dialog: EmployeeDialog {
+        dialog-title: root.dialog-title;
+        // Basic
+        surname <=> root.employee-surname;
+        name <=> root.employee-name;
+        patronym <=> root.employee-patronym;
+        selected-job-id <=> root.selected-job-id;
+        selected-department-id <=> root.selected-department-id;
+        // Personal
+        passport-series <=> root.passport-series;
+        passport-number <=> root.passport-number;
+        date-of-birth <=> root.date-of-birth;
+        email <=> root.email;
+        address <=> root.address;
+        personal-phone <=> root.personal-phone;
+        snils <=> root.snils;
+        // Driver
+        driver-license-number <=> root.driver-license-number;
+        driver-license-category <=> root.driver-license-category;
+        driver-license-issue-date <=> root.driver-license-issue-date;
+        // Medical
+        medical-cert-number <=> root.medical-cert-number;
+        medical-cert-issue-date <=> root.medical-cert-issue-date;
+        error-message <=> root.employee-error;
+        is-edit-mode: root.dialog-mode == "edit";
+        
+        save-clicked => {
+            root.save-employee();
+        }
+        
+        cancel-clicked => {
+            root.show-employee-dialog = false;
+            root.employee-error = "";
+        }
+    }
+    
+    // Delete Confirmation Dialog
+    if root.show-delete-dialog: DeleteConfirmDialog {
+        employee-name: root.delete-employee-name;
+        
+        confirm-delete => {
+            root.confirm-delete();
+        }
+        
+        cancel-delete => {
+            root.show-delete-dialog = false;
+        }
+    }
+}

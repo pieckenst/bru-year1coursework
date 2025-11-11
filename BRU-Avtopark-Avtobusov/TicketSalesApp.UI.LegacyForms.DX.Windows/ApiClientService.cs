@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
@@ -106,10 +107,11 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
 
             try
             {
+                Log.Debug("Starting JWT token parsing...");
                 var parts = token.Split('.');
                 if (parts.Length < 2)
                 {
-                    Log.Warn("JWT token does not contain enough parts.");
+                    Log.Warn("JWT token does not contain enough parts. Token has {0} parts, expected at least 2.", parts.Length);
                     return;
                 }
 
@@ -127,14 +129,36 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                 Log.Debug("Decoded JWT Payload: {0}", decodedPayload);
 
                 JObject jsonPayload = JObject.Parse(decodedPayload);
+                Log.Debug("JWT payload parsed successfully. Claims count: {0}", jsonPayload.Count);
 
                 JToken roleToken;
                 if (jsonPayload.TryGetValue("role", StringComparison.OrdinalIgnoreCase, out roleToken))
                 {
+                    Log.Debug("Found 'role' claim in token. Raw value: {0}, Type: {1}", roleToken.ToString(), roleToken.Type);
                     try
                     {
-                        _userRole = roleToken.Value<int>();
-                        Log.Info("User role parsed from token: {0}", _userRole);
+                        // Handle both single value and array (when server adds role claim multiple times)
+                        if (roleToken.Type == JTokenType.Array)
+                        {
+                            Log.Warn("Role claim is an array (duplicate claims detected). Taking first value.");
+                            var roleArray = (JArray)roleToken;
+                            if (roleArray.Count > 0)
+                            {
+                                _userRole = roleArray[0].Value<int>();
+                            }
+                            else
+                            {
+                                Log.Error("Role array is empty!");
+                                _userRole = null;
+                            }
+                        }
+                        else
+                        {
+                            _userRole = roleToken.Value<int>();
+                        }
+                        
+                        Log.Info("*** User role successfully parsed from token: {0} ***", _userRole);
+                        Log.Info("*** UserRole is now: {0} (0=User, 1=Admin) ***", _userRole.Value == 1 ? "ADMIN" : "USER");
                     }
                     catch (Exception exConv)
                     {
@@ -146,7 +170,8 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
                 }
                 else
                 {
-                    Log.Warn("JWT payload does not contain 'role' claim.");
+                    Log.Warn("JWT payload does not contain 'role' claim. Available claims: {0}", 
+                        string.Join(", ", jsonPayload.Properties().Select(p => p.Name)));
                     _userRole = null;
                 }
 

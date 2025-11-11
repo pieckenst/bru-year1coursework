@@ -39,6 +39,10 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             this.colPatronym = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colEmployedSince = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colJobTitle = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colDepartment = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colEmail = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colPersonalPhone = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colStatus = new DevExpress.XtraGrid.Columns.GridColumn();
             this.txtSearch = new DevExpress.XtraEditors.TextEdit();
             this.btnAdd = new DevExpress.XtraEditors.SimpleButton();
             this.btnEdit = new DevExpress.XtraEditors.SimpleButton();
@@ -107,7 +111,11 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             this.colName,
             this.colPatronym,
             this.colEmployedSince,
-            this.colJobTitle});
+            this.colJobTitle,
+            this.colDepartment,
+            this.colEmail,
+            this.colPersonalPhone,
+            this.colStatus});
             this.gridViewEmployees.GridControl = this.gridControlEmployees;
             this.gridViewEmployees.Name = "gridViewEmployees";
             this.gridViewEmployees.OptionsBehavior.Editable = false;
@@ -173,6 +181,46 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             this.colJobTitle.Width = 200;
             this.colJobTitle.Caption = "Должность";
             this.colJobTitle.OptionsColumn.AllowEdit = false;
+            // 
+            // colDepartment
+            // 
+            this.colDepartment.FieldName = "DepartmentName";
+            this.colDepartment.Name = "colDepartment";
+            this.colDepartment.Visible = true;
+            this.colDepartment.VisibleIndex = 6;
+            this.colDepartment.Width = 180;
+            this.colDepartment.Caption = "Отдел";
+            this.colDepartment.OptionsColumn.AllowEdit = false;
+            // 
+            // colEmail
+            // 
+            this.colEmail.FieldName = "Email";
+            this.colEmail.Name = "colEmail";
+            this.colEmail.Visible = true;
+            this.colEmail.VisibleIndex = 7;
+            this.colEmail.Width = 180;
+            this.colEmail.Caption = "Email";
+            this.colEmail.OptionsColumn.AllowEdit = false;
+            // 
+            // colPersonalPhone
+            // 
+            this.colPersonalPhone.FieldName = "PersonalPhone";
+            this.colPersonalPhone.Name = "colPersonalPhone";
+            this.colPersonalPhone.Visible = true;
+            this.colPersonalPhone.VisibleIndex = 8;
+            this.colPersonalPhone.Width = 120;
+            this.colPersonalPhone.Caption = "Телефон";
+            this.colPersonalPhone.OptionsColumn.AllowEdit = false;
+            // 
+            // colStatus
+            // 
+            this.colStatus.FieldName = "Status";
+            this.colStatus.Name = "colStatus";
+            this.colStatus.Visible = true;
+            this.colStatus.VisibleIndex = 9;
+            this.colStatus.Width = 100;
+            this.colStatus.Caption = "Статус";
+            this.colStatus.OptionsColumn.AllowEdit = false;
             // 
             // txtSearch
             // 
@@ -366,5 +414,9 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
         private DevExpress.XtraGrid.Columns.GridColumn colPatronym;
         private DevExpress.XtraGrid.Columns.GridColumn colEmployedSince;
         private DevExpress.XtraGrid.Columns.GridColumn colJobTitle;
+        private DevExpress.XtraGrid.Columns.GridColumn colDepartment;
+        private DevExpress.XtraGrid.Columns.GridColumn colEmail;
+        private DevExpress.XtraGrid.Columns.GridColumn colPersonalPhone;
+        private DevExpress.XtraGrid.Columns.GridColumn colStatus;
     }
 } 

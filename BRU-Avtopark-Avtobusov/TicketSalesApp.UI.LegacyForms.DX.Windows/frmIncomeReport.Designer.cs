@@ -235,20 +235,20 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             // colDepartureTime
             // 
             this.colDepartureTime.Caption = "Отправление";
-            this.colDepartureTime.FieldName = "DepartureTime";
+            this.colDepartureTime.FieldName = "DeparturePoint";
             this.colDepartureTime.Name = "colDepartureTime";
             this.colDepartureTime.Visible = true;
             this.colDepartureTime.VisibleIndex = 3;
-            this.colDepartureTime.Width = 100;
+            this.colDepartureTime.Width = 120;
             // 
             // colArrivalTime
             // 
             this.colArrivalTime.Caption = "Прибытие";
-            this.colArrivalTime.FieldName = "ArrivalTime";
+            this.colArrivalTime.FieldName = "ArrivalPoint";
             this.colArrivalTime.Name = "colArrivalTime";
             this.colArrivalTime.Visible = true;
             this.colArrivalTime.VisibleIndex = 4;
-            this.colArrivalTime.Width = 100;
+            this.colArrivalTime.Width = 120;
             // 
             // colSeatNumber
             // 
@@ -275,8 +275,8 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             this.colPaymentMethod.Caption = "Метод Оплаты";
             this.colPaymentMethod.FieldName = "PaymentMethod";
             this.colPaymentMethod.Name = "colPaymentMethod";
-            this.colPaymentMethod.Visible = true;
-            this.colPaymentMethod.VisibleIndex = 7;
+            this.colPaymentMethod.Visible = false;
+            this.colPaymentMethod.VisibleIndex = -1;
             this.colPaymentMethod.Width = 90;
             // 
             // colStatus
@@ -284,8 +284,8 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             this.colStatus.Caption = "Статус";
             this.colStatus.FieldName = "Status";
             this.colStatus.Name = "colStatus";
-            this.colStatus.Visible = true;
-            this.colStatus.VisibleIndex = 9;
+            this.colStatus.Visible = false;
+            this.colStatus.VisibleIndex = -1;
             this.colStatus.Width = 100;
             // 
             // Root
@@ -398,7 +398,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             this.colPassengerName.FieldName = "PassengerName";
             this.colPassengerName.Name = "colPassengerName";
             this.colPassengerName.Visible = true;
-            this.colPassengerName.VisibleIndex = 7;
+            this.colPassengerName.VisibleIndex = 10;
             this.colPassengerName.Width = 150;
             // 
             // colPassengerPhone
@@ -407,7 +407,7 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             this.colPassengerPhone.FieldName = "PassengerPhone";
             this.colPassengerPhone.Name = "colPassengerPhone";
             this.colPassengerPhone.Visible = true;
-            this.colPassengerPhone.VisibleIndex = 8;
+            this.colPassengerPhone.VisibleIndex = 11;
             this.colPassengerPhone.Width = 120;
             // 
             // frmIncomeReport

@@ -1,0 +1,396 @@
+import { VerticalBox, HorizontalBox, LineEdit, ComboBox, Button, ScrollView } from "std-widgets.slint";
+import { MaterialText, TextField, FilledButton, TonalButton, OutlineButton } from "../material-1.0/material.slint";
+import { MaterialPalette } from "../material-1.0/ui/styling/material_palette.slint";
+
+// Job data structure
+export struct JobData {
+    id: int,
+    title: string,
+}
+
+// Employee Add/Edit Dialog
+export component EmployeeDialog inherits Dialog {
+    in-out property <string> dialog-title: "Добавить сотрудника";
+    // Basic info
+    in-out property <string> surname: "";
+    in-out property <string> name: "";
+    in-out property <string> patronym: "";
+    in-out property <int> selected-job-id: -1;
+    in-out property <int> selected-department-id: -1;
+    // Personal info
+    in-out property <string> passport-series: "";
+    in-out property <string> passport-number: "";
+    in-out property <string> date-of-birth: "";
+    in-out property <string> email: "";
+    in-out property <string> address: "";
+    in-out property <string> personal-phone: "";
+    in-out property <string> snils: "";
+    // Driver info
+    in-out property <string> driver-license-number: "";
+    in-out property <string> driver-license-category: "";
+    in-out property <string> driver-license-issue-date: "";
+    // Medical info
+    in-out property <string> medical-cert-number: "";
+    in-out property <string> medical-cert-issue-date: "";
+    
+    in-out property <[JobData]> jobs: [];
+    in-out property <string> error-message: "";
+    in-out property <bool> is-edit-mode: false;
+    
+    callback save-clicked();
+    callback cancel-clicked();
+    
+    preferred-width: 680px;
+    preferred-height: 780px;
+    min-height: 780px;
+    max-height: 900px;
+    
+    Rectangle {
+        background: MaterialPalette.surface;
+        
+        VerticalBox {
+            padding: 24px;
+            spacing: 16px;
+            
+            // Dialog title
+            MaterialText {
+                text: root.dialog-title;
+                font-size: 24px;
+                font-weight: 600;
+            }
+            
+            // Scrollable content with all fields
+            ScrollView {
+                height: 600px;
+                viewport-height: 1200px;
+                
+                VerticalBox {
+                    spacing: 24px;
+                    
+                    // SECTION 1: Basic Information
+                    VerticalBox {
+                        spacing: 12px;
+                        
+                        MaterialText {
+                            text: "Основная информация";
+                            font-size: 18px;
+                            font-weight: 600;
+                        }
+                        
+                        HorizontalBox {
+                            spacing: 12px;
+                            
+                            VerticalBox {
+                                horizontal-stretch: 1;
+                                spacing: 8px;
+                                
+                                MaterialText {
+                                    text: "Фамилия *";
+                                    font-size: 14px;
+                                }
+                                TextField {
+                                    text <=> root.surname;
+                                    placeholder-text: "Фамилия";
+                                }
+                            }
+                            
+                            VerticalBox {
+                                horizontal-stretch: 1;
+                                spacing: 8px;
+                                
+                                MaterialText {
+                                    text: "Имя *";
+                                    font-size: 14px;
+                                }
+                                TextField {
+                                    text <=> root.name;
+                                    placeholder-text: "Имя";
+                                }
+                            }
+                        }
+                        
+                        HorizontalBox {
+                            spacing: 12px;
+                            
+                            VerticalBox {
+                                horizontal-stretch: 1;
+                                spacing: 8px;
+                                
+                                MaterialText {
+                                    text: "Отчество";
+                                    font-size: 14px;
+                                }
+                                TextField {
+                                    text <=> root.patronym;
+                                    placeholder-text: "Отчество";
+                                }
+                            }
+                            
+                            VerticalBox {
+                                horizontal-stretch: 1;
+                                spacing: 8px;
+                                
+                                MaterialText {
+                                    text: "Должность *";
+                                    font-size: 14px;
+                                }
+                                Rectangle {
+                                    height: 48px;
+                                    background: MaterialPalette.surface_container;
+                                    border-radius: 4px;
+                                    MaterialText {
+                                        text: "Выберите должность";
+                                        vertical-alignment: center;
+                                        horizontal-alignment: center;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    // SECTION 2: Personal Information  
+                    VerticalBox {
+                        spacing: 12px;
+                        
+                        MaterialText {
+                            text: "Личные данные";
+                            font-size: 18px;
+                            font-weight: 600;
+                        }
+                        
+                        HorizontalBox {
+                            spacing: 12px;
+                            
+                            VerticalBox {
+                                horizontal-stretch: 1;
+                                spacing: 8px;
+                                MaterialText {
+                                    text: "Серия паспорта";
+                                    font-size: 14px;
+                                }
+                                TextField {
+                                    text <=> root.passport-series;
+                                    placeholder-text: "0000";
+                                }
+                            }
+                            
+                            VerticalBox {
+                                horizontal-stretch: 1;
+                                spacing: 8px;
+                                MaterialText {
+                                    text: "Номер паспорта";
+                                    font-size: 14px;
+                                }
+                                TextField {
+                                    text <=> root.passport-number;
+                                    placeholder-text: "000000";
+                                }
+                            }
+                        }
+                        
+                        HorizontalBox {
+                            spacing: 12px;
+                            
+                            VerticalBox {
+                                horizontal-stretch: 1;
+                                spacing: 8px;
+                                MaterialText {
+                                    text: "Email";
+                                    font-size: 14px;
+                                }
+                                TextField {
+                                    text <=> root.email;
+                                    placeholder-text: "user@example.com";
+                                }
+                            }
+                            
+                            VerticalBox {
+                                horizontal-stretch: 1;
+                                spacing: 8px;
+                                MaterialText {
+                                    text: "Личный телефон";
+                                    font-size: 14px;
+                                }
+                                TextField {
+                                    text <=> root.personal-phone;
+                                    placeholder-text: "+7 (999) 000-00-00";
+                                }
+                            }
+                        }
+                        
+                        VerticalBox {
+                            spacing: 8px;
+                            MaterialText {
+                                text: "Адрес";
+                                font-size: 14px;
+                            }
+                            TextField {
+                                text <=> root.address;
+                                placeholder-text: "Город, улица, дом";
+                            }
+                        }
+                        
+                        VerticalBox {
+                            spacing: 8px;
+                            MaterialText {
+                                text: "СНИЛС";
+                                font-size: 14px;
+                            }
+                            TextField {
+                                text <=> root.snils;
+                                placeholder-text: "123-456-789 01";
+                            }
+                        }
+                    }
+                    
+                    // SECTION 3: Driver Information
+                    VerticalBox {
+                        spacing: 12px;
+                        
+                        MaterialText {
+                            text: "Водительские права";
+                            font-size: 18px;
+                            font-weight: 600;
+                        }
+                        
+                        HorizontalBox {
+                            spacing: 12px;
+                            
+                            VerticalBox {
+                                horizontal-stretch: 1;
+                                spacing: 8px;
+                                MaterialText {
+                                    text: "Номер ВУ";
+                                    font-size: 14px;
+                                }
+                                TextField {
+                                    text <=> root.driver-license-number;
+                                    placeholder-text: "00 00 000000";
+                                }
+                            }
+                            
+                            VerticalBox {
+                                horizontal-stretch: 1;
+                                spacing: 8px;
+                                MaterialText {
+                                    text: "Категория";
+                                    font-size: 14px;
+                                }
+                                TextField {
+                                    text <=> root.driver-license-category;
+                                    placeholder-text: "A, B, C, D, E";
+                                }
+                            }
+                        }
+                    }
+                    
+                    // SECTION 4: Medical Information
+                    VerticalBox {
+                        spacing: 12px;
+                        
+                        MaterialText {
+                            text: "Медицинская справка";
+                            font-size: 18px;
+                            font-weight: 600;
+                        }
+                        
+                        VerticalBox {
+                            spacing: 8px;
+                            MaterialText {
+                                text: "Номер справки";
+                                font-size: 14px;
+                            }
+                            TextField {
+                                text <=> root.medical-cert-number;
+                                placeholder-text: "000000";
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Error message
+            if root.error-message != "": MaterialText {
+                text: root.error-message;
+                color: MaterialPalette.error;
+                font-size: 14px;
+            }
+            
+            // Action buttons
+            HorizontalBox {
+                spacing: 12px;
+                alignment: end;
+                
+                OutlineButton {
+                    text: "Отмена";
+                    clicked => {
+                        root.cancel-clicked();
+                    }
+                }
+                
+                FilledButton {
+                    text: root.is-edit-mode ? "Сохранить" : "Добавить";
+                    enabled: root.surname != "" && root.name != "" && root.selected-job-id >= 0;
+                    clicked => {
+                        root.save-clicked();
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Delete Confirmation Dialog
+export component DeleteConfirmDialog inherits Dialog {
+    in-out property <string> employee-name: "";
+    
+    callback confirm-delete();
+    callback cancel-delete();
+    
+    preferred-width: 400px;
+    preferred-height: 200px;
+    
+    Rectangle {
+        background: MaterialPalette.surface;
+        
+        VerticalBox {
+            padding: 24px;
+            spacing: 20px;
+            
+            MaterialText {
+                text: "Подтверждение удаления";
+                font-size: 20px;
+                font-weight: 600;
+            }
+            
+            MaterialText {
+                text: "Вы уверены, что хотите удалить сотрудника " + root.employee-name + "?";
+                font-size: 16px;
+                wrap: word-wrap;
+            }
+            
+            Rectangle {
+                vertical-stretch: 1;
+            }
+            
+            HorizontalBox {
+                spacing: 12px;
+                alignment: end;
+                
+                OutlineButton {
+                    text: "Отмена";
+                    clicked => {
+                        root.cancel-delete();
+                    }
+                }
+                
+                FilledButton {
+                    text: "Удалить";
+                    clicked => {
+                        root.confirm-delete();
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,229 @@
+import { VerticalBox, HorizontalBox, ScrollView } from "std-widgets.slint";
+import { NavigationDrawer, MaterialText, TonalButton } from "../material-1.0/material.slint";
+import { MaterialPalette } from "../material-1.0/ui/styling/material_palette.slint";
+import { Elevation } from "../material-1.0/ui/components/elevation.slint";
+
+// Main navigation structure with Material Design NavigationDrawer
+export component AppNavigation inherits Rectangle {
+    in-out property <int> current-group: 0;
+    in-out property <int> current-index: 0;
+    in-out property <bool> drawer-open: true;
+    in-out property <string> current-user: "";
+    
+    callback navigation-selected(int, int);
+    callback logout();
+    
+    HorizontalBox {
+        // Navigation panel - unified drawer + app bar section
+        if root.drawer-open: Rectangle {
+            width: 280px;
+            
+            Elevation {
+                level: 1;
+                border-radius: 0px;
+                background: MaterialPalette.surface_container;
+            }
+            
+            VerticalBox {
+                // Navigation app bar section
+                Rectangle {
+                    height: 64px;
+                    background: transparent;
+                
+                HorizontalBox {
+                    padding-left: 16px;
+                    padding-right: 16px;
+                    spacing: 16px;
+                    alignment: center;
+                    
+                    Rectangle {
+                        width: 48px;
+                        height: 48px;
+                        
+                        TouchArea {
+                            clicked => {
+                                root.drawer-open = !root.drawer-open;
+                            }
+                            
+                            // Hamburger icon
+                            VerticalLayout {
+                                padding: 12px;
+                                spacing: 6px;
+                                alignment: center;
+                                
+                                Rectangle {
+                                    height: 3px;
+                                    background: MaterialPalette.on_surface;
+                                    border-radius: 1.5px;
+                                }
+                                Rectangle {
+                                    height: 3px;
+                                    background: MaterialPalette.on_surface;
+                                    border-radius: 1.5px;
+                                }
+                                Rectangle {
+                                    height: 3px;
+                                    background: MaterialPalette.on_surface;
+                                    border-radius: 1.5px;
+                                }
+                            }
+                        }
+                    }
+                    
+                    MaterialText {
+                        text: "Меню";
+                        font-size: 16px;
+                        font-weight: 500;
+                        vertical-alignment: center;
+                        horizontal-stretch: 1;
+                    }
+                }
+            }
+            
+            // Navigation Drawer
+            Rectangle {
+                background: transparent;
+                vertical-stretch: 1;
+                
+                ScrollView {
+                    nav-drawer := NavigationDrawer {
+                        width: 280px;
+                        current-group: root.current-group;
+                        current-index: root.current-index;
+                        
+                        groups: [
+                    {
+                        title: "Главная",
+                        items: [
+                            { text: "Панель управления" }
+                        ]
+                    },
+                    {
+                        title: "Персонал",
+                        items: [
+                            { text: "Сотрудники" },
+                            { text: "Должности" },
+                            { text: "Пользователи" }
+                        ]
+                    },
+                    {
+                        title: "Транспорт",
+                        items: [
+                            { text: "Автобусы" },
+                            { text: "Маршруты" },
+                            { text: "Расписание" },
+                            { text: "Обслуживание" }
+                        ]
+                    },
+                    {
+                        title: "Продажи",
+                        items: [
+                            { text: "Билеты" },
+                            { text: "Продажи" }
+                        ]
+                    },
+                    {
+                        title: "Отчёты",
+                        items: [
+                            { text: "Отчёты и статистика" }
+                        ]
+                    }
+                ];
+                
+                        selected => {
+                            root.navigation-selected(self.current-group, self.current-index);
+                        }
+                    }
+                }
+            }
+            }
+        }
+        
+        // Main content area
+        VerticalBox {
+            horizontal-stretch: 1;
+            
+            // Content app bar - matches navigation panel
+            Rectangle {
+                height: 64px;
+                
+                Elevation {
+                    level: 1;
+                    border-radius: 0px;
+                    background: MaterialPalette.surface_container;
+                }
+                
+                HorizontalBox {
+                    padding-left: 16px;
+                    padding-right: 16px;
+                    spacing: 16px;
+                    
+                    if !root.drawer-open: Rectangle {
+                        width: 48px;
+                        height: 48px;
+                        
+                        TouchArea {
+                            clicked => {
+                                root.drawer-open = !root.drawer-open;
+                            }
+                            
+                            // Hamburger icon
+                            VerticalLayout {
+                                padding: 12px;
+                                spacing: 6px;
+                                alignment: center;
+                                
+                                Rectangle {
+                                    height: 3px;
+                                    background: MaterialPalette.on_surface;
+                                    border-radius: 1.5px;
+                                }
+                                Rectangle {
+                                    height: 3px;
+                                    background: MaterialPalette.on_surface;
+                                    border-radius: 1.5px;
+                                }
+                                Rectangle {
+                                    height: 3px;
+                                    background: MaterialPalette.on_surface;
+                                    border-radius: 1.5px;
+                                }
+                            }
+                        }
+                    }
+                    
+                    MaterialText {
+                        text: "Система управления автопарком автобусов";
+                        font-size: 20px;
+                        font-weight: 500;
+                        vertical-alignment: center;
+                        horizontal-stretch: 1;
+                    }
+                    
+                    MaterialText {
+                        text: root.current-user;
+                        vertical-alignment: center;
+                    }
+                    
+                    TonalButton {
+                        text: "Выход";
+                        clicked => {
+                            root.logout();
+                        }
+                    }
+                }
+            }
+            
+            // Content area with rounded top corners
+            Rectangle {
+                vertical-stretch: 1;
+                background: MaterialPalette.surface;
+                border-top-left-radius: 28px;
+                border-top-right-radius: 28px;
+                clip: true;
+                
+                @children
+            }
+        }
+    }
+}

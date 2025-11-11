@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -196,46 +196,85 @@ namespace TicketSalesApp.UI.LegacyForms.DX.Windows
             var role = ApiClientService.Instance.UserRole;
             Log.Debug("Applying permissions for role: {0}", role.HasValue ? role.Value.ToString() : "None");
 
+            // Role: 0 = regular user (non-employee, ticket buying/selling only)
+            // Role: 1 = admin (employee, full access)
             bool isAdmin = role.HasValue && role.Value == 1;
+            bool isEmployee = isAdmin; // In this system, admins = employees
 
-            // --- Ribbon Button Visibility/Enabled State --- 
+            Log.Info("Permission check - IsAdmin: {0}, IsEmployee: {1}, Role value: {2}", 
+                isAdmin, isEmployee, role.HasValue ? role.Value.ToString() : "NULL");
 
-            // Assumed Admin-Only functions
-            if (bbiUserManagement != null) bbiUserManagement.Enabled = isAdmin;
-            if (bbiPermissions != null) bbiPermissions.Enabled = isAdmin;
-            if (bbiJobs != null) bbiJobs.Enabled = isAdmin; // Example: Only admins manage job titles
-            // Add other admin-only buttons here...
-            // Example: Potentially Maintenance, Sales Statistics etc might be admin only
-            if (bbiMaintenance != null) bbiMaintenance.Enabled = isAdmin;
-            if (bbiSalesStatistics != null) bbiSalesStatistics.Enabled = isAdmin;
-
-            // --- Potentially Hide Entire Ribbon Pages/Groups for non-admins ---
-            // Example: Hide System Admin Page for non-admins
-            if (ribbonPage4 != null) ribbonPage4.Visible = isAdmin;
-
-            // Example: Hide Inventory Management Page (if permissions require)
-            if (ribbonPage3 != null) ribbonPage3.Visible = isAdmin; // Or based on specific role
-
-            // Example: Maybe regular users can only view tickets/schedules but not manage them
-            // You might need finer control than just enabling/disabling top-level buttons.
-            // This might involve passing the role to the child forms themselves.
-
-            // --- NavBar Control Item Visibility/Enabled State (Example) ---
-            /*
-            if (navBarControl2 != null)
-            {
-               // Example: Hide System Admin group
-               // Find NavBarGroup by Caption or Name
-               var adminGroup = navBarControl2.Groups.FirstOrDefault(g => g.Caption == "System Administration"); 
-               if (adminGroup != null) adminGroup.Visible = isAdmin;
-
-               // Example: Disable specific items
-               var jobItem = navBarControl2.Items.FirstOrDefault(i => i.Name == "navBarItem_Jobs"); // Assuming Name property is set in designer
-               if (jobItem != null) jobItem.Enabled = isAdmin; 
+            // === EMPLOYEE/ADMIN FUNCTIONS (Role 1) ===
+            // These buttons are for managing company operations - employees only
+            if (bbiBuses != null) {
+                bbiBuses.Enabled = isEmployee;
+                Log.Debug("bbiBuses enabled: {0}", isEmployee);
             }
-            */
+            if (bbiRoutes != null) {
+                bbiRoutes.Enabled = isEmployee;
+                Log.Debug("bbiRoutes enabled: {0}", isEmployee);
+            }
+            if (bbiEmployees != null) {
+                bbiEmployees.Enabled = isEmployee;
+                Log.Debug("bbiEmployees enabled: {0}", isEmployee);
+            }
+            if (bbiJobs != null) {
+                bbiJobs.Enabled = isEmployee;
+                Log.Debug("bbiJobs enabled: {0}", isEmployee);
+            }
+            if (bbiMaintenance != null) {
+                bbiMaintenance.Enabled = isEmployee;
+                Log.Debug("bbiMaintenance enabled: {0}", isEmployee);
+            }
+            if (bbiRouteSchedules != null) {
+                bbiRouteSchedules.Enabled = isEmployee;
+                Log.Debug("bbiRouteSchedules enabled: {0}", isEmployee);
+            }
+            if (bbiSalesStatistics != null) {
+                bbiSalesStatistics.Enabled = isEmployee;
+                Log.Debug("bbiSalesStatistics enabled: {0}", isEmployee);
+            }
 
-            Log.Debug("Permissions applied.");
+            // === SYSTEM ADMIN FUNCTIONS (Role 1 only) ===
+            // User management and permissions are admin-only
+            if (bbiUserManagement != null) {
+                bbiUserManagement.Enabled = isAdmin;
+                Log.Debug("bbiUserManagement enabled: {0}", isAdmin);
+            }
+            if (bbiPermissions != null) {
+                bbiPermissions.Enabled = isAdmin;
+                Log.Debug("bbiPermissions enabled: {0}", isAdmin);
+            }
+
+            // === CUSTOMER FUNCTIONS (All users) ===
+            // Ticket buying and schedule viewing - available to everyone
+            if (bbiTickets != null) {
+                bbiTickets.Enabled = true; // Everyone can manage tickets
+                Log.Debug("bbiTickets enabled: true (public)");
+            }
+            if (bbiSales != null) {
+                bbiSales.Enabled = true; // Everyone can view/make sales
+                Log.Debug("bbiSales enabled: true (public)");
+            }
+            if (bbiIncomeReport != null) {
+                bbiIncomeReport.Enabled = isEmployee; // Financial reports for employees only
+                Log.Debug("bbiIncomeReport enabled: {0}", isEmployee);
+            }
+
+            // --- Hide Entire Ribbon Pages for non-employees ---
+            // System Admin Page (ribbonPage4) - admin only
+            if (ribbonPage4 != null) {
+                ribbonPage4.Visible = isAdmin;
+                Log.Debug("ribbonPage4 (System Admin) visible: {0}", isAdmin);
+            }
+
+            // Inventory Management Page (ribbonPage3) - employees only
+            if (ribbonPage3 != null) {
+                ribbonPage3.Visible = isEmployee;
+                Log.Debug("ribbonPage3 (Inventory) visible: {0}", isEmployee);
+            }
+
+            Log.Info("Permissions applied successfully.");
         }
 
         // --- Update Status Bar --- 
