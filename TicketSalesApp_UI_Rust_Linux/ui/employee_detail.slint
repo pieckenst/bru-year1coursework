@@ -194,10 +194,25 @@ export component EmployeeDetailView inherits Rectangle {
                         
                         // Document list
                         if root.documents-expanded: VerticalBox {
-                            spacing: 8px;
+                            spacing: 12px;
+                            
+                            // Empty state
+                            if root.documents.length == 0: Rectangle {
+                                height: 60px;
+                                background: MaterialPalette.surface-variant.with-alpha(0.3);
+                                border-radius: 8px;
+                                
+                                MaterialText {
+                                    text: "Нет документов";
+                                    font-size: 14px;
+                                    color: MaterialPalette.on-surface-variant;
+                                    horizontal-alignment: center;
+                                    vertical-alignment: center;
+                                }
+                            }
                             
                             for doc[idx] in root.documents: Rectangle {
-                                height: 80px;
+                                min-height: 95px;
                                 background: MaterialPalette.surface;
                                 border-radius: 8px;
                                 
@@ -206,13 +221,15 @@ export component EmployeeDetailView inherits Rectangle {
                                     spacing: 12px;
                                     
                                     VerticalBox {
-                                        spacing: 4px;
+                                        spacing: 6px;
                                         horizontal-stretch: 1;
                                         
                                         MaterialText {
                                             text: doc.document-type;
                                             font-size: 15px;
                                             font-weight: 600;
+                                            wrap: word-wrap;
+                                            overflow: elide;
                                         }
                                         
                                         MaterialText {
@@ -362,10 +379,25 @@ export component EmployeeDetailView inherits Rectangle {
                         }
                         
                         if root.training-expanded: VerticalBox {
-                            spacing: 8px;
+                            spacing: 12px;
+                            
+                            // Empty state
+                            if root.training.length == 0: Rectangle {
+                                height: 60px;
+                                background: MaterialPalette.surface-variant.with-alpha(0.3);
+                                border-radius: 8px;
+                                
+                                MaterialText {
+                                    text: "Нет обучений и сертификаций";
+                                    font-size: 14px;
+                                    color: MaterialPalette.on-surface-variant;
+                                    horizontal-alignment: center;
+                                    vertical-alignment: center;
+                                }
+                            }
                             
                             for train[idx] in root.training: Rectangle {
-                                height: 80px;
+                                min-height: 100px;
                                 background: MaterialPalette.surface;
                                 border-radius: 8px;
                                 
@@ -374,7 +406,7 @@ export component EmployeeDetailView inherits Rectangle {
                                     spacing: 12px;
                                     
                                     VerticalBox {
-                                        spacing: 4px;
+                                        spacing: 6px;
                                         horizontal-stretch: 1;
                                         
                                         HorizontalBox {
@@ -384,6 +416,8 @@ export component EmployeeDetailView inherits Rectangle {
                                                 text: train.training-name;
                                                 font-size: 15px;
                                                 font-weight: 600;
+                                                wrap: word-wrap;
+                                                overflow: elide;
                                             }
                                             
                                             if train.is-mandatory: MaterialText {
@@ -538,10 +572,25 @@ export component EmployeeDetailView inherits Rectangle {
                         }
                         
                         if root.contacts-expanded: VerticalBox {
-                            spacing: 8px;
+                            spacing: 12px;
+                            
+                            // Empty state
+                            if root.contacts.length == 0: Rectangle {
+                                height: 60px;
+                                background: MaterialPalette.surface-variant.with-alpha(0.3);
+                                border-radius: 8px;
+                                
+                                MaterialText {
+                                    text: "Нет экстренных контактов";
+                                    font-size: 14px;
+                                    color: MaterialPalette.on-surface-variant;
+                                    horizontal-alignment: center;
+                                    vertical-alignment: center;
+                                }
+                            }
                             
                             for contact[idx] in root.contacts: Rectangle {
-                                height: 80px;
+                                min-height: 95px;
                                 background: MaterialPalette.surface;
                                 border-radius: 8px;
                                 
@@ -550,7 +599,7 @@ export component EmployeeDetailView inherits Rectangle {
                                     spacing: 12px;
                                     
                                     VerticalBox {
-                                        spacing: 4px;
+                                        spacing: 6px;
                                         horizontal-stretch: 1;
                                         
                                         HorizontalBox {
@@ -565,6 +614,8 @@ export component EmployeeDetailView inherits Rectangle {
                                                 text: contact.contact-name + " (" + contact.relationship + ")";
                                                 font-size: 15px;
                                                 font-weight: 600;
+                                                wrap: word-wrap;
+                                                overflow: elide;
                                             }
                                             
                                             if contact.is-primary: MaterialText {
@@ -697,10 +748,25 @@ export component EmployeeDetailView inherits Rectangle {
                         }
                         
                         if root.vacations-expanded: VerticalBox {
-                            spacing: 8px;
+                            spacing: 12px;
+                            
+                            // Empty state
+                            if root.vacations.length == 0: Rectangle {
+                                height: 60px;
+                                background: MaterialPalette.surface-variant.with-alpha(0.3);
+                                border-radius: 8px;
+                                
+                                MaterialText {
+                                    text: "Нет запросов на отпуск";
+                                    font-size: 14px;
+                                    color: MaterialPalette.on-surface-variant;
+                                    horizontal-alignment: center;
+                                    vertical-alignment: center;
+                                }
+                            }
                             
                             for vac[idx] in root.vacations: Rectangle {
-                                height: 90px;
+                                min-height: 100px;
                                 background: MaterialPalette.surface;
                                 border-radius: 8px;
                                 
@@ -709,7 +775,7 @@ export component EmployeeDetailView inherits Rectangle {
                                     spacing: 12px;
                                     
                                     VerticalBox {
-                                        spacing: 4px;
+                                        spacing: 6px;
                                         horizontal-stretch: 1;
                                         
                                         HorizontalBox {
@@ -719,6 +785,7 @@ export component EmployeeDetailView inherits Rectangle {
                                                 text: vac.start-date + " - " + vac.end-date;
                                                 font-size: 15px;
                                                 font-weight: 600;
+                                                wrap: word-wrap;
                                             }
                                             
                                             MaterialText {

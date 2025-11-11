@@ -5,7 +5,8 @@ use serde_json::Value;
 impl ApiClient {
     /// Get all emergency contacts for an employee
     pub async fn get_emergency_contacts(&self, employee_id: i64) -> Result<Vec<EmergencyContact>, ApiError> {
-        let url = format!("{}/employees/{}/emergency-contacts", self.base_url, employee_id);
+        let url = format!("{}/api/Employees/{}/emergency-contacts", self.base_url, employee_id);
+        println!("🌐 Calling URL: {}", url);
         
         let response = self.client
             .get(&url)
@@ -21,9 +22,11 @@ impl ApiClient {
         let text = response.text().await
             .map_err(|e| ApiError::ParseError(e.to_string()))?;
         
+        println!("📦 Contacts JSON response: {}", &text[..text.len().min(500)]);
+        
         // Handle ReferenceHandler.Preserve format
         let json: Value = serde_json::from_str(&text)
-            .map_err(|e| ApiError::ParseError(e.to_string()))?;
+            .map_err(|e| ApiError::ParseError(format!("JSON parse error: {} - Response: {}", e, &text[..text.len().min(200)])))?;
         
         if let Some(values_array) = json.get("$values") {
             serde_json::from_value(values_array.clone())

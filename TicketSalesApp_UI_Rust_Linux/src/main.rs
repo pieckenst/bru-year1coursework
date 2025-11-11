@@ -624,77 +624,95 @@ fn show_main_window(
                             employee.patronym.unwrap_or_default().trim()
                         );
                         
+                        println!("Loading detail for: {}", full_name);
+                        
                         ui_weak.unwrap().set_detail_employee_id(emp_id);
                         ui_weak.unwrap().set_detail_employee_name(slint::SharedString::from(full_name));
                         
                         // Convert and set documents
-                        if let Ok(docs) = docs_result {
-                            let doc_data: Vec<_> = docs.iter().map(|doc| {
-                                DocumentData {
-                                    document_id: doc.document_id as i32,
-                                    document_type: slint::SharedString::from(&doc.document_type),
-                                    document_number: slint::SharedString::from(&doc.document_number),
-                                    issue_date: slint::SharedString::from(date_utils::format_date_for_ui(Some(doc.issue_date))),
-                                    expiry_date: slint::SharedString::from(
-                                        doc.expiry_date.map(|d| date_utils::format_date_for_ui(Some(d))).unwrap_or_default()
-                                    ),
-                                    status: slint::SharedString::from(doc.status_badge()),
-                                }
-                            }).collect();
-                            let model = std::rc::Rc::new(slint::VecModel::from(doc_data));
-                            ui_weak.unwrap().set_employee_documents(model.into());
+                        match &docs_result {
+                            Ok(docs) => {
+                                println!("✅ Loaded {} documents", docs.len());
+                                let doc_data: Vec<_> = docs.iter().map(|doc| {
+                                    DocumentData {
+                                        document_id: doc.document_id as i32,
+                                        document_type: slint::SharedString::from(&doc.document_type),
+                                        document_number: slint::SharedString::from(&doc.document_number),
+                                        issue_date: slint::SharedString::from(date_utils::format_date_for_ui(Some(doc.issue_date))),
+                                        expiry_date: slint::SharedString::from(
+                                            doc.expiry_date.map(|d| date_utils::format_date_for_ui(Some(d))).unwrap_or_default()
+                                        ),
+                                        status: slint::SharedString::from(doc.status_badge()),
+                                    }
+                                }).collect();
+                                let model = std::rc::Rc::new(slint::VecModel::from(doc_data));
+                                ui_weak.unwrap().set_employee_documents(model.into());
+                            }
+                            Err(e) => eprintln!("❌ Failed to load documents: {}", e),
                         }
                         
                         // Convert and set training
-                        if let Ok(training) = training_result {
-                            let training_data: Vec<_> = training.iter().map(|train| {
-                                TrainingData {
-                                    training_id: train.training_id as i32,
-                                    training_name: slint::SharedString::from(&train.training_name),
-                                    certificate_number: slint::SharedString::from(train.certificate_number.as_deref().unwrap_or("")),
-                                    completion_date: slint::SharedString::from(date_utils::format_date_for_ui(Some(train.completion_date))),
-                                    expiry_date: slint::SharedString::from(
-                                        train.expiry_date.map(|d| date_utils::format_date_for_ui(Some(d))).unwrap_or_default()
-                                    ),
-                                    status: slint::SharedString::from(train.status_text()),
-                                    is_mandatory: train.is_mandatory,
-                                }
-                            }).collect();
-                            let model = std::rc::Rc::new(slint::VecModel::from(training_data));
-                            ui_weak.unwrap().set_employee_training(model.into());
+                        match &training_result {
+                            Ok(training) => {
+                                println!("✅ Loaded {} training records", training.len());
+                                let training_data: Vec<_> = training.iter().map(|train| {
+                                    TrainingData {
+                                        training_id: train.training_id as i32,
+                                        training_name: slint::SharedString::from(&train.training_name),
+                                        certificate_number: slint::SharedString::from(train.certificate_number.as_deref().unwrap_or("")),
+                                        completion_date: slint::SharedString::from(date_utils::format_date_for_ui(Some(train.completion_date))),
+                                        expiry_date: slint::SharedString::from(
+                                            train.expiry_date.map(|d| date_utils::format_date_for_ui(Some(d))).unwrap_or_default()
+                                        ),
+                                        status: slint::SharedString::from(train.status_text()),
+                                        is_mandatory: train.is_mandatory,
+                                    }
+                                }).collect();
+                                let model = std::rc::Rc::new(slint::VecModel::from(training_data));
+                                ui_weak.unwrap().set_employee_training(model.into());
+                            }
+                            Err(e) => eprintln!("❌ Failed to load training: {}", e),
                         }
                         
                         // Convert and set contacts
-                        if let Ok(contacts) = contacts_result {
-                            let contact_data: Vec<_> = contacts.iter().map(|contact| {
-                                EmergencyContactData {
-                                    contact_id: contact.contact_id as i32,
-                                    contact_name: slint::SharedString::from(&contact.contact_name),
-                                    relationship: slint::SharedString::from(&contact.relationship),
-                                    phone_number: slint::SharedString::from(&contact.phone_number),
-                                    alternate_phone: slint::SharedString::from(contact.alternate_phone_number.as_deref().unwrap_or("")),
-                                    is_primary: contact.is_primary,
-                                }
-                            }).collect();
-                            let model = std::rc::Rc::new(slint::VecModel::from(contact_data));
-                            ui_weak.unwrap().set_employee_contacts(model.into());
+                        match &contacts_result {
+                            Ok(contacts) => {
+                                println!("✅ Loaded {} contacts", contacts.len());
+                                let contact_data: Vec<_> = contacts.iter().map(|contact| {
+                                    EmergencyContactData {
+                                        contact_id: contact.contact_id as i32,
+                                        contact_name: slint::SharedString::from(&contact.contact_name),
+                                        relationship: slint::SharedString::from(&contact.relationship),
+                                        phone_number: slint::SharedString::from(&contact.phone_number),
+                                        alternate_phone: slint::SharedString::from(contact.alternate_phone_number.as_deref().unwrap_or("")),
+                                        is_primary: contact.is_primary,
+                                    }
+                                }).collect();
+                                let model = std::rc::Rc::new(slint::VecModel::from(contact_data));
+                                ui_weak.unwrap().set_employee_contacts(model.into());
+                            }
+                            Err(e) => eprintln!("❌ Failed to load contacts: {}", e),
                         }
                         
                         // Convert and set vacations
-                        if let Ok(vacations) = vacations_result {
-                            let vacation_data: Vec<_> = vacations.iter().map(|vac| {
-                                VacationData {
-                                    request_id: vac.request_id as i32,
-                                    start_date: slint::SharedString::from(date_utils::format_date_for_ui(Some(vac.start_date))),
-                                    end_date: slint::SharedString::from(date_utils::format_date_for_ui(Some(vac.end_date))),
-                                    vacation_type: slint::SharedString::from(&vac.vacation_type),
-                                    days_requested: vac.days_requested,
-                                    status: slint::SharedString::from(&vac.status),
-                                    reason: slint::SharedString::from(vac.reason.as_deref().unwrap_or("")),
-                                }
-                            }).collect();
-                            let model = std::rc::Rc::new(slint::VecModel::from(vacation_data));
-                            ui_weak.unwrap().set_employee_vacations(model.into());
+                        match &vacations_result {
+                            Ok(vacations) => {
+                                println!("✅ Loaded {} vacation requests", vacations.len());
+                                let vacation_data: Vec<_> = vacations.iter().map(|vac| {
+                                    VacationData {
+                                        request_id: vac.request_id as i32,
+                                        start_date: slint::SharedString::from(date_utils::format_date_for_ui(Some(vac.start_date))),
+                                        end_date: slint::SharedString::from(date_utils::format_date_for_ui(Some(vac.end_date))),
+                                        vacation_type: slint::SharedString::from(&vac.vacation_type),
+                                        days_requested: vac.days_requested,
+                                        status: slint::SharedString::from(&vac.status),
+                                        reason: slint::SharedString::from(vac.reason.as_deref().unwrap_or("")),
+                                    }
+                                }).collect();
+                                let model = std::rc::Rc::new(slint::VecModel::from(vacation_data));
+                                ui_weak.unwrap().set_employee_vacations(model.into());
+                            }
+                            Err(e) => eprintln!("❌ Failed to load vacations: {}", e),
                         }
                         
                         ui_weak.unwrap().set_show_employee_detail(true);
