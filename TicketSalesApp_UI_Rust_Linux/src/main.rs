@@ -577,6 +577,354 @@ fn show_main_window(
         }
     });
     
+    // Handle view employee detail
+    let api_detail = api_client.clone();
+    main_ui.on_view_employee_detail_clicked({
+        let ui_handle = main_ui.as_weak();
+        move |emp_id| {
+            let ui = ui_handle.unwrap();
+            let api = api_detail.clone();
+            let ui_weak = ui.as_weak();
+            
+            slint::spawn_local(async move {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                
+                // Load employee
+                let emp_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_employee(emp_id as i64).await
+                });
+                
+                // Load all related data in parallel
+                let docs_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_employee_documents(emp_id as i64).await
+                });
+                
+                let training_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_employee_training(emp_id as i64).await
+                });
+                
+                let contacts_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_emergency_contacts(emp_id as i64).await
+                });
+                
+                let vacations_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_vacation_requests(emp_id as i64).await
+                });
+                
+                match emp_result {
+                    Ok(employee) => {
+                        let full_name = format!("{} {} {}", 
+                            employee.surname, 
+                            employee.name, 
+                            employee.patronym.unwrap_or_default().trim()
+                        );
+                        
+                        ui_weak.unwrap().set_detail_employee_id(emp_id);
+                        ui_weak.unwrap().set_detail_employee_name(slint::SharedString::from(full_name));
+                        
+                        // Convert and set documents
+                        if let Ok(docs) = docs_result {
+                            let doc_data: Vec<_> = docs.iter().map(|doc| {
+                                DocumentData {
+                                    document_id: doc.document_id as i32,
+                                    document_type: slint::SharedString::from(&doc.document_type),
+                                    document_number: slint::SharedString::from(&doc.document_number),
+                                    issue_date: slint::SharedString::from(date_utils::format_date_for_ui(Some(doc.issue_date))),
+                                    expiry_date: slint::SharedString::from(
+                                        doc.expiry_date.map(|d| date_utils::format_date_for_ui(Some(d))).unwrap_or_default()
+                                    ),
+                                    status: slint::SharedString::from(doc.status_badge()),
+                                }
+                            }).collect();
+                            let model = std::rc::Rc::new(slint::VecModel::from(doc_data));
+                            ui_weak.unwrap().set_employee_documents(model.into());
+                        }
+                        
+                        // Convert and set training
+                        if let Ok(training) = training_result {
+                            let training_data: Vec<_> = training.iter().map(|train| {
+                                TrainingData {
+                                    training_id: train.training_id as i32,
+                                    training_name: slint::SharedString::from(&train.training_name),
+                                    certificate_number: slint::SharedString::from(train.certificate_number.as_deref().unwrap_or("")),
+                                    completion_date: slint::SharedString::from(date_utils::format_date_for_ui(Some(train.completion_date))),
+                                    expiry_date: slint::SharedString::from(
+                                        train.expiry_date.map(|d| date_utils::format_date_for_ui(Some(d))).unwrap_or_default()
+                                    ),
+                                    status: slint::SharedString::from(train.status_text()),
+                                    is_mandatory: train.is_mandatory,
+                                }
+                            }).collect();
+                            let model = std::rc::Rc::new(slint::VecModel::from(training_data));
+                            ui_weak.unwrap().set_employee_training(model.into());
+                        }
+                        
+                        // Convert and set contacts
+                        if let Ok(contacts) = contacts_result {
+                            let contact_data: Vec<_> = contacts.iter().map(|contact| {
+                                EmergencyContactData {
+                                    contact_id: contact.contact_id as i32,
+                                    contact_name: slint::SharedString::from(&contact.contact_name),
+                                    relationship: slint::SharedString::from(&contact.relationship),
+                                    phone_number: slint::SharedString::from(&contact.phone_number),
+                                    alternate_phone: slint::SharedString::from(contact.alternate_phone_number.as_deref().unwrap_or("")),
+                                    is_primary: contact.is_primary,
+                                }
+                            }).collect();
+                            let model = std::rc::Rc::new(slint::VecModel::from(contact_data));
+                            ui_weak.unwrap().set_employee_contacts(model.into());
+                        }
+                        
+                        // Convert and set vacations
+                        if let Ok(vacations) = vacations_result {
+                            let vacation_data: Vec<_> = vacations.iter().map(|vac| {
+                                VacationData {
+                                    request_id: vac.request_id as i32,
+                                    start_date: slint::SharedString::from(date_utils::format_date_for_ui(Some(vac.start_date))),
+                                    end_date: slint::SharedString::from(date_utils::format_date_for_ui(Some(vac.end_date))),
+                                    vacation_type: slint::SharedString::from(&vac.vacation_type),
+                                    days_requested: vac.days_requested,
+                                    status: slint::SharedString::from(&vac.status),
+                                    reason: slint::SharedString::from(vac.reason.as_deref().unwrap_or("")),
+                                }
+                            }).collect();
+                            let model = std::rc::Rc::new(slint::VecModel::from(vacation_data));
+                            ui_weak.unwrap().set_employee_vacations(model.into());
+                        }
+                        
+                        ui_weak.unwrap().set_show_employee_detail(true);
+                        println!("Loaded detail view for employee {}", emp_id);
+                    }
+                    Err(e) => {
+                        eprintln!("Failed to load employee detail: {}", e);
+                    }
+                }
+            }).unwrap();
+        }
+    });
+    
+    // Placeholder callbacks for document operations
+    main_ui.on_add_document_clicked({
+        move || {
+            println!("Add document clicked - TODO: Implement dialog");
+        }
+    });
+    
+    main_ui.on_edit_document_clicked({
+        move |doc_id| {
+            println!("Edit document {} - TODO: Implement dialog", doc_id);
+        }
+    });
+    
+    let api_delete_doc = api_client.clone();
+    main_ui.on_delete_document_clicked({
+        let ui_handle = main_ui.as_weak();
+        move |doc_id| {
+            println!("Delete document {}", doc_id);
+            let api = api_delete_doc.clone();
+            let ui = ui_handle.unwrap();
+            let emp_id = ui.get_detail_employee_id();
+            
+            slint::spawn_local(async move {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.delete_employee_document(emp_id as i64, doc_id as i64).await
+                });
+                
+                match result {
+                    Ok(_) => {
+                        println!("Document {} deleted successfully", doc_id);
+                        // Reload documents
+                        // TODO: Reload document list
+                    }
+                    Err(e) => {
+                        eprintln!("Failed to delete document: {}", e);
+                    }
+                }
+            }).unwrap();
+        }
+    });
+    
+    // Placeholder callbacks for training operations
+    main_ui.on_add_training_clicked({
+        move || {
+            println!("Add training clicked - TODO: Implement dialog");
+        }
+    });
+    
+    main_ui.on_edit_training_clicked({
+        move |train_id| {
+            println!("Edit training {} - TODO: Implement dialog", train_id);
+        }
+    });
+    
+    let api_delete_train = api_client.clone();
+    main_ui.on_delete_training_clicked({
+        let ui_handle = main_ui.as_weak();
+        move |train_id| {
+            println!("Delete training {}", train_id);
+            let api = api_delete_train.clone();
+            let ui = ui_handle.unwrap();
+            let emp_id = ui.get_detail_employee_id();
+            
+            slint::spawn_local(async move {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.delete_employee_training(emp_id as i64, train_id as i64).await
+                });
+                
+                match result {
+                    Ok(_) => {
+                        println!("Training {} deleted successfully", train_id);
+                    }
+                    Err(e) => {
+                        eprintln!("Failed to delete training: {}", e);
+                    }
+                }
+            }).unwrap();
+        }
+    });
+    
+    // Placeholder callbacks for contact operations
+    main_ui.on_add_contact_clicked({
+        move || {
+            println!("Add contact clicked - TODO: Implement dialog");
+        }
+    });
+    
+    main_ui.on_edit_contact_clicked({
+        move |contact_id| {
+            println!("Edit contact {} - TODO: Implement dialog", contact_id);
+        }
+    });
+    
+    let api_delete_contact = api_client.clone();
+    main_ui.on_delete_contact_clicked({
+        let ui_handle = main_ui.as_weak();
+        move |contact_id| {
+            println!("Delete contact {}", contact_id);
+            let api = api_delete_contact.clone();
+            let ui = ui_handle.unwrap();
+            let emp_id = ui.get_detail_employee_id();
+            
+            slint::spawn_local(async move {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.delete_emergency_contact(emp_id as i64, contact_id as i64).await
+                });
+                
+                match result {
+                    Ok(_) => {
+                        println!("Contact {} deleted successfully", contact_id);
+                    }
+                    Err(e) => {
+                        eprintln!("Failed to delete contact: {}", e);
+                    }
+                }
+            }).unwrap();
+        }
+    });
+    
+    // Placeholder callbacks for vacation operations
+    main_ui.on_add_vacation_clicked({
+        move || {
+            println!("Add vacation clicked - TODO: Implement dialog");
+        }
+    });
+    
+    let api_approve_vac = api_client.clone();
+    main_ui.on_approve_vacation_clicked({
+        let ui_handle = main_ui.as_weak();
+        move |req_id| {
+            println!("Approve vacation {}", req_id);
+            let api = api_approve_vac.clone();
+            let ui = ui_handle.unwrap();
+            let emp_id = ui.get_detail_employee_id();
+            
+            slint::spawn_local(async move {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.approve_vacation_request(emp_id as i64, req_id as i64, None).await
+                });
+                
+                match result {
+                    Ok(_) => {
+                        println!("Vacation {} approved successfully", req_id);
+                        // TODO: Reload vacation list
+                    }
+                    Err(e) => {
+                        eprintln!("Failed to approve vacation: {}", e);
+                    }
+                }
+            }).unwrap();
+        }
+    });
+    
+    let api_reject_vac = api_client.clone();
+    main_ui.on_reject_vacation_clicked({
+        let ui_handle = main_ui.as_weak();
+        move |req_id| {
+            println!("Reject vacation {}", req_id);
+            let api = api_reject_vac.clone();
+            let ui = ui_handle.unwrap();
+            let emp_id = ui.get_detail_employee_id();
+            
+            slint::spawn_local(async move {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.reject_vacation_request(emp_id as i64, req_id as i64, None).await
+                });
+                
+                match result {
+                    Ok(_) => {
+                        println!("Vacation {} rejected successfully", req_id);
+                    }
+                    Err(e) => {
+                        eprintln!("Failed to reject vacation: {}", e);
+                    }
+                }
+            }).unwrap();
+        }
+    });
+    
+    let api_delete_vac = api_client.clone();
+    main_ui.on_delete_vacation_clicked({
+        let ui_handle = main_ui.as_weak();
+        move |req_id| {
+            println!("Delete vacation {}", req_id);
+            let api = api_delete_vac.clone();
+            let ui = ui_handle.unwrap();
+            let emp_id = ui.get_detail_employee_id();
+            
+            slint::spawn_local(async move {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.delete_vacation_request(emp_id as i64, req_id as i64).await
+                });
+                
+                match result {
+                    Ok(_) => {
+                        println!("Vacation {} deleted successfully", req_id);
+                    }
+                    Err(e) => {
+                        eprintln!("Failed to delete vacation: {}", e);
+                    }
+                }
+            }).unwrap();
+        }
+    });
+    
     // Initialize with Employees view (Group 1, Index 0)
     main_ui.set_current_nav_group(1);
     main_ui.set_current_nav_index(0);
