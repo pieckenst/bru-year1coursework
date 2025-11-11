@@ -3,6 +3,7 @@ import { MaterialWindow, FilledCard, TextField, FilledButton, TonalButton, Horiz
 import { MaterialPalette } from "../material-1.0/ui/styling/material_palette.slint";
 import { AppNavigation } from "navigation.slint";
 import { EmployeeDialog, DeleteConfirmDialog, JobData, DepartmentData } from "employee_dialogs.slint";
+import { EmployeeDetailView, DocumentData, TrainingData, EmergencyContactData, VacationData } from "employee_detail.slint";
 export { AuthWindow } from "auth_window.slint";
 
 // Employee data structure
@@ -63,14 +64,40 @@ export component AppWindow inherits Window {
     in-out property <int> delete-employee-id: 0;
     in-out property <string> delete-employee-name: "";
     
+    // Employee detail view state
+    in-out property <bool> show-employee-detail: false;
+    in-out property <int> detail-employee-id: 0;
+    in-out property <string> detail-employee-name: "";
+    in-out property <[DocumentData]> employee-documents: [];
+    in-out property <[TrainingData]> employee-training: [];
+    in-out property <[EmergencyContactData]> employee-contacts: [];
+    in-out property <[VacationData]> employee-vacations: [];
+    
     callback logout-clicked();
     callback refresh-employees();
     callback add-employee-clicked();
     callback edit-employee-clicked(int);
     callback delete-employee-clicked(int);
+    callback view-employee-detail-clicked(int);
     callback navigation-changed(int, int);
     callback save-employee();
     callback confirm-delete();
+    
+    // Employee detail callbacks
+    callback load-employee-documents(int);
+    callback add-document-clicked();
+    callback edit-document-clicked(int);
+    callback delete-document-clicked(int);
+    callback add-training-clicked();
+    callback edit-training-clicked(int);
+    callback delete-training-clicked(int);
+    callback add-contact-clicked();
+    callback edit-contact-clicked(int);
+    callback delete-contact-clicked(int);
+    callback add-vacation-clicked();
+    callback approve-vacation-clicked(int);
+    callback reject-vacation-clicked(int);
+    callback delete-vacation-clicked(int);
     
     AppNavigation {
         current-user: root.current-user;
@@ -211,6 +238,27 @@ export component AppWindow inherits Window {
                                     HorizontalBox {
                                         spacing: 8px;
                                         alignment: center;
+                                        
+                                        // View Details button
+                                        Rectangle {
+                                            width: 40px;
+                                            height: 40px;
+                                            border-radius: 20px;
+                                            background: view-touch.has-hover ? MaterialPalette.primary_container : transparent;
+                                            
+                                            view-touch := TouchArea {
+                                                clicked => {
+                                                    root.view-employee-detail-clicked(employee.id);
+                                                }
+                                            }
+                                            
+                                            MaterialText {
+                                                text: "👁️";
+                                                font-size: 18px;
+                                                vertical-alignment: center;
+                                                horizontal-alignment: center;
+                                            }
+                                        }
                                         
                                         // Edit button
                                         Rectangle {
@@ -359,6 +407,87 @@ export component AppWindow inherits Window {
         
         cancel-delete => {
             root.show-delete-dialog = false;
+        }
+    }
+    
+    // Employee Detail View Overlay
+    if root.show-employee-detail: Rectangle {
+        width: 100%;
+        height: 100%;
+        background: #00000088;
+        
+        Rectangle {
+            width: 800px;
+            height: parent.height;
+            x: parent.width - self.width;
+            background: MaterialPalette.surface;
+            drop-shadow-blur: 24px;
+            drop-shadow-color: #00000044;
+            
+            EmployeeDetailView {
+                employee-id: root.detail-employee-id;
+                employee-name: root.detail-employee-name;
+                documents: root.employee-documents;
+                training: root.employee-training;
+                contacts: root.employee-contacts;
+                vacations: root.employee-vacations;
+                
+                close-clicked => {
+                    root.show-employee-detail = false;
+                }
+                
+                add-document-clicked => {
+                    root.add-document-clicked();
+                }
+                
+                edit-document-clicked(doc-id) => {
+                    root.edit-document-clicked(doc-id);
+                }
+                
+                delete-document-clicked(doc-id) => {
+                    root.delete-document-clicked(doc-id);
+                }
+                
+                add-training-clicked => {
+                    root.add-training-clicked();
+                }
+                
+                edit-training-clicked(train-id) => {
+                    root.edit-training-clicked(train-id);
+                }
+                
+                delete-training-clicked(train-id) => {
+                    root.delete-training-clicked(train-id);
+                }
+                
+                add-contact-clicked => {
+                    root.add-contact-clicked();
+                }
+                
+                edit-contact-clicked(contact-id) => {
+                    root.edit-contact-clicked(contact-id);
+                }
+                
+                delete-contact-clicked(contact-id) => {
+                    root.delete-contact-clicked(contact-id);
+                }
+                
+                add-vacation-clicked => {
+                    root.add-vacation-clicked();
+                }
+                
+                approve-vacation-clicked(req-id) => {
+                    root.approve-vacation-clicked(req-id);
+                }
+                
+                reject-vacation-clicked(req-id) => {
+                    root.reject-vacation-clicked(req-id);
+                }
+                
+                delete-vacation-clicked(req-id) => {
+                    root.delete-vacation-clicked(req-id);
+                }
+            }
         }
     }
 }

@@ -2,6 +2,10 @@ pub mod auth;
 pub mod employees;
 pub mod departments;
 pub mod jobs;
+pub mod employee_documents;
+pub mod employee_training;
+pub mod emergency_contacts;
+pub mod vacation_requests;
 
 use reqwest::{Client, Response, StatusCode};
 use serde::{Deserialize, Serialize};
@@ -23,6 +27,9 @@ pub enum ApiError {
     NotFound(String),
     ServerError(String),
     ValidationError(String),
+    Unauthorized,
+    ParseError(String),
+    RequestFailed(String),
 }
 
 impl fmt::Display for ApiError {
@@ -33,6 +40,9 @@ impl fmt::Display for ApiError {
             ApiError::NotFound(msg) => write!(f, "Not found: {}", msg),
             ApiError::ServerError(msg) => write!(f, "Server error: {}", msg),
             ApiError::ValidationError(msg) => write!(f, "Validation error: {}", msg),
+            ApiError::Unauthorized => write!(f, "Unauthorized"),
+            ApiError::ParseError(msg) => write!(f, "Parse error: {}", msg),
+            ApiError::RequestFailed(msg) => write!(f, "Request failed: {}", msg),
         }
     }
 }

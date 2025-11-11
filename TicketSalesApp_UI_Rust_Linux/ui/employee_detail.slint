@@ -1,0 +1,829 @@
+import { Button, VerticalBox, HorizontalBox, ScrollView } from "std-widgets.slint";
+import { MaterialText, FilledButton, TonalButton } from "../material-1.0/material.slint";
+import { MaterialPalette } from "../material-1.0/ui/styling/material_palette.slint";
+
+// Document data structure
+export struct DocumentData {
+    document-id: int,
+    document-type: string,
+    document-number: string,
+    issue-date: string,
+    expiry-date: string,
+    status: string,  // "Действителен", "Истекает скоро", "Истек", "Бессрочный"
+}
+
+// Training data structure
+export struct TrainingData {
+    training-id: int,
+    training-name: string,
+    certificate-number: string,
+    completion-date: string,
+    expiry-date: string,
+    status: string,  // "Действителен", "Истекает скоро", "Истек"
+    is-mandatory: bool,
+}
+
+// Emergency contact data structure
+export struct EmergencyContactData {
+    contact-id: int,
+    contact-name: string,
+    relationship: string,
+    phone-number: string,
+    alternate-phone: string,
+    is-primary: bool,
+}
+
+// Vacation request data structure
+export struct VacationData {
+    request-id: int,
+    start-date: string,
+    end-date: string,
+    vacation-type: string,
+    days-requested: int,
+    status: string,  // "Pending", "Approved", "Rejected"
+    reason: string,
+}
+
+// Employee Detail View - Card-based modern UI
+export component EmployeeDetailView inherits Rectangle {
+    in-out property <int> employee-id;
+    in-out property <string> employee-name;
+    in-out property <[DocumentData]> documents: [];
+    in-out property <[TrainingData]> training: [];
+    in-out property <[EmergencyContactData]> contacts: [];
+    in-out property <[VacationData]> vacations: [];
+    
+    // Section expansion states
+    in-out property <bool> documents-expanded: true;
+    in-out property <bool> training-expanded: true;
+    in-out property <bool> contacts-expanded: true;
+    in-out property <bool> vacations-expanded: true;
+    
+    // Callbacks
+    callback close-clicked();
+    callback add-document-clicked();
+    callback edit-document-clicked(int);
+    callback delete-document-clicked(int);
+    callback add-training-clicked();
+    callback edit-training-clicked(int);
+    callback delete-training-clicked(int);
+    callback add-contact-clicked();
+    callback edit-contact-clicked(int);
+    callback delete-contact-clicked(int);
+    callback add-vacation-clicked();
+    callback approve-vacation-clicked(int);
+    callback reject-vacation-clicked(int);
+    callback delete-vacation-clicked(int);
+    
+    background: MaterialPalette.surface;
+    
+    VerticalBox {
+        padding: 0px;
+        
+        // Header
+        Rectangle {
+            height: 64px;
+            background: MaterialPalette.primary;
+            
+            HorizontalBox {
+                padding: 16px;
+                spacing: 16px;
+                
+                MaterialText {
+                    text: root.employee-name;
+                    font-size: 20px;
+                    font-weight: 600;
+                    color: Colors.white;
+                    vertical-alignment: center;
+                    horizontal-stretch: 1;
+                }
+                
+                Rectangle {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 20px;
+                    background: close-touch.has-hover ? #FFFFFF33 : transparent;
+                    
+                    close-touch := TouchArea {
+                        width: 100%;
+                        height: 100%;
+                        mouse-cursor: pointer;
+                        clicked => { root.close-clicked(); }
+                    }
+                    
+                    MaterialText {
+                        text: "✕";
+                        color: Colors.white;
+                        font-size: 20px;
+                        horizontal-alignment: center;
+                        vertical-alignment: center;
+                    }
+                }
+            }
+        }
+        
+        // Scrollable content
+        ScrollView {
+            VerticalBox {
+                padding: 16px;
+                spacing: 12px;
+                
+                // SECTION 1: Documents
+                Rectangle {
+                    background: MaterialPalette.surface-container-low;
+                    border-radius: 12px;
+                    
+                    VerticalBox {
+                        padding: 16px;
+                        spacing: 12px;
+                        
+                        // Section header
+                        HorizontalBox {
+                            spacing: 12px;
+                            
+                            doc-expand-touch := TouchArea {
+                                width: 100%;
+                                height: 40px;
+                                mouse-cursor: pointer;
+                                clicked => {
+                                    root.documents-expanded = !root.documents-expanded;
+                                }
+                            }
+                            
+                            MaterialText {
+                                text: root.documents-expanded ? "▼" : "▶";
+                                font-size: 14px;
+                                vertical-alignment: center;
+                            }
+                            
+                            MaterialText {
+                                text: "📋 Документы";
+                                font-size: 18px;
+                                font-weight: 600;
+                                vertical-alignment: center;
+                            }
+                            
+                            MaterialText {
+                                text: "(" + root.documents.length + ")";
+                                font-size: 14px;
+                                color: MaterialPalette.on-surface-variant;
+                                vertical-alignment: center;
+                                horizontal-stretch: 1;
+                            }
+                            
+                            if root.documents-expanded: Rectangle {
+                                width: 140px;
+                                height: 36px;
+                                border-radius: 18px;
+                                background: add-doc-touch.has-hover ? MaterialPalette.primary-container : MaterialPalette.surface;
+                                
+                                add-doc-touch := TouchArea {
+                                    mouse-cursor: pointer;
+                                    clicked => { root.add-document-clicked(); }
+                                }
+                                
+                                MaterialText {
+                                    text: "+ Добавить";
+                                    font-size: 13px;
+                                    color: MaterialPalette.on-surface;
+                                    horizontal-alignment: center;
+                                    vertical-alignment: center;
+                                }
+                            }
+                        }
+                        
+                        // Document list
+                        if root.documents-expanded: VerticalBox {
+                            spacing: 8px;
+                            
+                            for doc[idx] in root.documents: Rectangle {
+                                height: 80px;
+                                background: MaterialPalette.surface;
+                                border-radius: 8px;
+                                
+                                HorizontalBox {
+                                    padding: 12px;
+                                    spacing: 12px;
+                                    
+                                    VerticalBox {
+                                        spacing: 4px;
+                                        horizontal-stretch: 1;
+                                        
+                                        MaterialText {
+                                            text: doc.document-type;
+                                            font-size: 15px;
+                                            font-weight: 600;
+                                        }
+                                        
+                                        MaterialText {
+                                            text: "№ " + doc.document-number;
+                                            font-size: 13px;
+                                            color: MaterialPalette.on-surface-variant;
+                                        }
+                                        
+                                        HorizontalBox {
+                                            spacing: 8px;
+                                            
+                                            MaterialText {
+                                                text: "Истекает: " + doc.expiry-date;
+                                                font-size: 12px;
+                                                color: MaterialPalette.on-surface-variant;
+                                            }
+                                            
+                                            Rectangle {
+                                                width: self.text-width + 16px;
+                                                height: 20px;
+                                                border-radius: 10px;
+                                                background: doc.status == "Истек" ? #FF4444 : 
+                                                           doc.status == "Истекает скоро" ? #FFA726 : #4CAF50;
+                                                
+                                                property <length> text-width: status-text.preferred-width;
+                                                
+                                                status-text := MaterialText {
+                                                    text: doc.status;
+                                                    font-size: 11px;
+                                                    color: Colors.white;
+                                                    horizontal-alignment: center;
+                                                    vertical-alignment: center;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                    // Action buttons
+                                    HorizontalBox {
+                                        spacing: 8px;
+                                        
+                                        Rectangle {
+                                            width: 36px;
+                                            height: 36px;
+                                            border-radius: 18px;
+                                            background: edit-doc-touch.has-hover ? MaterialPalette.primary-container : transparent;
+                                            
+                                            edit-doc-touch := TouchArea {
+                                                mouse-cursor: pointer;
+                                                clicked => { root.edit-document-clicked(doc.document-id); }
+                                            }
+                                            
+                                            MaterialText {
+                                                text: "✏️";
+                                                font-size: 16px;
+                                                horizontal-alignment: center;
+                                                vertical-alignment: center;
+                                            }
+                                        }
+                                        
+                                        Rectangle {
+                                            width: 36px;
+                                            height: 36px;
+                                            border-radius: 18px;
+                                            background: del-doc-touch.has-hover ? #FF444422 : transparent;
+                                            
+                                            del-doc-touch := TouchArea {
+                                                mouse-cursor: pointer;
+                                                clicked => { root.delete-document-clicked(doc.document-id); }
+                                            }
+                                            
+                                            MaterialText {
+                                                text: "🗑️";
+                                                font-size: 16px;
+                                                horizontal-alignment: center;
+                                                vertical-alignment: center;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // SECTION 2: Training
+                Rectangle {
+                    background: MaterialPalette.surface-container-low;
+                    border-radius: 12px;
+                    
+                    VerticalBox {
+                        padding: 16px;
+                        spacing: 12px;
+                        
+                        HorizontalBox {
+                            spacing: 12px;
+                            
+                            train-expand-touch := TouchArea {
+                                width: 100%;
+                                height: 40px;
+                                mouse-cursor: pointer;
+                                clicked => {
+                                    root.training-expanded = !root.training-expanded;
+                                }
+                            }
+                            
+                            MaterialText {
+                                text: root.training-expanded ? "▼" : "▶";
+                                font-size: 14px;
+                                vertical-alignment: center;
+                            }
+                            
+                            MaterialText {
+                                text: "🎓 Обучение и сертификация";
+                                font-size: 18px;
+                                font-weight: 600;
+                                vertical-alignment: center;
+                            }
+                            
+                            MaterialText {
+                                text: "(" + root.training.length + ")";
+                                font-size: 14px;
+                                color: MaterialPalette.on-surface-variant;
+                                vertical-alignment: center;
+                                horizontal-stretch: 1;
+                            }
+                            
+                            if root.training-expanded: Rectangle {
+                                width: 140px;
+                                height: 36px;
+                                border-radius: 18px;
+                                background: add-train-touch.has-hover ? MaterialPalette.primary-container : MaterialPalette.surface;
+                                
+                                add-train-touch := TouchArea {
+                                    mouse-cursor: pointer;
+                                    clicked => { root.add-training-clicked(); }
+                                }
+                                
+                                MaterialText {
+                                    text: "+ Добавить";
+                                    font-size: 13px;
+                                    color: MaterialPalette.on-surface;
+                                    horizontal-alignment: center;
+                                    vertical-alignment: center;
+                                }
+                            }
+                        }
+                        
+                        if root.training-expanded: VerticalBox {
+                            spacing: 8px;
+                            
+                            for train[idx] in root.training: Rectangle {
+                                height: 80px;
+                                background: MaterialPalette.surface;
+                                border-radius: 8px;
+                                
+                                HorizontalBox {
+                                    padding: 12px;
+                                    spacing: 12px;
+                                    
+                                    VerticalBox {
+                                        spacing: 4px;
+                                        horizontal-stretch: 1;
+                                        
+                                        HorizontalBox {
+                                            spacing: 8px;
+                                            
+                                            MaterialText {
+                                                text: train.training-name;
+                                                font-size: 15px;
+                                                font-weight: 600;
+                                            }
+                                            
+                                            if train.is-mandatory: MaterialText {
+                                                text: "⚠️";
+                                                font-size: 13px;
+                                            }
+                                        }
+                                        
+                                        MaterialText {
+                                            text: "Сертификат: " + train.certificate-number;
+                                            font-size: 13px;
+                                            color: MaterialPalette.on-surface-variant;
+                                        }
+                                        
+                                        HorizontalBox {
+                                            spacing: 8px;
+                                            
+                                            MaterialText {
+                                                text: "Истекает: " + train.expiry-date;
+                                                font-size: 12px;
+                                                color: MaterialPalette.on-surface-variant;
+                                            }
+                                            
+                                            Rectangle {
+                                                width: self.text-width + 16px;
+                                                height: 20px;
+                                                border-radius: 10px;
+                                                background: train.status == "Истек" ? #FF4444 : 
+                                                           train.status == "Истекает скоро" ? #FFA726 : #4CAF50;
+                                                
+                                                property <length> text-width: train-status-text.preferred-width;
+                                                
+                                                train-status-text := MaterialText {
+                                                    text: train.status;
+                                                    font-size: 11px;
+                                                    color: Colors.white;
+                                                    horizontal-alignment: center;
+                                                    vertical-alignment: center;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                    HorizontalBox {
+                                        spacing: 8px;
+                                        
+                                        Rectangle {
+                                            width: 36px;
+                                            height: 36px;
+                                            border-radius: 18px;
+                                            background: edit-train-touch.has-hover ? MaterialPalette.primary-container : transparent;
+                                            
+                                            edit-train-touch := TouchArea {
+                                                mouse-cursor: pointer;
+                                                clicked => { root.edit-training-clicked(train.training-id); }
+                                            }
+                                            
+                                            MaterialText {
+                                                text: "✏️";
+                                                font-size: 16px;
+                                                horizontal-alignment: center;
+                                                vertical-alignment: center;
+                                            }
+                                        }
+                                        
+                                        Rectangle {
+                                            width: 36px;
+                                            height: 36px;
+                                            border-radius: 18px;
+                                            background: del-train-touch.has-hover ? #FF444422 : transparent;
+                                            
+                                            del-train-touch := TouchArea {
+                                                mouse-cursor: pointer;
+                                                clicked => { root.delete-training-clicked(train.training-id); }
+                                            }
+                                            
+                                            MaterialText {
+                                                text: "🗑️";
+                                                font-size: 16px;
+                                                horizontal-alignment: center;
+                                                vertical-alignment: center;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // SECTION 3: Emergency Contacts
+                Rectangle {
+                    background: MaterialPalette.surface-container-low;
+                    border-radius: 12px;
+                    
+                    VerticalBox {
+                        padding: 16px;
+                        spacing: 12px;
+                        
+                        HorizontalBox {
+                            spacing: 12px;
+                            
+                            contact-expand-touch := TouchArea {
+                                width: 100%;
+                                height: 40px;
+                                mouse-cursor: pointer;
+                                clicked => {
+                                    root.contacts-expanded = !root.contacts-expanded;
+                                }
+                            }
+                            
+                            MaterialText {
+                                text: root.contacts-expanded ? "▼" : "▶";
+                                font-size: 14px;
+                                vertical-alignment: center;
+                            }
+                            
+                            MaterialText {
+                                text: "☎️ Экстренные контакты";
+                                font-size: 18px;
+                                font-weight: 600;
+                                vertical-alignment: center;
+                            }
+                            
+                            MaterialText {
+                                text: "(" + root.contacts.length + ")";
+                                font-size: 14px;
+                                color: MaterialPalette.on-surface-variant;
+                                vertical-alignment: center;
+                                horizontal-stretch: 1;
+                            }
+                            
+                            if root.contacts-expanded: Rectangle {
+                                width: 140px;
+                                height: 36px;
+                                border-radius: 18px;
+                                background: add-contact-touch.has-hover ? MaterialPalette.primary-container : MaterialPalette.surface;
+                                
+                                add-contact-touch := TouchArea {
+                                    mouse-cursor: pointer;
+                                    clicked => { root.add-contact-clicked(); }
+                                }
+                                
+                                MaterialText {
+                                    text: "+ Добавить";
+                                    font-size: 13px;
+                                    color: MaterialPalette.on-surface;
+                                    horizontal-alignment: center;
+                                    vertical-alignment: center;
+                                }
+                            }
+                        }
+                        
+                        if root.contacts-expanded: VerticalBox {
+                            spacing: 8px;
+                            
+                            for contact[idx] in root.contacts: Rectangle {
+                                height: 80px;
+                                background: MaterialPalette.surface;
+                                border-radius: 8px;
+                                
+                                HorizontalBox {
+                                    padding: 12px;
+                                    spacing: 12px;
+                                    
+                                    VerticalBox {
+                                        spacing: 4px;
+                                        horizontal-stretch: 1;
+                                        
+                                        HorizontalBox {
+                                            spacing: 8px;
+                                            
+                                            MaterialText {
+                                                text: "📞";
+                                                font-size: 16px;
+                                            }
+                                            
+                                            MaterialText {
+                                                text: contact.contact-name + " (" + contact.relationship + ")";
+                                                font-size: 15px;
+                                                font-weight: 600;
+                                            }
+                                            
+                                            if contact.is-primary: MaterialText {
+                                                text: "⭐";
+                                                font-size: 13px;
+                                            }
+                                        }
+                                        
+                                        MaterialText {
+                                            text: contact.phone-number;
+                                            font-size: 14px;
+                                            color: MaterialPalette.primary;
+                                        }
+                                        
+                                        if contact.alternate-phone != "": MaterialText {
+                                            text: "Доп.: " + contact.alternate-phone;
+                                            font-size: 12px;
+                                            color: MaterialPalette.on-surface-variant;
+                                        }
+                                    }
+                                    
+                                    HorizontalBox {
+                                        spacing: 8px;
+                                        
+                                        Rectangle {
+                                            width: 36px;
+                                            height: 36px;
+                                            border-radius: 18px;
+                                            background: edit-contact-touch.has-hover ? MaterialPalette.primary-container : transparent;
+                                            
+                                            edit-contact-touch := TouchArea {
+                                                mouse-cursor: pointer;
+                                                clicked => { root.edit-contact-clicked(contact.contact-id); }
+                                            }
+                                            
+                                            MaterialText {
+                                                text: "✏️";
+                                                font-size: 16px;
+                                                horizontal-alignment: center;
+                                                vertical-alignment: center;
+                                            }
+                                        }
+                                        
+                                        Rectangle {
+                                            width: 36px;
+                                            height: 36px;
+                                            border-radius: 18px;
+                                            background: del-contact-touch.has-hover ? #FF444422 : transparent;
+                                            
+                                            del-contact-touch := TouchArea {
+                                                mouse-cursor: pointer;
+                                                clicked => { root.delete-contact-clicked(contact.contact-id); }
+                                            }
+                                            
+                                            MaterialText {
+                                                text: "🗑️";
+                                                font-size: 16px;
+                                                horizontal-alignment: center;
+                                                vertical-alignment: center;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // SECTION 4: Vacation Requests
+                Rectangle {
+                    background: MaterialPalette.surface-container-low;
+                    border-radius: 12px;
+                    
+                    VerticalBox {
+                        padding: 16px;
+                        spacing: 12px;
+                        
+                        HorizontalBox {
+                            spacing: 12px;
+                            
+                            vacation-expand-touch := TouchArea {
+                                width: 100%;
+                                height: 40px;
+                                mouse-cursor: pointer;
+                                clicked => {
+                                    root.vacations-expanded = !root.vacations-expanded;
+                                }
+                            }
+                            
+                            MaterialText {
+                                text: root.vacations-expanded ? "▼" : "▶";
+                                font-size: 14px;
+                                vertical-alignment: center;
+                            }
+                            
+                            MaterialText {
+                                text: "🏖️ Отпуска";
+                                font-size: 18px;
+                                font-weight: 600;
+                                vertical-alignment: center;
+                            }
+                            
+                            MaterialText {
+                                text: "(" + root.vacations.length + ")";
+                                font-size: 14px;
+                                color: MaterialPalette.on-surface-variant;
+                                vertical-alignment: center;
+                                horizontal-stretch: 1;
+                            }
+                            
+                            if root.vacations-expanded: Rectangle {
+                                width: 140px;
+                                height: 36px;
+                                border-radius: 18px;
+                                background: add-vac-touch.has-hover ? MaterialPalette.primary-container : MaterialPalette.surface;
+                                
+                                add-vac-touch := TouchArea {
+                                    mouse-cursor: pointer;
+                                    clicked => { root.add-vacation-clicked(); }
+                                }
+                                
+                                MaterialText {
+                                    text: "+ Создать";
+                                    font-size: 13px;
+                                    color: MaterialPalette.on-surface;
+                                    horizontal-alignment: center;
+                                    vertical-alignment: center;
+                                }
+                            }
+                        }
+                        
+                        if root.vacations-expanded: VerticalBox {
+                            spacing: 8px;
+                            
+                            for vac[idx] in root.vacations: Rectangle {
+                                height: 90px;
+                                background: MaterialPalette.surface;
+                                border-radius: 8px;
+                                
+                                HorizontalBox {
+                                    padding: 12px;
+                                    spacing: 12px;
+                                    
+                                    VerticalBox {
+                                        spacing: 4px;
+                                        horizontal-stretch: 1;
+                                        
+                                        HorizontalBox {
+                                            spacing: 8px;
+                                            
+                                            MaterialText {
+                                                text: vac.start-date + " - " + vac.end-date;
+                                                font-size: 15px;
+                                                font-weight: 600;
+                                            }
+                                            
+                                            MaterialText {
+                                                text: "(" + vac.days-requested + " дней)";
+                                                font-size: 13px;
+                                                color: MaterialPalette.on-surface-variant;
+                                            }
+                                        }
+                                        
+                                        MaterialText {
+                                            text: "Тип: " + vac.vacation-type;
+                                            font-size: 13px;
+                                            color: MaterialPalette.on-surface-variant;
+                                        }
+                                        
+                                        HorizontalBox {
+                                            spacing: 8px;
+                                            
+                                            Rectangle {
+                                                width: self.text-width + 20px;
+                                                height: 22px;
+                                                border-radius: 11px;
+                                                background: vac.status == "Approved" ? #4CAF50 : 
+                                                           vac.status == "Rejected" ? #FF4444 : #FFA726;
+                                                
+                                                property <length> text-width: vac-status-text.preferred-width;
+                                                
+                                                vac-status-text := MaterialText {
+                                                    text: vac.status == "Approved" ? "✅ Утвержден" : 
+                                                          vac.status == "Rejected" ? "❌ Отклонен" : "⏳ Ожидает";
+                                                    font-size: 11px;
+                                                    color: Colors.white;
+                                                    horizontal-alignment: center;
+                                                    vertical-alignment: center;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                    HorizontalBox {
+                                        spacing: 8px;
+                                        
+                                        if vac.status == "Pending": Rectangle {
+                                            width: 36px;
+                                            height: 36px;
+                                            border-radius: 18px;
+                                            background: approve-vac-touch.has-hover ? #4CAF5022 : transparent;
+                                            
+                                            approve-vac-touch := TouchArea {
+                                                mouse-cursor: pointer;
+                                                clicked => { root.approve-vacation-clicked(vac.request-id); }
+                                            }
+                                            
+                                            MaterialText {
+                                                text: "✅";
+                                                font-size: 16px;
+                                                horizontal-alignment: center;
+                                                vertical-alignment: center;
+                                            }
+                                        }
+                                        
+                                        if vac.status == "Pending": Rectangle {
+                                            width: 36px;
+                                            height: 36px;
+                                            border-radius: 18px;
+                                            background: reject-vac-touch.has-hover ? #FF444422 : transparent;
+                                            
+                                            reject-vac-touch := TouchArea {
+                                                mouse-cursor: pointer;
+                                                clicked => { root.reject-vacation-clicked(vac.request-id); }
+                                            }
+                                            
+                                            MaterialText {
+                                                text: "❌";
+                                                font-size: 16px;
+                                                horizontal-alignment: center;
+                                                vertical-alignment: center;
+                                            }
+                                        }
+                                        
+                                        Rectangle {
+                                            width: 36px;
+                                            height: 36px;
+                                            border-radius: 18px;
+                                            background: del-vac-touch.has-hover ? #FF444422 : transparent;
+                                            
+                                            del-vac-touch := TouchArea {
+                                                mouse-cursor: pointer;
+                                                clicked => { root.delete-vacation-clicked(vac.request-id); }
+                                            }
+                                            
+                                            MaterialText {
+                                                text: "🗑️";
+                                                font-size: 16px;
+                                                horizontal-alignment: center;
+                                                vertical-alignment: center;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
