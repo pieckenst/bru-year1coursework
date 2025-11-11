@@ -4,6 +4,7 @@
 mod api;
 mod models;
 mod navigation;
+mod date_utils;
 
 use api::ApiClient;
 use std::error::Error;
@@ -28,7 +29,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 
 fn show_login_window(api_client: Arc<Mutex<ApiClient>>) -> Result<Option<String>, Box<dyn Error>> {
-    let login_ui = LoginWindow::new()?;
+    let login_ui = AuthWindow::new()?;
     
     // Store login success state
     let login_result = Arc::new(Mutex::new(None));
@@ -143,8 +144,10 @@ fn show_main_window(
             ui.set_driver_license_number(slint::SharedString::from(""));
             ui.set_driver_license_category(slint::SharedString::from(""));
             ui.set_driver_license_issue_date(slint::SharedString::from(""));
+            ui.set_driver_license_expiry(slint::SharedString::from(""));
             ui.set_medical_cert_number(slint::SharedString::from(""));
             ui.set_medical_cert_issue_date(slint::SharedString::from(""));
+            ui.set_medical_cert_expiry(slint::SharedString::from(""));
             
             ui.set_dialog_mode(slint::SharedString::from("add"));
             ui.set_dialog_title(slint::SharedString::from("Добавить сотрудника"));
@@ -270,6 +273,7 @@ fn show_main_window(
                         // Personal
                         ui.set_passport_series(slint::SharedString::from(employee.passport_series.as_deref().unwrap_or("")));
                         ui.set_passport_number(slint::SharedString::from(employee.passport_number.as_deref().unwrap_or("")));
+                        ui.set_date_of_birth(slint::SharedString::from(date_utils::format_date_for_ui(employee.date_of_birth)));
                         ui.set_email(slint::SharedString::from(employee.email.as_deref().unwrap_or("")));
                         ui.set_address(slint::SharedString::from(employee.address.as_deref().unwrap_or("")));
                         ui.set_personal_phone(slint::SharedString::from(employee.personal_phone.as_deref().unwrap_or("")));
@@ -277,8 +281,12 @@ fn show_main_window(
                         // Driver
                         ui.set_driver_license_number(slint::SharedString::from(employee.driver_license_number.as_deref().unwrap_or("")));
                         ui.set_driver_license_category(slint::SharedString::from(employee.driver_license_category.as_deref().unwrap_or("")));
+                        ui.set_driver_license_issue_date(slint::SharedString::from(date_utils::format_date_for_ui(employee.driver_license_issue_date)));
+                        ui.set_driver_license_expiry(slint::SharedString::from(date_utils::format_date_for_ui(employee.driver_license_expiry_date)));
                         // Medical
                         ui.set_medical_cert_number(slint::SharedString::from(employee.medical_certificate_number.as_deref().unwrap_or("")));
+                        ui.set_medical_cert_issue_date(slint::SharedString::from(date_utils::format_date_for_ui(employee.medical_certificate_issue_date)));
+                        ui.set_medical_cert_expiry(slint::SharedString::from(date_utils::format_date_for_ui(employee.medical_certificate_expiry_date)));
                     }
                     (Err(e), _, _) => eprintln!("Failed to load employee: {}", e),
                     (_, Err(e), _) => eprintln!("Failed to load jobs: {}", e),
@@ -333,6 +341,7 @@ fn show_main_window(
             // Personal
             let passport_series = ui.get_passport_series().to_string();
             let passport_number = ui.get_passport_number().to_string();
+            let date_of_birth = ui.get_date_of_birth().to_string();
             let email = ui.get_email().to_string();
             let address = ui.get_address().to_string();
             let personal_phone = ui.get_personal_phone().to_string();
@@ -340,8 +349,12 @@ fn show_main_window(
             // Driver
             let driver_license_number = ui.get_driver_license_number().to_string();
             let driver_license_category = ui.get_driver_license_category().to_string();
+            let driver_license_issue_date = ui.get_driver_license_issue_date().to_string();
+            let driver_license_expiry = ui.get_driver_license_expiry().to_string();
             // Medical
             let medical_cert_number = ui.get_medical_cert_number().to_string();
+            let medical_cert_issue_date = ui.get_medical_cert_issue_date().to_string();
+            let medical_cert_expiry = ui.get_medical_cert_expiry().to_string();
             
             slint::spawn_local(async move {
                 use crate::models::CreateEmployeeRequest;
@@ -395,7 +408,7 @@ fn show_main_window(
                         employed_since: chrono::Local::now().naive_local().date(),
                         job_id: Some(job_id as i32),
                         department_id,
-                        date_of_birth: None,
+                        date_of_birth: date_utils::parse_date_from_ui(&date_of_birth),
                         personal_phone: Some(personal_phone).filter(|s| !s.is_empty()),
                         work_phone: None,
                         address: Some(address).filter(|s| !s.is_empty()),
@@ -406,11 +419,11 @@ fn show_main_window(
                         snils: Some(snils).filter(|s| !s.is_empty()),
                         driver_license_number: Some(driver_license_number).filter(|s| !s.is_empty()),
                         driver_license_category: Some(driver_license_category).filter(|s| !s.is_empty()),
-                        driver_license_issue_date: None,
-                        driver_license_expiry_date: None,
+                        driver_license_issue_date: date_utils::parse_date_from_ui(&driver_license_issue_date),
+                        driver_license_expiry_date: date_utils::parse_date_from_ui(&driver_license_expiry),
                         medical_certificate_number: Some(medical_cert_number).filter(|s| !s.is_empty()),
-                        medical_certificate_issue_date: None,
-                        medical_certificate_expiry_date: None,
+                        medical_certificate_issue_date: date_utils::parse_date_from_ui(&medical_cert_issue_date),
+                        medical_certificate_expiry_date: date_utils::parse_date_from_ui(&medical_cert_expiry),
                     };
                     
                     let result = rt.block_on(async {
@@ -449,6 +462,7 @@ fn show_main_window(
                             // Update personal fields
                             employee.passport_series = Some(passport_series).filter(|s| !s.is_empty());
                             employee.passport_number = Some(passport_number).filter(|s| !s.is_empty());
+                            employee.date_of_birth = date_utils::parse_date_from_ui(&date_of_birth);
                             employee.email = Some(email).filter(|s| !s.is_empty());
                             employee.address = Some(address).filter(|s| !s.is_empty());
                             employee.personal_phone = Some(personal_phone).filter(|s| !s.is_empty());
@@ -456,8 +470,12 @@ fn show_main_window(
                             // Update driver fields
                             employee.driver_license_number = Some(driver_license_number).filter(|s| !s.is_empty());
                             employee.driver_license_category = Some(driver_license_category).filter(|s| !s.is_empty());
+                            employee.driver_license_issue_date = date_utils::parse_date_from_ui(&driver_license_issue_date);
+                            employee.driver_license_expiry_date = date_utils::parse_date_from_ui(&driver_license_expiry);
                             // Update medical fields
                             employee.medical_certificate_number = Some(medical_cert_number).filter(|s| !s.is_empty());
+                            employee.medical_certificate_issue_date = date_utils::parse_date_from_ui(&medical_cert_issue_date);
+                            employee.medical_certificate_expiry_date = date_utils::parse_date_from_ui(&medical_cert_expiry);
                             
                             let update_result = rt.block_on(async {
                                 let client = api.lock().unwrap();

@@ -1,40 +1,36 @@
-use chrono::{NaiveDate, NaiveDateTime};
 use serde::{Deserialize, Serialize};
+use chrono::{NaiveDate, NaiveDateTime};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct EmployeeTraining {
-    pub training_id: i64,
-    pub employee_id: i64,
-    pub training_name: String,
-    pub description: Option<String>,
-    pub completion_date: NaiveDate,
+pub struct EmployeeDocument {
+    pub document_id: i64,
+    pub document_type: String,
+    pub document_number: String,
+    pub issue_date: NaiveDate,
     pub expiry_date: Option<NaiveDate>,
-    pub certificate_number: Option<String>,
-    pub issuing_organization: Option<String>,
-    pub is_mandatory: bool,
+    pub issued_by: Option<String>,
     pub file_path: Option<String>,
     pub notes: Option<String>,
+    pub employee_id: i64,
     pub created_at: Option<NaiveDateTime>,
     pub updated_at: Option<NaiveDateTime>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct CreateEmployeeTraining {
-    pub employee_id: i64,
-    pub training_name: String,
-    pub description: Option<String>,
-    pub completion_date: NaiveDate,
+pub struct CreateEmployeeDocument {
+    pub document_type: String,
+    pub document_number: String,
+    pub issue_date: NaiveDate,
     pub expiry_date: Option<NaiveDate>,
-    pub certificate_number: Option<String>,
-    pub issuing_organization: Option<String>,
-    pub is_mandatory: bool,
+    pub issued_by: Option<String>,
     pub file_path: Option<String>,
     pub notes: Option<String>,
+    pub employee_id: i64,
 }
 
-impl EmployeeTraining {
+impl EmployeeDocument {
     pub fn is_expired(&self) -> bool {
         if let Some(expiry) = self.expiry_date {
             expiry < chrono::Local::now().date_naive()
@@ -53,7 +49,11 @@ impl EmployeeTraining {
         }
     }
     
-    pub fn status_text(&self) -> &'static str {
+    pub fn status_badge(&self) -> &'static str {
+        if self.expiry_date.is_none() {
+            return "Бессрочный";
+        }
+        
         if self.is_expired() {
             "Истек"
         } else if self.is_expiring_soon(30) {

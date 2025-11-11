@@ -191,7 +191,7 @@ TicketSalesApp_UI_Rust_Linux/
 │   ├── app-window.slint          # Главное окно приложения
 │   ├── navigation.slint          # Навигационная панель Material Design
 │   ├── employee_dialogs.slint    # Диалоги управления сотрудниками
-│   └── login.slint               # Форма авторизации
+│   └── auth_window.slint               # Форма авторизации
 ├── material-1.0/                 # Material Design 3 компоненты для Slint
 └── Cargo.toml                    # Зависимости проекта
 ```

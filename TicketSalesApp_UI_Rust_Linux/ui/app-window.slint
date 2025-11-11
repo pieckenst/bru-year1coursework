@@ -3,6 +3,7 @@ import { MaterialWindow, FilledCard, TextField, FilledButton, TonalButton, Horiz
 import { MaterialPalette } from "../material-1.0/ui/styling/material_palette.slint";
 import { AppNavigation } from "navigation.slint";
 import { EmployeeDialog, DeleteConfirmDialog, JobData, DepartmentData } from "employee_dialogs.slint";
+export { AuthWindow } from "auth_window.slint";
 
 // Employee data structure
 export struct EmployeeData {
@@ -11,75 +12,6 @@ export struct EmployeeData {
     name: string,
     department: string,
     position: string,
-}
-
-// Login Window
-export component LoginWindow inherits Window {
-    title: "Авторизация - Автопарк автобусов";
-    width: 400px;
-    height: 300px;
-    default-font-family: "Arial";
-    
-    in-out property <string> username;
-    in-out property <string> password;
-    in-out property <string> error-message;
-    in-out property <bool> is-loading: false;
-    
-    callback login-clicked();
-    
-    VerticalBox {
-        padding: 20px;
-        spacing: 15px;
-        
-        Text {
-            text: "Вход для админа";
-            font-size: 24px;
-            font-weight: 700;
-            horizontal-alignment: center;
-        }
-        
-        VerticalBox {
-            spacing: 10px;
-            
-            Text {
-                text: "Имя пользователя:";
-                font-size: 14px;
-            }
-            
-            LineEdit {
-                text <=> root.username;
-                placeholder-text: "admin";
-                enabled: !root.is-loading;
-            }
-            
-            Text {
-                text: "Пароль:";
-                font-size: 14px;
-            }
-            
-            LineEdit {
-                text <=> root.password;
-                input-type: InputType.password;
-                placeholder-text: "Введите пароль";
-                enabled: !root.is-loading;
-            }
-        }
-        
-        if root.error-message != "": Text {
-            text: root.error-message;
-            color: #ff0000;
-            font-size: 12px;
-            horizontal-alignment: center;
-        }
-        
-        Button {
-            text: root.is-loading ? "Загрузка..." : "Войти";
-            enabled: !root.is-loading && root.username != "" && root.password != "";
-            clicked => {
-                root.login-clicked();
-            }
-        }
-    }
 }
 
 // Main Application Window
@@ -119,9 +51,11 @@ export component AppWindow inherits Window {
     in-out property <string> driver-license-number: "";
     in-out property <string> driver-license-category: "";
     in-out property <string> driver-license-issue-date: "";
+    in-out property <string> driver-license-expiry: "";
     // Medical info
     in-out property <string> medical-cert-number: "";
     in-out property <string> medical-cert-issue-date: "";
+    in-out property <string> medical-cert-expiry: "";
     in-out property <string> employee-error: "";
     
     // Delete dialog state
@@ -397,9 +331,11 @@ export component AppWindow inherits Window {
         driver-license-number <=> root.driver-license-number;
         driver-license-category <=> root.driver-license-category;
         driver-license-issue-date <=> root.driver-license-issue-date;
+        driver-license-expiry <=> root.driver-license-expiry;
         // Medical
         medical-cert-number <=> root.medical-cert-number;
         medical-cert-issue-date <=> root.medical-cert-issue-date;
+        medical-cert-expiry <=> root.medical-cert-expiry;
         error-message <=> root.employee-error;
         is-edit-mode: root.dialog-mode == "edit";
         

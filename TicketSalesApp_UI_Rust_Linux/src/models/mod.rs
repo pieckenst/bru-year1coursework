@@ -1,13 +1,19 @@
 pub mod employee;
+pub mod job;
 pub mod department;
 pub mod user;
-pub mod vacation_request;
 pub mod training;
-pub mod job;
+pub mod vacation_request;
+pub mod employee_document;
+pub mod emergency_contact;
 
 pub use employee::*;
+pub use job::*;
 pub use department::*;
 pub use user::*;
+pub use training::*;
 pub use vacation_request::*;
+pub use employee_document::*;
+pub use emergency_contact::*;
 pub use training::*;
 pub use job::*;

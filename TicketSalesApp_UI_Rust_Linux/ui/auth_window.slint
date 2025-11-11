@@ -1,0 +1,279 @@
+import { Button, VerticalBox, HorizontalBox, LineEdit } from "std-widgets.slint";
+import { FilledButton, MaterialPalette, MaterialText } from "../material-1.0/material.slint";
+
+// Modern Material Design 3 Login Window
+export component AuthWindow inherits Window {
+    title: "Вход в систему - Автопарк автобусов";
+    width: 900px;
+    height: 600px;
+    default-font-family: "Arial";
+    background: #1E1E1E;
+    
+    // Properties
+    in-out property <string> username;
+    in-out property <string> password;
+    in-out property <string> error-message;
+    in-out property <bool> is-loading: false;
+    
+    // Callbacks
+    callback login-clicked();
+    
+    // Main Layout - Two Columns
+    HorizontalBox {
+        // Left Side - Features Panel
+        VerticalBox {
+            horizontal-stretch: 1;
+            padding: 40px;
+            spacing: 20px;
+            
+            // Top Section - Logo and Title
+            VerticalBox {
+                vertical-stretch: 1;
+                spacing: 20px;
+                
+                // Bus Icon (using rectangle as placeholder)
+                Rectangle {
+                    width: 100px;
+                    height: 100px;
+                    border-radius: 50px;
+                    background: MaterialPalette.primary;
+                    
+                    MaterialText {
+                        text: "🚌";
+                        font-size: 60px;
+                        horizontal-alignment: center;
+                        vertical-alignment: center;
+                    }
+                }
+                
+                MaterialText {
+                    text: "Автопарк автобусов";
+                    font-size: 32px;
+                    font-weight: 700;
+                    color: Colors.white;
+                    horizontal-alignment: center;
+                }
+                
+                MaterialText {
+                    text: "Система управления автопарком и продажей билетов";
+                    font-size: 18px;
+                    color: Colors.white;
+                    horizontal-alignment: center;
+                    wrap: word-wrap;
+                }
+            }
+            
+            // Bottom Section - Features List
+            VerticalBox {
+                spacing: 10px;
+                
+                MaterialText {
+                    text: "Возможности системы:";
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: Colors.white;
+                }
+                
+                // Feature 1
+                HorizontalBox {
+                    spacing: 10px;
+                    
+                    MaterialText {
+                        text: "✓";
+                        font-size: 20px;
+                        color: MaterialPalette.primary;
+                    }
+                    
+                    MaterialText {
+                        text: "Управление автопарком и маршрутами";
+                        color: Colors.white;
+                    }
+                }
+                
+                // Feature 2
+                HorizontalBox {
+                    spacing: 10px;
+                    
+                    MaterialText {
+                        text: "✓";
+                        font-size: 20px;
+                        color: MaterialPalette.primary;
+                    }
+                    
+                    MaterialText {
+                        text: "Продажа и учет билетов";
+                        color: Colors.white;
+                    }
+                }
+                
+                // Feature 3
+                HorizontalBox {
+                    spacing: 10px;
+                    
+                    MaterialText {
+                        text: "✓";
+                        font-size: 20px;
+                        color: MaterialPalette.primary;
+                    }
+                    
+                    MaterialText {
+                        text: "Контроль технического обслуживания";
+                        color: Colors.white;
+                    }
+                }
+                
+                // Feature 4
+                HorizontalBox {
+                    spacing: 10px;
+                    
+                    MaterialText {
+                        text: "✓";
+                        font-size: 20px;
+                        color: MaterialPalette.primary;
+                    }
+                    
+                    MaterialText {
+                        text: "Статистика и аналитика";
+                        color: Colors.white;
+                    }
+                }
+            }
+        }
+        
+        // Right Side - Login Form Panel
+        Rectangle {
+            width: 350px;
+            background: #252526;
+            
+            VerticalBox {
+                padding: 35px;
+                spacing: 25px;
+                
+                // Header Section
+                VerticalBox {
+                    spacing: 10px;
+                    
+                    MaterialText {
+                        text: "Вход в систему";
+                        font-size: 24px;
+                        font-weight: 700;
+                        color: Colors.white;
+                    }
+                    
+                    MaterialText {
+                        text: "Введите ваши учетные данные";
+                        font-size: 14px;
+                        color: #808080;
+                    }
+                }
+                
+                // Login Form
+                VerticalBox {
+                    vertical-stretch: 1;
+                    spacing: 25px;
+                    
+                    // Username Field
+                    VerticalBox {
+                        spacing: 5px;
+                        
+                        MaterialText {
+                            text: "Логин";
+                            font-size: 14px;
+                            color: #808080;
+                        }
+                        
+                        username-field := LineEdit {
+                            text <=> root.username;
+                            placeholder-text: "Введите логин";
+                            enabled: !root.is-loading;
+                            height: 40px;
+                        }
+                    }
+                    
+                    // Password Field
+                    VerticalBox {
+                        spacing: 5px;
+                        
+                        MaterialText {
+                            text: "Пароль";
+                            font-size: 14px;
+                            color: #808080;
+                        }
+                        
+                        password-field := LineEdit {
+                            text <=> root.password;
+                            placeholder-text: "Введите пароль";
+                            input-type: InputType.password;
+                            enabled: !root.is-loading;
+                            height: 40px;
+                        }
+                    }
+                    
+                    // Error Message
+                    if root.error-message != "": MaterialText {
+                        text: root.error-message;
+                        color: #FF4444;
+                        font-size: 14px;
+                        wrap: word-wrap;
+                    }
+                    
+                    // Login Button
+                    Rectangle {
+                        height: 45px;
+                        background: login-btn-touch.has-hover ? #45A049 : MaterialPalette.primary;
+                        border-radius: 4px;
+                        
+                        login-btn-touch := TouchArea {
+                            enabled: !root.is-loading && root.username != "" && root.password != "";
+                            mouse-cursor: pointer;
+                            
+                            clicked => {
+                                root.login-clicked();
+                            }
+                        }
+                        
+                        MaterialText {
+                            text: root.is-loading ? "Загрузка..." : "Войти";
+                            color: Colors.white;
+                            font-size: 16px;
+                            font-weight: 600;
+                            horizontal-alignment: center;
+                            vertical-alignment: center;
+                        }
+                    }
+                    
+                    // Loading Indicator
+                    if root.is-loading: Rectangle {
+                        height: 2px;
+                        background: MaterialPalette.primary;
+                        
+                        // Simple loading animation
+                        animate background {
+                            duration: 1s;
+                            iteration-count: -1;
+                        }
+                    }
+                }
+                
+                // Footer Section
+                VerticalBox {
+                    spacing: 5px;
+                    
+                    MaterialText {
+                        text: "© 2025 Автопарк автобусов";
+                        font-size: 12px;
+                        color: #808080;
+                        horizontal-alignment: center;
+                    }
+                    
+                    MaterialText {
+                        text: "Все права защищены";
+                        font-size: 12px;
+                        color: #808080;
+                        horizontal-alignment: center;
+                    }
+                }
+            }
+        }
+    }
+}

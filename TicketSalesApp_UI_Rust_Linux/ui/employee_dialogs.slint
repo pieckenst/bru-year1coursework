@@ -35,9 +35,11 @@ export component EmployeeDialog inherits Dialog {
     in-out property <string> driver-license-number: "";
     in-out property <string> driver-license-category: "";
     in-out property <string> driver-license-issue-date: "";
+    in-out property <string> driver-license-expiry: "";
     // Medical info
     in-out property <string> medical-cert-number: "";
     in-out property <string> medical-cert-issue-date: "";
+    in-out property <string> medical-cert-expiry: "";
     
     in-out property <[JobData]> jobs: [];
     in-out property <[DepartmentData]> departments: [];
@@ -220,6 +222,19 @@ export component EmployeeDialog inherits Dialog {
                                 horizontal-stretch: 1;
                                 spacing: 8px;
                                 MaterialText {
+                                    text: "Дата рождения";
+                                    font-size: 14px;
+                                }
+                                TextField {
+                                    text <=> root.date-of-birth;
+                                    placeholder-text: "ДД.ММ.ГГГГ (напр. 15.05.1980)";
+                                }
+                            }
+                            
+                            VerticalBox {
+                                horizontal-stretch: 1;
+                                spacing: 8px;
+                                MaterialText {
                                     text: "Email";
                                     font-size: 14px;
                                 }
@@ -319,8 +334,8 @@ export component EmployeeDialog inherits Dialog {
                                     font-size: 14px;
                                 }
                                 TextField {
-                                    text <=> root.driver-license-issue-date;
-                                    placeholder-text: "ГГГГ-ММ-ДД";
+                                    text <=> root.driver-license-expiry;
+                                    placeholder-text: "ДД.ММ.ГГГГ (напр. 10.03.2025)";
                                 }
                             }
                             
@@ -332,8 +347,8 @@ export component EmployeeDialog inherits Dialog {
                                     font-size: 14px;
                                 }
                                 TextField {
-                                    text <=> root.medical-cert-issue-date;
-                                    placeholder-text: "ГГГГ-ММ-ДД";
+                                    text <=> root.medical-cert-expiry;
+                                    placeholder-text: "ДД.ММ.ГГГГ (напр. 15.01.2025)";
                                 }
                             }
                         }
