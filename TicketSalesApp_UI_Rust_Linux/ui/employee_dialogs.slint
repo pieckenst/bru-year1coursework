@@ -8,6 +8,12 @@ export struct JobData {
     title: string,
 }
 
+// Department data structure
+export struct DepartmentData {
+    id: int,
+    name: string,
+}
+
 // Employee Add/Edit Dialog
 export component EmployeeDialog inherits Dialog {
     in-out property <string> dialog-title: "Добавить сотрудника";
@@ -34,6 +40,9 @@ export component EmployeeDialog inherits Dialog {
     in-out property <string> medical-cert-issue-date: "";
     
     in-out property <[JobData]> jobs: [];
+    in-out property <[DepartmentData]> departments: [];
+    in-out property <[string]> job-names: [];
+    in-out property <[string]> department-names: [];
     in-out property <string> error-message: "";
     in-out property <bool> is-edit-mode: false;
     
@@ -134,16 +143,32 @@ export component EmployeeDialog inherits Dialog {
                                     text: "Должность *";
                                     font-size: 14px;
                                 }
-                                Rectangle {
-                                    height: 48px;
-                                    background: MaterialPalette.surface_container;
-                                    border-radius: 4px;
-                                    MaterialText {
-                                        text: "Выберите должность";
-                                        vertical-alignment: center;
-                                        horizontal-alignment: center;
-                                    }
+                                ComboBox {
+                                    model: root.job-names;
+                                    current-index: root.selected-job-id;
                                 }
+                            }
+                        }
+                        
+                        HorizontalBox {
+                            spacing: 12px;
+                            
+                            VerticalBox {
+                                horizontal-stretch: 1;
+                                spacing: 8px;
+                                
+                                MaterialText {
+                                    text: "Отдел";
+                                    font-size: 14px;
+                                }
+                                ComboBox {
+                                    model: root.department-names;
+                                    current-index: root.selected-department-id;
+                                }
+                            }
+                            
+                            Rectangle {
+                                horizontal-stretch: 1;
                             }
                         }
                     }
@@ -243,12 +268,12 @@ export component EmployeeDialog inherits Dialog {
                         }
                     }
                     
-                    // SECTION 3: Driver Information
+                    // SECTION 3: Водительская и медицинская информация
                     VerticalBox {
                         spacing: 12px;
                         
                         MaterialText {
-                            text: "Водительские права";
+                            text: "Водительская и медицинская информация";
                             font-size: 18px;
                             font-weight: 600;
                         }
@@ -278,31 +303,50 @@ export component EmployeeDialog inherits Dialog {
                                 }
                                 TextField {
                                     text <=> root.driver-license-category;
-                                    placeholder-text: "A, B, C, D, E";
+                                    placeholder-text: "B, C, D";
                                 }
                             }
                         }
-                    }
-                    
-                    // SECTION 4: Medical Information
-                    VerticalBox {
-                        spacing: 12px;
                         
-                        MaterialText {
-                            text: "Медицинская справка";
-                            font-size: 18px;
-                            font-weight: 600;
+                        HorizontalBox {
+                            spacing: 12px;
+                            
+                            VerticalBox {
+                                horizontal-stretch: 1;
+                                spacing: 8px;
+                                MaterialText {
+                                    text: "ВУ действительно до";
+                                    font-size: 14px;
+                                }
+                                TextField {
+                                    text <=> root.driver-license-issue-date;
+                                    placeholder-text: "ГГГГ-ММ-ДД";
+                                }
+                            }
+                            
+                            VerticalBox {
+                                horizontal-stretch: 1;
+                                spacing: 8px;
+                                MaterialText {
+                                    text: "Мед. справка до";
+                                    font-size: 14px;
+                                }
+                                TextField {
+                                    text <=> root.medical-cert-issue-date;
+                                    placeholder-text: "ГГГГ-ММ-ДД";
+                                }
+                            }
                         }
                         
                         VerticalBox {
                             spacing: 8px;
                             MaterialText {
-                                text: "Номер справки";
+                                text: "Номер мед. справки";
                                 font-size: 14px;
                             }
                             TextField {
                                 text <=> root.medical-cert-number;
-                                placeholder-text: "000000";
+                                placeholder-text: "MC123456";
                             }
                         }
                     }

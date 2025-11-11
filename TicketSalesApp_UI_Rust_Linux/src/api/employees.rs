@@ -337,6 +337,13 @@ impl ApiClient {
             let text = response.text().await
                 .map_err(|e| ApiError::ServerError(format!("Failed to read response: {}", e)))?;
             
+            // Handle empty response
+            if text.trim().is_empty() {
+                println!("⚠️ Create returned empty response - returning minimal employee object");
+                // Return a minimal employee object - the real data will be fetched on reload
+                return Err(ApiError::ServerError("Created but no employee data returned".to_string()));
+            }
+            
             // Parse with $ref handling
             let json: Value = serde_json::from_str(&text)
                 .map_err(|e| ApiError::ServerError(format!("Failed to parse JSON: {}", e)))?;
@@ -360,14 +367,20 @@ impl ApiClient {
             let text = response.text().await
                 .map_err(|e| ApiError::ServerError(format!("Failed to read response: {}", e)))?;
             
-            // Parse with $ref handling
+            // Handle empty response (204 No Content) - common for successful updates
+            if text.trim().is_empty() {
+                println!("✅ Update successful (empty response)");
+                return Ok(employee.clone());
+            }
+            
+            // Parse with $ref handling if we got a response body
             let json: Value = serde_json::from_str(&text)
                 .map_err(|e| ApiError::ServerError(format!("Failed to parse JSON: {}", e)))?;
             
-            let employee: Employee = serde_json::from_value(json)
+            let updated_employee: Employee = serde_json::from_value(json)
                 .map_err(|e| ApiError::ServerError(format!("Failed to parse employee: {}", e)))?;
             
-            Ok(employee)
+            Ok(updated_employee)
         } else {
             let error = response.text().await.unwrap_or_default();
             Err(ApiError::ServerError(format!("Failed to update employee: {}", error)))

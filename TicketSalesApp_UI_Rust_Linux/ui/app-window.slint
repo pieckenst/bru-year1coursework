@@ -2,7 +2,7 @@ import { Button, VerticalBox, HorizontalBox, LineEdit } from "std-widgets.slint"
 import { MaterialWindow, FilledCard, TextField, FilledButton, TonalButton, HorizontalDivider, MaterialText, ScrollView } from "../material-1.0/material.slint";
 import { MaterialPalette } from "../material-1.0/ui/styling/material_palette.slint";
 import { AppNavigation } from "navigation.slint";
-import { EmployeeDialog, DeleteConfirmDialog, JobData } from "employee_dialogs.slint";
+import { EmployeeDialog, DeleteConfirmDialog, JobData, DepartmentData } from "employee_dialogs.slint";
 
 // Employee data structure
 export struct EmployeeData {
@@ -105,6 +105,8 @@ export component AppWindow inherits Window {
     in-out property <string> employee-patronym: "";
     in-out property <int> selected-job-id: -1;
     in-out property <int> selected-department-id: -1;
+    in-out property <[string]> job-names: [];
+    in-out property <[string]> department-names: [];
     // Personal info
     in-out property <string> passport-series: "";
     in-out property <string> passport-number: "";
@@ -381,6 +383,8 @@ export component AppWindow inherits Window {
         patronym <=> root.employee-patronym;
         selected-job-id <=> root.selected-job-id;
         selected-department-id <=> root.selected-department-id;
+        job-names <=> root.job-names;
+        department-names <=> root.department-names;
         // Personal
         passport-series <=> root.passport-series;
         passport-number <=> root.passport-number;

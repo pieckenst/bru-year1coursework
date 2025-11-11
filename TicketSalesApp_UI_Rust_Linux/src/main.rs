@@ -125,17 +125,14 @@ fn show_main_window(
         move || {
             println!("Add employee clicked");
             let ui = ui_handle.unwrap();
-            // Show add dialog - clear all fields
-            ui.set_show_employee_dialog(true);
-            ui.set_dialog_mode(slint::SharedString::from("add"));
-            ui.set_dialog_title(slint::SharedString::from("Добавить сотрудника"));
-            // Basic
+            let api = api_add.clone();
+            
+            // Clear all fields first
             ui.set_employee_surname(slint::SharedString::from(""));
             ui.set_employee_name(slint::SharedString::from(""));
             ui.set_employee_patronym(slint::SharedString::from(""));
             ui.set_selected_job_id(-1);
             ui.set_selected_department_id(-1);
-            // Personal
             ui.set_passport_series(slint::SharedString::from(""));
             ui.set_passport_number(slint::SharedString::from(""));
             ui.set_date_of_birth(slint::SharedString::from(""));
@@ -143,13 +140,63 @@ fn show_main_window(
             ui.set_address(slint::SharedString::from(""));
             ui.set_personal_phone(slint::SharedString::from(""));
             ui.set_snils(slint::SharedString::from(""));
-            // Driver
             ui.set_driver_license_number(slint::SharedString::from(""));
             ui.set_driver_license_category(slint::SharedString::from(""));
             ui.set_driver_license_issue_date(slint::SharedString::from(""));
-            // Medical
             ui.set_medical_cert_number(slint::SharedString::from(""));
             ui.set_medical_cert_issue_date(slint::SharedString::from(""));
+            
+            ui.set_dialog_mode(slint::SharedString::from("add"));
+            ui.set_dialog_title(slint::SharedString::from("Добавить сотрудника"));
+            ui.set_show_employee_dialog(true);
+            
+            // Load jobs and departments dynamically
+            slint::spawn_local(async move {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                
+                // Load jobs
+                let jobs_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_jobs().await
+                });
+                
+                // Load departments
+                let depts_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_departments().await
+                });
+                
+                match (jobs_result, depts_result) {
+                    (Ok(jobs), Ok(departments)) => {
+                        // Convert to string arrays for ComboBox display
+                        let job_names: Vec<slint::SharedString> = jobs.iter()
+                            .map(|j| slint::SharedString::from(&j.job_title))
+                            .collect();
+                        
+                        let dept_names: Vec<slint::SharedString> = departments.iter()
+                            .map(|d| slint::SharedString::from(&d.department_name))
+                            .collect();
+                        
+                        // Create job ID mapping (index -> actual job_id)
+                        let job_ids: Vec<i32> = jobs.iter().map(|j| j.job_id).collect();
+                        let dept_ids: Vec<i64> = departments.iter().map(|d| d.department_id).collect();
+                        
+                        println!("📋 Loaded {} jobs and {} departments for dialog", jobs.len(), departments.len());
+                        
+                        // Set in UI
+                        let model_jobs = std::rc::Rc::new(slint::VecModel::from(job_names));
+                        let model_depts = std::rc::Rc::new(slint::VecModel::from(dept_names));
+                        
+                        ui.set_job_names(model_jobs.into());
+                        ui.set_department_names(model_depts.into());
+                        
+                        // Store ID mappings for later use (we'll need these when saving)
+                        // For now, we'll use index-based selection
+                    }
+                    (Err(e), _) => eprintln!("Failed to load jobs: {}", e),
+                    (_, Err(e)) => eprintln!("Failed to load departments: {}", e),
+                }
+            }).unwrap();
         }
     });
     
@@ -162,26 +209,64 @@ fn show_main_window(
             let ui = ui_handle.unwrap();
             let api = api_edit.clone();
             
-            // Load employee data - need Tokio runtime inside spawn_local
+            // Load employee data and combo data - need Tokio runtime inside spawn_local
             slint::spawn_local(async move {
                 let rt = tokio::runtime::Runtime::new().unwrap();
-                let result = rt.block_on(async {
+                
+                // Load employee
+                let emp_result = rt.block_on(async {
                     let client = api.lock().unwrap();
                     client.get_employee(emp_id as i64).await
                 });
                 
-                match result {
-                    Ok(employee) => {
+                // Load jobs and departments
+                let jobs_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_jobs().await
+                });
+                
+                let depts_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_departments().await
+                });
+                
+                match (emp_result, jobs_result, depts_result) {
+                    (Ok(employee), Ok(jobs), Ok(departments)) => {
                         ui.set_show_employee_dialog(true);
                         ui.set_dialog_mode(slint::SharedString::from("edit"));
                         ui.set_dialog_title(slint::SharedString::from("Редактировать сотрудника"));
                         ui.set_employee_id(employee.emp_id as i32);
+                        
+                        // Convert to string arrays for ComboBox display
+                        let job_names: Vec<slint::SharedString> = jobs.iter()
+                            .map(|j| slint::SharedString::from(&j.job_title))
+                            .collect();
+                        
+                        let dept_names: Vec<slint::SharedString> = departments.iter()
+                            .map(|d| slint::SharedString::from(&d.department_name))
+                            .collect();
+                        
+                        // Find index of current job and department
+                        let job_index = jobs.iter().position(|j| j.job_id == employee.job_id as i32).unwrap_or(0) as i32;
+                        let dept_index = employee.department_id
+                            .and_then(|dept_id| departments.iter().position(|d| d.department_id == dept_id))
+                            .unwrap_or(0) as i32;
+                        
+                        println!("📋 Loaded {} jobs, {} departments. Employee job index: {}, dept index: {}", 
+                                 jobs.len(), departments.len(), job_index, dept_index);
+                        
+                        // Set combo data
+                        let model_jobs = std::rc::Rc::new(slint::VecModel::from(job_names));
+                        let model_depts = std::rc::Rc::new(slint::VecModel::from(dept_names));
+                        ui.set_job_names(model_jobs.into());
+                        ui.set_department_names(model_depts.into());
+                        
                         // Basic
                         ui.set_employee_surname(slint::SharedString::from(&employee.surname));
                         ui.set_employee_name(slint::SharedString::from(&employee.name));
                         ui.set_employee_patronym(slint::SharedString::from(employee.patronym.as_deref().unwrap_or("")));
-                        ui.set_selected_job_id(employee.job_id as i32);
-                        ui.set_selected_department_id(employee.department_id.unwrap_or(-1) as i32);
+                        ui.set_selected_job_id(job_index);
+                        ui.set_selected_department_id(dept_index);
                         // Personal
                         ui.set_passport_series(slint::SharedString::from(employee.passport_series.as_deref().unwrap_or("")));
                         ui.set_passport_number(slint::SharedString::from(employee.passport_number.as_deref().unwrap_or("")));
@@ -195,9 +280,9 @@ fn show_main_window(
                         // Medical
                         ui.set_medical_cert_number(slint::SharedString::from(employee.medical_certificate_number.as_deref().unwrap_or("")));
                     }
-                    Err(e) => {
-                        eprintln!("Failed to load employee: {}", e);
-                    }
+                    (Err(e), _, _) => eprintln!("Failed to load employee: {}", e),
+                    (_, Err(e), _) => eprintln!("Failed to load jobs: {}", e),
+                    (_, _, Err(e)) => eprintln!("Failed to load departments: {}", e),
                 }
             }).unwrap();
         }
@@ -243,8 +328,8 @@ fn show_main_window(
             let surname = ui.get_employee_surname().to_string();
             let name = ui.get_employee_name().to_string();
             let patronym = ui.get_employee_patronym().to_string();
-            let job_id = ui.get_selected_job_id() as i64;
-            let department_id = ui.get_selected_department_id();
+            let job_index = ui.get_selected_job_id();
+            let dept_index = ui.get_selected_department_id();
             // Personal
             let passport_series = ui.get_passport_series().to_string();
             let passport_number = ui.get_passport_number().to_string();
@@ -263,6 +348,45 @@ fn show_main_window(
                 
                 let rt = tokio::runtime::Runtime::new().unwrap();
                 
+                // Load jobs and departments to map indices to IDs
+                let jobs_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_jobs().await
+                });
+                
+                let depts_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_departments().await
+                });
+                
+                let (jobs, departments) = match (jobs_result, depts_result) {
+                    (Ok(j), Ok(d)) => (j, d),
+                    (Err(e), _) => {
+                        eprintln!("Failed to load jobs: {}", e);
+                        return;
+                    }
+                    (_, Err(e)) => {
+                        eprintln!("Failed to load departments: {}", e);
+                        return;
+                    }
+                };
+                
+                // Map selected indices to actual IDs
+                let job_id = if job_index >= 0 && (job_index as usize) < jobs.len() {
+                    jobs[job_index as usize].job_id as i64
+                } else {
+                    0
+                };
+                
+                let department_id = if dept_index >= 0 && (dept_index as usize) < departments.len() {
+                    Some(departments[dept_index as usize].department_id as i32)
+                } else {
+                    None
+                };
+                
+                println!("💾 Saving: job_index={} -> job_id={}, dept_index={} -> dept_id={:?}", 
+                         job_index, job_id, dept_index, department_id);
+                
                 if mode == "add" {
                     let request = CreateEmployeeRequest {
                         surname,
@@ -270,7 +394,7 @@ fn show_main_window(
                         patronym: Some(patronym).filter(|s| !s.is_empty()),
                         employed_since: chrono::Local::now().naive_local().date(),
                         job_id: Some(job_id as i32),
-                        department_id: if department_id >= 0 { Some(department_id) } else { None },
+                        department_id,
                         date_of_birth: None,
                         personal_phone: Some(personal_phone).filter(|s| !s.is_empty()),
                         work_phone: None,
@@ -321,7 +445,7 @@ fn show_main_window(
                             employee.name = name;
                             employee.patronym = Some(patronym).filter(|s| !s.is_empty());
                             employee.job_id = job_id;
-                            employee.department_id = if department_id >= 0 { Some(department_id as i64) } else { None };
+                            employee.department_id = department_id.map(|d| d as i64);
                             // Update personal fields
                             employee.passport_series = Some(passport_series).filter(|s| !s.is_empty());
                             employee.passport_number = Some(passport_number).filter(|s| !s.is_empty());
