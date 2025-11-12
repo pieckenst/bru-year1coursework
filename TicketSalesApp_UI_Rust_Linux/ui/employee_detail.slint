@@ -83,7 +83,7 @@ export component EmployeeDetailView inherits Rectangle {
         // Header
         Rectangle {
             height: 64px;
-            background: MaterialPalette.primary;
+            background: MaterialPalette.surface-container-highest;
             
             HorizontalBox {
                 padding: 16px;
@@ -93,7 +93,7 @@ export component EmployeeDetailView inherits Rectangle {
                     text: root.employee-name;
                     font-size: 20px;
                     font-weight: 600;
-                    color: Colors.white;
+                    color: MaterialPalette.on-surface;
                     vertical-alignment: center;
                     horizontal-stretch: 1;
                 }
@@ -102,7 +102,7 @@ export component EmployeeDetailView inherits Rectangle {
                     width: 40px;
                     height: 40px;
                     border-radius: 20px;
-                    background: close-touch.has-hover ? #FFFFFF33 : transparent;
+                    background: close-touch.has-hover ? MaterialPalette.surface-container : transparent;
                     
                     close-touch := TouchArea {
                         width: 100%;
@@ -111,12 +111,13 @@ export component EmployeeDetailView inherits Rectangle {
                         clicked => { root.close-clicked(); }
                     }
                     
-                    MaterialText {
-                        text: "✕";
-                        color: Colors.white;
-                        font-size: 20px;
-                        horizontal-alignment: center;
-                        vertical-alignment: center;
+                    Path {
+                        width: 20px;
+                        height: 20px;
+                        x: 10px;
+                        y: 10px;
+                        fill: MaterialPalette.on-surface;
+                        commands: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z";
                     }
                 }
             }
@@ -125,7 +126,7 @@ export component EmployeeDetailView inherits Rectangle {
         // Scrollable content
         ScrollView {
             VerticalBox {
-                padding: 16px;
+                padding: 12px;
                 spacing: 12px;
                 
                 // SECTION 1: Documents
@@ -134,8 +135,8 @@ export component EmployeeDetailView inherits Rectangle {
                     border-radius: 12px;
                     
                     VerticalBox {
-                        padding: 16px;
-                        spacing: 12px;
+                        padding: 14px;
+                        spacing: 10px;
                         
                         // Section header
                         HorizontalBox {
@@ -143,7 +144,7 @@ export component EmployeeDetailView inherits Rectangle {
                             
                             doc-expand-touch := TouchArea {
                                 width: 100%;
-                                height: 40px;
+                                height: 36px;
                                 mouse-cursor: pointer;
                                 clicked => {
                                     root.documents-expanded = !root.documents-expanded;
@@ -194,7 +195,7 @@ export component EmployeeDetailView inherits Rectangle {
                         
                         // Document list
                         if root.documents-expanded: VerticalBox {
-                            spacing: 12px;
+                            spacing: 10px;
                             
                             // Empty state
                             if root.documents.length == 0: Rectangle {
@@ -211,18 +212,18 @@ export component EmployeeDetailView inherits Rectangle {
                                 }
                             }
                             
-                            for doc[idx] in root.documents: Rectangle {
-                                min-height: 95px;
-                                background: MaterialPalette.surface;
-                                border-radius: 8px;
+                            for doc[idx] in root.documents: VerticalBox {
+                                spacing: 6px;
                                 
-                                HorizontalBox {
-                                    padding: 12px;
-                                    spacing: 12px;
+                                // Info Card
+                                Rectangle {
+                                    min-height: 72px;
+                                    background: MaterialPalette.surface;
+                                    border-radius: 8px;
                                     
                                     VerticalBox {
+                                        padding: 14px;
                                         spacing: 6px;
-                                        horizontal-stretch: 1;
                                         
                                         MaterialText {
                                             text: doc.document-type;
@@ -238,74 +239,88 @@ export component EmployeeDetailView inherits Rectangle {
                                             color: MaterialPalette.on-surface-variant;
                                         }
                                         
-                                        HorizontalBox {
-                                            spacing: 8px;
+                                        MaterialText {
+                                            text: "Истекает: " + doc.expiry-date;
+                                            font-size: 12px;
+                                            color: MaterialPalette.on-surface-variant;
+                                        }
+                                    }
+                                }
+                                
+                                // Status & Actions Card
+                                Rectangle {
+                                    height: 44px;
+                                    background: MaterialPalette.surface-variant;
+                                    border-radius: 6px;
+                                    
+                                    HorizontalBox {
+                                        padding: 10px;
+                                        spacing: 10px;
+                                        
+                                        Rectangle {
+                                            width: min(self.text-width + 16px, 90px);
+                                            height: 24px;
+                                            border-radius: 12px;
+                                            background: doc.status == "Истек" ? #FF4444 : 
+                                                       doc.status == "Истекает скоро" ? #FFA726 : #4CAF50;
                                             
-                                            MaterialText {
-                                                text: "Истекает: " + doc.expiry-date;
-                                                font-size: 12px;
-                                                color: MaterialPalette.on-surface-variant;
+                                            property <length> text-width: status-text.preferred-width;
+                                            
+                                            status-text := MaterialText {
+                                                text: doc.status;
+                                                font-size: 11px;
+                                                color: Colors.white;
+                                                horizontal-alignment: center;
+                                                vertical-alignment: center;
+                                                overflow: elide;
+                                            }
+                                        }
+                                        
+                                        Rectangle { horizontal-stretch: 1; }
+                                        
+                                        HorizontalBox {
+                                            spacing: 6px;
+                                            
+                                            Rectangle {
+                                                width: 28px;
+                                                height: 28px;
+                                                border-radius: 14px;
+                                                background: edit-doc-touch.has-hover ? MaterialPalette.primary-container : transparent;
+                                                
+                                                edit-doc-touch := TouchArea {
+                                                    mouse-cursor: pointer;
+                                                    clicked => { root.edit-document-clicked(doc.document-id); }
+                                                }
+                                                
+                                                Path {
+                                                    width: 14px;
+                                                    height: 14px;
+                                                    x: 7px;
+                                                    y: 7px;
+                                                    fill: MaterialPalette.on-surface;
+                                                    commands: "M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z";
+                                                }
                                             }
                                             
                                             Rectangle {
-                                                width: self.text-width + 16px;
-                                                height: 20px;
-                                                border-radius: 10px;
-                                                background: doc.status == "Истек" ? #FF4444 : 
-                                                           doc.status == "Истекает скоро" ? #FFA726 : #4CAF50;
+                                                width: 28px;
+                                                height: 28px;
+                                                border-radius: 14px;
+                                                background: delete-doc-touch.has-hover ? MaterialPalette.error-container : transparent;
                                                 
-                                                property <length> text-width: status-text.preferred-width;
-                                                
-                                                status-text := MaterialText {
-                                                    text: doc.status;
-                                                    font-size: 11px;
-                                                    color: Colors.white;
-                                                    horizontal-alignment: center;
-                                                    vertical-alignment: center;
+                                                delete-doc-touch := TouchArea {
+                                                    mouse-cursor: pointer;
+                                                    clicked => { root.delete-document-clicked(doc.document-id); }
                                                 }
-                                            }
-                                        }
-                                    }
-                                    
-                                    // Action buttons
-                                    HorizontalBox {
-                                        spacing: 8px;
-                                        
-                                        Rectangle {
-                                            width: 36px;
-                                            height: 36px;
-                                            border-radius: 18px;
-                                            background: edit-doc-touch.has-hover ? MaterialPalette.primary-container : transparent;
-                                            
-                                            edit-doc-touch := TouchArea {
-                                                mouse-cursor: pointer;
-                                                clicked => { root.edit-document-clicked(doc.document-id); }
-                                            }
-                                            
-                                            MaterialText {
-                                                text: "✏️";
-                                                font-size: 16px;
-                                                horizontal-alignment: center;
-                                                vertical-alignment: center;
-                                            }
-                                        }
-                                        
-                                        Rectangle {
-                                            width: 36px;
-                                            height: 36px;
-                                            border-radius: 18px;
-                                            background: del-doc-touch.has-hover ? #FF444422 : transparent;
-                                            
-                                            del-doc-touch := TouchArea {
-                                                mouse-cursor: pointer;
-                                                clicked => { root.delete-document-clicked(doc.document-id); }
-                                            }
-                                            
-                                            MaterialText {
-                                                text: "🗑️";
-                                                font-size: 16px;
-                                                horizontal-alignment: center;
-                                                vertical-alignment: center;
+                                                
+                                                Path {
+                                                    width: 14px;
+                                                    height: 14px;
+                                                    x: 7px;
+                                                    y: 7px;
+                                                    fill: MaterialPalette.error;
+                                                    commands: "M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z";
+                                                }
                                             }
                                         }
                                     }
@@ -321,15 +336,15 @@ export component EmployeeDetailView inherits Rectangle {
                     border-radius: 12px;
                     
                     VerticalBox {
-                        padding: 16px;
-                        spacing: 12px;
+                        padding: 14px;
+                        spacing: 10px;
                         
                         HorizontalBox {
                             spacing: 12px;
                             
                             train-expand-touch := TouchArea {
                                 width: 100%;
-                                height: 40px;
+                                height: 36px;
                                 mouse-cursor: pointer;
                                 clicked => {
                                     root.training-expanded = !root.training-expanded;
@@ -379,7 +394,7 @@ export component EmployeeDetailView inherits Rectangle {
                         }
                         
                         if root.training-expanded: VerticalBox {
-                            spacing: 12px;
+                            spacing: 10px;
                             
                             // Empty state
                             if root.training.length == 0: Rectangle {
@@ -396,18 +411,18 @@ export component EmployeeDetailView inherits Rectangle {
                                 }
                             }
                             
-                            for train[idx] in root.training: Rectangle {
-                                min-height: 100px;
-                                background: MaterialPalette.surface;
-                                border-radius: 8px;
+                            for train[idx] in root.training: VerticalBox {
+                                spacing: 6px;
                                 
-                                HorizontalBox {
-                                    padding: 12px;
-                                    spacing: 12px;
+                                // Info Card
+                                Rectangle {
+                                    min-height: 100px;
+                                    background: MaterialPalette.surface;
+                                    border-radius: 8px;
                                     
                                     VerticalBox {
+                                        padding: 14px;
                                         spacing: 6px;
-                                        horizontal-stretch: 1;
                                         
                                         HorizontalBox {
                                             spacing: 8px;
@@ -418,6 +433,7 @@ export component EmployeeDetailView inherits Rectangle {
                                                 font-weight: 600;
                                                 wrap: word-wrap;
                                                 overflow: elide;
+                                                horizontal-stretch: 1;
                                             }
                                             
                                             if train.is-mandatory: MaterialText {
@@ -432,73 +448,88 @@ export component EmployeeDetailView inherits Rectangle {
                                             color: MaterialPalette.on-surface-variant;
                                         }
                                         
-                                        HorizontalBox {
-                                            spacing: 8px;
+                                        MaterialText {
+                                            text: "Истекает: " + train.expiry-date;
+                                            font-size: 12px;
+                                            color: MaterialPalette.on-surface-variant;
+                                        }
+                                    }
+                                }
+                                
+                                // Status & Actions Card
+                                Rectangle {
+                                    height: 44px;
+                                    background: MaterialPalette.surface-variant;
+                                    border-radius: 6px;
+                                    
+                                    HorizontalBox {
+                                        padding: 10px;
+                                        spacing: 10px;
+                                        
+                                        Rectangle {
+                                            width: min(self.text-width + 16px, 90px);
+                                            height: 24px;
+                                            border-radius: 12px;
+                                            background: train.status == "Истек" ? #FF4444 : 
+                                                       train.status == "Истекает скоро" ? #FFA726 : #4CAF50;
                                             
-                                            MaterialText {
-                                                text: "Истекает: " + train.expiry-date;
-                                                font-size: 12px;
-                                                color: MaterialPalette.on-surface-variant;
+                                            property <length> text-width: train-status-text.preferred-width;
+                                            
+                                            train-status-text := MaterialText {
+                                                text: train.status;
+                                                font-size: 11px;
+                                                color: Colors.white;
+                                                horizontal-alignment: center;
+                                                vertical-alignment: center;
+                                                overflow: elide;
+                                            }
+                                        }
+                                        
+                                        Rectangle { horizontal-stretch: 1; }
+                                        
+                                        HorizontalBox {
+                                            spacing: 6px;
+                                            
+                                            Rectangle {
+                                                width: 28px;
+                                                height: 28px;
+                                                border-radius: 14px;
+                                                background: edit-train-touch.has-hover ? MaterialPalette.primary-container : transparent;
+                                                
+                                                edit-train-touch := TouchArea {
+                                                    mouse-cursor: pointer;
+                                                    clicked => { root.edit-training-clicked(train.training-id); }
+                                                }
+                                                
+                                                Path {
+                                                    width: 14px;
+                                                    height: 14px;
+                                                    x: 7px;
+                                                    y: 7px;
+                                                    fill: MaterialPalette.on-surface;
+                                                    commands: "M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z";
+                                                }
                                             }
                                             
                                             Rectangle {
-                                                width: self.text-width + 16px;
-                                                height: 20px;
-                                                border-radius: 10px;
-                                                background: train.status == "Истек" ? #FF4444 : 
-                                                           train.status == "Истекает скоро" ? #FFA726 : #4CAF50;
+                                                width: 28px;
+                                                height: 28px;
+                                                border-radius: 14px;
+                                                background: del-train-touch.has-hover ? MaterialPalette.error-container : transparent;
                                                 
-                                                property <length> text-width: train-status-text.preferred-width;
-                                                
-                                                train-status-text := MaterialText {
-                                                    text: train.status;
-                                                    font-size: 11px;
-                                                    color: Colors.white;
-                                                    horizontal-alignment: center;
-                                                    vertical-alignment: center;
+                                                del-train-touch := TouchArea {
+                                                    mouse-cursor: pointer;
+                                                    clicked => { root.delete-training-clicked(train.training-id); }
                                                 }
-                                            }
-                                        }
-                                    }
-                                    
-                                    HorizontalBox {
-                                        spacing: 8px;
-                                        
-                                        Rectangle {
-                                            width: 36px;
-                                            height: 36px;
-                                            border-radius: 18px;
-                                            background: edit-train-touch.has-hover ? MaterialPalette.primary-container : transparent;
-                                            
-                                            edit-train-touch := TouchArea {
-                                                mouse-cursor: pointer;
-                                                clicked => { root.edit-training-clicked(train.training-id); }
-                                            }
-                                            
-                                            MaterialText {
-                                                text: "✏️";
-                                                font-size: 16px;
-                                                horizontal-alignment: center;
-                                                vertical-alignment: center;
-                                            }
-                                        }
-                                        
-                                        Rectangle {
-                                            width: 36px;
-                                            height: 36px;
-                                            border-radius: 18px;
-                                            background: del-train-touch.has-hover ? #FF444422 : transparent;
-                                            
-                                            del-train-touch := TouchArea {
-                                                mouse-cursor: pointer;
-                                                clicked => { root.delete-training-clicked(train.training-id); }
-                                            }
-                                            
-                                            MaterialText {
-                                                text: "🗑️";
-                                                font-size: 16px;
-                                                horizontal-alignment: center;
-                                                vertical-alignment: center;
+                                                
+                                                Path {
+                                                    width: 14px;
+                                                    height: 14px;
+                                                    x: 7px;
+                                                    y: 7px;
+                                                    fill: MaterialPalette.error;
+                                                    commands: "M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z";
+                                                }
                                             }
                                         }
                                     }
@@ -514,15 +545,15 @@ export component EmployeeDetailView inherits Rectangle {
                     border-radius: 12px;
                     
                     VerticalBox {
-                        padding: 16px;
-                        spacing: 12px;
+                        padding: 14px;
+                        spacing: 10px;
                         
                         HorizontalBox {
                             spacing: 12px;
                             
                             contact-expand-touch := TouchArea {
                                 width: 100%;
-                                height: 40px;
+                                height: 36px;
                                 mouse-cursor: pointer;
                                 clicked => {
                                     root.contacts-expanded = !root.contacts-expanded;
@@ -572,7 +603,7 @@ export component EmployeeDetailView inherits Rectangle {
                         }
                         
                         if root.contacts-expanded: VerticalBox {
-                            spacing: 12px;
+                            spacing: 10px;
                             
                             // Empty state
                             if root.contacts.length == 0: Rectangle {
@@ -589,18 +620,18 @@ export component EmployeeDetailView inherits Rectangle {
                                 }
                             }
                             
-                            for contact[idx] in root.contacts: Rectangle {
-                                min-height: 95px;
-                                background: MaterialPalette.surface;
-                                border-radius: 8px;
+                            for contact[idx] in root.contacts: VerticalBox {
+                                spacing: 6px;
                                 
-                                HorizontalBox {
-                                    padding: 12px;
-                                    spacing: 12px;
+                                // Info Card
+                                Rectangle {
+                                    min-height: 95px;
+                                    background: MaterialPalette.surface;
+                                    border-radius: 8px;
                                     
                                     VerticalBox {
+                                        padding: 14px;
                                         spacing: 6px;
-                                        horizontal-stretch: 1;
                                         
                                         HorizontalBox {
                                             spacing: 8px;
@@ -616,6 +647,7 @@ export component EmployeeDetailView inherits Rectangle {
                                                 font-weight: 600;
                                                 wrap: word-wrap;
                                                 overflow: elide;
+                                                horizontal-stretch: 1;
                                             }
                                             
                                             if contact.is-primary: MaterialText {
@@ -636,45 +668,63 @@ export component EmployeeDetailView inherits Rectangle {
                                             color: MaterialPalette.on-surface-variant;
                                         }
                                     }
+                                }
+                                
+                                // Actions Card (no status badge needed for contacts)
+                                Rectangle {
+                                    height: 44px;
+                                    background: MaterialPalette.surface-variant;
+                                    border-radius: 6px;
                                     
                                     HorizontalBox {
-                                        spacing: 8px;
+                                        padding: 10px;
+                                        spacing: 10px;
                                         
-                                        Rectangle {
-                                            width: 36px;
-                                            height: 36px;
-                                            border-radius: 18px;
-                                            background: edit-contact-touch.has-hover ? MaterialPalette.primary-container : transparent;
-                                            
-                                            edit-contact-touch := TouchArea {
-                                                mouse-cursor: pointer;
-                                                clicked => { root.edit-contact-clicked(contact.contact-id); }
-                                            }
-                                            
-                                            MaterialText {
-                                                text: "✏️";
-                                                font-size: 16px;
-                                                horizontal-alignment: center;
-                                                vertical-alignment: center;
-                                            }
-                                        }
+                                        Rectangle { horizontal-stretch: 1; }
                                         
-                                        Rectangle {
-                                            width: 36px;
-                                            height: 36px;
-                                            border-radius: 18px;
-                                            background: del-contact-touch.has-hover ? #FF444422 : transparent;
+                                        HorizontalBox {
+                                            spacing: 6px;
                                             
-                                            del-contact-touch := TouchArea {
-                                                mouse-cursor: pointer;
-                                                clicked => { root.delete-contact-clicked(contact.contact-id); }
+                                            Rectangle {
+                                                width: 28px;
+                                                height: 28px;
+                                                border-radius: 14px;
+                                                background: edit-contact-touch.has-hover ? MaterialPalette.primary-container : transparent;
+                                                
+                                                edit-contact-touch := TouchArea {
+                                                    mouse-cursor: pointer;
+                                                    clicked => { root.edit-contact-clicked(contact.contact-id); }
+                                                }
+                                                
+                                                Path {
+                                                    width: 14px;
+                                                    height: 14px;
+                                                    x: 7px;
+                                                    y: 7px;
+                                                    fill: MaterialPalette.on-surface;
+                                                    commands: "M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z";
+                                                }
                                             }
                                             
-                                            MaterialText {
-                                                text: "🗑️";
-                                                font-size: 16px;
-                                                horizontal-alignment: center;
-                                                vertical-alignment: center;
+                                            Rectangle {
+                                                width: 28px;
+                                                height: 28px;
+                                                border-radius: 14px;
+                                                background: del-contact-touch.has-hover ? MaterialPalette.error-container : transparent;
+                                                
+                                                del-contact-touch := TouchArea {
+                                                    mouse-cursor: pointer;
+                                                    clicked => { root.delete-contact-clicked(contact.contact-id); }
+                                                }
+                                                
+                                                Path {
+                                                    width: 14px;
+                                                    height: 14px;
+                                                    x: 7px;
+                                                    y: 7px;
+                                                    fill: MaterialPalette.error;
+                                                    commands: "M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z";
+                                                }
                                             }
                                         }
                                     }
@@ -690,15 +740,15 @@ export component EmployeeDetailView inherits Rectangle {
                     border-radius: 12px;
                     
                     VerticalBox {
-                        padding: 16px;
-                        spacing: 12px;
+                        padding: 14px;
+                        spacing: 10px;
                         
                         HorizontalBox {
                             spacing: 12px;
                             
                             vacation-expand-touch := TouchArea {
                                 width: 100%;
-                                height: 40px;
+                                height: 36px;
                                 mouse-cursor: pointer;
                                 clicked => {
                                     root.vacations-expanded = !root.vacations-expanded;
@@ -748,7 +798,7 @@ export component EmployeeDetailView inherits Rectangle {
                         }
                         
                         if root.vacations-expanded: VerticalBox {
-                            spacing: 12px;
+                            spacing: 10px;
                             
                             // Empty state
                             if root.vacations.length == 0: Rectangle {
@@ -765,18 +815,18 @@ export component EmployeeDetailView inherits Rectangle {
                                 }
                             }
                             
-                            for vac[idx] in root.vacations: Rectangle {
-                                min-height: 100px;
-                                background: MaterialPalette.surface;
-                                border-radius: 8px;
+                            for vac[idx] in root.vacations: VerticalBox {
+                                spacing: 6px;
                                 
-                                HorizontalBox {
-                                    padding: 12px;
-                                    spacing: 12px;
+                                // Info Card
+                                Rectangle {
+                                    min-height: 72px;
+                                    background: MaterialPalette.surface;
+                                    border-radius: 8px;
                                     
                                     VerticalBox {
+                                        padding: 14px;
                                         spacing: 6px;
-                                        horizontal-stretch: 1;
                                         
                                         HorizontalBox {
                                             spacing: 8px;
@@ -786,6 +836,7 @@ export component EmployeeDetailView inherits Rectangle {
                                                 font-size: 15px;
                                                 font-weight: 600;
                                                 wrap: word-wrap;
+                                                horizontal-stretch: 1;
                                             }
                                             
                                             MaterialText {
@@ -800,88 +851,101 @@ export component EmployeeDetailView inherits Rectangle {
                                             font-size: 13px;
                                             color: MaterialPalette.on-surface-variant;
                                         }
+                                    }
+                                }
+                                
+                                // Status & Actions Card
+                                Rectangle {
+                                    height: 44px;
+                                    background: MaterialPalette.surface-variant;
+                                    border-radius: 6px;
+                                    
+                                    HorizontalBox {
+                                        padding: 10px;
+                                        spacing: 10px;
+                                        
+                                        Rectangle {
+                                            width: min(self.text-width + 16px, 110px);
+                                            height: 24px;
+                                            border-radius: 12px;
+                                            background: vac.status == "Approved" ? #4CAF50 : 
+                                                       vac.status == "Rejected" ? #FF4444 : #FFA726;
+                                            
+                                            property <length> text-width: vac-status-text.preferred-width;
+                                            
+                                            vac-status-text := MaterialText {
+                                                text: vac.status == "Approved" ? "✅ Утвержден" : 
+                                                      vac.status == "Rejected" ? "❌ Отклонен" : "⏳ Ожидает";
+                                                font-size: 11px;
+                                                color: Colors.white;
+                                                horizontal-alignment: center;
+                                                vertical-alignment: center;
+                                                overflow: elide;
+                                            }
+                                        }
+                                        
+                                        Rectangle { horizontal-stretch: 1; }
                                         
                                         HorizontalBox {
-                                            spacing: 8px;
+                                            spacing: 6px;
                                             
-                                            Rectangle {
-                                                width: self.text-width + 20px;
-                                                height: 22px;
-                                                border-radius: 11px;
-                                                background: vac.status == "Approved" ? #4CAF50 : 
-                                                           vac.status == "Rejected" ? #FF4444 : #FFA726;
+                                            if vac.status == "Pending": Rectangle {
+                                                width: 28px;
+                                                height: 28px;
+                                                border-radius: 14px;
+                                                background: approve-vac-touch.has-hover ? MaterialPalette.primary-container : transparent;
                                                 
-                                                property <length> text-width: vac-status-text.preferred-width;
+                                                approve-vac-touch := TouchArea {
+                                                    mouse-cursor: pointer;
+                                                    clicked => { root.approve-vacation-clicked(vac.request-id); }
+                                                }
                                                 
-                                                vac-status-text := MaterialText {
-                                                    text: vac.status == "Approved" ? "✅ Утвержден" : 
-                                                          vac.status == "Rejected" ? "❌ Отклонен" : "⏳ Ожидает";
-                                                    font-size: 11px;
-                                                    color: Colors.white;
+                                                MaterialText {
+                                                    text: "✅";
+                                                    font-size: 14px;
                                                     horizontal-alignment: center;
                                                     vertical-alignment: center;
                                                 }
                                             }
-                                        }
-                                    }
-                                    
-                                    HorizontalBox {
-                                        spacing: 8px;
-                                        
-                                        if vac.status == "Pending": Rectangle {
-                                            width: 36px;
-                                            height: 36px;
-                                            border-radius: 18px;
-                                            background: approve-vac-touch.has-hover ? #4CAF5022 : transparent;
                                             
-                                            approve-vac-touch := TouchArea {
-                                                mouse-cursor: pointer;
-                                                clicked => { root.approve-vacation-clicked(vac.request-id); }
+                                            if vac.status == "Pending": Rectangle {
+                                                width: 28px;
+                                                height: 28px;
+                                                border-radius: 14px;
+                                                background: reject-vac-touch.has-hover ? MaterialPalette.error-container : transparent;
+                                                
+                                                reject-vac-touch := TouchArea {
+                                                    mouse-cursor: pointer;
+                                                    clicked => { root.reject-vacation-clicked(vac.request-id); }
+                                                }
+                                                
+                                                MaterialText {
+                                                    text: "❌";
+                                                    font-size: 14px;
+                                                    horizontal-alignment: center;
+                                                    vertical-alignment: center;
+                                                }
                                             }
                                             
-                                            MaterialText {
-                                                text: "✅";
-                                                font-size: 16px;
-                                                horizontal-alignment: center;
-                                                vertical-alignment: center;
-                                            }
-                                        }
-                                        
-                                        if vac.status == "Pending": Rectangle {
-                                            width: 36px;
-                                            height: 36px;
-                                            border-radius: 18px;
-                                            background: reject-vac-touch.has-hover ? #FF444422 : transparent;
-                                            
-                                            reject-vac-touch := TouchArea {
-                                                mouse-cursor: pointer;
-                                                clicked => { root.reject-vacation-clicked(vac.request-id); }
-                                            }
-                                            
-                                            MaterialText {
-                                                text: "❌";
-                                                font-size: 16px;
-                                                horizontal-alignment: center;
-                                                vertical-alignment: center;
-                                            }
-                                        }
-                                        
-                                        Rectangle {
-                                            width: 36px;
-                                            height: 36px;
-                                            border-radius: 18px;
-                                            background: del-vac-touch.has-hover ? #FF444422 : transparent;
-                                            
-                                            del-vac-touch := TouchArea {
-                                                mouse-cursor: pointer;
-                                                clicked => { root.delete-vacation-clicked(vac.request-id); }
-                                            }
-                                            
-                                            MaterialText {
-                                                text: "🗑️";
-                                                font-size: 16px;
-                                                horizontal-alignment: center;
-                                                vertical-alignment: center;
+                                            Rectangle {
+                                                width: 28px;
+                                                height: 28px;
+                                                border-radius: 14px;
+                                                background: del-vac-touch.has-hover ? MaterialPalette.error-container : transparent;
+                                                
+                                                del-vac-touch := TouchArea {
+                                                    mouse-cursor: pointer;
+                                                    clicked => { root.delete-vacation-clicked(vac.request-id); }
+                                                }
+                                                
+                                                Path {
+                                                    width: 14px;
+                                                    height: 14px;
+                                                    x: 7px;
+                                                    y: 7px;
+                                                    fill: MaterialPalette.error;
+                                                    commands: "M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z";
+                                                }
                                             }
                                         }
                                     }
