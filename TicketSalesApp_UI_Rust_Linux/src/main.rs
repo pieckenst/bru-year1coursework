@@ -1633,6 +1633,80 @@ fn show_main_window(
             }
         }
     });
+    
+    // Handle schedule selected - show route stops from cached data
+    main_ui.on_schedule_selected({
+        let ui_handle = main_ui.as_weak();
+        let api = api_client.clone();
+        move |schedule_id| {
+            println!("Schedule selected: {}", schedule_id);
+            let ui = ui_handle.unwrap();
+            let api_clone = api.clone();
+            let ui_weak = ui.as_weak();
+            
+            // Get the selected route index to know which route's schedules to search
+            let selected_route_index = ui.get_selected_schedule_route_index();
+            
+            if selected_route_index < 0 {
+                println!("No route selected");
+                return;
+            }
+            
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                
+                // Get route ID
+                let routes_result = rt.block_on(async {
+                    let client = api_clone.lock().unwrap();
+                    client.get_routes().await
+                });
+                
+                let route_id = match routes_result {
+                    Ok(routes) => {
+                        if selected_route_index >= 0 && (selected_route_index as usize) < routes.len() {
+                            routes[selected_route_index as usize].route_id
+                        } else {
+                            return;
+                        }
+                    }
+                    Err(_) => return,
+                };
+                
+                // Get all schedules for this route from cache
+                let schedules_result = rt.block_on(async {
+                    let client = api_clone.lock().unwrap();
+                    client.get_route_schedules_by_route(route_id).await
+                });
+                
+                let result_send = schedules_result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    
+                    match result_send {
+                        Ok(schedules) => {
+                            // Find the schedule with matching ID
+                            if let Some(schedule) = schedules.iter().find(|s| s.route_schedule_id == schedule_id as i64) {
+                                // Convert route stops to SharedString vector
+                                let stops: Vec<slint::SharedString> = schedule.route_stops.iter()
+                                    .map(|stop| slint::SharedString::from(stop))
+                                    .collect();
+                                
+                                let model = std::rc::Rc::new(slint::VecModel::from(stops));
+                                ui.set_route_stops_list(model.into());
+                                println!("✅ Loaded {} route stops for schedule {}", schedule.route_stops.len(), schedule_id);
+                            } else {
+                                println!("❌ Schedule {} not found in cached data", schedule_id);
+                            }
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to load schedules: {}", e);
+                        }
+                    }
+                });
+            });
+        }
+    });
 
     
     // Handle logout

@@ -157,6 +157,7 @@ export component AppWindow inherits Window {
     callback schedule-date-changed(string);
     callback next-page();
     callback previous-page();
+    callback schedule-selected(int);
     
     AppNavigation {
         current-user: root.current-user;
@@ -473,6 +474,11 @@ export component AppWindow inherits Window {
             error_message: root.schedules-error;
             has_error: root.schedules-has-error;
             
+            // Pagination properties
+            current_page: root.current-page;
+            page_size: root.page-size;
+            total_schedules: root.total-schedules;
+            
             load_schedules => {
                 root.load-schedules();
             }
@@ -499,6 +505,18 @@ export component AppWindow inherits Window {
             
             date_changed(date-str) => {
                 root.schedule-date-changed(date-str);
+            }
+            
+            next_page => {
+                root.next-page();
+            }
+            
+            previous_page => {
+                root.previous-page();
+            }
+            
+            schedule_selected(schedule-id) => {
+                root.schedule-selected(schedule-id);
             }
         }
         
