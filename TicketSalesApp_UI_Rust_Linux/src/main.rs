@@ -1468,7 +1468,36 @@ fn show_main_window(
                     ui.set_schedules_loading(false);
                     
                     match result_send {
-                        Ok(schedules) => {
+                        Ok(mut schedules) => {
+                            // Filter by date if provided
+                            if !selected_date.is_empty() {
+                                use chrono::{NaiveDate, Datelike};
+                                if let Ok(filter_date) = NaiveDate::parse_from_str(&selected_date, "%Y-%m-%d") {
+                                    let filter_weekday = filter_date.weekday().to_string();
+                                    
+                                    schedules.retain(|schedule| {
+                                        // For recurring schedules, check if:
+                                        // 1. The schedule is valid for this date (validFrom <= date <= validUntil)
+                                        // 2. The day of week matches
+                                        let date_in_range = schedule.valid_from.date_naive() <= filter_date &&
+                                            schedule.valid_until.map_or(true, |until| filter_date <= until.date_naive());
+                                        
+                                        let day_matches = if schedule.is_recurring && !schedule.days_of_week.is_empty() {
+                                            schedule.days_of_week.iter().any(|day| {
+                                                day.to_lowercase().contains(&filter_weekday.to_lowercase()) ||
+                                                filter_weekday.to_lowercase().contains(&day.to_lowercase())
+                                            })
+                                        } else {
+                                            // For non-recurring schedules, check exact date
+                                            schedule.departure_time.date_naive() == filter_date
+                                        };
+                                        
+                                        date_in_range && day_matches
+                                    });
+                                    println!("📅 Filtered to {} schedules for date {} ({})", schedules.len(), selected_date, filter_weekday);
+                                }
+                            }
+                            
                             let total_count = schedules.len();
                             let page_size = 100;
                             let current_page = ui.get_current_page() as usize;

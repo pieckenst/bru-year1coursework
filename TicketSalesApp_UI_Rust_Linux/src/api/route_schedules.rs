@@ -187,15 +187,23 @@ fn parse_schedule_manually(value: &Value) -> Result<RouteSchedule, Box<dyn std::
     
     // Helper function to parse DateTime
     let parse_datetime = |s: &str| -> DateTime<Utc> {
-        DateTime::parse_from_rfc3339(s)
-            .map(|dt| dt.with_timezone(&Utc))
-            .unwrap_or_else(|_| Utc::now())
+        match DateTime::parse_from_rfc3339(s) {
+            Ok(dt) => dt.with_timezone(&Utc),
+            Err(e) => {
+                log::warn!("Failed to parse datetime '{}': {}. Using current time as fallback.", s, e);
+                Utc::now()
+            }
+        }
     };
     
     // Parse times
     let departure_time = obj.get("departureTime")
         .and_then(|v| v.as_str())
-        .map(|s| parse_datetime(s))
+        .map(|s| {
+            let dt = parse_datetime(s);
+            log::debug!("Parsed departure_time: {} -> {}", s, dt);
+            dt
+        })
         .unwrap_or_else(Utc::now);
     
     let arrival_time = obj.get("arrivalTime")
