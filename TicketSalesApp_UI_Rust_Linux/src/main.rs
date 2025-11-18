@@ -1340,6 +1340,301 @@ fn show_main_window(
     });
 
     
+    // ========== ROUTE SCHEDULE MANAGEMENT CALLBACKS ==========
+    
+    // Handle load routes for selector
+    let api_load_routes_selector = api_client.clone();
+    main_ui.on_load_routes_for_selector({
+        let ui_handle = main_ui.as_weak();
+        move || {
+            let ui = ui_handle.unwrap();
+            let api = api_load_routes_selector.clone();
+            let ui_weak = ui.as_weak();
+            
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_routes().await
+                });
+                
+                let result_send = result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    
+                    match result_send {
+                        Ok(routes) => {
+                            let route_options: Vec<RouteOption> = routes.iter().map(|route| {
+                                RouteOption {
+                                    route_id: route.route_id as i32,
+                                    display_name: slint::SharedString::from(format!("{} → {}", route.start_point, route.end_point)),
+                                }
+                            }).collect();
+                            
+                            // Also create route names for ComboBox
+                            let route_names: Vec<slint::SharedString> = routes.iter().map(|route| {
+                                slint::SharedString::from(format!("{} → {}", route.start_point, route.end_point))
+                            }).collect();
+                            
+                            let model = std::rc::Rc::new(slint::VecModel::from(route_options));
+                            ui.set_schedule_routes(model.into());
+                            
+                            let names_model = std::rc::Rc::new(slint::VecModel::from(route_names));
+                            ui.set_schedule_route_names(names_model.into());
+                            
+                            println!("✅ Loaded {} routes for selector", routes.len());
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to load routes for selector: {}", e);
+                            ui.set_schedules_error(slint::SharedString::from(format!("Ошибка загрузки маршрутов: {}", e)));
+                            ui.set_schedules_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle load schedules
+    let api_load_schedules = api_client.clone();
+    main_ui.on_load_schedules({
+        let ui_handle = main_ui.as_weak();
+        move || {
+            let ui = ui_handle.unwrap();
+            let api = api_load_schedules.clone();
+            let ui_weak = ui.as_weak();
+            
+            let selected_route_index = ui.get_selected_schedule_route_index();
+            let selected_date = ui.get_selected_schedule_date().to_string();
+            
+            // Validate route is selected
+            if selected_route_index < 0 {
+                println!("No route selected, skipping schedule load");
+                return;
+            }
+            
+            ui.set_schedules_loading(true);
+            ui.set_schedules_error(slint::SharedString::from(""));
+            ui.set_schedules_has_error(false);
+            
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                
+                // Get route ID from the selected index
+                let routes_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_routes().await
+                });
+                
+                let route_id = match routes_result {
+                    Ok(routes) => {
+                        if selected_route_index >= 0 && (selected_route_index as usize) < routes.len() {
+                            routes[selected_route_index as usize].route_id
+                        } else {
+                            let _ = slint::invoke_from_event_loop(move || {
+                                let ui = ui_weak.unwrap();
+                                ui.set_schedules_loading(false);
+                                ui.set_schedules_error(slint::SharedString::from("Неверный индекс маршрута"));
+                                ui.set_schedules_has_error(true);
+                            });
+                            return;
+                        }
+                    }
+                    Err(e) => {
+                        let error_msg = format!("Failed to load routes: {}", e);
+                        let _ = slint::invoke_from_event_loop(move || {
+                            let ui = ui_weak.unwrap();
+                            ui.set_schedules_loading(false);
+                            ui.set_schedules_error(slint::SharedString::from(error_msg));
+                            ui.set_schedules_has_error(true);
+                        });
+                        return;
+                    }
+                };
+                
+                // Load schedules for the route
+                println!("📅 Loading schedules for route ID: {}", route_id);
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_route_schedules_by_route(route_id).await
+                });
+                println!("📅 Schedules result: {:?}", result.as_ref().map(|s| s.len()).map_err(|e| e.to_string()));
+                
+                let result_send = result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_schedules_loading(false);
+                    
+                    match result_send {
+                        Ok(schedules) => {
+                            let total_count = schedules.len();
+                            let page_size = 100;
+                            let current_page = ui.get_current_page() as usize;
+                            let start_idx = current_page * page_size;
+                            let end_idx = (start_idx + page_size).min(total_count);
+                            
+                            // Only convert the current page of schedules
+                            let schedule_data: Vec<_> = schedules[start_idx..end_idx].iter().map(|schedule| {
+                                ScheduleData {
+                                    schedule_id: schedule.route_schedule_id as i32,
+                                    route_id: schedule.route_id.unwrap_or(0) as i32,
+                                    start_point: slint::SharedString::from(&schedule.start_point),
+                                    end_point: slint::SharedString::from(&schedule.end_point),
+                                    departure_time: slint::SharedString::from(schedule.departure_time.format("%H:%M").to_string()),
+                                    arrival_time: slint::SharedString::from(schedule.arrival_time.format("%H:%M").to_string()),
+                                    price: schedule.price as f32,
+                                    available_seats: schedule.available_seats,
+                                    route_stops: slint::SharedString::from(schedule.route_stops.join(", ")),
+                                    is_active: schedule.is_active,
+                                    status: slint::SharedString::from(schedule.status_text()),
+                                }
+                            }).collect();
+                            
+                            let schedule_count = schedule_data.len();
+                            let model = std::rc::Rc::new(slint::VecModel::from(schedule_data));
+                            ui.set_schedules(model.into());
+                            ui.set_total_schedules(total_count as i32);
+                            ui.set_page_size(page_size as i32);
+                            println!("✅ Loaded {} schedules (showing page {} of {}, {} total)", 
+                                schedule_count, current_page + 1, (total_count + page_size - 1) / page_size, total_count);
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to load schedules: {}", e);
+                            ui.set_schedules_error(slint::SharedString::from(format!("Ошибка загрузки: {}", e)));
+                            ui.set_schedules_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle route selected
+    let api_route_selected = api_client.clone();
+    main_ui.on_schedule_route_selected({
+        let ui_handle = main_ui.as_weak();
+        move |route_index| {
+            println!("Route selected: {}", route_index);
+            let ui = ui_handle.unwrap();
+            ui.set_selected_schedule_route_index(route_index);
+            ui.invoke_load_schedules();
+        }
+    });
+    
+    // Handle date changed
+    main_ui.on_schedule_date_changed({
+        let ui_handle = main_ui.as_weak();
+        move |date_str| {
+            println!("Date changed: {}", date_str);
+            let ui = ui_handle.unwrap();
+            ui.set_selected_schedule_date(date_str);
+            ui.invoke_load_schedules();
+        }
+    });
+    
+    // Handle add schedule
+    let api_add_schedule = api_client.clone();
+    main_ui.on_add_schedule({
+        let ui_handle = main_ui.as_weak();
+        move || {
+            println!("Add schedule clicked");
+            let ui = ui_handle.unwrap();
+            
+            // TODO: Show add schedule dialog
+            // For now, just log
+            println!("TODO: Implement add schedule dialog");
+        }
+    });
+    
+    // Handle edit schedule
+    let api_edit_schedule = api_client.clone();
+    main_ui.on_edit_schedule({
+        let ui_handle = main_ui.as_weak();
+        move |schedule_id| {
+            println!("Edit schedule {}", schedule_id);
+            let ui = ui_handle.unwrap();
+            
+            // TODO: Show edit schedule dialog
+            println!("TODO: Implement edit schedule dialog");
+        }
+    });
+    
+    // Handle delete schedule
+    let api_delete_schedule = api_client.clone();
+    main_ui.on_delete_schedule({
+        let ui_handle = main_ui.as_weak();
+        move |schedule_id| {
+            println!("Delete schedule {}", schedule_id);
+            let ui = ui_handle.unwrap();
+            let api = api_delete_schedule.clone();
+            let ui_weak = ui.as_weak();
+            
+            ui.set_schedules_loading(true);
+            
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.delete_route_schedule(schedule_id as i64).await
+                });
+                
+                let result_send = result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_schedules_loading(false);
+                    
+                    match result_send {
+                        Ok(_) => {
+                            println!("✅ Deleted schedule {}", schedule_id);
+                            // Reload schedules
+                            ui.invoke_load_schedules();
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to delete schedule: {}", e);
+                            ui.set_schedules_error(slint::SharedString::from(format!("Ошибка удаления: {}", e)));
+                            ui.set_schedules_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle next page
+    main_ui.on_next_page({
+        let ui_handle = main_ui.as_weak();
+        move || {
+            let ui = ui_handle.unwrap();
+            let current_page = ui.get_current_page();
+            let total_schedules = ui.get_total_schedules();
+            let page_size = ui.get_page_size();
+            let total_pages = (total_schedules + page_size - 1) / page_size;
+            
+            if current_page < total_pages - 1 {
+                ui.set_current_page(current_page + 1);
+                ui.invoke_load_schedules();
+            }
+        }
+    });
+    
+    // Handle previous page
+    main_ui.on_previous_page({
+        let ui_handle = main_ui.as_weak();
+        move || {
+            let ui = ui_handle.unwrap();
+            let current_page = ui.get_current_page();
+            
+            if current_page > 0 {
+                ui.set_current_page(current_page - 1);
+                ui.invoke_load_schedules();
+            }
+        }
+    });
+
+    
     // Handle logout
     let api_client_clone = api_client.clone();
     main_ui.on_logout_clicked({
@@ -1383,6 +1678,11 @@ fn show_main_window(
                         println!("Loading routes...");
                         let ui = ui_weak.unwrap();
                         ui.invoke_load_routes();
+                    }
+                    AppRoute::Schedules => {
+                        println!("Loading route schedules...");
+                        let ui = ui_weak.unwrap();
+                        ui.invoke_load_routes_for_selector();
                     }
                     _ => {
                         println!("Route {} not yet implemented", route.display_name());

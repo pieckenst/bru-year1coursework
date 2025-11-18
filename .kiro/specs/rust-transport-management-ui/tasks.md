@@ -60,6 +60,7 @@
 
 
 
+
   - Create route_management.slint with Material Design styling
   - Implement Rust backend with CRUD operations
   - Add dropdown loading for buses and drivers
@@ -139,13 +140,18 @@
   - Implement Rust backend with schedule operations
   - _Requirements: 9.1-9.5, 10.1-10.7, 11.1-11.5, 12.1-12.5_
 
-- [ ] 3.1 Create route_schedules.slint UI component
+- [x] 3.1 Create route_schedules.slint UI component
+
+
   - Define ScheduleData struct with all fields including route stops array
   - Create main view with route selector ComboBox and date picker
   - Implement schedule list with columns for times, price, seats, stops
   - Add side panel for displaying route stops visualization
   - Add empty state handling
   - _Requirements: 9.1, 9.2, 9.3, 9.5_
+
+
+
 
 - [ ] 3.2 Create schedule add/edit dialogs in Slint
   - Create dialog with time pickers for departure/arrival
@@ -154,10 +160,13 @@
   - Add checkboxes for isActive and isRecurring
   - Display estimated stop times and distances
   - Add validation UI for minimum 2 stops requirement
+
   - Style with Material Design
   - _Requirements: 10.1, 10.2, 10.6, 11.1, 11.2_
 
-- [ ] 3.3 Create schedule delete confirmation dialog
+- [x] 3.3 Create schedule delete confirmation dialog
+
+
   - Create confirmation dialog showing schedule route and times
   - Add cancel and confirm buttons
   - _Requirements: 12.1_
@@ -167,6 +176,10 @@
   - Handle complex nested data (arrays of stops, times, distances)
   - Add date/time serialization with ISO 8601 format
   - Add proper error handling
+
+
+
+
   - _Requirements: 9.2, 10.3, 11.3, 12.2, 15.1, 16.4_
 
 - [ ]* 3.5 Write property test for date serialization format

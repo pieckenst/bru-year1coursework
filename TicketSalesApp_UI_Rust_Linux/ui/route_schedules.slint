@@ -1,0 +1,555 @@
+import { Button, VerticalBox, HorizontalBox, ScrollView, ComboBox, ListView } from "std-widgets.slint";
+import { MaterialText, FilledButton, TonalButton } from "../material-1.0/material.slint";
+import { MaterialPalette } from "../material-1.0/ui/styling/material_palette.slint";
+import { LineEdit } from "std-widgets.slint";
+
+// Data structure for route schedule
+export struct ScheduleData {
+    schedule_id: int,
+    route_id: int,
+    start_point: string,
+    end_point: string,
+    departure_time: string,
+    arrival_time: string,
+    price: float,
+    available_seats: int,
+    route_stops: string,  // Comma-separated stops
+    is_active: bool,
+    status: string,
+}
+
+// Data structure for route selector
+export struct RouteOption {
+    route_id: int,
+    display_name: string,
+}
+
+export component RouteSchedulesManagement inherits Rectangle {
+    background: MaterialPalette.surface;
+    
+    // Properties
+    in-out property <[ScheduleData]> schedules: [];
+    in-out property <[RouteOption]> routes: [];
+    in-out property <[string]> route_names: [];  // For ComboBox display
+    in-out property <[string]> route_stops_list: [];
+    in-out property <int> selected_schedule_index: -1;
+    in-out property <int> selected_route_index: -1;
+    in-out property <string> selected_date: "";
+    in-out property <string> error_message: "";
+    in-out property <bool> has_error: false;
+    in-out property <bool> is_loading: false;
+    
+    // Pagination properties (managed by Rust backend)
+    in-out property <int> current_page: 0;
+    in-out property <int> page_size: 100;
+    in-out property <int> total_schedules: 0;
+    property <int> total_pages: max(1, ceil(total_schedules / page_size));
+    
+    // Callbacks
+    callback load_schedules();
+    callback load_routes();
+    callback add_schedule();
+    callback edit_schedule(int);
+    callback delete_schedule(int);
+    callback route_selected(int);
+    callback date_changed(string);
+    callback next_page();
+    callback previous_page();
+    
+    VerticalBox {
+        padding: 0px;
+        
+        // Header
+        Rectangle {
+            height: 64px;
+            background: MaterialPalette.surface-container-highest;
+            
+            HorizontalBox {
+                padding: 16px;
+                spacing: 16px;
+                
+                MaterialText {
+                    text: "Управление расписанием маршрутов";
+                    font-size: 20px;
+                    font-weight: 600;
+                    color: MaterialPalette.on-surface;
+                    vertical-alignment: center;
+                    horizontal-stretch: 1;
+                }
+            }
+        }
+        
+        // Filter controls
+        Rectangle {
+            height: 72px;
+            background: MaterialPalette.surface-container;
+            
+            HorizontalBox {
+                padding: 16px;
+                spacing: 12px;
+                
+                // Route selector
+                VerticalBox {
+                    spacing: 4px;
+                    horizontal-stretch: 1;
+                    
+                    MaterialText {
+                        text: "Маршрут:";
+                        font-size: 12px;
+                        color: MaterialPalette.on-surface-variant;
+                    }
+                    
+                    ComboBox {
+                        model: route_names;
+                        current-index: selected_route_index;
+                        
+                        selected => {
+                            selected_route_index = self.current-index;
+                            route_selected(self.current-index);
+                        }
+                    }
+                }
+                
+                // Date picker
+                VerticalBox {
+                    spacing: 4px;
+                    horizontal-stretch: 1;
+                    
+                    MaterialText {
+                        text: "Дата:";
+                        font-size: 12px;
+                        color: MaterialPalette.on-surface-variant;
+                    }
+                    
+                    LineEdit {
+                        placeholder-text: "YYYY-MM-DD";
+                        text: selected_date;
+                        
+                        edited => {
+                            selected_date = self.text;
+                            date_changed(self.text);
+                        }
+                    }
+                }
+                
+                // Action buttons
+                HorizontalBox {
+                    spacing: 8px;
+                    
+                    FilledButton {
+                        text: "Добавить";
+                        enabled: selected_route_index >= 0;
+                        
+                        clicked => {
+                            add_schedule();
+                        }
+                    }
+                    
+                    TonalButton {
+                        text: "Обновить";
+                        
+                        clicked => {
+                            load_schedules();
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Error message
+        if has_error: Rectangle {
+            height: 48px;
+            background: #ffebee;
+            
+            HorizontalBox {
+                padding: 12px;
+                
+                MaterialText {
+                    text: error_message;
+                    color: #c62828;
+                    font-size: 14px;
+                    vertical-alignment: center;
+                }
+            }
+        }
+        
+        // Main content area
+        HorizontalBox {
+            spacing: 0px;
+            
+            // Schedule list (left side)
+            Rectangle {
+                background: MaterialPalette.surface;
+                horizontal-stretch: 2;
+                
+                VerticalBox {
+                    padding: 0px;
+                    spacing: 0px;
+                    
+                    // Column headers
+                    Rectangle {
+                        height: 48px;
+                        background: MaterialPalette.surface-container-high;
+                        
+                        HorizontalBox {
+                            padding-left: 16px;
+                            padding-right: 16px;
+                            spacing: 8px;
+                            
+                            MaterialText {
+                                width: 120px;
+                                text: "Маршрут";
+                                font-weight: 700;
+                                font-size: 14px;
+                                color: MaterialPalette.on-surface;
+                                vertical-alignment: center;
+                            }
+                            
+                            MaterialText {
+                                width: 120px;
+                                text: "Конечная";
+                                font-weight: 700;
+                                font-size: 14px;
+                                color: MaterialPalette.on-surface;
+                                vertical-alignment: center;
+                            }
+                            
+                            MaterialText {
+                                width: 80px;
+                                text: "Отправл.";
+                                font-weight: 700;
+                                font-size: 14px;
+                                color: MaterialPalette.on-surface;
+                                vertical-alignment: center;
+                            }
+                            
+                            MaterialText {
+                                width: 80px;
+                                text: "Прибытие";
+                                font-weight: 700;
+                                font-size: 14px;
+                                color: MaterialPalette.on-surface;
+                                vertical-alignment: center;
+                            }
+                            
+                            MaterialText {
+                                width: 70px;
+                                text: "Цена";
+                                font-weight: 700;
+                                font-size: 14px;
+                                color: MaterialPalette.on-surface;
+                                vertical-alignment: center;
+                            }
+                            
+                            MaterialText {
+                                width: 60px;
+                                text: "Места";
+                                font-weight: 700;
+                                font-size: 14px;
+                                color: MaterialPalette.on-surface;
+                                vertical-alignment: center;
+                            }
+                            
+                            MaterialText {
+                                horizontal-stretch: 1;
+                                text: "Статус";
+                                font-weight: 700;
+                                font-size: 14px;
+                                color: MaterialPalette.on-surface;
+                                vertical-alignment: center;
+                            }
+                        }
+                    }
+                    
+                    // Pagination info bar
+                    if total_schedules > page_size: Rectangle {
+                        height: 40px;
+                        background: MaterialPalette.surface-container-highest;
+                        
+                        HorizontalBox {
+                            padding-left: 16px;
+                            padding-right: 16px;
+                            spacing: 12px;
+                            alignment: space-between;
+                            
+                            MaterialText {
+                                text: "Показано " + ((current_page * page_size) + 1) + "-" + min((current_page + 1) * page_size, total_schedules) + " из " + total_schedules;
+                                font-size: 14px;
+                                color: MaterialPalette.on-surface-variant;
+                                vertical-alignment: center;
+                            }
+                            
+                            HorizontalBox {
+                                spacing: 8px;
+                                
+                                TonalButton {
+                                    text: "◀ Назад";
+                                    enabled: current_page > 0;
+                                    
+                                    clicked => {
+                                        previous_page();
+                                    }
+                                }
+                                
+                                MaterialText {
+                                    text: "Страница " + (current_page + 1) + " из " + total_pages;
+                                    font-size: 14px;
+                                    color: MaterialPalette.on-surface;
+                                    vertical-alignment: center;
+                                }
+                                
+                                TonalButton {
+                                    text: "Вперед ▶";
+                                    enabled: current_page < total_pages - 1;
+                                    
+                                    clicked => {
+                                        next_page();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Schedule list
+                    if schedules.length == 0: Rectangle {
+                        background: MaterialPalette.surface;
+                        
+                        VerticalBox {
+                            padding: 40px;
+                            alignment: center;
+                            
+                            MaterialText {
+                                text: "Нет расписаний для отображения";
+                                color: MaterialPalette.on-surface-variant;
+                                font-size: 16px;
+                                horizontal-alignment: center;
+                            }
+                            
+                            MaterialText {
+                                text: "Выберите маршрут и дату";
+                                color: MaterialPalette.on-surface-variant;
+                                font-size: 14px;
+                                horizontal-alignment: center;
+                            }
+                        }
+                    }
+                    
+                    if schedules.length > 0: ScrollView {
+                        VerticalBox {
+                            spacing: 0px;
+                            
+                            for schedule[index] in schedules: Rectangle {
+                                height: 56px;
+                                background: selected_schedule_index == index ? MaterialPalette.secondary-container : 
+                                           (mod(index, 2) == 0 ? MaterialPalette.surface-container : MaterialPalette.surface-container-low);
+                                
+                                touch := TouchArea {
+                                    clicked => {
+                                        selected_schedule_index = index;
+                                    }
+                                }
+                                
+                                HorizontalBox {
+                                    padding-left: 16px;
+                                    padding-right: 16px;
+                                    spacing: 8px;
+                                    
+                                    MaterialText {
+                                        width: 120px;
+                                        text: schedule.start_point;
+                                        color: MaterialPalette.on-surface;
+                                        font-size: 14px;
+                                        vertical-alignment: center;
+                                        overflow: elide;
+                                    }
+                                    
+                                    MaterialText {
+                                        width: 120px;
+                                        text: schedule.end_point;
+                                        color: MaterialPalette.on-surface;
+                                        font-size: 14px;
+                                        vertical-alignment: center;
+                                        overflow: elide;
+                                    }
+                                    
+                                    MaterialText {
+                                        width: 80px;
+                                        text: schedule.departure_time;
+                                        color: MaterialPalette.on-surface;
+                                        font-size: 14px;
+                                        vertical-alignment: center;
+                                    }
+                                    
+                                    MaterialText {
+                                        width: 80px;
+                                        text: schedule.arrival_time;
+                                        color: MaterialPalette.on-surface;
+                                        font-size: 14px;
+                                        vertical-alignment: center;
+                                    }
+                                    
+                                    MaterialText {
+                                        width: 70px;
+                                        text: schedule.price + "₽";
+                                        color: MaterialPalette.on-surface;
+                                        font-size: 14px;
+                                        vertical-alignment: center;
+                                    }
+                                    
+                                    MaterialText {
+                                        width: 60px;
+                                        text: schedule.available_seats;
+                                        color: MaterialPalette.on-surface;
+                                        font-size: 14px;
+                                        vertical-alignment: center;
+                                    }
+                                    
+                                    MaterialText {
+                                        horizontal-stretch: 1;
+                                        text: schedule.status;
+                                        color: schedule.is_active ? #4caf50 : #f44336;
+                                        font-size: 14px;
+                                        font-weight: 600;
+                                        vertical-alignment: center;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Vertical divider
+            Rectangle {
+                width: 1px;
+                background: MaterialPalette.outline-variant;
+            }
+            
+            // Route stops panel (right side)
+            Rectangle {
+                background: MaterialPalette.surface-container-low;
+                horizontal-stretch: 1;
+                
+                VerticalBox {
+                    padding: 16px;
+                    spacing: 12px;
+                    
+                    MaterialText {
+                        text: "Остановки маршрута";
+                        font-size: 18px;
+                        font-weight: 700;
+                        color: MaterialPalette.on-surface;
+                    }
+                    
+                    Rectangle {
+                        height: 1px;
+                        background: MaterialPalette.outline-variant;
+                    }
+                    
+                    if selected_schedule_index < 0: VerticalBox {
+                        padding: 40px;
+                        alignment: center;
+                        
+                        MaterialText {
+                            text: "Выберите расписание";
+                            color: MaterialPalette.on-surface-variant;
+                            font-size: 14px;
+                            horizontal-alignment: center;
+                        }
+                    }
+                    
+                    if selected_schedule_index >= 0 && route_stops_list.length > 0: ScrollView {
+                        VerticalBox {
+                            spacing: 8px;
+                            
+                            for stop[index] in route_stops_list: HorizontalBox {
+                                spacing: 12px;
+                                
+                                // Route line visualization
+                                Rectangle {
+                                    width: 24px;
+                                    
+                                    VerticalBox {
+                                        alignment: center;
+                                        
+                                        // Stop point circle
+                                        Rectangle {
+                                            width: 12px;
+                                            height: 12px;
+                                            border-radius: 6px;
+                                            background: #4caf50;
+                                        }
+                                        
+                                        // Vertical line (except for last stop)
+                                        if index < route_stops_list.length - 1: Rectangle {
+                                            width: 2px;
+                                            height: 32px;
+                                            background: #4caf50;
+                                        }
+                                    }
+                                }
+                                
+                                // Stop name
+                                MaterialText {
+                                    text: stop;
+                                    color: MaterialPalette.on-surface;
+                                    font-size: 14px;
+                                    vertical-alignment: center;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Action buttons footer
+        Rectangle {
+            height: 64px;
+            background: MaterialPalette.surface-container;
+            
+            HorizontalBox {
+                padding: 16px;
+                spacing: 12px;
+                alignment: end;
+                
+                TonalButton {
+                    text: "Редактировать";
+                    enabled: selected_schedule_index >= 0;
+                    
+                    clicked => {
+                        if (selected_schedule_index >= 0) {
+                            edit_schedule(schedules[selected_schedule_index].schedule_id);
+                        }
+                    }
+                }
+                
+                TonalButton {
+                    text: "Удалить";
+                    enabled: selected_schedule_index >= 0;
+                    
+                    clicked => {
+                        if (selected_schedule_index >= 0) {
+                            delete_schedule(schedules[selected_schedule_index].schedule_id);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Loading overlay
+        if is_loading: Rectangle {
+            background: #80000000;
+            
+            VerticalBox {
+                alignment: center;
+                
+                MaterialText {
+                    text: "Загрузка...";
+                    color: white;
+                    font-size: 20px;
+                }
+            }
+        }
+    }
+}

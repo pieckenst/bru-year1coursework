@@ -6,6 +6,7 @@ import { EmployeeDialog, DeleteConfirmDialog, JobData, DepartmentData } from "em
 import { EmployeeDetailView, DocumentData, TrainingData, EmergencyContactData, VacationData } from "employee_detail.slint";
 import { BusManagementView, BusData } from "bus_management.slint";
 import { RouteManagementView, RouteData } from "route_management.slint";
+import { RouteSchedulesManagement, ScheduleData, RouteOption } from "route_schedules.slint";
 export { AuthWindow } from "auth_window.slint";
 
 // Employee data structure
@@ -129,6 +130,33 @@ export component AppWindow inherits Window {
     callback edit-route(int, string, string, string, int, int);
     callback delete-route(int);
     callback load-route-dropdown-data();
+    
+    // Route schedule management state
+    in-out property <[ScheduleData]> schedules: [];
+    in-out property <[RouteOption]> schedule-routes: [];
+    in-out property <[string]> schedule-route-names: [];
+    in-out property <[string]> route-stops-list: [];
+    in-out property <int> selected-schedule-route-index: -1;
+    in-out property <string> selected-schedule-date: "";
+    in-out property <bool> schedules-loading: false;
+    in-out property <string> schedules-error: "";
+    in-out property <bool> schedules-has-error: false;
+    
+    // Pagination properties
+    in-out property <int> current-page: 0;
+    in-out property <int> page-size: 100;
+    in-out property <int> total-schedules: 0;
+    
+    // Route schedule management callbacks
+    callback load-schedules();
+    callback load-routes-for-selector();
+    callback add-schedule();
+    callback edit-schedule(int);
+    callback delete-schedule(int);
+    callback schedule-route-selected(int);
+    callback schedule-date-changed(string);
+    callback next-page();
+    callback previous-page();
     
     AppNavigation {
         current-user: root.current-user;
@@ -433,8 +461,49 @@ export component AppWindow inherits Window {
             }
         }
         
+        // Route Schedules Management View (Group 2, Index 2)
+        if root.current-nav-group == 2 && root.current-nav-index == 2: RouteSchedulesManagement {
+            schedules: root.schedules;
+            routes: root.schedule-routes;
+            route_names: root.schedule-route-names;
+            route_stops_list: root.route-stops-list;
+            selected_route_index: root.selected-schedule-route-index;
+            selected_date: root.selected-schedule-date;
+            is_loading: root.schedules-loading;
+            error_message: root.schedules-error;
+            has_error: root.schedules-has-error;
+            
+            load_schedules => {
+                root.load-schedules();
+            }
+            
+            load_routes => {
+                root.load-routes-for-selector();
+            }
+            
+            add_schedule => {
+                root.add-schedule();
+            }
+            
+            edit_schedule(schedule-id) => {
+                root.edit-schedule(schedule-id);
+            }
+            
+            delete_schedule(schedule-id) => {
+                root.delete-schedule(schedule-id);
+            }
+            
+            route_selected(route-idx) => {
+                root.schedule-route-selected(route-idx);
+            }
+            
+            date_changed(date-str) => {
+                root.schedule-date-changed(date-str);
+            }
+        }
+        
         // Placeholder for other transport routes
-        if root.current-nav-group == 2 && root.current-nav-index > 1: VerticalBox {
+        if root.current-nav-group == 2 && root.current-nav-index > 2: VerticalBox {
             padding: 40px;
             MaterialText {
                 text: "Раздел транспорта";
