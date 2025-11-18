@@ -836,6 +836,7 @@ fn show_main_window(
     main_ui.on_load_routes({
         let ui_handle = main_ui.as_weak();
         move || {
+            println!("🚗🚗🚗 on_load_routes callback triggered!");
             let ui = ui_handle.unwrap();
             let api = api_load_routes.clone();
             let ui_weak = ui.as_weak();
@@ -845,12 +846,18 @@ fn show_main_window(
             ui.set_routes_error(slint::SharedString::from(""));
             ui.set_routes_has_error(false);
             
+            println!("🚗 Spawning thread to load routes...");
             std::thread::spawn(move || {
+                println!("🚗 Inside thread, creating tokio runtime...");
                 let rt = tokio::runtime::Runtime::new().unwrap();
+                println!("🚗 Calling get_routes()...");
                 let result = rt.block_on(async {
                     let client = api.lock().unwrap();
+                    println!("🚗 Got API client lock, calling get_routes...");
                     client.get_routes().await
                 });
+                
+                println!("🚗 get_routes() returned: {:?}", result.as_ref().map(|r| r.len()).map_err(|e| e.to_string()));
                 
                 // Convert result to Send-able types
                 let result_send = result.map_err(|e| e.to_string());

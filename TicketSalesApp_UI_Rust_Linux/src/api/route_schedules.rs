@@ -34,12 +34,21 @@ fn build_ref_map(json_value: &Value) -> HashMap<String, Value> {
 }
 
 fn resolve_refs(value: &Value, ref_map: &HashMap<String, Value>) -> Value {
+    resolve_refs_with_depth(value, ref_map, 0, 10)
+}
+
+fn resolve_refs_with_depth(value: &Value, ref_map: &HashMap<String, Value>, depth: usize, max_depth: usize) -> Value {
+    if depth >= max_depth {
+        log::warn!("Max recursion depth reached while resolving references");
+        return value.clone();
+    }
+    
     match value {
         Value::Object(obj) => {
             if let Some(ref_value) = obj.get("$ref") {
                 if let Some(ref_str) = ref_value.as_str() {
                     if let Some(resolved) = ref_map.get(ref_str) {
-                        return resolve_refs(resolved, ref_map);
+                        return resolve_refs_with_depth(resolved, ref_map, depth + 1, max_depth);
                     }
                 }
                 return value.clone();
@@ -47,12 +56,12 @@ fn resolve_refs(value: &Value, ref_map: &HashMap<String, Value>) -> Value {
             
             let mut new_obj = serde_json::Map::new();
             for (k, v) in obj {
-                new_obj.insert(k.clone(), resolve_refs(v, ref_map));
+                new_obj.insert(k.clone(), resolve_refs_with_depth(v, ref_map, depth + 1, max_depth));
             }
             Value::Object(new_obj)
         }
         Value::Array(arr) => {
-            Value::Array(arr.iter().map(|v| resolve_refs(v, ref_map)).collect())
+            Value::Array(arr.iter().map(|v| resolve_refs_with_depth(v, ref_map, depth + 1, max_depth)).collect())
         }
         _ => value.clone(),
     }

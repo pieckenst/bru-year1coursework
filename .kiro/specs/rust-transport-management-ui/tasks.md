@@ -93,7 +93,8 @@
 
 
 
-- [ ] 2.4 Add API client methods for route operations
+- [x] 2.4 Add API client methods for route operations
+
   - Implement `get_routes()`, `get_route()`, `create_route()`, `update_route()`, `delete_route()`
   - Handle nested bus and employee data in responses
   - Add proper error handling
@@ -105,7 +106,9 @@
 
   - **Validates: Requirements 5.3**
 
-- [ ] 2.6 Implement route management callbacks in main.rs
+
+- [x] 2.6 Implement route management callbacks in main.rs
+
   - Add `load_routes()` to fetch routes with nested data
   - Add `load_buses_for_dropdown()` and `load_drivers_for_dropdown()` for dialog population
   - Add `search_routes()` for multi-field filtering
@@ -122,7 +125,9 @@
   - **Property 12: Dialog loading populates dropdown data**
   - **Validates: Requirements 6.2, 7.2**
 
-- [ ] 2.9 Add navigation integration for route management
+
+
+- [x] 2.9 Add navigation integration for route management
   - Update AppRoute enum to include RouteManagement
   - Add navigation handler to show route management view
   - _Requirements: 14.2, 14.5_

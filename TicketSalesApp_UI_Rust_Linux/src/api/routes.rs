@@ -34,12 +34,21 @@ fn build_ref_map(json_value: &Value) -> HashMap<String, Value> {
 }
 
 fn resolve_refs(value: &Value, ref_map: &HashMap<String, Value>) -> Value {
+    resolve_refs_with_depth(value, ref_map, 0, 10)
+}
+
+fn resolve_refs_with_depth(value: &Value, ref_map: &HashMap<String, Value>, depth: usize, max_depth: usize) -> Value {
+    if depth >= max_depth {
+        log::warn!("Max recursion depth reached while resolving references");
+        return value.clone();
+    }
+    
     match value {
         Value::Object(obj) => {
             if let Some(ref_value) = obj.get("$ref") {
                 if let Some(ref_str) = ref_value.as_str() {
                     if let Some(resolved) = ref_map.get(ref_str) {
-                        return resolve_refs(resolved, ref_map);
+                        return resolve_refs_with_depth(resolved, ref_map, depth + 1, max_depth);
                     }
                 }
                 return value.clone();
@@ -47,12 +56,12 @@ fn resolve_refs(value: &Value, ref_map: &HashMap<String, Value>) -> Value {
             
             let mut new_obj = serde_json::Map::new();
             for (k, v) in obj {
-                new_obj.insert(k.clone(), resolve_refs(v, ref_map));
+                new_obj.insert(k.clone(), resolve_refs_with_depth(v, ref_map, depth + 1, max_depth));
             }
             Value::Object(new_obj)
         }
         Value::Array(arr) => {
-            Value::Array(arr.iter().map(|v| resolve_refs(v, ref_map)).collect())
+            Value::Array(arr.iter().map(|v| resolve_refs_with_depth(v, ref_map, depth + 1, max_depth)).collect())
         }
         _ => value.clone(),
     }
@@ -61,83 +70,138 @@ fn resolve_refs(value: &Value, ref_map: &HashMap<String, Value>) -> Value {
 impl ApiClient {
     /// Get all routes
     pub async fn get_routes(&self) -> Result<Vec<Route>, Box<dyn std::error::Error>> {
-        log::debug!("Fetching routes from: api/Routes");
+        println!("🚗 Fetching routes from: api/Routes");
 
         let response = self.get("api/Routes").await
             .map_err(|e| Box::new(e) as Box<dyn std::error::Error>)?;
 
-        log::debug!("Routes response status: {}", response.status());
+        println!("🚗 Routes response status: {}", response.status());
 
         if response.status().is_success() {
             let json_str = response.text().await?;
-            log::debug!("Raw routes JSON (first 500 chars): {}", &json_str[..json_str.len().min(500)]);
+            println!("🚗 Raw routes JSON (first 500 chars): {}", &json_str[..json_str.len().min(500)]);
 
             // Parse as raw JSON first
             let json_value: Value = serde_json::from_str(&json_str)?;
             
             // Check if it's wrapped in $values (ASP.NET Core ReferenceHandler.Preserve format)
             let routes_array = if let Some(values) = json_value.get("$values") {
-                log::debug!("Found $values wrapper, extracting array");
+                println!("🚗 Found $values wrapper, extracting array");
                 values.as_array()
                     .ok_or_else(|| "Expected $values to be an array")?
             } else if let Some(arr) = json_value.as_array() {
-                log::debug!("Direct array format");
+                println!("🚗 Direct array format");
                 arr
             } else {
                 return Err("Unexpected JSON format - not an array or $values wrapper".into());
             };
 
-            log::debug!("Processing {} items from routes array", routes_array.len());
+            println!("🚗 Processing {} items from routes array", routes_array.len());
 
-            // Collect all route objects by their $id
+            // First pass: Build a reference map of ALL objects with $id
+            let ref_map = build_ref_map(&json_value);
+            println!("🚗 Built reference map with {} entries", ref_map.len());
+
+            // Second pass: Collect all route objects (both direct and via $ref)
             let mut route_map = std::collections::HashMap::new();
             
             for (idx, route_value) in routes_array.iter().enumerate() {
+                // Check if this is a $ref pointer
                 if let Some(ref_id) = route_value.get("$ref").and_then(|v| v.as_str()) {
-                    log::debug!("  Item {} is $ref pointer to: {}", idx, ref_id);
+                    println!("  Item {} is $ref pointer to: {}", idx, ref_id);
+                    // Resolve the reference
+                    if let Some(resolved) = ref_map.get(ref_id) {
+                        if let Some(obj) = resolved.as_object() {
+                            if obj.contains_key("routeId") {
+                                let route_id = obj.get("routeId").and_then(|v| v.as_i64()).unwrap_or(0);
+                                println!("    ✓ Resolved to route with routeId={}", route_id);
+                                route_map.insert(ref_id.to_string(), resolved.clone());
+                            }
+                        }
+                    } else {
+                        println!("    ✗ Could not resolve $ref {}", ref_id);
+                    }
                 } else if let Some(obj) = route_value.as_object() {
                     if let Some(id) = obj.get("$id").and_then(|v| v.as_str()) {
                         if obj.contains_key("routeId") {
                             let route_id = obj.get("routeId").and_then(|v| v.as_i64()).unwrap_or(0);
-                            log::debug!("  Found route with $id={}, routeId={}", id, route_id);
+                            println!("  Found route with $id={}, routeId={}", id, route_id);
                             route_map.insert(id.to_string(), route_value.clone());
+                        } else {
+                            println!("  Item {} has $id={} but no routeId field", idx, id);
                         }
+                    } else {
+                        println!("  Item {} has no $id field", idx);
                     }
+                } else {
+                    println!("  Item {} is not an object", idx);
                 }
             }
 
-            log::debug!("Total unique routes found: {}", route_map.len());
+            println!("📊 Total unique routes found: {}", route_map.len());
 
-            // Parse each unique route
+            // Parse each unique route - manually to avoid nested object issues
             let mut routes = Vec::new();
             for (_id, route_value) in route_map.iter() {
-                let ref_map = build_ref_map(route_value);
-                let resolved_value = resolve_refs(route_value, &ref_map);
+                let route_obj = match route_value.as_object() {
+                    Some(obj) => obj,
+                    None => continue,
+                };
+
+                // Manually extract fields to avoid deep nesting issues
+                let route_id = route_obj.get("routeId")
+                    .and_then(|v| v.as_i64())
+                    .unwrap_or(0);
                 
-                match serde_json::from_value::<Route>(resolved_value) {
-                    Ok(mut route) => {
-                        // Clear circular reference fields after resolution
-                        route.ref_id = None;
-                        route.ref_pointer = None;
-                        log::debug!("✓ Parsed route: {} (ID: {})", route.display_name(), route.route_id);
-                        routes.push(route);
-                    }
-                    Err(e) => {
-                        log::warn!("Failed to deserialize route: {}", e);
-                        continue;
-                    }
-                }
+                let start_point = route_obj.get("startPoint")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("")
+                    .to_string();
+                
+                let end_point = route_obj.get("endPoint")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("")
+                    .to_string();
+                
+                let driver_id = route_obj.get("driverId")
+                    .and_then(|v| v.as_i64())
+                    .unwrap_or(0);
+                
+                let bus_id = route_obj.get("busId")
+                    .and_then(|v| v.as_i64())
+                    .unwrap_or(0);
+                
+                let travel_time = route_obj.get("travelTime")
+                    .and_then(|v| v.as_str())
+                    .map(|s| s.to_string());
+
+                let route = Route {
+                    route_id,
+                    start_point: start_point.clone(),
+                    end_point: end_point.clone(),
+                    driver_id,
+                    bus_id,
+                    travel_time,
+                    employee: None,  // Skip nested objects to avoid circular refs
+                    bus: None,       // Skip nested objects to avoid circular refs
+                    tickets: None,   // Skip nested objects to avoid circular refs
+                    ref_id: None,
+                    ref_pointer: None,
+                };
+
+                println!("✓ Parsed route: {} → {} (ID: {})", start_point, end_point, route_id);
+                routes.push(route);
             }
 
             // Sort routes by ID in ascending order
             routes.sort_by_key(|route| route.route_id);
             
-            log::info!("Successfully loaded {} routes (sorted by ID)", routes.len());
+            println!("✅ Successfully loaded {} routes (sorted by ID)", routes.len());
             Ok(routes)
         } else {
             let status = response.status();
             let error_text = response.text().await?;
-            log::error!("Failed to fetch routes: {} - {}", status, error_text);
+            println!("❌ Failed to fetch routes: {} - {}", status, error_text);
             Err(format!("Failed to fetch routes: {} - {}", status, error_text).into())
         }
     }
