@@ -6,6 +6,9 @@ pub mod training;
 pub mod vacation_request;
 pub mod employee_document;
 pub mod emergency_contact;
+pub mod bus;
+pub mod route;
+pub mod route_schedule;
 
 pub use employee::*;
 pub use job::*;
@@ -15,5 +18,6 @@ pub use training::*;
 pub use vacation_request::*;
 pub use employee_document::*;
 pub use emergency_contact::*;
-pub use training::*;
-pub use job::*;
+pub use bus::*;
+pub use route::*;
+pub use route_schedule::*;

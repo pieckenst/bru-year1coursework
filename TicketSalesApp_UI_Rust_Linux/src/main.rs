@@ -535,6 +535,804 @@ fn show_main_window(
         }
     });
     
+    // ========== BUS MANAGEMENT CALLBACKS ==========
+    
+    // Handle load buses
+    let api_load_buses = api_client.clone();
+    main_ui.on_load_buses({
+        let ui_handle = main_ui.as_weak();
+        move || {
+            let ui = ui_handle.unwrap();
+            let api = api_load_buses.clone();
+            let ui_weak = ui.as_weak();
+            
+            // Set loading state
+            ui.set_buses_loading(true);
+            ui.set_buses_error(slint::SharedString::from(""));
+            ui.set_buses_has_error(false);
+            
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_buses().await
+                });
+                
+                // Convert result to Send-able types
+                let result_send = result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_buses_loading(false);
+                    
+                    match result_send {
+                        Ok(buses) => {
+                            let bus_data: Vec<_> = buses.iter().map(|bus| {
+                                BusData {
+                                    bus_id: bus.bus_id as i32,
+                                    model: slint::SharedString::from(&bus.model),
+                                    route_count: bus.route_count() as i32,
+                                }
+                            }).collect();
+                            
+                            let count = bus_data.len();
+                            let model = std::rc::Rc::new(slint::VecModel::from(bus_data));
+                            ui.set_buses(model.into());
+                            println!("✅ Loaded {} buses", count);
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to load buses: {}", e);
+                            ui.set_buses_error(slint::SharedString::from(format!("Ошибка загрузки: {}", e)));
+                            ui.set_buses_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle search buses
+    let api_search_buses = api_client.clone();
+    main_ui.on_search_buses({
+        let ui_handle = main_ui.as_weak();
+        move |search_text| {
+            let ui = ui_handle.unwrap();
+            let api = api_search_buses.clone();
+            let ui_weak = ui.as_weak();
+            let query = search_text.to_string();
+            
+            // If search is empty, reload all buses
+            if query.trim().is_empty() {
+                std::thread::spawn(move || {
+                    let rt = tokio::runtime::Runtime::new().unwrap();
+                    let result = rt.block_on(async {
+                        let client = api.lock().unwrap();
+                        client.get_buses().await
+                    });
+                    
+                    let result_send = result.map_err(|e| e.to_string());
+                    
+                    let _ = slint::invoke_from_event_loop(move || {
+                        let ui = ui_weak.unwrap();
+                        
+                        match result_send {
+                            Ok(buses) => {
+                                let bus_data: Vec<_> = buses.iter().map(|bus| {
+                                    BusData {
+                                        bus_id: bus.bus_id as i32,
+                                        model: slint::SharedString::from(&bus.model),
+                                        route_count: bus.route_count() as i32,
+                                    }
+                                }).collect();
+                                
+                                let model = std::rc::Rc::new(slint::VecModel::from(bus_data));
+                                ui.set_buses(model.into());
+                            }
+                            Err(e) => {
+                                eprintln!("❌ Failed to reload buses: {}", e);
+                            }
+                        }
+                    });
+                });
+            } else {
+                // Client-side filtering for real-time search
+                std::thread::spawn(move || {
+                    let rt = tokio::runtime::Runtime::new().unwrap();
+                    let result = rt.block_on(async {
+                        let client = api.lock().unwrap();
+                        client.get_buses().await
+                    });
+                    
+                    let result_send = result.map_err(|e| e.to_string());
+                    
+                    let _ = slint::invoke_from_event_loop(move || {
+                        let ui = ui_weak.unwrap();
+                        
+                        match result_send {
+                            Ok(buses) => {
+                                let filtered_buses: Vec<_> = buses.iter()
+                                    .filter(|bus| bus.model.to_lowercase().contains(&query.to_lowercase()))
+                                    .map(|bus| {
+                                        BusData {
+                                            bus_id: bus.bus_id as i32,
+                                            model: slint::SharedString::from(&bus.model),
+                                            route_count: bus.route_count() as i32,
+                                        }
+                                    })
+                                    .collect();
+                                
+                                let count = filtered_buses.len();
+                                let model = std::rc::Rc::new(slint::VecModel::from(filtered_buses));
+                                ui.set_buses(model.into());
+                                println!("🔍 Found {} buses matching '{}'", count, query);
+                            }
+                            Err(e) => {
+                                eprintln!("❌ Failed to search buses: {}", e);
+                            }
+                        }
+                    });
+                });
+            }
+        }
+    });
+    
+    // Handle add bus
+    let api_add_bus = api_client.clone();
+    main_ui.on_add_bus({
+        let ui_handle = main_ui.as_weak();
+        move |model| {
+            let ui = ui_handle.unwrap();
+            let api = api_add_bus.clone();
+            let ui_weak = ui.as_weak();
+            let model_str = model.to_string();
+            
+            // Validate model is not empty
+            if model_str.trim().is_empty() {
+                ui.set_buses_error(slint::SharedString::from("Модель не может быть пустой"));
+                ui.set_buses_has_error(true);
+                return;
+            }
+            
+            ui.set_buses_loading(true);
+            
+            std::thread::spawn(move || {
+                use crate::models::CreateBusRequest;
+                
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let request = CreateBusRequest {
+                    model: model_str.clone(),
+                };
+                
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.create_bus(request).await
+                });
+                
+                let result_send = result.map(|bus| bus.display_name()).map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_buses_loading(false);
+                    
+                    match result_send {
+                        Ok(display_name) => {
+                            println!("✅ Created bus: {}", display_name);
+                            // Reload buses
+                            ui.invoke_load_buses();
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to create bus: {}", e);
+                            ui.set_buses_error(slint::SharedString::from(format!("Ошибка создания: {}", e)));
+                            ui.set_buses_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle edit bus
+    let api_edit_bus = api_client.clone();
+    main_ui.on_edit_bus({
+        let ui_handle = main_ui.as_weak();
+        move |bus_id, model| {
+            let ui = ui_handle.unwrap();
+            let api = api_edit_bus.clone();
+            let ui_weak = ui.as_weak();
+            let model_str = model.to_string();
+            
+            // Validate model is not empty
+            if model_str.trim().is_empty() {
+                ui.set_buses_error(slint::SharedString::from("Модель не может быть пустой"));
+                ui.set_buses_has_error(true);
+                return;
+            }
+            
+            ui.set_buses_loading(true);
+            
+            std::thread::spawn(move || {
+                use crate::models::UpdateBusRequest;
+                
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let request = UpdateBusRequest {
+                    bus_id: bus_id as i64,
+                    model: model_str.clone(),
+                };
+                
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.update_bus(bus_id as i64, request).await
+                });
+                
+                let result_send = result.map(|bus| bus.display_name()).map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_buses_loading(false);
+                    
+                    match result_send {
+                        Ok(display_name) => {
+                            println!("✅ Updated bus: {}", display_name);
+                            // Reload buses
+                            ui.invoke_load_buses();
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to update bus: {}", e);
+                            ui.set_buses_error(slint::SharedString::from(format!("Ошибка обновления: {}", e)));
+                            ui.set_buses_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle delete bus
+    let api_delete_bus = api_client.clone();
+    main_ui.on_delete_bus({
+        let ui_handle = main_ui.as_weak();
+        move |bus_id| {
+            let ui = ui_handle.unwrap();
+            let api = api_delete_bus.clone();
+            let ui_weak = ui.as_weak();
+            
+            ui.set_buses_loading(true);
+            
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.delete_bus(bus_id as i64).await
+                });
+                
+                let result_send = result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_buses_loading(false);
+                    
+                    match result_send {
+                        Ok(_) => {
+                            println!("✅ Deleted bus {}", bus_id);
+                            // Reload buses
+                            ui.invoke_load_buses();
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to delete bus: {}", e);
+                            ui.set_buses_error(slint::SharedString::from(format!("Ошибка удаления: {}", e)));
+                            ui.set_buses_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+
+
+    // ========== ROUTE MANAGEMENT CALLBACKS ==========
+    
+    // Handle load routes
+    let api_load_routes = api_client.clone();
+    main_ui.on_load_routes({
+        let ui_handle = main_ui.as_weak();
+        move || {
+            let ui = ui_handle.unwrap();
+            let api = api_load_routes.clone();
+            let ui_weak = ui.as_weak();
+            
+            // Set loading state
+            ui.set_routes_loading(true);
+            ui.set_routes_error(slint::SharedString::from(""));
+            ui.set_routes_has_error(false);
+            
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_routes().await
+                });
+                
+                // Convert result to Send-able types
+                let result_send = result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_routes_loading(false);
+                    
+                    match result_send {
+                        Ok(routes) => {
+                            let route_data: Vec<_> = routes.iter().map(|route| {
+                                RouteData {
+                                    route_id: route.route_id as i32,
+                                    start_point: slint::SharedString::from(&route.start_point),
+                                    end_point: slint::SharedString::from(&route.end_point),
+                                    bus_model: slint::SharedString::from(&route.bus_model()),
+                                    driver_name: slint::SharedString::from(&route.driver_name()),
+                                    travel_time: slint::SharedString::from(route.travel_time.as_deref().unwrap_or("")),
+                                }
+                            }).collect();
+                            
+                            let count = route_data.len();
+                            let model = std::rc::Rc::new(slint::VecModel::from(route_data));
+                            ui.set_routes(model.into());
+                            println!("✅ Loaded {} routes", count);
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to load routes: {}", e);
+                            ui.set_routes_error(slint::SharedString::from(format!("Ошибка загрузки: {}", e)));
+                            ui.set_routes_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle search routes
+    let api_search_routes = api_client.clone();
+    main_ui.on_search_routes({
+        let ui_handle = main_ui.as_weak();
+        move |search_text| {
+            let ui = ui_handle.unwrap();
+            let api = api_search_routes.clone();
+            let ui_weak = ui.as_weak();
+            let query = search_text.to_string();
+            
+            // If search is empty, reload all routes
+            if query.trim().is_empty() {
+                std::thread::spawn(move || {
+                    let rt = tokio::runtime::Runtime::new().unwrap();
+                    let result = rt.block_on(async {
+                        let client = api.lock().unwrap();
+                        client.get_routes().await
+                    });
+                    
+                    let result_send = result.map_err(|e| e.to_string());
+                    
+                    let _ = slint::invoke_from_event_loop(move || {
+                        let ui = ui_weak.unwrap();
+                        
+                        match result_send {
+                            Ok(routes) => {
+                                let route_data: Vec<_> = routes.iter().map(|route| {
+                                    RouteData {
+                                        route_id: route.route_id as i32,
+                                        start_point: slint::SharedString::from(&route.start_point),
+                                        end_point: slint::SharedString::from(&route.end_point),
+                                        bus_model: slint::SharedString::from(&route.bus_model()),
+                                        driver_name: slint::SharedString::from(&route.driver_name()),
+                                        travel_time: slint::SharedString::from(route.travel_time.as_deref().unwrap_or("")),
+                                    }
+                                }).collect();
+                                
+                                let model = std::rc::Rc::new(slint::VecModel::from(route_data));
+                                ui.set_routes(model.into());
+                            }
+                            Err(e) => {
+                                eprintln!("❌ Failed to reload routes: {}", e);
+                            }
+                        }
+                    });
+                });
+            } else {
+                // Client-side filtering for real-time search
+                std::thread::spawn(move || {
+                    let rt = tokio::runtime::Runtime::new().unwrap();
+                    let result = rt.block_on(async {
+                        let client = api.lock().unwrap();
+                        client.get_routes().await
+                    });
+                    
+                    let result_send = result.map_err(|e| e.to_string());
+                    
+                    let _ = slint::invoke_from_event_loop(move || {
+                        let ui = ui_weak.unwrap();
+                        
+                        match result_send {
+                            Ok(routes) => {
+                                let filtered_routes: Vec<_> = routes.iter()
+                                    .filter(|route| {
+                                        route.start_point.to_lowercase().contains(&query.to_lowercase()) ||
+                                        route.end_point.to_lowercase().contains(&query.to_lowercase()) ||
+                                        route.bus_model().to_lowercase().contains(&query.to_lowercase()) ||
+                                        route.driver_name().to_lowercase().contains(&query.to_lowercase())
+                                    })
+                                    .map(|route| {
+                                        RouteData {
+                                            route_id: route.route_id as i32,
+                                            start_point: slint::SharedString::from(&route.start_point),
+                                            end_point: slint::SharedString::from(&route.end_point),
+                                            bus_model: slint::SharedString::from(&route.bus_model()),
+                                            driver_name: slint::SharedString::from(&route.driver_name()),
+                                            travel_time: slint::SharedString::from(route.travel_time.as_deref().unwrap_or("")),
+                                        }
+                                    })
+                                    .collect();
+                                
+                                let count = filtered_routes.len();
+                                let model = std::rc::Rc::new(slint::VecModel::from(filtered_routes));
+                                ui.set_routes(model.into());
+                                println!("🔍 Found {} routes matching '{}'", count, query);
+                            }
+                            Err(e) => {
+                                eprintln!("❌ Failed to search routes: {}", e);
+                            }
+                        }
+                    });
+                });
+            }
+        }
+    });
+    
+    // Handle load dropdown data for route dialogs
+    let api_load_dropdown = api_client.clone();
+    main_ui.on_load_route_dropdown_data({
+        let ui_handle = main_ui.as_weak();
+        move || {
+            let ui = ui_handle.unwrap();
+            let api = api_load_dropdown.clone();
+            let ui_weak = ui.as_weak();
+            
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                
+                // Load buses
+                let buses_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_buses().await
+                });
+                
+                // Load employees (drivers)
+                let employees_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_employees().await
+                });
+                
+                let buses_send = buses_result.map_err(|e| e.to_string());
+                let employees_send = employees_result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    
+                    match buses_send {
+                        Ok(buses) => {
+                            let bus_options: Vec<slint::SharedString> = buses.iter()
+                                .map(|bus| slint::SharedString::from(&bus.model))
+                                .collect();
+                            let model = std::rc::Rc::new(slint::VecModel::from(bus_options));
+                            ui.set_route_bus_options(model.into());
+                            println!("✅ Loaded {} buses for dropdown", buses.len());
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to load buses for dropdown: {}", e);
+                        }
+                    }
+                    
+                    match employees_send {
+                        Ok(employees) => {
+                            let driver_options: Vec<slint::SharedString> = employees.iter()
+                                .map(|emp| slint::SharedString::from(format!("{} {}", emp.name, emp.surname)))
+                                .collect();
+                            let model = std::rc::Rc::new(slint::VecModel::from(driver_options));
+                            ui.set_route_driver_options(model.into());
+                            println!("✅ Loaded {} employees for dropdown", employees.len());
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to load employees for dropdown: {}", e);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle add route
+    let api_add_route = api_client.clone();
+    main_ui.on_add_route({
+        let ui_handle = main_ui.as_weak();
+        move |start_point, end_point, travel_time, bus_index, driver_index| {
+            let ui = ui_handle.unwrap();
+            let api = api_add_route.clone();
+            let ui_weak = ui.as_weak();
+            let start = start_point.to_string();
+            let end = end_point.to_string();
+            let time = travel_time.to_string();
+            
+            // Validate required fields
+            if start.trim().is_empty() || end.trim().is_empty() || bus_index < 0 || driver_index < 0 {
+                ui.set_routes_error(slint::SharedString::from("Все обязательные поля должны быть заполнены"));
+                ui.set_routes_has_error(true);
+                return;
+            }
+            
+            ui.set_routes_loading(true);
+            
+            std::thread::spawn(move || {
+                use crate::models::CreateRouteRequest;
+                
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                
+                // Load buses and employees to map indices to IDs
+                let buses_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_buses().await
+                });
+                
+                let employees_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_employees().await
+                });
+                
+                let (buses, employees) = match (buses_result, employees_result) {
+                    (Ok(b), Ok(e)) => (b, e),
+                    (Err(e), _) => {
+                        let error_msg = format!("Failed to load buses: {}", e);
+                        let _ = slint::invoke_from_event_loop(move || {
+                            let ui = ui_weak.unwrap();
+                            ui.set_routes_loading(false);
+                            ui.set_routes_error(slint::SharedString::from(error_msg));
+                            ui.set_routes_has_error(true);
+                        });
+                        return;
+                    }
+                    (_, Err(e)) => {
+                        let error_msg = format!("Failed to load employees: {}", e);
+                        let _ = slint::invoke_from_event_loop(move || {
+                            let ui = ui_weak.unwrap();
+                            ui.set_routes_loading(false);
+                            ui.set_routes_error(slint::SharedString::from(error_msg));
+                            ui.set_routes_has_error(true);
+                        });
+                        return;
+                    }
+                };
+                
+                // Map indices to IDs
+                let bus_id = if bus_index >= 0 && (bus_index as usize) < buses.len() {
+                    buses[bus_index as usize].bus_id
+                } else {
+                    let _ = slint::invoke_from_event_loop(move || {
+                        let ui = ui_weak.unwrap();
+                        ui.set_routes_loading(false);
+                        ui.set_routes_error(slint::SharedString::from("Неверный индекс автобуса"));
+                        ui.set_routes_has_error(true);
+                    });
+                    return;
+                };
+                
+                let driver_id = if driver_index >= 0 && (driver_index as usize) < employees.len() {
+                    employees[driver_index as usize].emp_id
+                } else {
+                    let _ = slint::invoke_from_event_loop(move || {
+                        let ui = ui_weak.unwrap();
+                        ui.set_routes_loading(false);
+                        ui.set_routes_error(slint::SharedString::from("Неверный индекс водителя"));
+                        ui.set_routes_has_error(true);
+                    });
+                    return;
+                };
+                
+                let request = CreateRouteRequest {
+                    start_point: start,
+                    end_point: end,
+                    driver_id,
+                    bus_id,
+                    travel_time: if time.is_empty() { None } else { Some(time) },
+                };
+                
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.create_route(request).await
+                });
+                
+                let result_send = result.map(|route| route.display_name()).map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_routes_loading(false);
+                    
+                    match result_send {
+                        Ok(display_name) => {
+                            println!("✅ Created route: {}", display_name);
+                            // Reload routes
+                            ui.invoke_load_routes();
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to create route: {}", e);
+                            ui.set_routes_error(slint::SharedString::from(format!("Ошибка создания: {}", e)));
+                            ui.set_routes_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle edit route
+    let api_edit_route = api_client.clone();
+    main_ui.on_edit_route({
+        let ui_handle = main_ui.as_weak();
+        move |route_id, start_point, end_point, travel_time, bus_index, driver_index| {
+            let ui = ui_handle.unwrap();
+            let api = api_edit_route.clone();
+            let ui_weak = ui.as_weak();
+            let start = start_point.to_string();
+            let end = end_point.to_string();
+            let time = travel_time.to_string();
+            
+            // Validate required fields
+            if start.trim().is_empty() || end.trim().is_empty() || bus_index < 0 || driver_index < 0 {
+                ui.set_routes_error(slint::SharedString::from("Все обязательные поля должны быть заполнены"));
+                ui.set_routes_has_error(true);
+                return;
+            }
+            
+            ui.set_routes_loading(true);
+            
+            std::thread::spawn(move || {
+                use crate::models::UpdateRouteRequest;
+                
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                
+                // Load buses and employees to map indices to IDs
+                let buses_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_buses().await
+                });
+                
+                let employees_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_employees().await
+                });
+                
+                let (buses, employees) = match (buses_result, employees_result) {
+                    (Ok(b), Ok(e)) => (b, e),
+                    (Err(e), _) => {
+                        let error_msg = format!("Failed to load buses: {}", e);
+                        let _ = slint::invoke_from_event_loop(move || {
+                            let ui = ui_weak.unwrap();
+                            ui.set_routes_loading(false);
+                            ui.set_routes_error(slint::SharedString::from(error_msg));
+                            ui.set_routes_has_error(true);
+                        });
+                        return;
+                    }
+                    (_, Err(e)) => {
+                        let error_msg = format!("Failed to load employees: {}", e);
+                        let _ = slint::invoke_from_event_loop(move || {
+                            let ui = ui_weak.unwrap();
+                            ui.set_routes_loading(false);
+                            ui.set_routes_error(slint::SharedString::from(error_msg));
+                            ui.set_routes_has_error(true);
+                        });
+                        return;
+                    }
+                };
+                
+                // Map indices to IDs
+                let bus_id = if bus_index >= 0 && (bus_index as usize) < buses.len() {
+                    buses[bus_index as usize].bus_id
+                } else {
+                    let _ = slint::invoke_from_event_loop(move || {
+                        let ui = ui_weak.unwrap();
+                        ui.set_routes_loading(false);
+                        ui.set_routes_error(slint::SharedString::from("Неверный индекс автобуса"));
+                        ui.set_routes_has_error(true);
+                    });
+                    return;
+                };
+                
+                let driver_id = if driver_index >= 0 && (driver_index as usize) < employees.len() {
+                    employees[driver_index as usize].emp_id
+                } else {
+                    let _ = slint::invoke_from_event_loop(move || {
+                        let ui = ui_weak.unwrap();
+                        ui.set_routes_loading(false);
+                        ui.set_routes_error(slint::SharedString::from("Неверный индекс водителя"));
+                        ui.set_routes_has_error(true);
+                    });
+                    return;
+                };
+                
+                let request = UpdateRouteRequest {
+                    route_id: route_id as i64,
+                    start_point: start,
+                    end_point: end,
+                    driver_id,
+                    bus_id,
+                    travel_time: if time.is_empty() { None } else { Some(time) },
+                };
+                
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.update_route(route_id as i64, request).await
+                });
+                
+                let result_send = result.map(|route| route.display_name()).map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_routes_loading(false);
+                    
+                    match result_send {
+                        Ok(display_name) => {
+                            println!("✅ Updated route: {}", display_name);
+                            // Reload routes
+                            ui.invoke_load_routes();
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to update route: {}", e);
+                            ui.set_routes_error(slint::SharedString::from(format!("Ошибка обновления: {}", e)));
+                            ui.set_routes_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle delete route
+    let api_delete_route = api_client.clone();
+    main_ui.on_delete_route({
+        let ui_handle = main_ui.as_weak();
+        move |route_id| {
+            let ui = ui_handle.unwrap();
+            let api = api_delete_route.clone();
+            let ui_weak = ui.as_weak();
+            
+            ui.set_routes_loading(true);
+            
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.delete_route(route_id as i64).await
+                });
+                
+                let result_send = result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_routes_loading(false);
+                    
+                    match result_send {
+                        Ok(_) => {
+                            println!("✅ Deleted route {}", route_id);
+                            // Reload routes
+                            ui.invoke_load_routes();
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to delete route: {}", e);
+                            ui.set_routes_error(slint::SharedString::from(format!("Ошибка удаления: {}", e)));
+                            ui.set_routes_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+
+    
     // Handle logout
     let api_client_clone = api_client.clone();
     main_ui.on_logout_clicked({
@@ -568,6 +1366,16 @@ fn show_main_window(
                     AppRoute::Employees => {
                         println!("Loading employees...");
                         load_employees_impl(ui_weak.clone(), api_client_nav.clone());
+                    }
+                    AppRoute::Buses => {
+                        println!("Loading buses...");
+                        let ui = ui_weak.unwrap();
+                        ui.invoke_load_buses();
+                    }
+                    AppRoute::Routes => {
+                        println!("Loading routes...");
+                        let ui = ui_weak.unwrap();
+                        ui.invoke_load_routes();
                     }
                     _ => {
                         println!("Route {} not yet implemented", route.display_name());
@@ -1012,3 +1820,5 @@ fn load_employees_impl(
 
 // Note: EmployeeData struct is defined in app-window.slint UI file
 // and is automatically generated by slint::include_modules!()
+
+    

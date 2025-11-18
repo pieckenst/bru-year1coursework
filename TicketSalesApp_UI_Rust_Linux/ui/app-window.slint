@@ -4,6 +4,8 @@ import { MaterialPalette } from "../material-1.0/ui/styling/material_palette.sli
 import { AppNavigation } from "navigation.slint";
 import { EmployeeDialog, DeleteConfirmDialog, JobData, DepartmentData } from "employee_dialogs.slint";
 import { EmployeeDetailView, DocumentData, TrainingData, EmergencyContactData, VacationData } from "employee_detail.slint";
+import { BusManagementView, BusData } from "bus_management.slint";
+import { RouteManagementView, RouteData } from "route_management.slint";
 export { AuthWindow } from "auth_window.slint";
 
 // Employee data structure
@@ -98,6 +100,35 @@ export component AppWindow inherits Window {
     callback approve-vacation-clicked(int);
     callback reject-vacation-clicked(int);
     callback delete-vacation-clicked(int);
+    
+    // Bus management state
+    in-out property <[BusData]> buses: [];
+    in-out property <bool> buses-loading: false;
+    in-out property <string> buses-error: "";
+    in-out property <bool> buses-has-error: false;
+    
+    // Bus management callbacks
+    callback load-buses();
+    callback search-buses(string);
+    callback add-bus(string);
+    callback edit-bus(int, string);
+    callback delete-bus(int);
+    
+    // Route management state
+    in-out property <[RouteData]> routes: [];
+    in-out property <bool> routes-loading: false;
+    in-out property <string> routes-error: "";
+    in-out property <bool> routes-has-error: false;
+    in-out property <[string]> route-bus-options: [];
+    in-out property <[string]> route-driver-options: [];
+    
+    // Route management callbacks
+    callback load-routes();
+    callback search-routes(string);
+    callback add-route(string, string, string, int, int);
+    callback edit-route(int, string, string, string, int, int);
+    callback delete-route(int);
+    callback load-route-dropdown-data();
     
     AppNavigation {
         current-user: root.current-user;
@@ -340,7 +371,85 @@ export component AppWindow inherits Window {
             }
         }
         
-        if root.current-nav-group >= 2: VerticalBox {
+        // Bus Management View (Group 2, Index 0)
+        if root.current-nav-group == 2 && root.current-nav-index == 0: BusManagementView {
+            buses: root.buses;
+            is-loading: root.buses-loading;
+            error-message: root.buses-error;
+            has-error: root.buses-has-error;
+            
+            load-buses => {
+                root.load-buses();
+            }
+            
+            search-buses(text) => {
+                root.search-buses(text);
+            }
+            
+            add-bus(model) => {
+                root.add-bus(model);
+            }
+            
+            edit-bus(bus-id, model) => {
+                root.edit-bus(bus-id, model);
+            }
+            
+            delete-bus(bus-id) => {
+                root.delete-bus(bus-id);
+            }
+        }
+        
+        // Route Management View (Group 2, Index 1)
+        if root.current-nav-group == 2 && root.current-nav-index == 1: RouteManagementView {
+            routes: root.routes;
+            is-loading: root.routes-loading;
+            error-message: root.routes-error;
+            has-error: root.routes-has-error;
+            bus-options: root.route-bus-options;
+            driver-options: root.route-driver-options;
+            
+            load-routes => {
+                root.load-routes();
+            }
+            
+            search-routes(text) => {
+                root.search-routes(text);
+            }
+            
+            add-route(start, end, time, bus-idx, driver-idx) => {
+                root.add-route(start, end, time, bus-idx, driver-idx);
+            }
+            
+            edit-route(route-id, start, end, time, bus-idx, driver-idx) => {
+                root.edit-route(route-id, start, end, time, bus-idx, driver-idx);
+            }
+            
+            delete-route(route-id) => {
+                root.delete-route(route-id);
+            }
+            
+            load-dropdown-data => {
+                root.load-route-dropdown-data();
+            }
+        }
+        
+        // Placeholder for other transport routes
+        if root.current-nav-group == 2 && root.current-nav-index > 1: VerticalBox {
+            padding: 40px;
+            MaterialText {
+                text: "Раздел транспорта";
+                font-size: 24px;
+                font-weight: 700;
+                horizontal-alignment: center;
+            }
+            Rectangle { vertical-stretch: 1; }
+            MaterialText {
+                text: "В разработке";
+                horizontal-alignment: center;
+            }
+        }
+        
+        if root.current-nav-group >= 3: VerticalBox {
             padding: 40px;
             MaterialText {
                 text: "Раздел в разработке";

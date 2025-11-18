@@ -6,6 +6,9 @@ pub mod employee_documents;
 pub mod employee_training;
 pub mod emergency_contacts;
 pub mod vacation_requests;
+pub mod buses;
+pub mod routes;
+pub mod route_schedules;
 
 use reqwest::{Client, Response, StatusCode};
 use serde::{Deserialize, Serialize};

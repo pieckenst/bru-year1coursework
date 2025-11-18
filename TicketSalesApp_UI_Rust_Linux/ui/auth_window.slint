@@ -7,7 +7,11 @@ export component AuthWindow inherits Window {
     width: 900px;
     height: 600px;
     default-font-family: "Arial";
-    background: #1E1E1E;
+    
+    // Gradient background
+    Rectangle {
+        background: @linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
+    }
     
     // Properties
     in-out property <string> username;
@@ -31,18 +35,25 @@ export component AuthWindow inherits Window {
                 vertical-stretch: 1;
                 spacing: 20px;
                 
-                // Bus Icon (using rectangle as placeholder)
+                // Bus Icon with proper SVG and glow effect
                 Rectangle {
-                    width: 100px;
-                    height: 100px;
-                    border-radius: 50px;
-                    background: MaterialPalette.primary;
+                    width: 120px;
+                    height: 120px;
+                    border-radius: 60px;
+                    background: @linear-gradient(135deg, #7E57C2 0%, #673AB7 100%);
+                    drop-shadow-blur: 20px;
+                    drop-shadow-color: #673AB740;
+                    drop-shadow-offset-y: 4px;
                     
-                    MaterialText {
-                        text: "🚌";
-                        font-size: 60px;
-                        horizontal-alignment: center;
-                        vertical-alignment: center;
+                    Path {
+                        width: 64px;
+                        height: 64px;
+                        x: 28px;
+                        y: 28px;
+                        fill: Colors.white;
+                        viewbox-width: 24;
+                        viewbox-height: 24;
+                        commands: "M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6.85c.52-.86 2.24-1.85 6-1.85s5.48.99 6 1.85V11z";
                     }
                 }
                 
@@ -75,66 +86,138 @@ export component AuthWindow inherits Window {
                 }
                 
                 // Feature 1
-                HorizontalBox {
-                    spacing: 10px;
+                Rectangle {
+                    height: 40px;
+                    background: #FFFFFF08;
+                    border-radius: 8px;
                     
-                    MaterialText {
-                        text: "✓";
-                        font-size: 20px;
-                        color: MaterialPalette.primary;
-                    }
-                    
-                    MaterialText {
-                        text: "Управление автопарком и маршрутами";
-                        color: Colors.white;
+                    HorizontalBox {
+                        padding: 10px;
+                        spacing: 12px;
+                        
+                        Rectangle {
+                            width: 24px;
+                            height: 24px;
+                            border-radius: 12px;
+                            background: MaterialPalette.primary;
+                            
+                            MaterialText {
+                                text: "✓";
+                                font-size: 16px;
+                                color: Colors.white;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+                        
+                        MaterialText {
+                            text: "Управление автопарком и маршрутами";
+                            color: Colors.white;
+                            font-size: 15px;
+                            vertical-alignment: center;
+                        }
                     }
                 }
                 
                 // Feature 2
-                HorizontalBox {
-                    spacing: 10px;
+                Rectangle {
+                    height: 40px;
+                    background: #FFFFFF08;
+                    border-radius: 8px;
                     
-                    MaterialText {
-                        text: "✓";
-                        font-size: 20px;
-                        color: MaterialPalette.primary;
-                    }
-                    
-                    MaterialText {
-                        text: "Продажа и учет билетов";
-                        color: Colors.white;
+                    HorizontalBox {
+                        padding: 10px;
+                        spacing: 12px;
+                        
+                        Rectangle {
+                            width: 24px;
+                            height: 24px;
+                            border-radius: 12px;
+                            background: MaterialPalette.primary;
+                            
+                            MaterialText {
+                                text: "✓";
+                                font-size: 16px;
+                                color: Colors.white;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+                        
+                        MaterialText {
+                            text: "Продажа и учет билетов";
+                            color: Colors.white;
+                            font-size: 15px;
+                            vertical-alignment: center;
+                        }
                     }
                 }
                 
                 // Feature 3
-                HorizontalBox {
-                    spacing: 10px;
+                Rectangle {
+                    height: 40px;
+                    background: #FFFFFF08;
+                    border-radius: 8px;
                     
-                    MaterialText {
-                        text: "✓";
-                        font-size: 20px;
-                        color: MaterialPalette.primary;
-                    }
-                    
-                    MaterialText {
-                        text: "Контроль технического обслуживания";
-                        color: Colors.white;
+                    HorizontalBox {
+                        padding: 10px;
+                        spacing: 12px;
+                        
+                        Rectangle {
+                            width: 24px;
+                            height: 24px;
+                            border-radius: 12px;
+                            background: MaterialPalette.primary;
+                            
+                            MaterialText {
+                                text: "✓";
+                                font-size: 16px;
+                                color: Colors.white;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+                        
+                        MaterialText {
+                            text: "Контроль технического обслуживания";
+                            color: Colors.white;
+                            font-size: 15px;
+                            vertical-alignment: center;
+                        }
                     }
                 }
                 
                 // Feature 4
-                HorizontalBox {
-                    spacing: 10px;
+                Rectangle {
+                    height: 40px;
+                    background: #FFFFFF08;
+                    border-radius: 8px;
                     
-                    MaterialText {
-                        text: "✓";
-                        font-size: 20px;
-                        color: MaterialPalette.primary;
-                    }
-                    
-                    MaterialText {
-                        text: "Статистика и аналитика";
-                        color: Colors.white;
+                    HorizontalBox {
+                        padding: 10px;
+                        spacing: 12px;
+                        
+                        Rectangle {
+                            width: 24px;
+                            height: 24px;
+                            border-radius: 12px;
+                            background: MaterialPalette.primary;
+                            
+                            MaterialText {
+                                text: "✓";
+                                font-size: 16px;
+                                color: Colors.white;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+                        
+                        MaterialText {
+                            text: "Статистика и аналитика";
+                            color: Colors.white;
+                            font-size: 15px;
+                            vertical-alignment: center;
+                        }
                     }
                 }
             }
@@ -142,12 +225,15 @@ export component AuthWindow inherits Window {
         
         // Right Side - Login Form Panel
         Rectangle {
-            width: 350px;
-            background: #252526;
+            width: 380px;
+            background: #1E1E1E;
+            drop-shadow-blur: 30px;
+            drop-shadow-color: #00000080;
+            drop-shadow-offset-x: -5px;
             
             VerticalBox {
-                padding: 35px;
-                spacing: 25px;
+                padding: 40px;
+                spacing: 30px;
                 
                 // Header Section
                 VerticalBox {
@@ -174,71 +260,183 @@ export component AuthWindow inherits Window {
                     
                     // Username Field
                     VerticalBox {
-                        spacing: 5px;
+                        spacing: 8px;
                         
                         MaterialText {
                             text: "Логин";
                             font-size: 14px;
-                            color: #808080;
+                            font-weight: 500;
+                            color: Colors.white;
                         }
                         
-                        username-field := LineEdit {
-                            text <=> root.username;
-                            placeholder-text: "Введите логин";
-                            enabled: !root.is-loading;
-                            height: 40px;
+                        Rectangle {
+                            height: 48px;
+                            background: username-field.has-focus ? MaterialPalette.surface-container-high : MaterialPalette.surface-container-highest;
+                            border-radius: 8px;
+                            border-width: username-field.has-focus ? 2px : 1px;
+                            border-color: username-field.has-focus ? MaterialPalette.primary : #3A3A3A;
+                            
+                            animate background, border-color {
+                                duration: 200ms;
+                                easing: ease-in-out;
+                            }
+                            
+                            username-field := LineEdit {
+                                text <=> root.username;
+                                placeholder-text: "Введите логин";
+                                enabled: !root.is-loading;
+                                font-size: 15px;
+                            }
                         }
                     }
                     
                     // Password Field
                     VerticalBox {
-                        spacing: 5px;
+                        spacing: 8px;
                         
                         MaterialText {
                             text: "Пароль";
                             font-size: 14px;
-                            color: #808080;
+                            font-weight: 500;
+                            color: Colors.white;
                         }
                         
-                        password-field := LineEdit {
-                            text <=> root.password;
-                            placeholder-text: "Введите пароль";
-                            input-type: InputType.password;
-                            enabled: !root.is-loading;
-                            height: 40px;
+                        Rectangle {
+                            height: 48px;
+                            background: password-field.has-focus ? MaterialPalette.surface-container-high : MaterialPalette.surface-container-highest;
+                            border-radius: 8px;
+                            border-width: password-field.has-focus ? 2px : 1px;
+                            border-color: password-field.has-focus ? MaterialPalette.primary : #3A3A3A;
+                            
+                            animate background, border-color {
+                                duration: 200ms;
+                                easing: ease-in-out;
+                            }
+                            
+                            HorizontalBox {
+                                padding-left: 12px;
+                                padding-right: 12px;
+                                spacing: 8px;
+                                
+                                password-field := LineEdit {
+                                    horizontal-stretch: 1;
+                                    text <=> root.password;
+                                    placeholder-text: "Введите пароль";
+                                    input-type: InputType.password;
+                                    enabled: !root.is-loading;
+                                    font-size: 15px;
+                                }
+                                
+                                // Password visibility toggle icon
+                                Rectangle {
+                                    width: 24px;
+                                    height: 24px;
+                                    
+                                    Path {
+                                        width: 20px;
+                                        height: 20px;
+                                        fill: #808080;
+                                        viewbox-width: 24;
+                                        viewbox-height: 24;
+                                        commands: "M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z";
+                                    }
+                                }
+                            }
                         }
                     }
                     
                     // Error Message
-                    if root.error-message != "": MaterialText {
-                        text: root.error-message;
-                        color: #FF4444;
-                        font-size: 14px;
-                        wrap: word-wrap;
+                    if root.error-message != "": Rectangle {
+                        height: 48px;
+                        background: #3D1F1F;
+                        border-radius: 8px;
+                        border-width: 1px;
+                        border-color: #FF4444;
+                        
+                        HorizontalBox {
+                            padding: 12px;
+                            spacing: 10px;
+                            
+                            // Error icon
+                            Rectangle {
+                                width: 20px;
+                                height: 20px;
+                                
+                                Path {
+                                    width: 20px;
+                                    height: 20px;
+                                    fill: #FF4444;
+                                    viewbox-width: 24;
+                                    viewbox-height: 24;
+                                    commands: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z";
+                                }
+                            }
+                            
+                            MaterialText {
+                                text: root.error-message;
+                                color: #FF6B6B;
+                                font-size: 14px;
+                                wrap: word-wrap;
+                                vertical-alignment: center;
+                            }
+                        }
                     }
                     
                     // Login Button
                     Rectangle {
-                        height: 45px;
-                        background: login-btn-touch.has-hover ? #45A049 : MaterialPalette.primary;
-                        border-radius: 4px;
+                        height: 52px;
+                        background: root.is-loading || root.username == "" || root.password == "" ? 
+                            MaterialPalette.surface-container-high : 
+                            (login-btn-touch.pressed ? #5E35B1 : 
+                             login-btn-touch.has-hover ? #7E57C2 : MaterialPalette.primary);
+                        border-radius: 26px;
+                        drop-shadow-blur: login-btn-touch.has-hover ? 12px : 6px;
+                        drop-shadow-color: #00000060;
+                        drop-shadow-offset-y: login-btn-touch.pressed ? 1px : 3px;
+                        
+                        animate background, drop-shadow-blur, drop-shadow-offset-y {
+                            duration: 150ms;
+                            easing: ease-in-out;
+                        }
                         
                         login-btn-touch := TouchArea {
                             enabled: !root.is-loading && root.username != "" && root.password != "";
-                            mouse-cursor: pointer;
+                            mouse-cursor: self.enabled ? pointer : default;
                             
                             clicked => {
                                 root.login-clicked();
                             }
                         }
                         
-                        MaterialText {
-                            text: root.is-loading ? "Загрузка..." : "Войти";
-                            color: Colors.white;
-                            font-size: 16px;
-                            font-weight: 600;
-                            horizontal-alignment: center;
-                            vertical-alignment: center;
+                        HorizontalBox {
+                            alignment: center;
+                            spacing: 8px;
+                            
+                            if root.is-loading: Rectangle {
+                                width: 20px;
+                                height: 20px;
+                                
+                                // Loading spinner
+                                Path {
+                                    width: 20px;
+                                    height: 20px;
+                                    fill: MaterialPalette.on-primary;
+                                    viewbox-width: 24;
+                                    viewbox-height: 24;
+                                    commands: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z";
+                                }
+                            }
+                            
+                            MaterialText {
+                                text: root.is-loading ? "Загрузка..." : "Войти";
+                                color: root.is-loading || root.username == "" || root.password == "" ? 
+                                    MaterialPalette.on-surface-variant : 
+                                    MaterialPalette.on-primary;
+                                font-size: 16px;
+                                font-weight: 600;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
                         }
                     }
                     
