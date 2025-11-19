@@ -185,31 +185,60 @@ fn parse_schedule_manually(value: &Value) -> Result<RouteSchedule, Box<dyn std::
         vec![start_point.clone(), end_point.clone()]
     };
     
-    // Helper function to parse DateTime
+    // Helper function to parse DateTime - handles both with and without timezone
     let parse_datetime = |s: &str| -> DateTime<Utc> {
-        match DateTime::parse_from_rfc3339(s) {
-            Ok(dt) => dt.with_timezone(&Utc),
-            Err(e) => {
-                log::warn!("Failed to parse datetime '{}': {}. Using current time as fallback.", s, e);
-                Utc::now()
-            }
+        use chrono::NaiveDateTime;
+        
+        // Try RFC3339 format first (with timezone)
+        if let Ok(dt) = DateTime::parse_from_rfc3339(s) {
+            return dt.with_timezone(&Utc);
         }
+        
+        // Try with 'Z' suffix
+        if let Ok(dt) = DateTime::parse_from_rfc3339(&format!("{}Z", s)) {
+            return dt.with_timezone(&Utc);
+        }
+        
+        // Try parsing as naive datetime (no timezone) and assume UTC
+        if let Ok(naive_dt) = NaiveDateTime::parse_from_str(s, "%Y-%m-%dT%H:%M:%S") {
+            return DateTime::<Utc>::from_naive_utc_and_offset(naive_dt, Utc);
+        }
+        
+        // Try with milliseconds
+        if let Ok(naive_dt) = NaiveDateTime::parse_from_str(s, "%Y-%m-%dT%H:%M:%S%.f") {
+            return DateTime::<Utc>::from_naive_utc_and_offset(naive_dt, Utc);
+        }
+        
+        log::warn!("❌ CRITICAL: Failed to parse datetime '{}'. Using current time as fallback.", s);
+        Utc::now()
     };
     
-    // Parse times
+    // Parse times - try BOTH camelCase and PascalCase
     let departure_time = obj.get("departureTime")
+        .or_else(|| obj.get("DepartureTime"))
         .and_then(|v| v.as_str())
         .map(|s| {
             let dt = parse_datetime(s);
-            log::debug!("Parsed departure_time: {} -> {}", s, dt);
+            println!("✓ Parsed departure_time from '{}' -> {}", s, dt);
             dt
         })
-        .unwrap_or_else(Utc::now);
+        .unwrap_or_else(|| {
+            println!("❌ WARNING: No departureTime/DepartureTime field found for schedule {}, using current time as fallback", route_schedule_id);
+            Utc::now()
+        });
     
     let arrival_time = obj.get("arrivalTime")
+        .or_else(|| obj.get("ArrivalTime"))
         .and_then(|v| v.as_str())
-        .map(|s| parse_datetime(s))
-        .unwrap_or_else(Utc::now);
+        .map(|s| {
+            let dt = parse_datetime(s);
+            println!("✓ Parsed arrival_time from '{}' -> {}", s, dt);
+            dt
+        })
+        .unwrap_or_else(|| {
+            println!("❌ WARNING: No arrivalTime/ArrivalTime field found for schedule {}, using current time as fallback", route_schedule_id);
+            Utc::now()
+        });
     
     // Parse price
     let price = obj.get("price")

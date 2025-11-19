@@ -7,6 +7,7 @@ import { EmployeeDetailView, DocumentData, TrainingData, EmergencyContactData, V
 import { BusManagementView, BusData } from "bus_management.slint";
 import { RouteManagementView, RouteData } from "route_management.slint";
 import { RouteSchedulesManagement, ScheduleData, RouteOption } from "route_schedules.slint";
+import { RouteScheduleDialog, DeleteScheduleConfirmDialog, RouteStopItem } from "route_schedule_dialogs.slint";
 export { AuthWindow } from "auth_window.slint";
 
 // Employee data structure
@@ -147,6 +148,31 @@ export component AppWindow inherits Window {
     in-out property <int> page-size: 100;
     in-out property <int> total-schedules: 0;
     
+    // Route schedule dialog state
+    in-out property <bool> show-schedule-dialog: false;
+    in-out property <string> schedule-dialog-mode: "add";
+    in-out property <string> schedule-dialog-title: "Добавить расписание";
+    in-out property <int> schedule-id: 0;
+    in-out property <string> schedule-departure-time: "";
+    in-out property <string> schedule-arrival-time: "";
+    in-out property <string> schedule-price: "";
+    in-out property <string> schedule-available-seats: "";
+    in-out property <[RouteStopItem]> schedule-available-stops: [];
+    in-out property <int> schedule-selected-stops-count: 0;
+    in-out property <bool> schedule-is-active: true;
+    in-out property <bool> schedule-is-recurring: true;
+    in-out property <string> schedule-stop-duration: "5";
+    in-out property <string> schedule-notes: "";
+    in-out property <[string]> schedule-estimated-times: [];
+    in-out property <[string]> schedule-stop-distances: [];
+    in-out property <string> schedule-error: "";
+    in-out property <string> schedule-validation-error: "";
+    
+    // Delete schedule dialog state
+    in-out property <bool> show-delete-schedule-dialog: false;
+    in-out property <int> delete-schedule-id: 0;
+    in-out property <string> delete-schedule-description: "";
+    
     // Route schedule management callbacks
     callback load-schedules();
     callback load-routes-for-selector();
@@ -158,6 +184,9 @@ export component AppWindow inherits Window {
     callback next-page();
     callback previous-page();
     callback schedule-selected(int);
+    callback save-schedule();
+    callback confirm-delete-schedule();
+    callback schedule-stop-selection-changed(int, bool);
     
     AppNavigation {
         current-user: root.current-user;
@@ -684,6 +713,53 @@ export component AppWindow inherits Window {
                     root.delete-vacation-clicked(req-id);
                 }
             }
+        }
+    }
+    
+    // Route Schedule Dialog
+    if root.show-schedule-dialog: RouteScheduleDialog {
+        dialog-title: root.schedule-dialog-title;
+        departure-time <=> root.schedule-departure-time;
+        arrival-time <=> root.schedule-arrival-time;
+        price <=> root.schedule-price;
+        available-seats <=> root.schedule-available-seats;
+        available-stops <=> root.schedule-available-stops;
+        selected-stops-count <=> root.schedule-selected-stops-count;
+        is-active <=> root.schedule-is-active;
+        is-recurring <=> root.schedule-is-recurring;
+        stop-duration-minutes <=> root.schedule-stop-duration;
+        notes <=> root.schedule-notes;
+        estimated-stop-times <=> root.schedule-estimated-times;
+        stop-distances <=> root.schedule-stop-distances;
+        error-message <=> root.schedule-error;
+        validation-error <=> root.schedule-validation-error;
+        is-edit-mode: root.schedule-dialog-mode == "edit";
+        
+        save-clicked => {
+            root.save-schedule();
+        }
+        
+        cancel-clicked => {
+            root.show-schedule-dialog = false;
+            root.schedule-error = "";
+            root.schedule-validation-error = "";
+        }
+        
+        stop-selection-changed(index, selected) => {
+            root.schedule-stop-selection-changed(index, selected);
+        }
+    }
+    
+    // Delete Schedule Confirmation Dialog
+    if root.show-delete-schedule-dialog: DeleteScheduleConfirmDialog {
+        schedule-description: root.delete-schedule-description;
+        
+        confirm-delete => {
+            root.confirm-delete-schedule();
+        }
+        
+        cancel-delete => {
+            root.show-delete-schedule-dialog = false;
         }
     }
 }

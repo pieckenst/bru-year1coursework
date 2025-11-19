@@ -1469,32 +1469,115 @@ fn show_main_window(
                     
                     match result_send {
                         Ok(mut schedules) => {
+                            println!("📅 Found {} route schedules for route {}", schedules.len(), route_id);
+                            
                             // Filter by date if provided
                             if !selected_date.is_empty() {
                                 use chrono::{NaiveDate, Datelike};
                                 if let Ok(filter_date) = NaiveDate::parse_from_str(&selected_date, "%Y-%m-%d") {
-                                    let filter_weekday = filter_date.weekday().to_string();
+                                    let filter_weekday = filter_date.weekday();
+                                    let filter_year = filter_date.year();
+                                    println!("📅 Filtering schedules for date: {} (year: {}, weekday: {})", selected_date, filter_year, filter_weekday);
+                                    println!("📅 Total schedules before filter: {}", schedules.len());
                                     
-                                    schedules.retain(|schedule| {
-                                        // For recurring schedules, check if:
-                                        // 1. The schedule is valid for this date (validFrom <= date <= validUntil)
-                                        // 2. The day of week matches
-                                        let date_in_range = schedule.valid_from.date_naive() <= filter_date &&
-                                            schedule.valid_until.map_or(true, |until| filter_date <= until.date_naive());
+                                    // Debug: Show what dates we actually have in the data
+                                    println!("🔍 STEP 1: Checking for exact date matches...");
+                                    let sample_size = schedules.len().min(5);
+                                    for i in 0..sample_size {
+                                        let s = &schedules[i];
+                                        println!("  Sample {}: ID={}, departure={}, arrival={}", 
+                                            i, s.route_schedule_id, 
+                                            s.departure_time.format("%Y-%m-%d %H:%M:%S"),
+                                            s.arrival_time.format("%Y-%m-%d %H:%M:%S"));
+                                    }
+                                    
+                                    // CRITICAL FIX: Check BOTH departure_time AND arrival_time dates
+                                    // The actual schedule date might be in either field
+                                    let mut exact_matches: Vec<_> = schedules.iter()
+                                        .filter(|schedule| {
+                                            let departure_date = schedule.departure_time.date_naive();
+                                            let arrival_date = schedule.arrival_time.date_naive();
+                                            
+                                            // Match if EITHER date matches the filter
+                                            let matches = departure_date == filter_date || arrival_date == filter_date;
+                                            
+                                            if matches {
+                                                println!("  ✓ Schedule {} MATCHES: departure={}, arrival={}, filter={}", 
+                                                    schedule.route_schedule_id, departure_date, arrival_date, filter_date);
+                                            }
+                                            
+                                            matches
+                                        })
+                                        .cloned()
+                                        .collect();
+                                    
+                                    println!("📊 Exact match results: {} matches out of {} total", exact_matches.len(), schedules.len());
+                                    
+                                    if !exact_matches.is_empty() {
+                                        println!("✅ Found {} schedules with EXACT DATE match", exact_matches.len());
+                                        schedules = exact_matches;
+                                    } else {
+                                        println!("⚠️ No exact date matches found");
+                                        println!("📊 Analyzing date distribution in database:");
                                         
-                                        let day_matches = if schedule.is_recurring && !schedule.days_of_week.is_empty() {
-                                            schedule.days_of_week.iter().any(|day| {
-                                                day.to_lowercase().contains(&filter_weekday.to_lowercase()) ||
-                                                filter_weekday.to_lowercase().contains(&day.to_lowercase())
-                                            })
+                                        // Show date distribution
+                                        let mut year_counts = std::collections::HashMap::new();
+                                        for s in schedules.iter().take(100) {
+                                            let dep_year = s.departure_time.date_naive().year();
+                                            let arr_year = s.arrival_time.date_naive().year();
+                                            *year_counts.entry(dep_year).or_insert(0) += 1;
+                                            *year_counts.entry(arr_year).or_insert(0) += 1;
+                                        }
+                                        println!("  Year distribution (first 100 schedules): {:?}", year_counts);
+                                        
+                                        // Try matching by year and weekday
+                                        println!("🔍 STEP 2: Trying year + weekday matching...");
+                                        schedules.retain(|schedule| {
+                                            let departure_date = schedule.departure_time.date_naive();
+                                            let arrival_date = schedule.arrival_time.date_naive();
+                                            let departure_year = departure_date.year();
+                                            let arrival_year = arrival_date.year();
+                                            let departure_weekday = schedule.departure_time.weekday();
+                                            let arrival_weekday = schedule.arrival_time.weekday();
+                                            
+                                            // Check if EITHER date is in the correct year
+                                            let year_matches = departure_year == filter_year || arrival_year == filter_year;
+                                            if !year_matches {
+                                                return false;
+                                            }
+                                            
+                                            // Check weekday match
+                                            let weekday_matches = departure_weekday == filter_weekday || arrival_weekday == filter_weekday;
+                                            
+                                            // Also check days_of_week array if populated
+                                            let days_array_matches = if !schedule.days_of_week.is_empty() {
+                                                schedule.days_of_week.iter().any(|day| {
+                                                    let day_lower = day.to_lowercase();
+                                                    match filter_weekday {
+                                                        chrono::Weekday::Mon => day_lower.contains("понедельник") || day_lower.contains("пн") || day_lower.contains("monday") || day_lower.contains("mon"),
+                                                        chrono::Weekday::Tue => day_lower.contains("вторник") || day_lower.contains("вт") || day_lower.contains("tuesday") || day_lower.contains("tue"),
+                                                        chrono::Weekday::Wed => day_lower.contains("среда") || day_lower.contains("ср") || day_lower.contains("wednesday") || day_lower.contains("wed"),
+                                                        chrono::Weekday::Thu => day_lower.contains("четверг") || day_lower.contains("чт") || day_lower.contains("thursday") || day_lower.contains("thu"),
+                                                        chrono::Weekday::Fri => day_lower.contains("пятница") || day_lower.contains("пт") || day_lower.contains("friday") || day_lower.contains("fri"),
+                                                        chrono::Weekday::Sat => day_lower.contains("суббота") || day_lower.contains("сб") || day_lower.contains("saturday") || day_lower.contains("sat"),
+                                                        chrono::Weekday::Sun => day_lower.contains("воскресенье") || day_lower.contains("вс") || day_lower.contains("sunday") || day_lower.contains("sun"),
+                                                    }
+                                                })
+                                            } else {
+                                                false
+                                            };
+                                            
+                                            weekday_matches || days_array_matches
+                                        });
+                                        
+                                        if schedules.is_empty() {
+                                            println!("❌ No schedules found for date {} ({}, year {})", selected_date, filter_weekday, filter_year);
                                         } else {
-                                            // For non-recurring schedules, check exact date
-                                            schedule.departure_time.date_naive() == filter_date
-                                        };
-                                        
-                                        date_in_range && day_matches
-                                    });
-                                    println!("📅 Filtered to {} schedules for date {} ({})", schedules.len(), selected_date, filter_weekday);
+                                            println!("✅ Found {} schedules by year+weekday matching", schedules.len());
+                                        }
+                                    }
+                                } else {
+                                    println!("❌ Failed to parse date: {}", selected_date);
                                 }
                             }
                             
@@ -1511,8 +1594,8 @@ fn show_main_window(
                                     route_id: schedule.route_id.unwrap_or(0) as i32,
                                     start_point: slint::SharedString::from(&schedule.start_point),
                                     end_point: slint::SharedString::from(&schedule.end_point),
-                                    departure_time: slint::SharedString::from(schedule.departure_time.format("%H:%M").to_string()),
-                                    arrival_time: slint::SharedString::from(schedule.arrival_time.format("%H:%M").to_string()),
+                                    departure_time: slint::SharedString::from(schedule.departure_time.format("%Y-%m-%d %H:%M").to_string()),
+                                    arrival_time: slint::SharedString::from(schedule.arrival_time.format("%Y-%m-%d %H:%M").to_string()),
                                     price: schedule.price as f32,
                                     available_seats: schedule.available_seats,
                                     route_stops: slint::SharedString::from(schedule.route_stops.join(", ")),
@@ -1570,10 +1653,85 @@ fn show_main_window(
         move || {
             println!("Add schedule clicked");
             let ui = ui_handle.unwrap();
+            let api = api_add_schedule.clone();
+            let ui_weak = ui.as_weak();
             
-            // TODO: Show add schedule dialog
-            // For now, just log
-            println!("TODO: Implement add schedule dialog");
+            // Get selected route index to pre-populate route stops
+            let selected_route_index = ui.get_selected_schedule_route_index();
+            
+            if selected_route_index < 0 {
+                ui.set_schedules_error(slint::SharedString::from("Выберите маршрут"));
+                ui.set_schedules_has_error(true);
+                return;
+            }
+            
+            // Clear all dialog fields
+            ui.set_schedule_departure_time(slint::SharedString::from(""));
+            ui.set_schedule_arrival_time(slint::SharedString::from(""));
+            ui.set_schedule_price(slint::SharedString::from(""));
+            ui.set_schedule_available_seats(slint::SharedString::from(""));
+            ui.set_schedule_is_active(true);
+            ui.set_schedule_is_recurring(true);
+            ui.set_schedule_stop_duration(slint::SharedString::from("5"));
+            ui.set_schedule_notes(slint::SharedString::from(""));
+            ui.set_schedule_error(slint::SharedString::from(""));
+            ui.set_schedule_validation_error(slint::SharedString::from(""));
+            ui.set_schedule_selected_stops_count(0);
+            
+            // Load route stops for the selected route
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                
+                // Get routes to find the selected one
+                let routes_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_routes().await
+                });
+                
+                let result_send = routes_result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    
+                    match result_send {
+                        Ok(routes) => {
+                            if selected_route_index >= 0 && (selected_route_index as usize) < routes.len() {
+                                let route = &routes[selected_route_index as usize];
+                                
+                                // Pre-populate route stops from the route
+                                let stops = vec![
+                                    route.start_point.clone(),
+                                    route.end_point.clone(),
+                                ];
+                                
+                                // Convert to RouteStopItem format
+                                use crate::RouteStopItem;
+                                let stop_items: Vec<RouteStopItem> = stops.iter().map(|stop| {
+                                    RouteStopItem {
+                                        name: slint::SharedString::from(stop),
+                                        selected: false,
+                                    }
+                                }).collect();
+                                
+                                let model = std::rc::Rc::new(slint::VecModel::from(stop_items));
+                                ui.set_schedule_available_stops(model.into());
+                                
+                                // Show dialog
+                                ui.set_schedule_dialog_mode(slint::SharedString::from("add"));
+                                ui.set_schedule_dialog_title(slint::SharedString::from("Добавить расписание"));
+                                ui.set_show_schedule_dialog(true);
+                                
+                                println!("✅ Loaded {} route stops for add dialog", stops.len());
+                            }
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to load route for add dialog: {}", e);
+                            ui.set_schedules_error(slint::SharedString::from(format!("Ошибка: {}", e)));
+                            ui.set_schedules_has_error(true);
+                        }
+                    }
+                });
+            });
         }
     });
     
@@ -1584,23 +1742,126 @@ fn show_main_window(
         move |schedule_id| {
             println!("Edit schedule {}", schedule_id);
             let ui = ui_handle.unwrap();
+            let api = api_edit_schedule.clone();
+            let ui_weak = ui.as_weak();
             
-            // TODO: Show edit schedule dialog
-            println!("TODO: Implement edit schedule dialog");
+            ui.set_schedule_id(schedule_id);
+            
+            // Load the schedule data
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_route_schedule(schedule_id as i64).await
+                });
+                
+                let result_send = result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    
+                    match result_send {
+                        Ok(schedule) => {
+                            println!("✅ Loaded schedule for edit: {}", schedule.display_name());
+                            
+                            // Pre-populate dialog fields with schedule data
+                            ui.set_schedule_departure_time(slint::SharedString::from(schedule.departure_time.format("%H:%M").to_string()));
+                            ui.set_schedule_arrival_time(slint::SharedString::from(schedule.arrival_time.format("%H:%M").to_string()));
+                            ui.set_schedule_price(slint::SharedString::from(format!("{:.2}", schedule.price)));
+                            ui.set_schedule_available_seats(slint::SharedString::from(schedule.available_seats.to_string()));
+                            ui.set_schedule_is_active(schedule.is_active);
+                            ui.set_schedule_is_recurring(schedule.is_recurring);
+                            ui.set_schedule_stop_duration(slint::SharedString::from(schedule.stop_duration_minutes.to_string()));
+                            ui.set_schedule_notes(slint::SharedString::from(schedule.notes.unwrap_or_default()));
+                            
+                            // Convert route stops to RouteStopItem format with pre-selection
+                            use crate::RouteStopItem;
+                            let stop_items: Vec<RouteStopItem> = schedule.route_stops.iter().map(|stop| {
+                                RouteStopItem {
+                                    name: slint::SharedString::from(stop),
+                                    selected: true, // Pre-select all existing stops
+                                }
+                            }).collect();
+                            
+                            let selected_count = stop_items.len() as i32;
+                            let model = std::rc::Rc::new(slint::VecModel::from(stop_items));
+                            ui.set_schedule_available_stops(model.into());
+                            ui.set_schedule_selected_stops_count(selected_count);
+                            
+                            // Set estimated times and distances if available
+                            if let Some(times) = schedule.estimated_stop_times {
+                                let times_vec: Vec<slint::SharedString> = times.iter()
+                                    .map(|t| slint::SharedString::from(t))
+                                    .collect();
+                                let model = std::rc::Rc::new(slint::VecModel::from(times_vec));
+                                ui.set_schedule_estimated_times(model.into());
+                            }
+                            
+                            if let Some(distances) = schedule.stop_distances {
+                                let distances_vec: Vec<slint::SharedString> = distances.iter()
+                                    .map(|d| slint::SharedString::from(format!("{:.1}", d)))
+                                    .collect();
+                                let model = std::rc::Rc::new(slint::VecModel::from(distances_vec));
+                                ui.set_schedule_stop_distances(model.into());
+                            }
+                            
+                            // Show dialog
+                            ui.set_schedule_dialog_mode(slint::SharedString::from("edit"));
+                            ui.set_schedule_dialog_title(slint::SharedString::from("Редактировать расписание"));
+                            ui.set_show_schedule_dialog(true);
+                            ui.set_schedule_error(slint::SharedString::from(""));
+                            ui.set_schedule_validation_error(slint::SharedString::from(""));
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to load schedule for edit: {}", e);
+                            ui.set_schedules_error(slint::SharedString::from(format!("Ошибка загрузки: {}", e)));
+                            ui.set_schedules_has_error(true);
+                        }
+                    }
+                });
+            });
         }
     });
     
-    // Handle delete schedule
-    let api_delete_schedule = api_client.clone();
+    // Handle delete schedule - show confirmation dialog
     main_ui.on_delete_schedule({
         let ui_handle = main_ui.as_weak();
         move |schedule_id| {
             println!("Delete schedule {}", schedule_id);
             let ui = ui_handle.unwrap();
-            let api = api_delete_schedule.clone();
+            
+            // Find schedule description for confirmation
+            let schedules = ui.get_schedules();
+            let mut schedule_desc = String::new();
+            for i in 0..schedules.row_count() {
+                let schedule = schedules.row_data(i).unwrap();
+                if schedule.schedule_id == schedule_id {
+                    schedule_desc = format!("{} → {} ({})", 
+                        schedule.start_point, 
+                        schedule.end_point,
+                        schedule.departure_time);
+                    break;
+                }
+            }
+            
+            ui.set_show_delete_schedule_dialog(true);
+            ui.set_delete_schedule_id(schedule_id);
+            ui.set_delete_schedule_description(slint::SharedString::from(schedule_desc));
+        }
+    });
+    
+    // Handle confirm delete schedule
+    let api_confirm_delete_schedule = api_client.clone();
+    main_ui.on_confirm_delete_schedule({
+        let ui_handle = main_ui.as_weak();
+        move || {
+            let ui = ui_handle.unwrap();
+            let api = api_confirm_delete_schedule.clone();
             let ui_weak = ui.as_weak();
+            let schedule_id = ui.get_delete_schedule_id();
             
             ui.set_schedules_loading(true);
+            ui.set_show_delete_schedule_dialog(false);
             
             std::thread::spawn(move || {
                 let rt = tokio::runtime::Runtime::new().unwrap();
@@ -1629,6 +1890,260 @@ fn show_main_window(
                     }
                 });
             });
+        }
+    });
+    
+    // Handle save schedule
+    let api_save_schedule = api_client.clone();
+    main_ui.on_save_schedule({
+        let ui_handle = main_ui.as_weak();
+        move || {
+            let ui = ui_handle.unwrap();
+            let api = api_save_schedule.clone();
+            let ui_weak = ui.as_weak();
+            
+            let mode = ui.get_schedule_dialog_mode().to_string();
+            let schedule_id = ui.get_schedule_id();
+            let departure_time = ui.get_schedule_departure_time().to_string();
+            let arrival_time = ui.get_schedule_arrival_time().to_string();
+            let price_str = ui.get_schedule_price().to_string();
+            let seats_str = ui.get_schedule_available_seats().to_string();
+            let is_active = ui.get_schedule_is_active();
+            let is_recurring = ui.get_schedule_is_recurring();
+            let stop_duration_str = ui.get_schedule_stop_duration().to_string();
+            let notes = ui.get_schedule_notes().to_string();
+            let selected_route_index = ui.get_selected_schedule_route_index();
+            
+            // Get selected stops
+            let stops_model = ui.get_schedule_available_stops();
+            let mut selected_stops = Vec::new();
+            for i in 0..stops_model.row_count() {
+                let stop = stops_model.row_data(i).unwrap();
+                if stop.selected {
+                    selected_stops.push(stop.name.to_string());
+                }
+            }
+            
+            // Validate
+            if departure_time.trim().is_empty() || arrival_time.trim().is_empty() {
+                ui.set_schedule_validation_error(slint::SharedString::from("Укажите время отправления и прибытия"));
+                return;
+            }
+            
+            if price_str.trim().is_empty() || seats_str.trim().is_empty() {
+                ui.set_schedule_validation_error(slint::SharedString::from("Укажите цену и количество мест"));
+                return;
+            }
+            
+            if selected_stops.len() < 2 {
+                ui.set_schedule_validation_error(slint::SharedString::from("Выберите минимум 2 остановки"));
+                return;
+            }
+            
+            let price: f64 = match price_str.parse() {
+                Ok(p) => p,
+                Err(_) => {
+                    ui.set_schedule_validation_error(slint::SharedString::from("Неверный формат цены"));
+                    return;
+                }
+            };
+            
+            let seats: i32 = match seats_str.parse() {
+                Ok(s) => s,
+                Err(_) => {
+                    ui.set_schedule_validation_error(slint::SharedString::from("Неверный формат количества мест"));
+                    return;
+                }
+            };
+            
+            let stop_duration: i32 = stop_duration_str.parse().unwrap_or(5);
+            
+            ui.set_schedules_loading(true);
+            ui.set_schedule_validation_error(slint::SharedString::from(""));
+            
+            std::thread::spawn(move || {
+                use chrono::{NaiveTime, Utc, Datelike, Timelike};
+                use crate::models::{CreateRouteScheduleRequest, UpdateRouteScheduleRequest};
+                
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                
+                // Parse times
+                let dep_time = match NaiveTime::parse_from_str(&departure_time, "%H:%M") {
+                    Ok(t) => t,
+                    Err(_) => {
+                        let _ = slint::invoke_from_event_loop(move || {
+                            let ui = ui_weak.unwrap();
+                            ui.set_schedules_loading(false);
+                            ui.set_schedule_validation_error(slint::SharedString::from("Неверный формат времени отправления (HH:MM)"));
+                        });
+                        return;
+                    }
+                };
+                
+                let arr_time = match NaiveTime::parse_from_str(&arrival_time, "%H:%M") {
+                    Ok(t) => t,
+                    Err(_) => {
+                        let _ = slint::invoke_from_event_loop(move || {
+                            let ui = ui_weak.unwrap();
+                            ui.set_schedules_loading(false);
+                            ui.set_schedule_validation_error(slint::SharedString::from("Неверный формат времени прибытия (HH:MM)"));
+                        });
+                        return;
+                    }
+                };
+                
+                // Create DateTime from times (use today's date as base)
+                let now = Utc::now();
+                let departure_datetime = now.date_naive()
+                    .and_hms_opt(dep_time.hour(), dep_time.minute(), 0)
+                    .unwrap()
+                    .and_local_timezone(Utc)
+                    .unwrap();
+                
+                let arrival_datetime = now.date_naive()
+                    .and_hms_opt(arr_time.hour(), arr_time.minute(), 0)
+                    .unwrap()
+                    .and_local_timezone(Utc)
+                    .unwrap();
+                
+                // Get route ID
+                let routes_result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_routes().await
+                });
+                
+                let route_id = match routes_result {
+                    Ok(routes) => {
+                        if selected_route_index >= 0 && (selected_route_index as usize) < routes.len() {
+                            Some(routes[selected_route_index as usize].route_id)
+                        } else {
+                            None
+                        }
+                    }
+                    Err(_) => None,
+                };
+                
+                let start_point = selected_stops.first().cloned().unwrap_or_default();
+                let end_point = selected_stops.last().cloned().unwrap_or_default();
+                
+                if mode == "add" {
+                    let request = CreateRouteScheduleRequest {
+                        start_point,
+                        route_stops: selected_stops,
+                        end_point,
+                        departure_time: departure_datetime,
+                        arrival_time: arrival_datetime,
+                        price,
+                        available_seats: seats,
+                        days_of_week: vec![],
+                        bus_types: vec![],
+                        route_id,
+                        is_active,
+                        valid_from: Utc::now(),
+                        valid_until: None,
+                        stop_duration_minutes: stop_duration,
+                        is_recurring,
+                        estimated_stop_times: None,
+                        stop_distances: None,
+                        notes: if notes.is_empty() { None } else { Some(notes) },
+                    };
+                    
+                    let result = rt.block_on(async {
+                        let client = api.lock().unwrap();
+                        client.create_route_schedule(request).await
+                    });
+                    
+                    let result_send = result.map(|s| s.display_name()).map_err(|e| e.to_string());
+                    
+                    let _ = slint::invoke_from_event_loop(move || {
+                        let ui = ui_weak.unwrap();
+                        ui.set_schedules_loading(false);
+                        
+                        match result_send {
+                            Ok(display_name) => {
+                                println!("✅ Created schedule: {}", display_name);
+                                ui.set_show_schedule_dialog(false);
+                                ui.invoke_load_schedules();
+                            }
+                            Err(e) => {
+                                eprintln!("❌ Failed to create schedule: {}", e);
+                                ui.set_schedule_error(slint::SharedString::from(format!("Ошибка создания: {}", e)));
+                            }
+                        }
+                    });
+                } else if mode == "edit" {
+                    let request = UpdateRouteScheduleRequest {
+                        route_schedule_id: schedule_id as i64,
+                        start_point,
+                        route_stops: selected_stops,
+                        end_point,
+                        departure_time: departure_datetime,
+                        arrival_time: arrival_datetime,
+                        price,
+                        available_seats: seats,
+                        days_of_week: vec![],
+                        bus_types: vec![],
+                        route_id,
+                        is_active,
+                        valid_from: Utc::now(),
+                        valid_until: None,
+                        stop_duration_minutes: stop_duration,
+                        is_recurring,
+                        estimated_stop_times: None,
+                        stop_distances: None,
+                        notes: if notes.is_empty() { None } else { Some(notes) },
+                    };
+                    
+                    let result = rt.block_on(async {
+                        let client = api.lock().unwrap();
+                        client.update_route_schedule(schedule_id as i64, request).await
+                    });
+                    
+                    let result_send = result.map(|s| s.display_name()).map_err(|e| e.to_string());
+                    
+                    let _ = slint::invoke_from_event_loop(move || {
+                        let ui = ui_weak.unwrap();
+                        ui.set_schedules_loading(false);
+                        
+                        match result_send {
+                            Ok(display_name) => {
+                                println!("✅ Updated schedule: {}", display_name);
+                                ui.set_show_schedule_dialog(false);
+                                ui.invoke_load_schedules();
+                            }
+                            Err(e) => {
+                                eprintln!("❌ Failed to update schedule: {}", e);
+                                ui.set_schedule_error(slint::SharedString::from(format!("Ошибка обновления: {}", e)));
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    });
+    
+    // Handle stop selection changed
+    main_ui.on_schedule_stop_selection_changed({
+        let ui_handle = main_ui.as_weak();
+        move |index, selected| {
+            let ui = ui_handle.unwrap();
+            let stops_model = ui.get_schedule_available_stops();
+            
+            // Update the selected state
+            if index >= 0 && (index as usize) < stops_model.row_count() {
+                let mut stop = stops_model.row_data(index as usize).unwrap();
+                stop.selected = selected;
+                stops_model.set_row_data(index as usize, stop);
+                
+                // Count selected stops
+                let mut count = 0;
+                for i in 0..stops_model.row_count() {
+                    if stops_model.row_data(i).unwrap().selected {
+                        count += 1;
+                    }
+                }
+                ui.set_schedule_selected_stops_count(count);
+            }
         }
     });
     

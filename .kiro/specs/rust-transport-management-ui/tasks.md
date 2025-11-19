@@ -133,7 +133,9 @@
   - Add navigation handler to show route management view
   - _Requirements: 14.2, 14.5_
 
-- [ ] 3. Create Route Schedules UI and Backend
+- [x] 3. Create Route Schedules UI and Backend
+
+
   - Create route_schedules.slint with complex layout
   - Implement multi-select for route stops
   - Add date picker and route selector
@@ -153,7 +155,10 @@
 
 
 
-- [ ] 3.2 Create schedule add/edit dialogs in Slint
+- [x] 3.2 Create schedule add/edit dialogs in Slint
+
+
+
   - Create dialog with time pickers for departure/arrival
   - Add numeric inputs for price and available seats
   - Implement multi-select ListBox for route stops
@@ -171,7 +176,8 @@
   - Add cancel and confirm buttons
   - _Requirements: 12.1_
 
-- [ ] 3.4 Add API client methods for route schedule operations
+- [x] 3.4 Add API client methods for route schedule operations
+
   - Implement `get_route_schedules()`, `get_route_schedule()`, `create_route_schedule()`, `update_route_schedule()`, `delete_route_schedule()`
   - Handle complex nested data (arrays of stops, times, distances)
   - Add date/time serialization with ISO 8601 format
@@ -186,7 +192,8 @@
   - **Property 20: Date serialization uses ISO 8601**
   - **Validates: Requirements 16.4**
 
-- [ ] 3.6 Implement route schedule callbacks in main.rs
+- [x] 3.6 Implement route schedule callbacks in main.rs
+
   - Add `load_routes_for_selector()` to populate route dropdown
   - Add `load_schedules()` to fetch schedules for selected route and date
   - Add `load_route_stops()` to pre-populate stops based on route configuration
@@ -202,6 +209,8 @@
 - [ ]* 3.8 Write property test for schedule data completeness
   - **Property 24: Schedule data includes all required fields**
   - **Validates: Requirements 9.3**
+
+
 
 - [ ] 3.9 Add navigation integration for route schedules
   - Update AppRoute enum to include RouteSchedules

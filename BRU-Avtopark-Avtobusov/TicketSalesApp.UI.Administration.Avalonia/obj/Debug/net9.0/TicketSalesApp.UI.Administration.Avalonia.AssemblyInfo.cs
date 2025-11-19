@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TicketSalesApp.UI.Administration.Avalonia")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+04c340a209f78c9183100f005d5358f137834b1b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+503688aed02f9882621e788dbe4785d5cf5d2a5f")]
 [assembly: System.Reflection.AssemblyProductAttribute("TicketSalesApp.UI.Administration.Avalonia")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TicketSalesApp.UI.Administration.Avalonia")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
