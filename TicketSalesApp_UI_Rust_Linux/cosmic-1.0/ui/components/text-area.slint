@@ -1,0 +1,167 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+
+// CosmicTextArea - Multi-line text input component
+// Requirements: 56.8
+export component CosmicTextArea {
+    // Content properties
+    in-out property <string> text;
+    in property <string> placeholder;
+    in property <string> label;
+    
+    // State properties
+    in property <bool> disabled: false;
+    in property <bool> has-error: false;
+    in property <string> error-message;
+    
+    // Size properties (Requirement 56.8 - minimum 3 rows)
+    in property <int> min-rows: 3;
+    in property <int> max-rows: -1;  // -1 means no limit
+    in property <bool> auto-resize: true;
+    
+    // Character limit properties
+    in property <int> max-length: -1;  // -1 means no limit
+    in property <bool> show-counter: false;
+    
+    // Callbacks
+    callback edited(string);
+    callback accepted(string);
+    
+    // Internal state
+    property <bool> is-focused: text-input.has-focus;
+    property <bool> is-hovered: hover-area.has-hover;
+    property <int> char-count: text.character-count;
+    
+    // Calculate height based on content and row settings
+    property <length> line-height: CosmicTypography.input-size * 1.5;
+    property <length> base-height: line-height * min-rows + CosmicSpacing.input-padding-vertical * 2;
+    property <length> computed-height: {
+        if auto-resize {
+            // Calculate based on content (simplified - would need actual line counting)
+            max(base-height, line-height * min-rows + CosmicSpacing.input-padding-vertical * 2)
+        } else {
+            base-height
+        }
+    };
+    
+    // Computed colors (same as text-input)
+    property <color> border-color: {
+        if has-error {
+            CosmicPalette.border-error
+        } else if is-focused {
+            CosmicPalette.accent-primary
+        } else {
+            CosmicPalette.border-neutral
+        }
+    };
+    
+    property <length> border-width: is-focused ? 2px : 1px;
+    
+    min-width: 200px;
+    
+    VerticalLayout {
+        spacing: CosmicSpacing.space-xxxs;
+        
+        // Label
+        if label != "": Text {
+            text: root.label;
+            color: CosmicPalette.text-primary;
+            font-family: CosmicTypography.font-family;
+            font-size: CosmicTypography.label-size;
+            font-weight: CosmicTypography.label-weight;
+        }
+        
+        // TextArea container
+        textarea-container := Rectangle {
+            height: root.computed-height;
+            background: CosmicPalette.background-surface;
+            border-radius: CosmicCornerRadii.input-radius;
+            border-width: root.border-width;
+            border-color: root.border-color;
+            
+            states [
+                disabled when root.disabled: {
+                    opacity: CosmicPalette.opacity-disabled;
+                }
+            ]
+            
+            // Text input area (using TextInput as multi-line)
+            VerticalLayout {
+                x: CosmicSpacing.input-padding-horizontal;
+                y: CosmicSpacing.input-padding-vertical;
+                width: parent.width - CosmicSpacing.input-padding-horizontal * 2;
+                height: parent.height - CosmicSpacing.input-padding-vertical * 2;
+                
+                text-input := TextInput {
+                    text <=> root.text;
+                    enabled: !root.disabled;
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.input-size;
+                    font-weight: CosmicTypography.input-weight;
+                    selection-background-color: CosmicPalette.accent-primary.with-alpha(0.3);
+                    selection-foreground-color: CosmicPalette.text-primary;
+                    wrap: word-wrap;
+                    vertical-alignment: top;
+                    
+                    edited => {
+                        // Note: Max length enforcement would need to be done in Rust code
+                        root.edited(self.text);
+                    }
+                }
+            }
+            
+            // Placeholder text (shown when empty)
+            if root.text == "" && root.placeholder != "": Text {
+                x: CosmicSpacing.input-padding-horizontal;
+                y: CosmicSpacing.input-padding-vertical;
+                text: root.placeholder;
+                color: CosmicPalette.text-secondary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.input-size;
+                font-weight: CosmicTypography.input-weight;
+                vertical-alignment: top;
+            }
+            
+            // Hover detection
+            hover-area := TouchArea {
+                mouse-cursor: root.disabled ? MouseCursor.default : MouseCursor.text;
+                
+                clicked => {
+                    if !root.disabled {
+                        text-input.focus();
+                    }
+                }
+            }
+        }
+        
+        // Bottom row: error message or character counter
+        HorizontalLayout {
+            spacing: CosmicSpacing.space-xxs;
+            
+            // Error message
+            if root.has-error && root.error-message != "": Text {
+                text: root.error-message;
+                color: CosmicPalette.error;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.caption-size;
+                font-weight: CosmicTypography.caption-weight;
+                horizontal-stretch: 1;
+            }
+            
+            // Character counter
+            if root.show-counter && root.max-length > 0: Text {
+                text: root.char-count + "/" + root.max-length;
+                color: root.char-count > root.max-length ? 
+                    CosmicPalette.error : 
+                    CosmicPalette.text-secondary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.caption-size;
+                font-weight: CosmicTypography.caption-weight;
+                horizontal-alignment: right;
+            }
+        }
+    }
+}

@@ -2,6 +2,7 @@ import { CosmicPalette } from "../styling/palette.slint";
 import { CosmicTypography } from "../styling/typography.slint";
 import { CosmicSpacing } from "../styling/spacing.slint";
 import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+import { CosmicElevation } from "../styling/elevation.slint";
 
 // Menu item types
 export enum MenuItemType {
@@ -135,19 +136,21 @@ export component CosmicMenu {
     callback item-clicked(int);
     callback close-requested();
     
-    min-width: 150px;
+    width: 200px;
     
-    if root.show: Rectangle {
-        background: CosmicPalette.background-surface;
+    if root.show: menu-bg := Rectangle {
+        width: 200px;
+        background: CosmicPalette.component-base;
         border-radius: CosmicCornerRadii.radius-m;
         border-width: 1px;
         border-color: CosmicPalette.border-neutral;
         
-        drop-shadow-offset-y: 4px;
-        drop-shadow-blur: 8px;
-        drop-shadow-color: #00000033;
+        drop-shadow-offset-x: 0px;
+        drop-shadow-offset-y: CosmicElevation.dropdown-shadow-offset-y;
+        drop-shadow-blur: CosmicElevation.dropdown-shadow-blur;
+        drop-shadow-color: CosmicElevation.dropdown-shadow-color;
         
-        VerticalLayout {
+        menu-layout := VerticalLayout {
             padding: CosmicSpacing.space-xxs;
             spacing: 2px;
             
@@ -200,12 +203,15 @@ export component CosmicMenuButton {
     ]
     
     VerticalLayout {
+        spacing: 4px;
+        
         // Button
         button-container := Rectangle {
             background: CosmicPalette.background-surface;
             border-radius: CosmicCornerRadii.radius-s;
             border-width: 1px;
             border-color: CosmicPalette.border-neutral;
+            height: root.button-height;
             
             HorizontalLayout {
                 padding-left: CosmicSpacing.space-xs;
@@ -253,35 +259,40 @@ export component CosmicMenuButton {
                     }
                 }
             }
-            
-            // Focus indicator (would need FocusScope for full implementation)
         }
         
         // Menu dropdown
-        if root.menu-open: CosmicMenu {
-            items: root.menu-items;
-            show: root.menu-open;
+        if root.menu-open: Rectangle {
+            width: 200px;
+            background: CosmicPalette.background-overlay;
+            opacity: 1.0;
+            border-radius: CosmicCornerRadii.radius-m;
+            border-width: 1px;
+            border-color: CosmicPalette.border-neutral;
             
-            item-clicked(index) => {
-                root.menu-item-clicked(index);
-                root.menu-open = false;
-            }
+            drop-shadow-offset-x: 0px;
+            drop-shadow-offset-y: CosmicElevation.dropdown-shadow-offset-y;
+            drop-shadow-blur: CosmicElevation.dropdown-shadow-blur;
+            drop-shadow-color: CosmicElevation.dropdown-shadow-color;
             
-            close-requested => {
-                root.menu-open = false;
+            VerticalLayout {
+                padding: CosmicSpacing.space-xxs;
+                spacing: 2px;
+                
+                for item[index] in root.menu-items: CosmicMenuItem {
+                    label: item.label;
+                    icon: item.icon;
+                    shortcut: item.shortcut;
+                    item-type: item.item-type;
+                    checked: item.checked;
+                    disabled: item.disabled;
+                    
+                    clicked => {
+                        root.menu-item-clicked(index);
+                        root.menu-open = false;
+                    }
+                }
             }
-        }
-    }
-    
-    // Close menu when clicking outside
-    if root.menu-open: TouchArea {
-        x: 0;
-        y: 0;
-        width: root.width;
-        height: root.height;
-        
-        clicked => {
-            root.menu-open = false;
         }
     }
 }
@@ -310,11 +321,14 @@ export component CosmicMenuBarItem {
         }
     ]
     
-    HorizontalLayout {
+    VerticalLayout {
+        spacing: 4px;
+        
         // Menu bar item
         item-container := Rectangle {
             background: Colors.transparent;
             border-radius: CosmicCornerRadii.radius-xs;
+            height: 32px;
             
             HorizontalLayout {
                 padding-left: CosmicSpacing.space-xs;
@@ -344,19 +358,37 @@ export component CosmicMenuBarItem {
             }
         }
         
-        // Menu dropdown (positioned below)
-        if root.menu-open: CosmicMenu {
-            y: parent.height;
-            items: root.menu-items;
-            show: root.menu-open;
+        // Menu dropdown
+        if root.menu-open: Rectangle {
+            width: 200px;
+            background: CosmicPalette.background-overlay;
+            opacity: 1.0;
+            border-radius: CosmicCornerRadii.radius-m;
+            border-width: 1px;
+            border-color: CosmicPalette.border-neutral;
             
-            item-clicked(index) => {
-                root.menu-item-clicked(index);
-                root.menu-open = false;
-            }
+            drop-shadow-offset-x: 0px;
+            drop-shadow-offset-y: CosmicElevation.dropdown-shadow-offset-y;
+            drop-shadow-blur: CosmicElevation.dropdown-shadow-blur;
+            drop-shadow-color: CosmicElevation.dropdown-shadow-color;
             
-            close-requested => {
-                root.menu-open = false;
+            VerticalLayout {
+                padding: CosmicSpacing.space-xxs;
+                spacing: 2px;
+                
+                for item[index] in root.menu-items: CosmicMenuItem {
+                    label: item.label;
+                    icon: item.icon;
+                    shortcut: item.shortcut;
+                    item-type: item.item-type;
+                    checked: item.checked;
+                    disabled: item.disabled;
+                    
+                    clicked => {
+                        root.menu-item-clicked(index);
+                        root.menu-open = false;
+                    }
+                }
             }
         }
     }

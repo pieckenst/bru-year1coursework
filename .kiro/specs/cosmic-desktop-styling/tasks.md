@@ -199,7 +199,14 @@
 ## Phase 3: Input Components (Tasks 6-10)
 
 - [ ] 6. Implement Text Input Components
+
+
+
+
+
   - _Requirements: 8.1-8.5, 56.1-56.10_
+
+
 
 - [ ] 6.1 Create text-input.slint with CosmicTextInput
   - Implement 32px height single-line input
@@ -218,11 +225,15 @@
 
 - [ ]* 6.3 Write property test for input error display
   - **Property 9: Input validation error display**
+
+
   - **Validates: Requirements 8.5, 56.4**
 
 - [ ] 6.2 Create text-area.slint with CosmicTextArea
   - Implement multi-line text input (minimum 3 rows)
   - Add auto-resize functionality
+
+
   - Add character counter
   - Apply same states as text input
   - _Requirements: 56.8_

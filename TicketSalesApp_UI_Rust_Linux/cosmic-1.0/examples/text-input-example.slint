@@ -1,0 +1,152 @@
+import { CosmicTextInput } from "../ui/components/text-input.slint";
+import { CosmicTextArea } from "../ui/components/text-area.slint";
+import { CosmicSearchInput, SearchSuggestion } from "../ui/components/search-input.slint";
+import { CosmicPalette } from "../ui/styling/palette.slint";
+import { CosmicSpacing } from "../ui/styling/spacing.slint";
+
+// Example demonstrating the text input components
+export component TextInputExample inherits Window {
+    title: "COSMIC Text Input Components Example";
+    background: CosmicPalette.background-base;
+    
+    preferred-width: 600px;
+    preferred-height: 800px;
+    
+    Flickable {
+        viewport-height: content.preferred-height;
+        
+        content := VerticalLayout {
+            padding: CosmicSpacing.space-m;
+            spacing: CosmicSpacing.space-l;
+            
+            // Basic text input
+            CosmicTextInput {
+                label: "Username";
+                placeholder: "Enter your username";
+                text: username-text;
+                
+                edited(new-text) => {
+                    username-text = new-text;
+                }
+            }
+            
+            // Text input with error
+            CosmicTextInput {
+                label: "Email";
+                placeholder: "user@example.com";
+                text: email-text;
+                has-error: email-text != "" && email-text.character-count > 0;
+                error-message: "Please enter a valid email address";
+                
+                edited(new-text) => {
+                    email-text = new-text;
+                }
+            }
+            
+            // Text input with character counter
+            CosmicTextInput {
+                label: "Bio (max 100 characters)";
+                placeholder: "Tell us about yourself";
+                text: bio-text;
+                max-length: 100;
+                show-counter: true;
+                
+                edited(new-text) => {
+                    bio-text = new-text;
+                }
+            }
+            
+            // Disabled text input
+            CosmicTextInput {
+                label: "Disabled Input";
+                text: "This field is disabled";
+                disabled: true;
+            }
+            
+            // Text area
+            CosmicTextArea {
+                label: "Description";
+                placeholder: "Enter a detailed description...";
+                text: description-text;
+                min-rows: 4;
+                
+                edited(new-text) => {
+                    description-text = new-text;
+                }
+            }
+            
+            // Text area with character counter
+            CosmicTextArea {
+                label: "Comments (max 500 characters)";
+                placeholder: "Add your comments here...";
+                text: comments-text;
+                min-rows: 3;
+                max-length: 500;
+                show-counter: true;
+                
+                edited(new-text) => {
+                    comments-text = new-text;
+                }
+            }
+            
+            // Search input
+            CosmicSearchInput {
+                label: "Search";
+                placeholder: "Search for items...";
+                text: search-text;
+                
+                edited(new-text) => {
+                    search-text = new-text;
+                }
+                
+                cleared() => {
+                    debug("Search cleared");
+                }
+            }
+            
+            // Search input with loading state
+            CosmicSearchInput {
+                label: "Search with Loading";
+                placeholder: "Type to search...";
+                text: search-loading-text;
+                loading: true;
+                
+                edited(new-text) => {
+                    search-loading-text = new-text;
+                }
+            }
+            
+            // Search input with suggestions
+            CosmicSearchInput {
+                label: "Search with Autocomplete";
+                placeholder: "Search users...";
+                text: search-suggestions-text;
+                show-suggestions: search-suggestions-text != "";
+                suggestions: [
+                    { text: "Alice Johnson", highlighted: false },
+                    { text: "Bob Smith", highlighted: true },
+                    { text: "Charlie Brown", highlighted: false },
+                    { text: "Diana Prince", highlighted: false },
+                ];
+                
+                edited(new-text) => {
+                    search-suggestions-text = new-text;
+                }
+                
+                suggestion-selected(index) => {
+                    debug("Selected suggestion:", index);
+                }
+            }
+        }
+    }
+    
+    // State variables
+    property <string> username-text: "";
+    property <string> email-text: "";
+    property <string> bio-text: "";
+    property <string> description-text: "";
+    property <string> comments-text: "";
+    property <string> search-text: "";
+    property <string> search-loading-text: "";
+    property <string> search-suggestions-text: "";
+}

@@ -1,0 +1,251 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+
+// Spinner component for loading state
+component SearchSpinner inherits Rectangle {
+    in property <length> size: 16px;
+    in property <color> spinner-color: CosmicPalette.text-secondary;
+    
+    width: size;
+    height: size;
+    
+    // Simple rotating circle for spinner
+    Path {
+        width: parent.width;
+        height: parent.height;
+        
+        commands: "M 50 10 A 40 40 0 1 1 49.9 10";
+        stroke: root.spinner-color;
+        stroke-width: 3px;
+    }
+}
+
+// Suggestion item for autocomplete
+export struct SearchSuggestion {
+    text: string,
+    highlighted: bool,
+}
+
+// CosmicSearchInput - Search input with icon, clear button, and autocomplete
+// Requirements: 56.10, 74.1-74.7
+export component CosmicSearchInput {
+    // Content properties
+    in-out property <string> text;
+    in property <string> placeholder: "Search...";
+    in property <string> label;
+    
+    // Icon properties (Requirement 56.10)
+    in property <image> search-icon;
+    in property <length> icon-size: 16px;
+    
+    // State properties
+    in property <bool> disabled: false;
+    in property <bool> loading: false;
+    
+    // Autocomplete properties (Requirements 74.1-74.7)
+    in property <[SearchSuggestion]> suggestions;
+    in property <bool> show-suggestions: false;
+    in property <int> selected-suggestion-index: -1;
+    
+    // Callbacks
+    callback edited(string);
+    callback accepted(string);
+    callback cleared();
+    callback suggestion-selected(int);
+    
+    // Internal state
+    property <bool> is-focused: text-input.has-focus;
+    property <bool> is-hovered: hover-area.has-hover;
+    property <bool> show-clear: text != "" && (is-hovered || is-focused) && !loading;
+    property <bool> show-dropdown: show-suggestions && suggestions.length > 0 && is-focused;
+    
+    // Computed colors
+    property <color> border-color: is-focused ? 
+        CosmicPalette.accent-primary : 
+        CosmicPalette.border-neutral;
+    
+    property <length> border-width: is-focused ? 2px : 1px;
+    
+    min-width: 200px;
+    
+    VerticalLayout {
+        spacing: CosmicSpacing.space-xxxs;
+        
+        // Label
+        if label != "": Text {
+            text: root.label;
+            color: CosmicPalette.text-primary;
+            font-family: CosmicTypography.font-family;
+            font-size: CosmicTypography.label-size;
+            font-weight: CosmicTypography.label-weight;
+        }
+        
+        // Input container
+        input-container := Rectangle {
+            height: 32px;
+            background: CosmicPalette.background-surface;
+            border-radius: CosmicCornerRadii.input-radius;
+            border-width: root.border-width;
+            border-color: root.border-color;
+            
+            states [
+                disabled when root.disabled: {
+                    opacity: CosmicPalette.opacity-disabled;
+                }
+            ]
+            
+            HorizontalLayout {
+                padding-left: CosmicSpacing.input-padding-horizontal;
+                padding-right: CosmicSpacing.input-padding-horizontal;
+                spacing: CosmicSpacing.space-xxs;
+                
+                // Search icon on left (Requirement 56.10)
+                if root.search-icon.width > 0 && !root.loading: Image {
+                    source: root.search-icon;
+                    width: root.icon-size;
+                    height: root.icon-size;
+                    colorize: CosmicPalette.text-secondary;
+                    vertical-alignment: center;
+                }
+                
+                // Loading spinner (replaces search icon when loading)
+                if root.loading: SearchSpinner {
+                    size: root.icon-size;
+                    spinner-color: CosmicPalette.text-secondary;
+                }
+                
+                // Text input field
+                text-input := TextInput {
+                    text <=> root.text;
+                    enabled: !root.disabled;
+                    horizontal-alignment: left;
+                    vertical-alignment: center;
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.input-size;
+                    font-weight: CosmicTypography.input-weight;
+                    selection-background-color: CosmicPalette.accent-primary.with-alpha(0.3);
+                    selection-foreground-color: CosmicPalette.text-primary;
+                    
+                    edited => {
+                        root.edited(self.text);
+                    }
+                    
+                    accepted => {
+                        root.accepted(self.text);
+                    }
+                }
+                
+                // Clear button on right
+                if root.show-clear: Rectangle {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: CosmicCornerRadii.radius-xs;
+                    background: clear-touch.has-hover ? 
+                        CosmicPalette.surface-variant : 
+                        Colors.transparent;
+                    
+                    Text {
+                        text: "✕";
+                        color: CosmicPalette.text-secondary;
+                        font-size: 14px;
+                        horizontal-alignment: center;
+                        vertical-alignment: center;
+                    }
+                    
+                    clear-touch := TouchArea {
+                        mouse-cursor: MouseCursor.pointer;
+                        clicked => {
+                            root.text = "";
+                            root.cleared();
+                        }
+                    }
+                }
+            }
+            
+            // Placeholder text (shown when empty) - positioned absolutely
+            if root.text == "" && root.placeholder != "": Text {
+                x: CosmicSpacing.input-padding-horizontal + (root.search-icon.width > 0 || root.loading ? root.icon-size + CosmicSpacing.space-xxs : 0px);
+                text: root.placeholder;
+                color: CosmicPalette.text-secondary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.input-size;
+                font-weight: CosmicTypography.input-weight;
+                vertical-alignment: center;
+            }
+            
+            // Hover detection
+            hover-area := TouchArea {
+                mouse-cursor: root.disabled ? MouseCursor.default : MouseCursor.text;
+                
+                clicked => {
+                    if !root.disabled {
+                        text-input.focus();
+                    }
+                }
+            }
+        }
+        
+        // Autocomplete dropdown (Requirements 74.1-74.7)
+        if root.show-dropdown: Rectangle {
+            background: CosmicPalette.background-surface;
+            border-radius: CosmicCornerRadii.input-radius;
+            border-width: 1px;
+            border-color: CosmicPalette.border-neutral;
+            drop-shadow-offset-y: 2px;
+            drop-shadow-blur: 8px;
+            drop-shadow-color: CosmicPalette.shadow-color-md;
+            
+            // Max height for dropdown (show max 8 items)
+            max-height: 36px * 8;
+            
+            Flickable {
+                viewport-height: suggestions-layout.preferred-height;
+                
+                suggestions-layout := VerticalLayout {
+                    padding: CosmicSpacing.space-xxxs;
+                    spacing: 0px;
+                    
+                    for suggestion[index] in root.suggestions: Rectangle {
+                        height: 36px;
+                        border-radius: CosmicCornerRadii.radius-xs;
+                        background: {
+                            if index == root.selected-suggestion-index {
+                                CosmicPalette.accent-primary.with-alpha(0.15)
+                            } else if suggestion-touch.has-hover {
+                                CosmicPalette.surface-variant.with-alpha(0.5)
+                            } else {
+                                Colors.transparent
+                            }
+                        };
+                        
+                        HorizontalLayout {
+                            padding-left: CosmicSpacing.space-xs;
+                            padding-right: CosmicSpacing.space-xs;
+                            
+                            Text {
+                                text: suggestion.text;
+                                color: CosmicPalette.text-primary;
+                                font-family: CosmicTypography.font-family;
+                                font-size: CosmicTypography.body-size;
+                                font-weight: suggestion.highlighted ? 
+                                    CosmicTypography.weight-medium : 
+                                    CosmicTypography.weight-regular;
+                                vertical-alignment: center;
+                            }
+                        }
+                        
+                        suggestion-touch := TouchArea {
+                            mouse-cursor: MouseCursor.pointer;
+                            clicked => {
+                                root.suggestion-selected(index);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
