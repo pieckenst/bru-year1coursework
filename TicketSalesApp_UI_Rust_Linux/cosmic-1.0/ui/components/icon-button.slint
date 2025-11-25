@@ -1,0 +1,165 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+
+// Icon button layout orientation
+export enum IconButtonLayout {
+    icon-only,     // Just the icon
+    vertical,      // Icon above text
+    horizontal,    // Icon before text
+}
+
+// Icon button component for compact actions
+export component CosmicIconButton {
+    // Content properties
+    in property <image> icon;
+    in property <string> label: "";  // Optional text label
+    in property <string> tooltip: "";  // Tooltip text
+    
+    // Style properties
+    in property <IconButtonLayout> layout: IconButtonLayout.icon-only;
+    in property <bool> symbolic: true;  // true = 16px symbolic icons, false = 24px regular icons
+    
+    // State properties
+    in property <bool> disabled: false;
+    in property <bool> selected: false;
+    
+    // Size properties
+    in property <length> button-size: 40px;  // Standard size for icon-only
+    in property <length> icon-size: symbolic ? 16px : 24px;
+    
+    // Callbacks
+    callback clicked <=> touch-area.clicked;
+    
+    // Computed colors
+    property <color> icon-color: root.selected ? CosmicPalette.accent-primary : CosmicPalette.text-primary;
+    property <color> text-color: root.selected ? CosmicPalette.accent-primary : CosmicPalette.text-primary;
+    
+    // Computed dimensions based on layout
+    property <length> computed-width: layout == IconButtonLayout.icon-only ? button-size : 
+                                      layout == IconButtonLayout.vertical ? button-size :
+                                      button-size + 60px; // horizontal with text
+    
+    property <length> computed-height: layout == IconButtonLayout.icon-only ? button-size :
+                                       layout == IconButtonLayout.vertical ? button-size + 24px :
+                                       button-size;
+    
+    width: computed-width;
+    height: computed-height;
+    
+    states [
+        disabled when root.disabled: {
+            container.opacity: CosmicPalette.opacity-disabled;
+        }
+        pressed when touch-area.pressed && !root.disabled: {
+            container.background: CosmicPalette.surface-variant.darker(0.1);
+        }
+        hover when touch-area.has-hover && !root.disabled: {
+            container.background: CosmicPalette.surface-variant;
+        }
+        selected when root.selected: {
+            container.background: CosmicPalette.accent-primary.with-alpha(CosmicPalette.opacity-selected);
+        }
+    ]
+    
+    container := Rectangle {
+        background: Colors.transparent;
+        border-radius: CosmicCornerRadii.radius-s;
+        
+        // Layout based on orientation
+        if layout == IconButtonLayout.icon-only: Rectangle {
+            width: parent.width;
+            height: parent.height;
+            
+            Image {
+                source: root.icon;
+                width: root.icon-size;
+                height: root.icon-size;
+                colorize: root.icon-color;
+                x: (parent.width - self.width) / 2;
+                y: (parent.height - self.height) / 2;
+            }
+        }
+        
+        if layout == IconButtonLayout.vertical: VerticalLayout {
+            padding: CosmicSpacing.space-xxs;
+            spacing: CosmicSpacing.space-xxxs;
+            alignment: center;
+            
+            Image {
+                source: root.icon;
+                width: root.icon-size;
+                height: root.icon-size;
+                colorize: root.icon-color;
+                horizontal-alignment: center;
+            }
+            
+            if root.label != "": Text {
+                text: root.label;
+                color: root.text-color;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-12;
+                font-weight: CosmicTypography.weight-regular;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+        }
+        
+        if layout == IconButtonLayout.horizontal: HorizontalLayout {
+            padding-left: CosmicSpacing.space-xs;
+            padding-right: CosmicSpacing.space-xs;
+            padding-top: CosmicSpacing.space-xxs;
+            padding-bottom: CosmicSpacing.space-xxs;
+            spacing: CosmicSpacing.space-xxxs;
+            alignment: center;
+            
+            Image {
+                source: root.icon;
+                width: root.icon-size;
+                height: root.icon-size;
+                colorize: root.icon-color;
+                vertical-alignment: center;
+            }
+            
+            if root.label != "": Text {
+                text: root.label;
+                color: root.text-color;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-14;
+                font-weight: CosmicTypography.weight-regular;
+                vertical-alignment: center;
+            }
+        }
+        
+        touch-area := TouchArea {
+            enabled: !root.disabled;
+            mouse-cursor: root.disabled ? MouseCursor.default : MouseCursor.pointer;
+        }
+        
+        // Focus indicator (would need FocusScope for full implementation)
+    }
+    
+    // Tooltip (simplified - would need proper tooltip component)
+    if touch-area.has-hover && root.tooltip != "": Rectangle {
+        x: root.width / 2 - self.width / 2;
+        y: root.height + 8px;
+        width: tooltip-text.width + 16px;
+        height: tooltip-text.height + 8px;
+        background: #2B2B2B;
+        border-radius: CosmicCornerRadii.radius-xs;
+        
+        drop-shadow-offset-y: 2px;
+        drop-shadow-blur: 4px;
+        drop-shadow-color: #00000033;
+        
+        tooltip-text := Text {
+            text: root.tooltip;
+            color: #FFFFFF;
+            font-family: CosmicTypography.font-family;
+            font-size: CosmicTypography.size-12;
+            x: 8px;
+            y: 4px;
+        }
+    }
+}

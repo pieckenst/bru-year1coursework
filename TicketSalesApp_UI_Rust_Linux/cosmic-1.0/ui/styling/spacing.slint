@@ -1,0 +1,80 @@
+// COSMIC Desktop Spacing System
+// Comprehensive spacing scale based on 4px increments
+
+export global CosmicSpacing {
+    // ============================================================================
+    // SPACING SCALE (Requirements 6.1-6.5, 37.1-37.8)
+    // ============================================================================
+    
+    // 4px-based spacing scale for consistent layout
+    
+    // Extra extra extra small - 4px (Requirement 37.1)
+    in-out property <length> space-xxxs: 4px;
+    
+    // Extra extra small - 8px (Requirement 37.2)
+    in-out property <length> space-xxs: 8px;
+    
+    // Extra small - 12px (Requirement 37.3)
+    in-out property <length> space-xs: 12px;
+    
+    // Small - 16px (Requirement 37.4)
+    in-out property <length> space-s: 16px;
+    
+    // Medium - 24px (Requirement 37.5)
+    in-out property <length> space-m: 24px;
+    
+    // Large - 32px (Requirement 37.6)
+    in-out property <length> space-l: 32px;
+    
+    // Extra large - 48px (Requirement 37.7)
+    in-out property <length> space-xl: 48px;
+    
+    // Extra extra large - 64px (Requirement 37.8)
+    in-out property <length> space-xxl: 64px;
+    
+    // ============================================================================
+    // SEMANTIC SPACING ALIASES
+    // ============================================================================
+    
+    // Container padding (Requirements 6.2)
+    in-out property <length> container-padding-compact: space-s;      // 16px
+    in-out property <length> container-padding-standard: space-m;     // 24px
+    in-out property <length> container-padding-comfortable: space-l;  // 32px
+    
+    // Section spacing (Requirements 6.3)
+    in-out property <length> section-spacing-small: space-m;          // 24px
+    in-out property <length> section-spacing-standard: space-l;       // 32px
+    in-out property <length> section-spacing-large: space-xl;         // 48px
+    
+    // List item spacing (Requirements 6.4)
+    in-out property <length> list-item-spacing-compact: space-xs;     // 12px
+    in-out property <length> list-item-spacing-standard: space-s;     // 16px
+     
+    // Form field spacing (Requirements 6.5)
+    in-out property <length> form-field-spacing-compact: space-s;     // 16px
+    in-out property <length> form-field-spacing-standard: space-m;    // 24px
+    
+    // Icon spacing
+    in-out property <length> icon-text-spacing: space-xxs;            // 8px
+    in-out property <length> icon-spacing-small: space-xs;            // 12px
+    
+    // Button padding
+    in-out property <length> button-padding-horizontal: space-s;      // 16px
+    in-out property <length> button-padding-vertical: space-xs;       // 12px
+    
+    // Input padding
+    in-out property <length> input-padding-horizontal: space-xs;      // 12px
+    in-out property <length> input-padding-vertical: space-xxs;       // 8px
+    
+    // Card padding
+    in-out property <length> card-padding-small: space-s;             // 16px
+    in-out property <length> card-padding-standard: space-m;          // 24px
+    in-out property <length> card-padding-large: space-l;             // 32px
+    
+    // Dialog padding
+    in-out property <length> dialog-padding: space-m;                 // 24px
+    
+    // App bar padding
+    in-out property <length> app-bar-padding-horizontal: space-m;     // 24px
+    in-out property <length> app-bar-padding-vertical: space-s;       // 16px
+}

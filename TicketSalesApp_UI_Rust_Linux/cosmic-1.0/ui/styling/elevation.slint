@@ -1,0 +1,106 @@
+// COSMIC Desktop Elevation System
+// Shadow definitions for depth and layering
+
+import { CosmicPalette } from "palette.slint";
+
+export global CosmicElevation {
+    // ============================================================================
+    // SHADOW LEVELS (Requirements 5.1-5.5)
+    // ============================================================================
+    
+    // Small elevation - Subtle depth (Requirement 5.4)
+    // Used for: Cards, buttons at rest
+   in-out property <length> shadow-sm-offset-x: 0px;
+   in-out property <length> shadow-sm-offset-y: 1px;
+   in-out property <length> shadow-sm-blur: 2px;
+   in-out property <length> shadow-sm-spread: 0px;
+    
+    // Medium elevation - Moderate depth (Requirement 5.2)
+    // Used for: Elevated cards, hover states, dropdowns
+   in-out property <length> shadow-md-offset-x: 0px;
+   in-out property <length> shadow-md-offset-y: 2px;
+   in-out property <length> shadow-md-blur: 4px;
+   in-out property <length> shadow-md-spread: 0px;
+    
+    // Large elevation - Strong depth (Requirement 5.2)
+    // Used for: Dialogs, modals, popovers
+  in-out  property <length> shadow-lg-offset-x: 0px;
+  in-out  property <length> shadow-lg-offset-y: 4px;
+  in-out  property <length> shadow-lg-blur: 8px;
+  in-out  property <length> shadow-lg-spread: 0px;
+    
+    // Extra large elevation - Maximum depth
+    // Used for: Floating action buttons, tooltips
+  in-out  property <length> shadow-xl-offset-x: 0px;
+  in-out  property <length> shadow-xl-offset-y: 8px;
+  in-out  property <length> shadow-xl-blur: 16px;
+  in-out  property <length> shadow-xl-spread: 0px;
+    
+    // ============================================================================
+    // SHADOW COLORS (Requirements 5.1, 5.5)
+    // ============================================================================
+    
+    // Shadow colors are mode-aware and defined in CosmicPalette
+    // Light mode: 10-20% opacity (Requirement 5.1)
+    // Dark mode: Adjusted for dark backgrounds (Requirement 5.5)
+    
+    out property <color> shadow-color-sm: CosmicPalette.shadow-color-sm;
+    out property <color> shadow-color-md: CosmicPalette.shadow-color-md;
+    out property <color> shadow-color-lg: CosmicPalette.shadow-color-lg;
+    
+    // ============================================================================
+    // SEMANTIC ELEVATION ALIASES
+    // ============================================================================
+    
+    // Card elevation (Requirement 5.4)
+  in-out  property <length> card-shadow-offset-y: shadow-sm-offset-y;
+  in-out  property <length> card-shadow-blur: shadow-sm-blur;
+    out property <color> card-shadow-color: shadow-color-sm;
+    
+    // Card hover elevation (Requirement 5.3)
+  in-out  property <length> card-hover-shadow-offset-y: shadow-md-offset-y;
+   in-out property <length> card-hover-shadow-blur: shadow-md-blur;
+    out property <color> card-hover-shadow-color: shadow-color-md;
+    
+    // Button elevation
+  in-out  property <length> button-shadow-offset-y: shadow-sm-offset-y;
+   in-out property <length> button-shadow-blur: shadow-sm-blur;
+    out property <color> button-shadow-color: shadow-color-sm;
+    
+    // Button hover elevation (Requirement 5.3)
+  in-out  property <length> button-hover-shadow-offset-y: shadow-md-offset-y;
+  in-out  property <length> button-hover-shadow-blur: shadow-md-blur;
+    out property <color> button-hover-shadow-color: shadow-color-md;
+    
+    // Dialog elevation (Requirement 5.2)
+  in-out  property <length> dialog-shadow-offset-y: shadow-lg-offset-y;
+  in-out  property <length> dialog-shadow-blur: shadow-lg-blur;
+    out property <color> dialog-shadow-color: shadow-color-lg;
+    
+    // Popover elevation
+   in-out property <length> popover-shadow-offset-y: shadow-md-offset-y;
+   in-out property <length> popover-shadow-blur: shadow-md-blur;
+    out property <color> popover-shadow-color: shadow-color-md;
+    
+    // Dropdown elevation
+   in-out property <length> dropdown-shadow-offset-y: shadow-md-offset-y;
+   in-out property <length> dropdown-shadow-blur: shadow-md-blur;
+    out property <color> dropdown-shadow-color: shadow-color-md;
+    
+    // App bar elevation (minimal)
+in-out    property <length> app-bar-shadow-offset-y: shadow-sm-offset-y;
+  in-out  property <length> app-bar-shadow-blur: shadow-sm-blur;
+    out property <color> app-bar-shadow-color: shadow-color-sm;
+    
+    // Tooltip elevation
+in-out    property <length> tooltip-shadow-offset-y: shadow-md-offset-y;
+  in-out  property <length> tooltip-shadow-blur: shadow-md-blur;
+    out property <color> tooltip-shadow-color: shadow-color-md;
+    
+    // ============================================================================
+    // HELPER PROPERTIES
+    // ============================================================================
+    
+    // No elevation (for flat surfaces)
+  in-out  property <length> no-shadow: 0px;
+}

@@ -1,0 +1,363 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+
+// Menu item types
+export enum MenuItemType {
+    standard,      // Regular menu item
+    checkbox,      // Checkbox menu item
+    divider,       // Menu divider
+    folder,        // Submenu (folder)
+}
+
+// Forward declaration - Menu item data structure
+// Note: Slint doesn't support recursive structs directly, so children array
+// will be handled as a separate property or through component composition
+export struct MenuItem {
+    label: string,
+    icon: image,
+    shortcut: string,
+    item-type: MenuItemType,
+    checked: bool,
+    disabled: bool,
+}
+
+// Individual menu item component
+export component CosmicMenuItem {
+    in property <string> label;
+    in property <image> icon;
+    in property <string> shortcut;
+    in property <MenuItemType> item-type: MenuItemType.standard;
+    in property <bool> checked: false;
+    in property <bool> disabled: false;
+    
+    callback clicked();
+    
+    min-height: item-type == MenuItemType.divider ? 9px : 36px;
+    
+    property <bool> is-hovered: false;
+    
+    states [
+        disabled when root.disabled: {
+            container.opacity: CosmicPalette.opacity-disabled;
+        }
+        hover when root.is-hovered && !root.disabled && item-type != MenuItemType.divider: {
+            container.background: CosmicPalette.accent-primary.with-alpha(CosmicPalette.opacity-selected);
+        }
+    ]
+    
+    container := Rectangle {
+        background: Colors.transparent;
+        
+        if item-type == MenuItemType.divider: Rectangle {
+            height: 1px;
+            y: (parent.height - self.height) / 2;
+            background: CosmicPalette.divider;
+        }
+        
+        if item-type != MenuItemType.divider: HorizontalLayout {
+            padding-left: CosmicSpacing.space-s;
+            padding-right: CosmicSpacing.space-s;
+            padding-top: CosmicSpacing.space-xxxs;
+            padding-bottom: CosmicSpacing.space-xxxs;
+            spacing: CosmicSpacing.space-xs;
+            alignment: center;
+            
+            // Checkbox indicator (left side)
+            if item-type == MenuItemType.checkbox: Rectangle {
+                width: 16px;
+                height: 16px;
+                
+                if root.checked: Text {
+                    text: "✓";
+                    color: CosmicPalette.accent-primary;
+                    font-size: 14px;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+            }
+            
+            // Icon (if provided)
+            if root.icon.width > 0: Image {
+                source: root.icon;
+                width: 16px;
+                height: 16px;
+                colorize: CosmicPalette.text-primary;
+                vertical-alignment: center;
+            }
+            
+            // Label
+            Text {
+                text: root.label;
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-14;
+                font-weight: CosmicTypography.weight-regular;
+                vertical-alignment: center;
+                horizontal-stretch: 1;
+            }
+            
+            // Keyboard shortcut (right side)
+            if root.shortcut != "": Text {
+                text: root.shortcut;
+                color: CosmicPalette.text-secondary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-12;
+                font-weight: CosmicTypography.weight-regular;
+                vertical-alignment: center;
+                opacity: 0.7;
+            }
+        }
+        
+        if item-type != MenuItemType.divider: TouchArea {
+            enabled: !root.disabled;
+            mouse-cursor: root.disabled ? MouseCursor.default : MouseCursor.pointer;
+            
+            clicked => {
+                if !root.disabled {
+                    root.clicked();
+                }
+            }
+            
+            moved => {
+                root.is-hovered = self.has-hover;
+            }
+        }
+    }
+}
+
+// Menu container component
+export component CosmicMenu {
+    in property <[MenuItem]> items;
+    in property <bool> show: false;
+    
+    callback item-clicked(int);
+    callback close-requested();
+    
+    min-width: 150px;
+    
+    if root.show: Rectangle {
+        background: CosmicPalette.background-surface;
+        border-radius: CosmicCornerRadii.radius-m;
+        border-width: 1px;
+        border-color: CosmicPalette.border-neutral;
+        
+        drop-shadow-offset-y: 4px;
+        drop-shadow-blur: 8px;
+        drop-shadow-color: #00000033;
+        
+        VerticalLayout {
+            padding: CosmicSpacing.space-xxs;
+            spacing: 2px;
+            
+            for item[index] in root.items: CosmicMenuItem {
+                label: item.label;
+                icon: item.icon;
+                shortcut: item.shortcut;
+                item-type: item.item-type;
+                checked: item.checked;
+                disabled: item.disabled;
+                
+                clicked => {
+                    root.item-clicked(index);
+                    root.close-requested();
+                }
+            }
+        }
+    }
+}
+
+// Menu button component (button that opens a menu)
+export component CosmicMenuButton {
+    in property <string> text;
+    in property <image> icon;
+    in property <[MenuItem]> menu-items;
+    in property <bool> disabled: false;
+    
+    in-out property <bool> menu-open: false;
+    
+    callback menu-item-clicked(int);
+    
+    property <length> button-height: 32px;
+    property <length> icon-size: 16px;
+    
+    min-height: button-height;
+    
+    states [
+        disabled when root.disabled: {
+            button-container.opacity: 0.4;
+        }
+        pressed when touch-area.pressed && !root.disabled: {
+            button-container.background: CosmicPalette.surface-variant.darker(0.05);
+        }
+        hover when touch-area.has-hover && !root.disabled: {
+            button-container.background: CosmicPalette.surface-variant;
+        }
+        open when root.menu-open: {
+            button-container.background: CosmicPalette.accent-primary.with-alpha(0.15);
+        }
+    ]
+    
+    VerticalLayout {
+        // Button
+        button-container := Rectangle {
+            background: CosmicPalette.background-surface;
+            border-radius: CosmicCornerRadii.radius-s;
+            border-width: 1px;
+            border-color: CosmicPalette.border-neutral;
+            
+            HorizontalLayout {
+                padding-left: CosmicSpacing.space-xs;
+                padding-right: CosmicSpacing.space-xs;
+                padding-top: CosmicSpacing.space-xxs;
+                padding-bottom: CosmicSpacing.space-xxs;
+                spacing: CosmicSpacing.space-xxs;
+                alignment: center;
+                
+                // Icon (if provided)
+                if root.icon.width > 0: Image {
+                    source: root.icon;
+                    width: root.icon-size;
+                    height: root.icon-size;
+                    colorize: CosmicPalette.text-primary;
+                    vertical-alignment: center;
+                }
+                
+                // Button text
+                if root.text != "": Text {
+                    text: root.text;
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.size-14;
+                    font-weight: CosmicTypography.weight-medium;
+                    vertical-alignment: center;
+                }
+                
+                // Dropdown arrow
+                Text {
+                    text: "▾";
+                    color: CosmicPalette.text-secondary;
+                    font-size: 12px;
+                    vertical-alignment: center;
+                }
+            }
+            
+            touch-area := TouchArea {
+                enabled: !root.disabled;
+                mouse-cursor: root.disabled ? MouseCursor.default : MouseCursor.pointer;
+                
+                clicked => {
+                    if !root.disabled {
+                        root.menu-open = !root.menu-open;
+                    }
+                }
+            }
+            
+            // Focus indicator (would need FocusScope for full implementation)
+        }
+        
+        // Menu dropdown
+        if root.menu-open: CosmicMenu {
+            items: root.menu-items;
+            show: root.menu-open;
+            
+            item-clicked(index) => {
+                root.menu-item-clicked(index);
+                root.menu-open = false;
+            }
+            
+            close-requested => {
+                root.menu-open = false;
+            }
+        }
+    }
+    
+    // Close menu when clicking outside
+    if root.menu-open: TouchArea {
+        x: 0;
+        y: 0;
+        width: root.width;
+        height: root.height;
+        
+        clicked => {
+            root.menu-open = false;
+        }
+    }
+}
+
+// Menu bar root item (for menu bars)
+export component CosmicMenuBarItem {
+    in property <string> text;
+    in property <[MenuItem]> menu-items;
+    in property <bool> disabled: false;
+    
+    in-out property <bool> menu-open: false;
+    
+    callback menu-item-clicked(int);
+    
+    min-height: 32px;
+    
+    states [
+        disabled when root.disabled: {
+            item-container.opacity: 0.4;
+        }
+        hover when touch-area.has-hover && !root.disabled: {
+            item-container.background: CosmicPalette.surface-variant.with-alpha(0.5);
+        }
+        open when root.menu-open: {
+            item-container.background: CosmicPalette.accent-primary.with-alpha(0.15);
+        }
+    ]
+    
+    HorizontalLayout {
+        // Menu bar item
+        item-container := Rectangle {
+            background: Colors.transparent;
+            border-radius: CosmicCornerRadii.radius-xs;
+            
+            HorizontalLayout {
+                padding-left: CosmicSpacing.space-xs;
+                padding-right: CosmicSpacing.space-xs;
+                padding-top: CosmicSpacing.space-xxxs;
+                padding-bottom: CosmicSpacing.space-xxxs;
+                
+                Text {
+                    text: root.text;
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.size-14;
+                    font-weight: CosmicTypography.weight-regular;
+                    vertical-alignment: center;
+                }
+            }
+            
+            touch-area := TouchArea {
+                enabled: !root.disabled;
+                mouse-cursor: root.disabled ? MouseCursor.default : MouseCursor.pointer;
+                
+                clicked => {
+                    if !root.disabled {
+                        root.menu-open = !root.menu-open;
+                    }
+                }
+            }
+        }
+        
+        // Menu dropdown (positioned below)
+        if root.menu-open: CosmicMenu {
+            y: parent.height;
+            items: root.menu-items;
+            show: root.menu-open;
+            
+            item-clicked(index) => {
+                root.menu-item-clicked(index);
+                root.menu-open = false;
+            }
+            
+            close-requested => {
+                root.menu-open = false;
+            }
+        }
+    }
+}

@@ -1,0 +1,145 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+
+// Image-based button component
+export component CosmicImageButton {
+    // Content properties
+    in property <image> image;
+    
+    // State properties
+    in property <bool> selected: false;
+    in property <bool> removable: false;  // Show remove icon on hover
+    
+    // Size properties
+    in property <length> button-width: 120px;
+    in property <length> button-height: 120px;
+    
+    // Callbacks
+    callback clicked <=> touch-area.clicked;
+    callback remove-clicked();
+    
+    width: button-width;
+    height: button-height;
+    
+    property <bool> is-hovered: false;
+    
+    states [
+        hover when root.is-hovered: {
+            overlay.opacity: 0.1;
+        }
+        selected when root.selected: {
+            selection-indicator.opacity: 1.0;
+        }
+    ]
+    
+    container := Rectangle {
+        background: CosmicPalette.background-surface;
+        border-radius: 9px;
+        clip: true;
+        
+        // Image content
+        Image {
+            source: root.image;
+            width: parent.width;
+            height: parent.height;
+            image-fit: cover;
+        }
+        
+        // Hover overlay
+        overlay := Rectangle {
+            width: parent.width;
+            height: parent.height;
+            background: CosmicPalette.text-primary;
+            opacity: 0.0;
+            
+            animate opacity {
+                duration: 150ms;
+                easing: ease-in-out;
+            }
+        }
+        
+        // Selection indicator (bottom-left corner)
+        selection-indicator := Rectangle {
+            x: 8px;
+            y: parent.height - self.height - 8px;
+            width: 24px;
+            height: 24px;
+            background: CosmicPalette.accent-primary;
+            border-radius: 12px;
+            opacity: 0.0;
+            
+            // Checkmark icon
+            Rectangle {
+                x: 6px;
+                y: 6px;
+                width: 12px;
+                height: 12px;
+                
+                // Simple checkmark using Path would go here
+                // For now, using a simple indicator
+                Text {
+                    text: "✓";
+                    color: #FFFFFF;
+                    font-size: 14px;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+            }
+            
+            animate opacity {
+                duration: 150ms;
+                easing: ease-in-out;
+            }
+        }
+        
+        // Remove button (top-right corner, shown on hover)
+        if root.removable: Rectangle {
+            x: parent.width - self.width - 8px;
+            y: 8px;
+            width: 24px;
+            height: 24px;
+            background: #2B2B2B.with-alpha(0.8);
+            border-radius: 12px;
+            opacity: root.is-hovered ? 1.0 : 0.0;
+            
+            // Close icon (×)
+            Text {
+                text: "×";
+                color: #FFFFFF;
+                font-size: 18px;
+                font-weight: 700;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+            
+            TouchArea {
+                mouse-cursor: MouseCursor.pointer;
+                clicked => {
+                    root.remove-clicked();
+                }
+            }
+        }
+        
+        touch-area := TouchArea {
+            mouse-cursor: MouseCursor.pointer;
+            clicked => {
+                root.clicked();
+            }
+            moved => {
+                root.is-hovered = self.has-hover;
+            }
+        }
+        
+        // Border for selected state
+        if root.selected: Rectangle {
+            x: 0px;
+            y: 0px;
+            width: parent.width;
+            height: parent.height;
+            border-radius: parent.border-radius;
+            border-width: 2px;
+            border-color: CosmicPalette.accent-primary;
+            background: Colors.transparent;
+        }
+    }
+}

@@ -1,0 +1,293 @@
+// Example usage of CosmicMenuButton component
+import { CosmicMenuButton, CosmicMenuBarItem, MenuItem, MenuItemType } from "../../cosmic.slint";
+import { CosmicPalette } from "../styling/palette.slint";
+
+export component MenuButtonExample inherits Window {
+    title: "COSMIC Menu Button Example";
+    background: CosmicPalette.background-base;
+    
+    preferred-width: 600px;
+    preferred-height: 400px;
+    
+    VerticalLayout {
+        padding: 24px;
+        spacing: 24px;
+        
+        Text {
+            text: "Menu Button Examples";
+            font-size: 24px;
+            font-weight: 700;
+            color: CosmicPalette.text-primary;
+        }
+        
+        // Example 1: Simple menu button
+        HorizontalLayout {
+            spacing: 16px;
+            
+            Text {
+                text: "Simple Menu:";
+                color: CosmicPalette.text-primary;
+                vertical-alignment: center;
+            }
+            
+            CosmicMenuButton {
+                text: "File";
+                menu-items: [
+                    {
+                        label: "New",
+                        icon: @image-url(""),
+                        shortcut: "Ctrl+N",
+                        item-type: MenuItemType.standard,
+                        checked: false,
+                        disabled: false,
+                        children: [],
+                    },
+                    {
+                        label: "Open",
+                        icon: @image-url(""),
+                        shortcut: "Ctrl+O",
+                        item-type: MenuItemType.standard,
+                        checked: false,
+                        disabled: false,
+                        children: [],
+                    },
+                    {
+                        label: "",
+                        icon: @image-url(""),
+                        shortcut: "",
+                        item-type: MenuItemType.divider,
+                        checked: false,
+                        disabled: false,
+                        children: [],
+                    },
+                    {
+                        label: "Save",
+                        icon: @image-url(""),
+                        shortcut: "Ctrl+S",
+                        item-type: MenuItemType.standard,
+                        checked: false,
+                        disabled: false,
+                        children: [],
+                    },
+                    {
+                        label: "Save As...",
+                        icon: @image-url(""),
+                        shortcut: "Ctrl+Shift+S",
+                        item-type: MenuItemType.standard,
+                        checked: false,
+                        disabled: false,
+                        children: [],
+                    },
+                    {
+                        label: "",
+                        icon: @image-url(""),
+                        shortcut: "",
+                        item-type: MenuItemType.divider,
+                        checked: false,
+                        disabled: false,
+                        children: [],
+                    },
+                    {
+                        label: "Exit",
+                        icon: @image-url(""),
+                        shortcut: "Ctrl+Q",
+                        item-type: MenuItemType.standard,
+                        checked: false,
+                        disabled: false,
+                        children: [],
+                    },
+                ];
+                
+                menu-item-clicked(index) => {
+                    debug("Menu item clicked:", index);
+                }
+            }
+        }
+        
+        // Example 2: Menu with checkboxes
+        HorizontalLayout {
+            spacing: 16px;
+            
+            Text {
+                text: "View Menu:";
+                color: CosmicPalette.text-primary;
+                vertical-alignment: center;
+            }
+            
+            CosmicMenuButton {
+                text: "View";
+                menu-items: [
+                    {
+                        label: "Show Toolbar",
+                        icon: @image-url(""),
+                        shortcut: "",
+                        item-type: MenuItemType.checkbox,
+                        checked: true,
+                        disabled: false,
+                        children: [],
+                    },
+                    {
+                        label: "Show Sidebar",
+                        icon: @image-url(""),
+                        shortcut: "",
+                        item-type: MenuItemType.checkbox,
+                        checked: false,
+                        disabled: false,
+                        children: [],
+                    },
+                    {
+                        label: "Show Status Bar",
+                        icon: @image-url(""),
+                        shortcut: "",
+                        item-type: MenuItemType.checkbox,
+                        checked: true,
+                        disabled: false,
+                        children: [],
+                    },
+                    {
+                        label: "",
+                        icon: @image-url(""),
+                        shortcut: "",
+                        item-type: MenuItemType.divider,
+                        checked: false,
+                        disabled: false,
+                        children: [],
+                    },
+                    {
+                        label: "Full Screen",
+                        icon: @image-url(""),
+                        shortcut: "F11",
+                        item-type: MenuItemType.standard,
+                        checked: false,
+                        disabled: false,
+                        children: [],
+                    },
+                ];
+                
+                menu-item-clicked(index) => {
+                    debug("View menu item clicked:", index);
+                }
+            }
+        }
+        
+        // Example 3: Menu bar items
+        HorizontalLayout {
+            spacing: 16px;
+            
+            Text {
+                text: "Menu Bar:";
+                color: CosmicPalette.text-primary;
+                vertical-alignment: center;
+            }
+            
+            HorizontalLayout {
+                spacing: 4px;
+                
+                CosmicMenuBarItem {
+                    text: "File";
+                    menu-items: [
+                        {
+                            label: "New",
+                            icon: @image-url(""),
+                            shortcut: "Ctrl+N",
+                            item-type: MenuItemType.standard,
+                            checked: false,
+                            disabled: false,
+                            children: [],
+                        },
+                        {
+                            label: "Open",
+                            icon: @image-url(""),
+                            shortcut: "Ctrl+O",
+                            item-type: MenuItemType.standard,
+                            checked: false,
+                            disabled: false,
+                            children: [],
+                        },
+                    ];
+                    
+                    menu-item-clicked(index) => {
+                        debug("File menu item clicked:", index);
+                    }
+                }
+                
+                CosmicMenuBarItem {
+                    text: "Edit";
+                    menu-items: [
+                        {
+                            label: "Undo",
+                            icon: @image-url(""),
+                            shortcut: "Ctrl+Z",
+                            item-type: MenuItemType.standard,
+                            checked: false,
+                            disabled: false,
+                            children: [],
+                        },
+                        {
+                            label: "Redo",
+                            icon: @image-url(""),
+                            shortcut: "Ctrl+Y",
+                            item-type: MenuItemType.standard,
+                            checked: false,
+                            disabled: false,
+                            children: [],
+                        },
+                    ];
+                    
+                    menu-item-clicked(index) => {
+                        debug("Edit menu item clicked:", index);
+                    }
+                }
+                
+                CosmicMenuBarItem {
+                    text: "View";
+                    menu-items: [
+                        {
+                            label: "Zoom In",
+                            icon: @image-url(""),
+                            shortcut: "Ctrl++",
+                            item-type: MenuItemType.standard,
+                            checked: false,
+                            disabled: false,
+                            children: [],
+                        },
+                        {
+                            label: "Zoom Out",
+                            icon: @image-url(""),
+                            shortcut: "Ctrl+-",
+                            item-type: MenuItemType.standard,
+                            checked: false,
+                            disabled: false,
+                            children: [],
+                        },
+                    ];
+                    
+                    menu-item-clicked(index) => {
+                        debug("View menu item clicked:", index);
+                    }
+                }
+            }
+        }
+        
+        // Example 4: Disabled menu button
+        HorizontalLayout {
+            spacing: 16px;
+            
+            Text {
+                text: "Disabled:";
+                color: CosmicPalette.text-primary;
+                vertical-alignment: center;
+            }
+            
+            CosmicMenuButton {
+                text: "Disabled Menu";
+                disabled: true;
+                menu-items: [];
+            }
+        }
+        
+        Rectangle {
+            vertical-stretch: 1;
+        }
+    }
+}

@@ -1,0 +1,95 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+
+// Link-style button component
+export component CosmicLinkButton {
+    // Content properties
+    in property <string> text;
+    in property <image> trailing-icon;  // Optional trailing icon (e.g., external-link)
+    
+    // State properties
+    in property <bool> disabled: false;
+    
+    // Callbacks
+    callback clicked <=> touch-area.clicked;
+    
+    // Computed dimensions
+    property <length> text-width: text-element.preferred-width;
+    property <length> icon-width: trailing-icon.width > 0 ? 16px + CosmicSpacing.space-xxxs : 0px;
+    
+    width: text-width + icon-width + CosmicSpacing.space-xxs * 2;
+    height: 32px;
+    
+    states [
+        disabled when root.disabled: {
+            container.opacity: 0.4;
+        }
+        hover when touch-area.has-hover && !root.disabled: {
+            text-element.color: CosmicPalette.accent-hover;
+            underline.opacity: 1.0;
+        }
+    ]
+    
+    container := Rectangle {
+        background: Colors.transparent;
+        
+        HorizontalLayout {
+            padding-left: CosmicSpacing.space-xxs;
+            padding-right: CosmicSpacing.space-xxs;
+            spacing: CosmicSpacing.space-xxxs;
+            alignment: center;
+            
+            // Link text
+            text-element := Text {
+                text: root.text;
+                color: CosmicPalette.accent-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-14;
+                font-weight: 400;
+                vertical-alignment: center;
+            }
+            
+            // Trailing icon (e.g., external-link)
+            if root.trailing-icon.width > 0: Image {
+                source: root.trailing-icon;
+                width: 16px;
+                height: 16px;
+                colorize: CosmicPalette.accent-primary;
+                vertical-alignment: center;
+            }
+        }
+        
+        // Underline that appears on hover
+        underline := Rectangle {
+            y: parent.height - 2px;
+            x: CosmicSpacing.space-xxs;
+            width: text-element.width;
+            height: 1px;
+            background: CosmicPalette.accent-primary;
+            opacity: 0.0;
+            
+            animate opacity {
+                duration: 150ms;
+                easing: ease-in-out;
+            }
+        }
+        
+        touch-area := TouchArea {
+            enabled: !root.disabled;
+            mouse-cursor: root.disabled ? MouseCursor.default : MouseCursor.pointer;
+        }
+        
+        // Focus indicator (would need FocusScope for full implementation)
+        if false: Rectangle {
+            x: -2px;
+            y: -2px;
+            width: parent.width + 4px;
+            height: parent.height + 4px;
+            border-radius: 4px;
+            border-width: 2px;
+            border-color: CosmicPalette.accent-primary;
+            background: Colors.transparent;
+        }
+    }
+}

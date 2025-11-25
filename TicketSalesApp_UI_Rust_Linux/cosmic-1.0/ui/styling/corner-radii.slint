@@ -1,0 +1,82 @@
+// COSMIC Desktop Corner Radii System
+// Consistent border radius scale for rounded elements
+
+export global CosmicCornerRadii {
+    // ============================================================================
+    // CORNER RADIUS SCALE (Requirements 4.1-4.5, 38.1-38.8)
+    // ============================================================================
+    
+    // Sharp corners - 0px (Requirement 38.1)
+    in-out property <length> radius-0: 0px;
+    
+    // Extra small - 4px (Requirement 38.2)
+    in-out property <length> radius-xs: 4px;
+    
+    // Small - 8px (Requirement 38.3)
+    in-out property <length> radius-s: 8px;
+    
+    // Medium - 12px (Requirement 38.4)
+    in-out property <length> radius-m: 12px;
+    
+    // Large - 16px (Requirement 38.5)
+    in-out property <length> radius-l: 16px;
+    
+    // Extra large - 20px (Requirement 38.6)
+    in-out property <length> radius-xl: 20px;
+    
+    // Extra extra large - 24px (Requirement 38.7)
+    in-out property <length> radius-xxl: 24px;
+    
+    // Fully rounded/circular - 9999px (Requirement 38.8)
+    in-out property <length> radius-full: 9999px;
+    
+    // ============================================================================
+    // SEMANTIC RADIUS ALIASES (Requirements 4.1-4.4)
+    // ============================================================================
+    
+    // Button radius (Requirement 4.1)
+    in-out property <length> button-radius-small: radius-s;           // 8px
+    in-out property <length> button-radius-standard: radius-m;        // 12px
+    
+    // Card/Container radius (Requirement 4.2)
+    in-out property <length> card-radius-small: radius-m;             // 12px
+    in-out property <length> card-radius-standard: radius-l;          // 16px
+    
+    // Input field radius (Requirement 4.3)
+    in-out property <length> input-radius: radius-s;                  // 8px
+    
+    // Dialog/Modal radius (Requirement 4.4)
+    in-out property <length> dialog-radius-small: radius-l;           // 16px
+    in-out property <length> dialog-radius-standard: radius-xl;       // 20px
+    
+    // Badge/Chip radius (Requirement 4.5)
+    in-out property <length> badge-radius: radius-xs;                 // 4px
+    in-out property <length> chip-radius: radius-full;                // Fully rounded
+    
+    // Icon button radius
+    in-out property <length> icon-button-radius: radius-s;            // 8px
+    
+    // Checkbox radius
+    in-out property <length> checkbox-radius: radius-xs;              // 4px
+    
+    // Avatar radius (square variant)
+    in-out property <length> avatar-radius: radius-s;                 // 8px
+    
+    // Image button radius
+    in-out property <length> image-button-radius: radius-s;           // 9px (as per spec)
+    
+    // Navigation item radius
+    in-out property <length> nav-item-radius: radius-s;               // 8px
+    
+    // Popover/Menu radius
+    in-out property <length> popover-radius: radius-m;                // 12px
+    
+    // Progress bar radius
+    in-out property <length> progress-bar-radius: radius-full;        // Fully rounded ends
+    
+    // Slider track radius
+    in-out property <length> slider-track-radius: radius-full;        // Fully rounded
+    
+    // Toggle switch radius
+    in-out property <length> toggle-radius: radius-full;              // Pill shape
+}

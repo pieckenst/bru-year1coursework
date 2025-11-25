@@ -1,0 +1,284 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+
+// Selection mode for segmented button
+export enum SelectionMode {
+    single,      // Only one segment can be selected at a time
+    multiple,    // Multiple segments can be selected
+}
+
+// Layout orientation
+export enum SegmentOrientation {
+    horizontal,  // Segments arranged horizontally
+    vertical,    // Segments arranged vertically
+}
+
+// Segment item data structure
+export struct SegmentItem {
+    text: string,
+    icon: image,
+    enabled: bool,
+}
+
+// Individual segment button component
+component SegmentButton {
+    in property <string> text;
+    in property <image> icon;
+    in property <bool> selected: false;
+    in property <bool> disabled: false;
+    in property <bool> is-first: false;
+    in property <bool> is-last: false;
+    in property <SegmentOrientation> orientation: SegmentOrientation.horizontal;
+    in property <length> segment-height: 32px;
+    in property <length> icon-size: 16px;
+    
+    callback clicked();
+    
+    // Computed border radius based on position
+    property <length> top-left-radius: is-first ? CosmicCornerRadii.radius-s : 0px;
+    property <length> top-right-radius: (is-first && orientation == SegmentOrientation.vertical) || 
+                                        (is-last && orientation == SegmentOrientation.horizontal) ? 
+                                        CosmicCornerRadii.radius-s : 0px;
+    property <length> bottom-left-radius: (is-first && orientation == SegmentOrientation.horizontal) || 
+                                          (is-last && orientation == SegmentOrientation.vertical) ? 
+                                          0px : 
+                                          (is-last && orientation == SegmentOrientation.vertical ? CosmicCornerRadii.radius-s : 0px);
+    property <length> bottom-right-radius: is-last ? CosmicCornerRadii.radius-s : 0px;
+    
+    // Text color and weight based on selection
+    property <color> text-color: selected ? CosmicPalette.accent-primary : CosmicPalette.text-primary;
+    property <int> text-weight: selected ? CosmicTypography.weight-medium : CosmicTypography.weight-regular;
+    
+    min-height: segment-height;
+    // min-width: orientation == SegmentOrientation.horizontal ? 76px : parent.width;
+    
+    states [
+        disabled when root.disabled: {
+            segment-container.opacity: 0.4;
+        }
+        selected when root.selected && !root.disabled: {
+            segment-container.background: CosmicPalette.accent-primary.with-alpha(0.15);
+        }
+        pressed when touch-area.pressed && !root.disabled: {
+            segment-container.background: CosmicPalette.surface-variant.darker(0.05);
+        }
+        hover when touch-area.has-hover && !root.disabled && !root.selected: {
+            segment-container.background: CosmicPalette.surface-variant.with-alpha(0.5);
+        }
+    ]
+    
+    segment-container := Rectangle {
+        background: Colors.transparent;
+        border-width: 1px;
+        border-color: CosmicPalette.border-neutral;
+        
+        // Apply individual corner radii
+        border-top-left-radius: root.top-left-radius;
+        border-top-right-radius: root.top-right-radius;
+        border-bottom-left-radius: root.bottom-left-radius;
+        border-bottom-right-radius: root.bottom-right-radius;
+        
+        if orientation == SegmentOrientation.horizontal: HorizontalLayout {
+            padding-left: CosmicSpacing.space-xs;
+            padding-right: CosmicSpacing.space-xs;
+            padding-top: CosmicSpacing.space-xxs;
+            padding-bottom: CosmicSpacing.space-xxs;
+            spacing: CosmicSpacing.space-xxs;
+            alignment: center;
+            
+            // Icon
+            if root.icon.width > 0: Image {
+                source: root.icon;
+                width: root.icon-size;
+                height: root.icon-size;
+                colorize: root.text-color;
+                vertical-alignment: center;
+            }
+            
+            // Text
+            if root.text != "": Text {
+                text: root.text;
+                color: root.text-color;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-14;
+                font-weight: root.text-weight;
+                vertical-alignment: center;
+                horizontal-alignment: center;
+            }
+        }
+        
+        if orientation == SegmentOrientation.vertical: VerticalLayout {
+            padding-left: CosmicSpacing.space-xs;
+            padding-right: CosmicSpacing.space-xs;
+            padding-top: CosmicSpacing.space-xxs;
+            padding-bottom: CosmicSpacing.space-xxs;
+            spacing: CosmicSpacing.space-xxs;
+            alignment: center;
+            
+            // Icon
+            if root.icon.width > 0: Image {
+                source: root.icon;
+                width: root.icon-size;
+                height: root.icon-size;
+                colorize: root.text-color;
+                horizontal-alignment: center;
+            }
+            
+            // Text
+            if root.text != "": Text {
+                text: root.text;
+                color: root.text-color;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-14;
+                font-weight: root.text-weight;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+        }
+        
+        touch-area := TouchArea {
+            enabled: !root.disabled;
+            mouse-cursor: root.disabled ? MouseCursor.default : MouseCursor.pointer;
+            
+            clicked => {
+                if !root.disabled {
+                    root.clicked();
+                }
+            }
+        }
+        
+        // Focus indicator (would need FocusScope for full implementation)
+    }
+}
+
+// Divider between segments
+component SegmentDivider {
+    in property <SegmentOrientation> orientation: SegmentOrientation.horizontal;
+    
+    if orientation == SegmentOrientation.horizontal: Rectangle {
+        width: 1px;
+        background: CosmicPalette.border-neutral;
+    }
+    
+    if orientation == SegmentOrientation.vertical: Rectangle {
+        height: 1px;
+        background: CosmicPalette.border-neutral;
+    }
+}
+
+// Main CosmicSegmentedButton component
+export component CosmicSegmentedButton {
+    // Content properties
+    in property <[SegmentItem]> items: [];
+    
+    // Style properties
+    in property <SelectionMode> selection-mode: SelectionMode.single;
+    in property <SegmentOrientation> orientation: SegmentOrientation.horizontal;
+    in property <length> segment-height: 32px;
+    in property <length> icon-size: 16px;
+    in property <bool> show-dividers: true;
+    
+    // State properties - array of selected indices
+    in-out property <[int]> selected-indices: [];
+    
+    // Callbacks
+    callback segment-clicked(int /* index */);
+    
+    // Helper function to check if index is selected
+    // Supports up to 10 selected items (sufficient for most use cases)
+    pure function is-selected(index: int) -> bool {
+        if selected-indices.length == 0 {
+            return false;
+        }
+        if selected-indices.length > 0 && selected-indices[0] == index {
+            return true;
+        }
+        if selected-indices.length > 1 && selected-indices[1] == index {
+            return true;
+        }
+        if selected-indices.length > 2 && selected-indices[2] == index {
+            return true;
+        }
+        if selected-indices.length > 3 && selected-indices[3] == index {
+            return true;
+        }
+        if selected-indices.length > 4 && selected-indices[4] == index {
+            return true;
+        }
+        if selected-indices.length > 5 && selected-indices[5] == index {
+            return true;
+        }
+        if selected-indices.length > 6 && selected-indices[6] == index {
+            return true;
+        }
+        if selected-indices.length > 7 && selected-indices[7] == index {
+            return true;
+        }
+        if selected-indices.length > 8 && selected-indices[8] == index {
+            return true;
+        }
+        if selected-indices.length > 9 && selected-indices[9] == index {
+            return true;
+        }
+        return false;
+    }
+    
+    // Container with appropriate layout
+    if orientation == SegmentOrientation.horizontal: HorizontalLayout {
+        spacing: 0px;
+        
+        for item[index] in root.items: Rectangle {
+            // Segment button
+            SegmentButton {
+                text: item.text;
+                icon: item.icon;
+                selected: root.is-selected(index);
+                disabled: !item.enabled;
+                is-first: index == 0;
+                is-last: index == root.items.length - 1;
+                orientation: root.orientation;
+                segment-height: root.segment-height;
+                icon-size: root.icon-size;
+                
+                clicked => {
+                    root.segment-clicked(index);
+                }
+            }
+            
+            // Divider (except after last item)
+            if root.show-dividers && index < root.items.length - 1: SegmentDivider {
+                orientation: root.orientation;
+            }
+        }
+    }
+    
+    if orientation == SegmentOrientation.vertical: VerticalLayout {
+        spacing: 0px;
+        
+        for item[index] in root.items: Rectangle {
+            // Segment button
+            SegmentButton {
+                text: item.text;
+                icon: item.icon;
+                selected: root.is-selected(index);
+                disabled: !item.enabled;
+                is-first: index == 0;
+                is-last: index == root.items.length - 1;
+                orientation: root.orientation;
+                segment-height: root.segment-height;
+                icon-size: root.icon-size;
+                
+                clicked => {
+                    root.segment-clicked(index);
+                }
+            }
+            
+            // Divider (except after last item)
+            if root.show-dividers && index < root.items.length - 1: SegmentDivider {
+                orientation: root.orientation;
+            }
+        }
+    }
+}

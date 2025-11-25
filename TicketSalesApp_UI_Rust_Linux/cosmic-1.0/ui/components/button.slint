@@ -1,0 +1,261 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicElevation } from "../styling/elevation.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+
+// Button variant types
+export enum ButtonVariant {
+    standard,      // Filled button with background
+    outlined,      // Button with border, no fill
+    text,          // Text-only button, no background or border
+}
+
+// Button class/style types
+export enum ButtonClass {
+    standard,      // Default button style
+    suggested,     // Primary action (accent color)
+    destructive,   // Dangerous action (error color)
+    text,          // Text-only style
+    link,          // Hyperlink style
+}
+
+// Button size presets
+export enum ButtonSize {
+    xs,    // Extra small
+    sm,    // Small (default)
+    md,    // Medium
+    lg,    // Large
+    xl,    // Extra large
+}
+
+// Spinner component for loading state
+component Spinner inherits Rectangle {
+    in property <length> size: 16px;
+    in property <color> spinner-color: CosmicPalette.text-primary;
+    
+    width: size;
+    height: size;
+    
+    // Simple rotating circle for spinner
+    Path {
+        width: parent.width;
+        height: parent.height;
+        
+        commands: "M 50 10 A 40 40 0 1 1 49.9 10";
+        stroke: root.spinner-color;
+        stroke-width: 3px;
+    }
+}
+
+// Main CosmicButton component
+export component CosmicButton {
+    // Content properties
+    in property <string> text;
+    in property <image> leading-icon;
+    in property <image> trailing-icon;
+    
+    // Style properties
+    in property <ButtonVariant> variant: ButtonVariant.standard;
+    in property <ButtonClass> class: ButtonClass.standard;
+    in property <ButtonSize> size: ButtonSize.sm;
+    
+    // State properties
+    in property <bool> disabled: false;
+    in property <bool> selected: false;
+    in property <bool> loading: false;
+    
+    // Callbacks
+    callback clicked <=> touch-area.clicked;
+    
+    // Size-based dimensions
+    property <length> button-height: size == ButtonSize.xs ? 28px :
+                                     size == ButtonSize.sm ? 32px :
+                                     size == ButtonSize.md ? 40px :
+                                     size == ButtonSize.lg ? 48px :
+                                     56px; // xl
+    
+    property <length> icon-size: size == ButtonSize.xs ? 14px :
+                                 size == ButtonSize.sm ? 16px :
+                                 size == ButtonSize.md ? 24px :
+                                 size == ButtonSize.lg ? 32px :
+                                 40px; // xl
+    
+    property <length> font-size: size == ButtonSize.xs ? CosmicTypography.size-12 :
+                                 size == ButtonSize.sm ? CosmicTypography.size-14 :
+                                 size == ButtonSize.md ? CosmicTypography.size-18 :
+                                 size == ButtonSize.lg ? CosmicTypography.size-20 :
+                                 CosmicTypography.size-24; // xl
+    
+    property <int> font-weight: size == ButtonSize.xl ? 300 : 500; // Light for XL, Medium for others
+    
+    property <length> padding-horizontal: size == ButtonSize.xs ? CosmicSpacing.space-xxs :
+                                          size == ButtonSize.sm ? CosmicSpacing.space-xs :
+                                          size == ButtonSize.md ? CosmicSpacing.space-s :
+                                          size == ButtonSize.lg ? CosmicSpacing.space-s :
+                                          CosmicSpacing.space-s; // xl
+    
+    property <length> padding-vertical: size == ButtonSize.xs ? CosmicSpacing.space-xxxs :
+                                        size == ButtonSize.sm ? CosmicSpacing.space-xxs :
+                                        size == ButtonSize.md ? CosmicSpacing.space-xs :
+                                        size == ButtonSize.lg ? CosmicSpacing.space-xs :
+                                        CosmicSpacing.space-xs; // xl
+    
+    // Computed colors based on variant and class
+    property <color> background-color: {
+        if class == ButtonClass.suggested {
+            CosmicPalette.accent-primary
+        } else if class == ButtonClass.destructive {
+            CosmicPalette.error
+        } else if class == ButtonClass.text || class == ButtonClass.link {
+            Colors.transparent
+        } else if variant == ButtonVariant.text {
+            Colors.transparent
+        } else if variant == ButtonVariant.outlined {
+            Colors.transparent
+        } else {
+            CosmicPalette.background-surface
+        }
+    };
+    
+    property <color> text-color: {
+        if class == ButtonClass.suggested || class == ButtonClass.destructive {
+            #FFFFFF
+        } else if class == ButtonClass.text || class == ButtonClass.link {
+            CosmicPalette.accent-primary
+        } else {
+            CosmicPalette.text-primary
+        }
+    };
+    
+    property <length> border-width: {
+        if variant == ButtonVariant.outlined {
+            1px
+        } else {
+            0px
+        }
+    };
+    
+    property <color> border-color: {
+        if variant == ButtonVariant.outlined {
+            if class == ButtonClass.destructive {
+                CosmicPalette.error
+            } else {
+                CosmicPalette.accent-primary
+            }
+        } else {
+            Colors.transparent
+        }
+    };
+    
+    min-height: button-height;
+    
+    states [
+        disabled when root.disabled || root.loading: {
+            container.opacity: 0.4;
+        }
+        pressed when touch-area.pressed && !root.disabled && !root.loading: {
+            container.background: {
+                if class == ButtonClass.suggested {
+                    CosmicPalette.accent-pressed
+                } else if class == ButtonClass.destructive {
+                    CosmicPalette.error.darker(0.15)
+                } else if class == ButtonClass.text || class == ButtonClass.link {
+                    CosmicPalette.surface-variant.with-alpha(0.3)
+                } else {
+                    CosmicPalette.surface-variant.darker(0.05)
+                }
+            };
+            container.drop-shadow-blur: CosmicElevation.shadow-sm-blur * 0.5;
+        }
+        hover when touch-area.has-hover && !root.disabled && !root.loading: {
+            container.background: {
+                if class == ButtonClass.suggested {
+                    CosmicPalette.accent-hover
+                } else if class == ButtonClass.destructive {
+                    CosmicPalette.error.darker(0.1)
+                } else if class == ButtonClass.text || class == ButtonClass.link {
+                    CosmicPalette.surface-variant.with-alpha(0.2)
+                } else {
+                    CosmicPalette.surface-variant
+                }
+            };
+        }
+        selected when root.selected: {
+            container.background: CosmicPalette.accent-primary.with-alpha(0.15);
+        }
+    ]
+    
+    container := Rectangle {
+        background: root.background-color;
+        border-radius: CosmicCornerRadii.radius-s;
+        border-width: root.border-width;
+        border-color: root.border-color;
+        
+        drop-shadow-offset-y: CosmicElevation.shadow-sm-offset-y;
+        drop-shadow-blur: CosmicElevation.shadow-sm-blur;
+        drop-shadow-color: variant == ButtonVariant.text || class == ButtonClass.text || class == ButtonClass.link ? 
+                          Colors.transparent : CosmicPalette.shadow-color-sm;
+        
+        HorizontalLayout {
+            padding-left: root.padding-horizontal;
+            padding-right: root.padding-horizontal;
+            padding-top: root.padding-vertical;
+            padding-bottom: root.padding-vertical;
+            spacing: CosmicSpacing.space-xxs;
+            alignment: center;
+            
+            // Leading icon
+            if root.leading-icon.width > 0 && !root.loading: Image {
+                source: root.leading-icon;
+                width: root.icon-size;
+                height: root.icon-size;
+                colorize: root.text-color;
+                vertical-alignment: center;
+            }
+            
+            // Loading spinner (replaces leading icon when loading)
+            if root.loading: Spinner {
+                size: root.icon-size;
+                spinner-color: root.text-color;
+            }
+            
+            // Button text
+            if root.text != "": Text {
+                text: root.text;
+                color: root.text-color;
+                font-family: CosmicTypography.font-family;
+                font-size: root.font-size;
+                font-weight: root.font-weight;
+                vertical-alignment: center;
+                horizontal-alignment: center;
+            }
+            
+            // Trailing icon
+            if root.trailing-icon.width > 0: Image {
+                source: root.trailing-icon;
+                width: root.icon-size;
+                height: root.icon-size;
+                colorize: root.text-color;
+                vertical-alignment: center;
+            }
+        }
+        
+        touch-area := TouchArea {
+            enabled: !root.disabled && !root.loading;
+            mouse-cursor: root.disabled || root.loading ? MouseCursor.default : MouseCursor.pointer;
+        }
+        
+        // Focus indicator (would need FocusScope for full implementation)
+        if false: Rectangle {
+            x: -2px;
+            y: -2px;
+            width: parent.width + 4px;
+            height: parent.height + 4px;
+            border-radius: parent.border-radius + 2px;
+            border-width: 2px;
+            border-color: CosmicPalette.accent-primary;
+            background: Colors.transparent;
+        }
+    }
+}

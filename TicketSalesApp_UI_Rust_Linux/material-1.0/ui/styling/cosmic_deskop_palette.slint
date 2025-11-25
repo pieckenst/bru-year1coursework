@@ -1,0 +1,38 @@
+import { Palette } from "std-widgets.slint";
+
+export global CosmicTheme {
+    in-out property <bool> is-dark: true;
+
+    // --- METRICS ---
+    out property <length> radius-sm: 8px;
+    out property <length> radius-md: 12px;
+    out property <length> radius-lg: 16px;
+    out property <length> padding: 16px;
+    out property <string> font-family: "Inter";
+
+    // --- PALETTE (Cosmic Orange) ---
+    out property <color> accent: is-dark ? #F59E0B : #D97706; 
+    out property <color> on-accent: is-dark ? #000000 : #FFFFFF;
+    
+    out property <color> danger: #EF4444;
+    out property <color> success: #22C55E;
+    out property <color> warning: #EAB308;
+
+    // --- SURFACES ---
+    // Deep gray/black background like "Cosmic Settings"
+    out property <color> bg-app: is-dark ? #191919 : #F3F0F9;
+    out property <color> bg-sidebar: is-dark ? #111111 : #E6E1F5;
+    out property <color> bg-surface: is-dark ? #242424 : #FFFFFF;
+    out property <color> bg-subtle: is-dark ? #333333 : #E5E7EB;
+    
+    // --- BORDERS ---
+    out property <color> border: is-dark ? #404040 : #D1D5DB;
+    out property <color> border-focus: accent;
+
+    // --- TEXT ---
+    out property <color> text-primary: is-dark ? #FFFFFF : #111827;
+    out property <color> text-secondary: is-dark ? #9CA3AF : #4B5563;
+    out property <color> text-tertiary: is-dark ? #6B7280 : #9CA3AF;
+
+    out property <duration> anim-speed: 200ms;
+}

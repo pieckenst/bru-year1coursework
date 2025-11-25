@@ -1,0 +1,119 @@
+// COSMIC Desktop Typography System
+// Complete font system with Inter font family and typography presets
+
+export global CosmicTypography {
+    // ============================================================================
+    // FONT FAMILY (Requirement 3.1)
+    // ============================================================================
+    
+    // Inter font family (already available in cosmic-1.0/font)
+    in-out property <string> font-family: "Inter";
+    
+    // ============================================================================
+    // FONT SIZES (Requirements 3.5, 25.1-25.8)
+    // ============================================================================
+    
+    // Complete font size scale
+    in-out property <length> size-12: 12px;
+    in-out property <length> size-14: 14px;
+    in-out property <length> size-16: 16px;
+    in-out property <length> size-18: 18px;
+    in-out property <length> size-20: 20px;
+    in-out property <length> size-24: 24px;
+    in-out property <length> size-29: 29px;
+    in-out property <length> size-32: 32px;
+    in-out property <length> size-35: 35px;
+    
+    // ============================================================================
+    // FONT WEIGHTS (Requirements 3.2, 3.3)
+    // ============================================================================
+    
+    in-out property <int> weight-light: 300;
+    in-out property <int> weight-regular: 400;
+    in-out property <int> weight-medium: 500;
+    in-out property <int> weight-semibold: 600;
+    in-out property <int> weight-bold: 700;
+    
+    // ============================================================================
+    // LINE HEIGHTS (Requirements 25.1-25.8)
+    // ============================================================================
+    
+    in-out property <length> line-height-17: 17px;
+    in-out property <length> line-height-21: 21px;
+    in-out  property <length> line-height-30: 30px;
+    in-out property <length> line-height-36: 36px;
+    in-out property <length> line-height-43: 43px;
+    in-out property <length> line-height-52: 52px;
+    
+    // ============================================================================
+    // TYPOGRAPHY PRESETS (Requirements 25.1-25.8)
+    // ============================================================================
+    
+    // Title 1 - Largest heading (Requirement 25.1)
+    in-out property <length> title1-size: size-35;
+    in-out property <int> title1-weight: weight-semibold;
+    in-out property <length> title1-line-height: line-height-52;
+    
+    // Title 2 - Large heading (Requirement 25.2)
+    in-out property <length> title2-size: size-29;
+    in-out property <int> title2-weight: weight-semibold;
+    in-out property <length> title2-line-height: line-height-43;
+    
+    // Title 3 - Medium heading (Requirement 25.3)
+    in-out property <length> title3-size: size-24;
+    in-out property <int> title3-weight: weight-bold;
+    in-out property <length> title3-line-height: line-height-36;
+    
+    // Title 4 - Small heading (Requirement 25.4)
+    in-out property <length> title4-size: size-20;
+    in-out property <int> title4-weight: weight-bold;
+    in-out property <length> title4-line-height: line-height-30;
+    
+    // Heading - Section heading (Requirement 25.5)
+    in-out property <length> heading-size: size-14;
+    in-out property <int> heading-weight: weight-bold;
+    in-out property <length> heading-line-height: line-height-21;
+    
+    // Body - Standard text (Requirement 25.6)
+    in-out property <length> body-size: size-14;
+    in-out property <int> body-weight: weight-regular;
+    in-out property <length> body-line-height: line-height-21;
+    
+    // Caption - Small text (Requirement 25.7)
+    in-out property <length> caption-size: size-12;
+    in-out property <int> caption-weight: weight-regular;
+    in-out property <length> caption-line-height: line-height-17;
+    
+    // Caption Heading - Small bold text (Requirement 25.8)
+   in-out property <length> caption-heading-size: size-12;
+    in-out property <int> caption-heading-weight: weight-semibold;
+    in-out  property <length> caption-heading-line-height: line-height-17;
+    
+    // ============================================================================
+    // ADDITIONAL COMMON SIZES
+    // ============================================================================
+    
+    // App bar title
+    in-out property <length> app-bar-title-size: size-18;
+    in-out property <int> app-bar-title-weight: weight-semibold;
+    
+    // Button text
+   in-out  property <length> button-size: size-14;
+   in-out property <int> button-weight: weight-medium;
+    
+    // Input text
+   in-out property <length> input-size: size-16;
+   in-out property <int> input-weight: weight-regular;
+    
+    // Label text
+   in-out property <length> label-size: size-14;
+   in-out property <int> label-weight: weight-semibold;
+    
+    // Menu text
+   in-out property <length> menu-size: size-14;
+   in-out property <int> menu-weight: weight-regular;
+    
+    // Tooltip text
+   in-out property <length> tooltip-size: size-12;
+   in-out property <int> tooltip-weight: weight-regular;
+}
