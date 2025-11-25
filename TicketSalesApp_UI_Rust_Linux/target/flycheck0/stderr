@@ -1,12 +1,12 @@
-   0.358551900s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="TicketSalesApp_UI_Rust_Linux"}: cargo::core::compiler::fingerprint: stale: changed "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\ui/app-window.slint"
-   0.358588600s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="TicketSalesApp_UI_Rust_Linux"}: cargo::core::compiler::fingerprint:           (vs) "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\target\\debug\\build\\TicketSalesApp_UI_Rust_Linux-c20fec8f16625090\\output"
-   0.358594600s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="TicketSalesApp_UI_Rust_Linux"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13408032808, nanos: 229286900 } < FileTime { seconds: 13408033420, nanos: 569551200 }
-   0.401316600s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="TicketSalesApp_UI_Rust_Linux"}: cargo::core::compiler::fingerprint: fingerprint dirty for TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux)/Check { test: false }/TargetInner { name: "TicketSalesApp_UI_Rust_Linux", doc: true, ..: with_path("D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\src\\main.rs", Edition2024) }
-   0.401358000s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="TicketSalesApp_UI_Rust_Linux"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "build_script_build" })
-   0.403160800s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux)/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\build.rs", Edition2024) }
-   0.403182900s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\target\\debug\\build\\TicketSalesApp_UI_Rust_Linux-c20fec8f16625090\\output", reference_mtime: FileTime { seconds: 13408032808, nanos: 229286900 }, stale: "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\ui/app-window.slint", stale_mtime: FileTime { seconds: 13408033420, nanos: 569551200 } }))
-   0.496317200s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="TicketSalesApp_UI_Rust_Linux"}: cargo::core::compiler::fingerprint: fingerprint dirty for TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux)/Check { test: true }/TargetInner { name: "TicketSalesApp_UI_Rust_Linux", doc: true, ..: with_path("D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\src\\main.rs", Edition2024) }
-   0.496353700s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="TicketSalesApp_UI_Rust_Linux"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "build_script_build" })
+   0.397491500s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="TicketSalesApp_UI_Rust_Linux"}: cargo::core::compiler::fingerprint: stale: changed "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\ui\\jobs_management.slint"
+   0.397533000s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="TicketSalesApp_UI_Rust_Linux"}: cargo::core::compiler::fingerprint:           (vs) "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\target\\debug\\build\\TicketSalesApp_UI_Rust_Linux-c20fec8f16625090\\output"
+   0.397540400s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="TicketSalesApp_UI_Rust_Linux"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13408214330, nanos: 127013400 } < FileTime { seconds: 13408552974, nanos: 767803600 }
+   0.476904300s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="TicketSalesApp_UI_Rust_Linux"}: cargo::core::compiler::fingerprint: fingerprint dirty for TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux)/Check { test: false }/TargetInner { name: "TicketSalesApp_UI_Rust_Linux", doc: true, ..: with_path("D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\src\\main.rs", Edition2024) }
+   0.476962300s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="TicketSalesApp_UI_Rust_Linux"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "build_script_build" })
+   0.482465100s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux)/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\build.rs", Edition2024) }
+   0.482495900s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\target\\debug\\build\\TicketSalesApp_UI_Rust_Linux-c20fec8f16625090\\output", reference_mtime: FileTime { seconds: 13408214330, nanos: 127013400 }, stale: "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\ui\\jobs_management.slint", stale_mtime: FileTime { seconds: 13408552974, nanos: 767803600 } }))
+   0.592687200s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="TicketSalesApp_UI_Rust_Linux"}: cargo::core::compiler::fingerprint: fingerprint dirty for TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux)/Check { test: true }/TargetInner { name: "TicketSalesApp_UI_Rust_Linux", doc: true, ..: with_path("D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\src\\main.rs", Edition2024) }
+   0.592716500s  INFO prepare_target{force=false package_id=TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux) target="TicketSalesApp_UI_Rust_Linux"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "build_script_build" })
    Compiling TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux)
 error: failed to run custom build command for `TicketSalesApp_UI_Rust_Linux v0.1.0 (D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux)`
 note: To improve backtraces for build dependencies, set the CARGO_PROFILE_DEV_BUILD_OVERRIDE_DEBUG=true environment variable to enable debug information generation.
@@ -24,25 +24,30 @@ Caused by:
       |
   304 |             animate rotation-angle { duration: 250ms; }
       |                     ^
-  error: Unknown property input-type in TextField
-     --> D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux\ui\route_schedule_dialogs.slint:154:37
+  error: 'add-job' only has 2 arguments, but 3 were provided
+     --> D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux\ui\app-window.slint:448:13
       |
-  154 |                                     input-type: decimal;
-      |                                     ^
-  error: Unknown property input-type in TextField
-     --> D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux\ui\route_schedule_dialogs.slint:170:37
+  448 |             add-job(title, description, salary) => {
+      |             ^
+  error: 'edit-job' only has 3 arguments, but 4 were provided
+     --> D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux\ui\app-window.slint:452:13
       |
-  170 |                                     input-type: number;
-      |                                     ^
-  error: Unknown property input-type in TextField
-     --> D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux\ui\route_schedule_dialogs.slint:186:37
+  452 |             edit-job(job-id, title, description, salary) => {
+      |             ^
+  error: Unknown unqualified identifier 'salary'
+     --> D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux\ui\app-window.slint:449:50
       |
-  186 |                                     input-type: number;
-      |                                     ^
+  449 |                 root.add-job(title, description, salary);
+      |                                                  ^
+  error: Unknown unqualified identifier 'salary'
+     --> D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux\ui\app-window.slint:453:59
+      |
+  453 |                 root.edit-job(job-id, title, description, salary);
+      |                                                           ^
 
 
-  thread 'main' (22208) panicked at build.rs:2:49:
-  Slint build failed: CompileError(["D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\material-1.0\\ui\\components\\date_picker.slint:300: The property 'rotation-angle' has been deprecated. Please use 'transform-rotation' instead", "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\material-1.0\\ui\\components\\date_picker.slint:304: The property 'rotation-angle' has been deprecated. Please use 'transform-rotation' instead", "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\ui\\route_schedule_dialogs.slint:154: Unknown property input-type in TextField", "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\ui\\route_schedule_dialogs.slint:170: Unknown property input-type in TextField", "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\ui\\route_schedule_dialogs.slint:186: Unknown property input-type in TextField"])
+  thread 'main' (14420) panicked at build.rs:2:49:
+  Slint build failed: CompileError(["D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\material-1.0\\ui\\components\\date_picker.slint:300: The property 'rotation-angle' has been deprecated. Please use 'transform-rotation' instead", "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\material-1.0\\ui\\components\\date_picker.slint:304: The property 'rotation-angle' has been deprecated. Please use 'transform-rotation' instead", "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\ui\\app-window.slint:448: 'add-job' only has 2 arguments, but 3 were provided", "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\ui\\app-window.slint:452: 'edit-job' only has 3 arguments, but 4 were provided", "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\ui\\app-window.slint:449: Unknown unqualified identifier 'salary'", "D:\\code\\bru-year1coursework\\TicketSalesApp_UI_Rust_Linux\\ui\\app-window.slint:453: Unknown unqualified identifier 'salary'"])
   stack backtrace:
      0: std::panicking::panic_handler
                at /rustc/f3f12444a017add0468f683f3a10656d29438a05/library\std\src\panicking.rs:698

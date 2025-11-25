@@ -1,6 +1,6 @@
 # Implementation Plan
 
-- [-] 1. Implement Bus Management Rust Backend
+- [x] 1. Implement Bus Management Rust Backend
 
 
   - Wire up existing bus_management.slint UI to API client
@@ -212,7 +212,7 @@
 
 
 
-- [ ] 3.9 Add navigation integration for route schedules
+- [x] 3.9 Add navigation integration for route schedules
   - Update AppRoute enum to include RouteSchedules
   - Add navigation handler to show route schedules view
   - _Requirements: 14.3, 14.5_
@@ -505,5 +505,344 @@ or validation error display
   - Check for unused imports and variables
   - Verify all tests pass with `cargo test`
 
-- [ ] 13. Final Checkpoint - Ensure all tests pass
+- [ ] 13. Implement Jobs Management UI and Backend
+
+  - Create jobs_management.slint with Material Design styling
+  - Implement Rust backend with CRUD operations
+  - Add administrator-only access control
+  - Add search functionality for jobs
+  - _Requirements: 19.1-19.5, 20.1-20.6, 21.1-21.5, 22.1-22.6, 23.1-23.5_
+
+- [x] 13.1 Update User model to include complete fields
+
+
+  - Add email, phone_number, is_active, is_windows_auth fields to User struct
+  - Add created_at, last_login_at timestamp fields
+  - Add user_roles relationship field
+  - Update serialization attributes for API compatibility
+  - _Requirements: 24.1, 24.3_
+
+- [x] 13.2 Create users API client module (src/api/users.rs)
+
+
+  - Implement `get_users()` with ReferenceHandler.Preserve parsing
+  - Implement `get_user(id)` with nested roles/permissions
+  - Implement `create_user(request)` with CreateUserRequest
+  - Implement `update_user(id, request)` with UpdateUserRequest
+  - Implement `delete_user(id)` with proper error handling
+  - Implement `get_current_user()` for authentication
+  - Implement `get_user_roles(id)` and `get_user_permissions(id)`
+  - Implement `assign_role_to_user(user_id, role_id)` and `remove_role_from_user(user_id, role_id)`
+  - Handle complex nested UserRoles structure in responses
+  - _Requirements: 24.1, 24.3, 25.3, 26.3, 27.2, 28.3, 28.4, 29.1_
+
+- [ ]* 13.3 Write property test for user data with nested roles
+  - **Property 30: User data includes roles and permissions**
+  - **Validates: Requirements 24.3**
+
+
+
+- [x] 13.4 Update jobs API client module (src/api/jobs.rs)
+  - Add `create_job(request)` with CreateJobRequest
+  - Add `update_job(id, request)` with UpdateJobRequest
+  - Add `delete_job(id)` with proper error handling
+  - Add `search_jobs(job_title, internship)` with query parameters
+  - Handle ReferenceHandler.Preserve format in responses
+
+
+  - _Requirements: 20.2, 21.2, 22.2, 23.5_
+
+- [x] 13.5 Create jobs_management.slint UI component
+
+
+
+  - Define JobData struct with id, title, description, salary fields
+  - Create main view with search bar and action buttons
+  - Implement job list with columns for ID, title, description, salary
+
+  - Add empty state handling
+  - Add admin-only UI indicators
+  - _Requirements: 19.1, 19.2, 19.5_
+
+
+- [ ] 13.6 Create job add/edit dialogs in Slint
+  - Create dialog with fields for job title, description, base salary
+
+  - Add validation UI (required field indicators)
+  - Add error message display area
+  - Style dialogs with Material Design
+  - _Requirements: 20.1, 21.1_
+
+
+
+
+- [ ] 13.7 Create job delete confirmation dialog
+  - Create confirmation dialog showing job title
+  - Add cancel and confirm buttons
+  - _Requirements: 22.1_
+
+- [x] 13.8 Implement jobs management callbacks in main.rs
+
+
+
+  - Add `load_jobs()` to fetch and display job data
+  - Add `search_jobs()` for real-time filtering by title/description
+  - Add `add_job()`, `edit_job()`, `delete_job()` callbacks
+  - Handle 403 Forbidden responses for non-admin users
+  - Handle loading states and error messages
+  - _Requirements: 19.3, 20.2, 20.3, 21.2, 21.3, 22.2, 22.3, 23.1, 23.4, 22.6_
+
+- [ ]* 13.9 Write property test for job search by multiple fields
+  - **Property 26: Search filters by multiple fields**
+  - **Validates: Requirements 23.1**
+
+- [ ]* 13.10 Write property test for search API parameters
+  - **Property 29: Search API includes query parameters**
+
+
+  - **Validates: Requirements 23.5**
+
+
+- [ ] 13.11 Add navigation integration for jobs management
+  - Update AppRoute enum to include JobsManagement
+  - Add navigation handler to show jobs management view
+  - _Requirements: 31.1_
+
+- [ ] 14. Implement Users Management UI and Backend
+  - Create users_management.slint with Material Design styling
+  - Implement Rust backend with CRUD operations
+  - Add role and permission management
+  - Add administrator-only access control
+  - _Requirements: 24.1-24.6, 25.1-25.7, 26.1-26.6, 27.1-27.7, 28.1-28.5, 29.1-29.5_
+
+- [ ] 14.1 Create users_management.slint UI component
+  - Define UserData struct with all user fields including roles
+  - Define RoleOption struct for role selection
+  - Create main view with action buttons
+  - Implement user list with columns for ID, login, email, phone, role, active status
+  - Add empty state handling
+  - Add admin-only UI indicators
+  - _Requirements: 24.1, 24.2_
+
+- [ ] 14.2 Create user add/edit dialogs in Slint
+  - Create dialog with fields for login, password, email, phone, role
+  - Add ComboBox for role selection (Administrator, Cashier, Controller, Senior Cashier)
+  - Add checkbox for is_active status
+  - Add fields for Windows authentication settings
+  - Add validation UI (required field indicators, unique login check)
+  - Add error message display area
+  - Style dialogs with Material Design
+  - _Requirements: 25.1, 25.2, 26.1, 26.2_
+
+- [ ] 14.3 Create user delete confirmation dialog
+  - Create confirmation dialog showing user login
+  - Add warning for self-deletion attempt
+  - Add warning for last admin deletion attempt
+  - Add cancel and confirm buttons
+  - _Requirements: 27.1_
+
+- [ ] 14.4 Create role/permission view dialogs
+  - Create dialog to display user's assigned roles
+  - Create dialog to display user's effective permissions
+  - Add ability to assign/remove roles
+  - _Requirements: 28.1, 28.2_
+
+- [ ] 14.5 Implement users management callbacks in main.rs
+  - Add `load_users()` to fetch users with nested roles/permissions
+  - Add `add_user()`, `edit_user()`, `delete_user()` callbacks
+  - Add `view_user_roles()` and `view_user_permissions()` callbacks
+  - Add `assign_role()` and `remove_role()` callbacks
+  - Implement self-deletion prevention logic
+  - Implement last-admin deletion prevention logic
+  - Handle 403 Forbidden responses for non-admin users
+  - Handle loading states and error messages
+  - _Requirements: 24.3, 25.3, 25.4, 26.3, 26.4, 27.2, 27.3, 27.5, 27.6, 28.3, 28.4, 28.5, 24.6_
+
+- [ ]* 14.6 Write property test for unique login validation
+  - **Property 31: Unique login validation**
+  - **Validates: Requirements 25.5, 26.5**
+
+- [ ]* 14.7 Write property test for self-deletion prevention
+  - **Property 32: Self-deletion prevention**
+  - **Validates: Requirements 27.5**
+
+- [ ]* 14.8 Write property test for last admin deletion prevention
+  - **Property 33: Last admin deletion prevention**
+  - **Validates: Requirements 27.6**
+
+- [ ]* 14.9 Write property test for role and permission display
+  - **Property 34: Role and permission display**
+  - **Validates: Requirements 28.1, 28.2, 29.5**
+
+- [ ]* 14.10 Write property test for role assignment API calls
+  - **Property 35: Role assignment triggers API call**
+  - **Validates: Requirements 28.3, 28.4**
+
+- [ ]* 14.11 Write property test for role changes refresh
+  - **Property 36: Role changes refresh display**
+  - **Validates: Requirements 28.5**
+
+- [ ] 14.12 Add navigation integration for users management
+  - Update AppRoute enum to include UsersManagement
+  - Add `requires_admin()` method to AppRoute
+  - Add navigation handler to show users management view
+  - Implement navigation visibility based on user role
+  - _Requirements: 31.2, 31.5_
+
+- [ ]* 14.13 Write property test for admin-only navigation visibility
+  - **Property 41: Admin-only navigation visibility**
+  - **Validates: Requirements 31.5**
+
+- [ ] 15. Implement Current User and Authentication Features
+  - Load current user information on startup
+  - Display current user in navigation
+  - Handle authentication failures
+  - _Requirements: 29.1-29.5, 30.1-30.6_
+
+- [ ] 15.1 Implement current user loading on startup
+  - Call `get_current_user()` API on application startup
+  - Store current user information in application state
+  - Display user login and role in navigation area
+  - _Requirements: 29.1, 29.2_
+
+- [ ]* 15.2 Write property test for current user loaded on startup
+  - **Property 37: Current user loaded on startup**
+  - **Validates: Requirements 29.1, 29.2**
+
+- [ ] 15.3 Implement authentication failure handling
+  - Handle 401 Unauthorized responses
+  - Redirect to login screen on invalid token
+  - Clear authentication state
+  - _Requirements: 29.3_
+
+- [ ]* 15.4 Write property test for invalid token handling
+  - **Property 38: Invalid token triggers re-authentication**
+  - **Validates: Requirements 29.3**
+
+- [ ] 15.5 Implement authorization enforcement
+  - Check user role before allowing admin operations
+  - Handle 403 Forbidden responses from API
+  - Display permission denied messages
+  - Disable/hide admin-only UI elements for non-admins
+  - _Requirements: 22.6, 24.6, 30.1, 30.2, 30.3, 30.4, 30.5, 30.6_
+
+- [ ]* 15.6 Write property test for administrator-only operations
+  - **Property 39: Administrator-only operations enforce authorization**
+  - **Validates: Requirements 22.6, 24.6, 30.1, 30.2, 30.3, 30.4, 30.5**
+
+- [ ]* 15.7 Write property test for forbidden response handling
+  - **Property 40: Forbidden responses display permission denied**
+  - **Validates: Requirements 30.6**
+
+- [ ] 16. Update Common Functionality for Jobs and Users
+  - Extend error handling for new error cases
+  - Update validation helpers
+  - Add authorization helpers
+  - _Requirements: 18.1-18.5, 20.4, 25.5, 27.5, 27.6_
+
+- [ ] 16.1 Extend error handling for authorization
+  - Add handling for 403 Forbidden responses
+  - Add permission denied error messages in Russian
+  - Add specific error messages for self-deletion and last-admin deletion
+  - _Requirements: 22.6, 27.5, 27.6, 30.6_
+
+- [ ] 16.2 Add validation for unique constraints
+  - Implement `validate_unique_login()` helper
+  - Check for duplicate logins before submission
+  - Display appropriate error messages
+  - _Requirements: 25.5, 26.5_
+
+- [ ] 16.3 Add authorization helper functions
+  - Implement `is_admin()` helper to check current user role
+  - Implement `can_delete_user()` to check self-deletion and last-admin rules
+  - Add UI visibility helpers based on role
+  - _Requirements: 22.6, 24.6, 27.5, 27.6, 31.5_
+
+- [ ] 17. Update Navigation System for Jobs and Users
+  - Add Jobs and Users to navigation menu
+  - Implement role-based navigation visibility
+  - Update navigation grouping
+  - _Requirements: 31.1-31.5_
+
+- [ ] 17.1 Update navigation.rs module
+  - Add JobsManagement and UsersManagement to AppRoute enum
+  - Update `from_indices()` to map navigation indices
+  - Add `requires_admin()` method for route authorization
+  - Update `display_name()` for new routes
+  - _Requirements: 31.1, 31.2_
+
+- [ ] 17.2 Update navigation.slint UI
+  - Add new navigation group "Администрирование"
+  - Add navigation items for Jobs and Users management
+  - Add appropriate icons
+  - Implement conditional visibility for Users management (admin-only)
+  - _Requirements: 31.1, 31.2, 31.5_
+
+- [ ] 17.3 Update app-window.slint to include new views
+  - Add conditional rendering for jobs management view
+  - Add conditional rendering for users management view
+  - Wire up navigation callbacks
+  - _Requirements: 31.1, 31.2_
+
+- [ ] 18. Implement Search Functionality for Jobs
+  - Add real-time search for jobs management
+  - Implement multi-field search (title and description)
+  - Implement clear search to restore full list
+  - _Requirements: 23.1-23.5_
+
+- [ ] 18.1 Implement job search filtering
+  - Filter jobs by title OR description in real-time
+  - Update display without API calls (client-side filtering)
+  - Handle empty search results
+  - _Requirements: 23.1, 23.4_
+
+- [ ] 18.2 Implement search clear for jobs
+  - Restore full list when search is cleared
+  - Test round-trip property (filter then clear)
+  - _Requirements: 23.2_
+
+- [ ]* 18.3 Write property test for search round-trip
+  - **Property 27: Search clear restores full list**
+  - **Validates: Requirements 23.2**
+
+- [ ]* 18.4 Write property test for real-time search
+  - **Property 28: Real-time search updates display**
+  - **Validates: Requirements 23.4**
+
+- [ ] 19. Final Integration and Testing for Jobs and Users
+  - Perform end-to-end testing of all workflows
+  - Verify all property tests pass
+  - Ensure authorization works correctly
+  - _Requirements: All Jobs and Users requirements_
+
+- [ ] 19.1 Test complete jobs management workflow
+  - Test add, edit, delete operations as admin
+  - Test that non-admins receive 403 Forbidden
+  - Test search functionality
+  - Test error handling and validation
+  - Verify loading states and user feedback
+
+- [ ] 19.2 Test complete users management workflow
+  - Test add, edit, delete operations as admin
+  - Test that non-admins cannot access users management
+  - Test role and permission viewing
+  - Test role assignment and removal
+  - Test self-deletion prevention
+  - Test last-admin deletion prevention
+  - Test unique login validation
+  - Verify loading states and user feedback
+
+- [ ] 19.3 Test current user and authentication
+  - Test current user loading on startup
+  - Test display of current user in navigation
+  - Test 401 Unauthorized handling
+  - Test 403 Forbidden handling
+  - Test navigation visibility based on role
+
+- [ ] 19.4 Run all new property-based tests
+  - Ensure all 16 new properties (26-41) pass with 100+ iterations
+  - Fix any failing tests
+  - Document any edge cases discovered
+
+- [ ] 20. Final Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.

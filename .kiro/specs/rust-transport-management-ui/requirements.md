@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This specification defines the requirements for implementing Bus Management, Route Management, and Route Schedules Management user interfaces in the Rust/Slint-based Linux application for the BRU Avtopark system. The implementation will mirror the functionality of the existing Avalonia C# application while adapting to the Slint UI framework and Rust programming patterns.
+This specification defines the requirements for implementing Bus Management, Route Management, Route Schedules Management, Jobs Management, and Users Management user interfaces in the Rust/Slint-based Linux application for the BRU Avtopark system. The implementation will mirror the functionality of the existing Avalonia C# application while adapting to the Slint UI framework and Rust programming patterns.
 
 ## Glossary
 
@@ -11,6 +11,9 @@ This specification defines the requirements for implementing Bus Management, Rou
 - **Bus**: A vehicle (Avtobus) in the fleet with a model identifier
 - **Route**: A transportation route (Marshut) with start/end points, assigned driver, and bus
 - **Route Schedule**: A specific scheduled instance of a route with departure/arrival times, stops, and pricing
+- **Job**: A position or role within the organization with title, description, and salary information
+- **System User**: An account in the system with login credentials, role, and permissions
+- **Administrator**: A user with role value 1 who has full access to create, edit, and delete records
 - **API**: The backend REST API service running on localhost:5000
 - **Dialog**: A modal window for creating or editing records
 - **Navigation**: The application's sidebar menu system for switching between views
@@ -236,3 +239,168 @@ This specification defines the requirements for implementing Bus Management, Rou
 3. WHEN an operation fails THEN the system SHALL display a clear error message explaining what went wrong
 4. WHEN validation fails THEN the system SHALL highlight the problematic fields and explain the requirements
 5. WHEN the system is loading data THEN the system SHALL disable action buttons to prevent duplicate requests
+
+### Requirement 19: Jobs Management View
+
+**User Story:** As an administrator, I want to view and manage job positions, so that I can maintain accurate records of all roles in the organization.
+
+#### Acceptance Criteria
+
+1. WHEN the user navigates to the Jobs Management section THEN the system SHALL display a list of all jobs with their ID, title, description, and base salary
+2. WHEN the job list is displayed THEN the system SHALL show action buttons for adding, editing, and deleting jobs
+3. WHEN the user clicks the refresh button THEN the system SHALL reload the job list from the API
+4. WHEN the API request fails THEN the system SHALL display an error message to the user
+5. WHEN the job list is empty THEN the system SHALL display an appropriate empty state message
+
+### Requirement 20: Job Creation
+
+**User Story:** As an administrator, I want to add new job positions, so that I can define roles for employees.
+
+#### Acceptance Criteria
+
+1. WHEN the user clicks the "Add Job" button THEN the system SHALL display a dialog with fields for job title, description, and base salary
+2. WHEN the user enters a job title and clicks save THEN the system SHALL send a POST request to the API with the job data
+3. WHEN the job creation succeeds THEN the system SHALL close the dialog and refresh the job list
+4. WHEN the user attempts to save with an empty job title field THEN the system SHALL prevent submission and display a validation error
+5. WHEN the API returns an error THEN the system SHALL display the error message in the dialog
+6. WHEN the user clicks cancel THEN the system SHALL close the dialog without saving
+
+### Requirement 21: Job Editing
+
+**User Story:** As an administrator, I want to edit existing job information, so that I can update role details or salary information.
+
+#### Acceptance Criteria
+
+1. WHEN the user clicks the edit button for a job THEN the system SHALL display a dialog pre-filled with the current job title, description, and base salary
+2. WHEN the user modifies fields and clicks save THEN the system SHALL send a PUT request to the API with the updated data
+3. WHEN the job update succeeds THEN the system SHALL close the dialog and refresh the job list
+4. WHEN the user attempts to save with an empty job title field THEN the system SHALL prevent submission and display a validation error
+5. WHEN the API returns an error THEN the system SHALL display the error message in the dialog
+
+### Requirement 22: Job Deletion
+
+**User Story:** As an administrator, I want to delete job positions from the system, so that I can remove obsolete roles.
+
+#### Acceptance Criteria
+
+1. WHEN the user clicks the delete button for a job THEN the system SHALL display a confirmation dialog showing the job title
+2. WHEN the user confirms deletion THEN the system SHALL send a DELETE request to the API
+3. WHEN the deletion succeeds THEN the system SHALL close the dialog and refresh the job list
+4. WHEN the user cancels the deletion THEN the system SHALL close the dialog without deleting
+5. WHEN the API returns an error THEN the system SHALL display the error message to the user
+6. IF the user is not an administrator THEN the system SHALL return a 403 Forbidden response
+
+### Requirement 23: Job Search Functionality
+
+**User Story:** As a user, I want to search for jobs by title or description, so that I can quickly find specific positions.
+
+#### Acceptance Criteria
+
+1. WHEN the user enters text in the job search field THEN the system SHALL filter the job list to show only jobs with matching titles or descriptions
+2. WHEN the search field is cleared THEN the system SHALL display all jobs again
+3. WHEN the search returns no results THEN the system SHALL display an appropriate empty state message
+4. WHEN the user performs a search THEN the system SHALL update the display in real-time without requiring a button click
+5. WHEN the system sends a search request to the API THEN the system SHALL include jobTitle and internship query parameters
+
+### Requirement 24: Users Management View
+
+**User Story:** As an administrator, I want to view and manage system users, so that I can control access to the application.
+
+#### Acceptance Criteria
+
+1. WHEN the user navigates to the Users Management section THEN the system SHALL display a list of all users with their ID, login, email, phone number, role, and active status
+2. WHEN the user list is displayed THEN the system SHALL show action buttons for adding, editing, and deleting users
+3. WHEN the system loads users THEN the system SHALL include user roles and permissions from the API
+4. WHEN the user clicks the refresh button THEN the system SHALL reload the user list from the API
+5. WHEN the API request fails THEN the system SHALL display an error message to the user
+6. IF the current user is not an administrator THEN the system SHALL return a 403 Forbidden response
+
+### Requirement 25: User Creation
+
+**User Story:** As an administrator, I want to create new user accounts, so that I can grant system access to employees.
+
+#### Acceptance Criteria
+
+1. WHEN the user clicks the "Add User" button THEN the system SHALL display a dialog with fields for login, password, role, phone number, email, and Windows authentication settings
+2. WHEN the dialog opens THEN the system SHALL provide a role selector with options for Administrator, Cashier, Controller, and Senior Cashier
+3. WHEN the user fills required fields and clicks save THEN the system SHALL send a POST request to the API with the user data
+4. WHEN the user creation succeeds THEN the system SHALL close the dialog and refresh the user list
+5. WHEN the user attempts to save with an existing login THEN the system SHALL display a validation error indicating the login already exists
+6. WHEN the user attempts to save with missing required fields THEN the system SHALL prevent submission and display validation errors
+7. WHEN the API returns an error THEN the system SHALL display the error message in the dialog
+
+### Requirement 26: User Editing
+
+**User Story:** As an administrator, I want to edit existing user accounts, so that I can update user information or change permissions.
+
+#### Acceptance Criteria
+
+1. WHEN the user clicks the edit button for a user THEN the system SHALL display a dialog pre-filled with the current user data
+2. WHEN the dialog opens THEN the system SHALL show all user fields including login, role, phone number, email, active status, and Windows authentication settings
+3. WHEN the user modifies fields and clicks save THEN the system SHALL send a PUT request to the API with the updated data
+4. WHEN the user update succeeds THEN the system SHALL close the dialog and refresh the user list
+5. WHEN the user attempts to change the login to an existing login THEN the system SHALL display a validation error
+6. WHEN the API returns an error THEN the system SHALL display the error message in the dialog
+
+### Requirement 27: User Deletion
+
+**User Story:** As an administrator, I want to delete user accounts from the system, so that I can revoke access for former employees.
+
+#### Acceptance Criteria
+
+1. WHEN the user clicks the delete button for a user THEN the system SHALL display a confirmation dialog showing the user login
+2. WHEN the user confirms deletion THEN the system SHALL send a DELETE request to the API
+3. WHEN the deletion succeeds THEN the system SHALL close the dialog and refresh the user list
+4. WHEN the user cancels the deletion THEN the system SHALL close the dialog without deleting
+5. WHEN the current user attempts to delete their own account THEN the system SHALL prevent the deletion and display an error message
+6. WHEN the user attempts to delete the last administrator account THEN the system SHALL prevent the deletion and display an error message
+7. WHEN the API returns an error THEN the system SHALL display the error message to the user
+
+### Requirement 28: User Role and Permission Management
+
+**User Story:** As an administrator, I want to view and manage user roles and permissions, so that I can control what actions users can perform.
+
+#### Acceptance Criteria
+
+1. WHEN the user views a user's details THEN the system SHALL display the user's assigned roles
+2. WHEN the user views a user's details THEN the system SHALL display the user's effective permissions
+3. WHEN the user assigns a role to a user THEN the system SHALL send a POST request to the API with the role assignment
+4. WHEN the user removes a role from a user THEN the system SHALL send a DELETE request to the API
+5. WHEN role assignments change THEN the system SHALL refresh the user's role and permission display
+
+### Requirement 29: Current User Information
+
+**User Story:** As a user, I want to view my own account information, so that I can verify my access level and contact details.
+
+#### Acceptance Criteria
+
+1. WHEN the system loads THEN the system SHALL fetch the current user information from the API using the authentication token
+2. WHEN the API returns the current user THEN the system SHALL display the user's login and role in the navigation area
+3. WHEN the authentication token is invalid THEN the system SHALL return a 401 Unauthorized response and redirect to login
+4. WHEN the API request fails THEN the system SHALL display an error message
+5. WHEN the current user information is displayed THEN the system SHALL show the user's roles and permissions
+
+### Requirement 30: Administrator-Only Access Control
+
+**User Story:** As a system, I want to restrict certain operations to administrators, so that only authorized users can modify critical data.
+
+#### Acceptance Criteria
+
+1. WHEN a non-administrator user attempts to create a job THEN the system SHALL return a 403 Forbidden response
+2. WHEN a non-administrator user attempts to update a job THEN the system SHALL return a 403 Forbidden response
+3. WHEN a non-administrator user attempts to delete a job THEN the system SHALL return a 403 Forbidden response
+4. WHEN a non-administrator user attempts to access the users list THEN the system SHALL return a 403 Forbidden response
+5. WHEN a non-administrator user attempts to create, update, or delete a user THEN the system SHALL return a 403 Forbidden response
+6. WHEN the system receives a 403 Forbidden response THEN the system SHALL display a permission denied message to the user
+
+### Requirement 31: Navigation Integration for Jobs and Users
+
+**User Story:** As a user, I want to navigate to Jobs and Users management views, so that I can access administrative features.
+
+#### Acceptance Criteria
+
+1. WHEN the user clicks the Jobs Management navigation item THEN the system SHALL display the jobs management view
+2. WHEN the user clicks the Users Management navigation item THEN the system SHALL display the users management view
+3. WHEN the user switches to these views THEN the system SHALL preserve the authentication state
+4. WHEN the user switches to these views THEN the system SHALL load the appropriate data for the new view
+5. IF the user is not an administrator THEN the system SHALL hide or disable the Users Management navigation item

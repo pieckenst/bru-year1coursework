@@ -8,11 +8,8 @@ pub struct Job {
     #[serde(rename = "jobTitle")]
     pub job_title: String,
     
-    #[serde(rename = "jobDescription")]
-    pub job_description: Option<String>,
-    
-    #[serde(rename = "baseSalary")]
-    pub base_salary: Option<f64>,
+    #[serde(rename = "internship", skip_serializing_if = "Option::is_none")]
+    pub internship: Option<String>,
     
     #[serde(skip_serializing_if = "Option::is_none", rename = "$id")]
     pub ref_id: Option<String>,
@@ -24,8 +21,7 @@ impl Job {
         Job {
             job_id,
             job_title,
-            job_description: None,
-            base_salary: None,
+            internship: None,
             ref_id: None,
         }
     }

@@ -103,6 +103,9 @@ fn show_main_window(
     // Set current user
     main_ui.set_current_user(slint::SharedString::from(username));
     
+    // Set admin status (TODO: Get this from user authentication response)
+    main_ui.set_is_admin(true);
+    
     // Load initial employee data
     load_employees(&main_ui, &api_client);
     
@@ -2253,6 +2256,291 @@ fn show_main_window(
     });
 
     
+    // ========== JOBS MANAGEMENT CALLBACKS ==========
+    
+    // Handle load jobs
+    let api_load_jobs = api_client.clone();
+    main_ui.on_load_jobs({
+        let ui_handle = main_ui.as_weak();
+        move || {
+            let ui = ui_handle.unwrap();
+            let api = api_load_jobs.clone();
+            let ui_weak = ui.as_weak();
+            
+            // Set loading state
+            ui.set_jobs_loading(true);
+            ui.set_jobs_error(slint::SharedString::from(""));
+            ui.set_jobs_has_error(false);
+            
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_jobs().await
+                });
+                
+                // Convert result to Send-able types
+                let result_send = result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_jobs_loading(false);
+                    
+                    match result_send {
+                        Ok(jobs) => {
+                            let job_data: Vec<_> = jobs.iter().map(|job| {
+                                JobData {
+                                    job_id: job.job_id,
+                                    job_title: slint::SharedString::from(&job.job_title),
+                                    internship: slint::SharedString::from(job.internship.as_deref().unwrap_or("")),
+                                }
+                            }).collect();
+                            
+                            let count = job_data.len();
+                            let model = std::rc::Rc::new(slint::VecModel::from(job_data));
+                            ui.set_jobs(model.into());
+                            println!("✅ Loaded {} jobs", count);
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to load jobs: {}", e);
+                            ui.set_jobs_error(slint::SharedString::from(format!("Ошибка загрузки: {}", e)));
+                            ui.set_jobs_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle search jobs
+    let api_search_jobs = api_client.clone();
+    main_ui.on_search_jobs({
+        let ui_handle = main_ui.as_weak();
+        move |search_text| {
+            let ui = ui_handle.unwrap();
+            let api = api_search_jobs.clone();
+            let ui_weak = ui.as_weak();
+            let query = search_text.to_string();
+            
+            // If search is empty, reload all jobs
+            if query.trim().is_empty() {
+                std::thread::spawn(move || {
+                    let rt = tokio::runtime::Runtime::new().unwrap();
+                    let result = rt.block_on(async {
+                        let client = api.lock().unwrap();
+                        client.get_jobs().await
+                    });
+                    
+                    let result_send = result.map_err(|e| e.to_string());
+                    
+                    let _ = slint::invoke_from_event_loop(move || {
+                        let ui = ui_weak.unwrap();
+                        
+                        match result_send {
+                            Ok(jobs) => {
+                                let job_data: Vec<_> = jobs.iter().map(|job| {
+                                    JobData {
+                                        job_id: job.job_id,
+                                        job_title: slint::SharedString::from(&job.job_title),
+                                        internship: slint::SharedString::from(job.internship.as_deref().unwrap_or("")),
+                                    }
+                                }).collect();
+                                
+                                let model = std::rc::Rc::new(slint::VecModel::from(job_data));
+                                ui.set_jobs(model.into());
+                            }
+                            Err(e) => {
+                                eprintln!("❌ Failed to reload jobs: {}", e);
+                            }
+                        }
+                    });
+                });
+            } else {
+                // Use search API endpoint
+                std::thread::spawn(move || {
+                    let rt = tokio::runtime::Runtime::new().unwrap();
+                    let result = rt.block_on(async {
+                        let client = api.lock().unwrap();
+                        client.search_jobs(Some(query.as_str()), None).await
+                    });
+                    
+                    let result_send = result.map_err(|e| e.to_string());
+                    
+                    let _ = slint::invoke_from_event_loop(move || {
+                        let ui = ui_weak.unwrap();
+                        
+                        match result_send {
+                            Ok(jobs) => {
+                                let job_data: Vec<_> = jobs.iter().map(|job| {
+                                    JobData {
+                                        job_id: job.job_id,
+                                        job_title: slint::SharedString::from(&job.job_title),
+                                        internship: slint::SharedString::from(job.internship.as_deref().unwrap_or("")),
+                                    }
+                                }).collect();
+                                
+                                let count = job_data.len();
+                                let model = std::rc::Rc::new(slint::VecModel::from(job_data));
+                                ui.set_jobs(model.into());
+                                println!("🔍 Found {} jobs matching '{}'", count, query);
+                            }
+                            Err(e) => {
+                                eprintln!("❌ Failed to search jobs: {}", e);
+                            }
+                        }
+                    });
+                });
+            }
+        }
+    });
+    
+    // Handle add job
+    let api_add_job = api_client.clone();
+    main_ui.on_add_job({
+        let ui_handle = main_ui.as_weak();
+        move |title, internship| {
+            let ui = ui_handle.unwrap();
+            let api = api_add_job.clone();
+            let ui_weak = ui.as_weak();
+            let title_str = title.to_string();
+            let internship_str = internship.to_string();
+            
+            // Validate title is not empty
+            if title_str.trim().is_empty() {
+                ui.set_jobs_error(slint::SharedString::from("Название должности не может быть пустым"));
+                ui.set_jobs_has_error(true);
+                return;
+            }
+            
+            ui.set_jobs_loading(true);
+            
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                
+                let intern = if internship_str.trim().is_empty() { None } else { Some(internship_str.as_str()) };
+                
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.create_job(&title_str, intern).await
+                });
+                
+                let result_send = result.map(|job| job.job_title.clone()).map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_jobs_loading(false);
+                    
+                    match result_send {
+                        Ok(job_title) => {
+                            println!("✅ Created job: {}", job_title);
+                            // Reload jobs
+                            ui.invoke_load_jobs();
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to create job: {}", e);
+                            ui.set_jobs_error(slint::SharedString::from(format!("Ошибка создания: {}", e)));
+                            ui.set_jobs_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle edit job
+    let api_edit_job = api_client.clone();
+    main_ui.on_edit_job({
+        let ui_handle = main_ui.as_weak();
+        move |job_id, title, internship| {
+            let ui = ui_handle.unwrap();
+            let api = api_edit_job.clone();
+            let ui_weak = ui.as_weak();
+            let title_str = title.to_string();
+            let internship_str = internship.to_string();
+            
+            // Validate title is not empty
+            if title_str.trim().is_empty() {
+                ui.set_jobs_error(slint::SharedString::from("Название должности не может быть пустым"));
+                ui.set_jobs_has_error(true);
+                return;
+            }
+            
+            ui.set_jobs_loading(true);
+            
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                
+                let intern = if internship_str.trim().is_empty() { None } else { Some(internship_str.as_str()) };
+                
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.update_job(job_id, &title_str, intern).await
+                });
+                
+                let result_send = result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_jobs_loading(false);
+                    
+                    match result_send {
+                        Ok(_) => {
+                            println!("✅ Updated job: {}", title_str);
+                            // Reload jobs
+                            ui.invoke_load_jobs();
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to update job: {}", e);
+                            ui.set_jobs_error(slint::SharedString::from(format!("Ошибка обновления: {}", e)));
+                            ui.set_jobs_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle delete job
+    let api_delete_job = api_client.clone();
+    main_ui.on_delete_job({
+        let ui_handle = main_ui.as_weak();
+        move |job_id| {
+            let ui = ui_handle.unwrap();
+            let api = api_delete_job.clone();
+            let ui_weak = ui.as_weak();
+            
+            ui.set_jobs_loading(true);
+            
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.delete_job(job_id).await
+                });
+                
+                let result_send = result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_jobs_loading(false);
+                    
+                    match result_send {
+                        Ok(_) => {
+                            println!("✅ Deleted job {}", job_id);
+                            // Reload jobs
+                            ui.invoke_load_jobs();
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to delete job: {}", e);
+                            ui.set_jobs_error(slint::SharedString::from(format!("Ошибка удаления: {}", e)));
+                            ui.set_jobs_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+
     // Handle logout
     let api_client_clone = api_client.clone();
     main_ui.on_logout_clicked({
@@ -2286,6 +2574,11 @@ fn show_main_window(
                     AppRoute::Employees => {
                         println!("Loading employees...");
                         load_employees_impl(ui_weak.clone(), api_client_nav.clone());
+                    }
+                    AppRoute::Jobs => {
+                        println!("Loading jobs...");
+                        let ui = ui_weak.unwrap();
+                        ui.invoke_load_jobs();
                     }
                     AppRoute::Buses => {
                         println!("Loading buses...");

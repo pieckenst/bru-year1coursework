@@ -1,0 +1,551 @@
+import { Button, VerticalBox, HorizontalBox, ScrollView } from "std-widgets.slint";
+import { MaterialText, FilledButton, TonalButton } from "../material-1.0/material.slint";
+import { MaterialPalette } from "../material-1.0/ui/styling/material_palette.slint";
+import { LineEdit } from "std-widgets.slint";
+
+// Job data structure
+export struct JobData {
+    job-id: int,
+    job-title: string,
+    internship: string,
+}
+
+// Jobs Management View - CRUD operations for job positions
+export component JobsManagementView inherits Rectangle {
+    in-out property <[JobData]> jobs: [];
+    in-out property <JobData> selected-job: { job-id: -1, job-title: "", internship: "" };
+    in-out property <string> search-text: "";
+    in-out property <bool> is-loading: false;
+    in-out property <string> error-message: "";
+    in-out property <bool> has-error: false;
+    in-out property <bool> is-admin: false;
+    
+    // Dialog states
+    in-out property <bool> show-add-dialog: false;
+    in-out property <bool> show-edit-dialog: false;
+    in-out property <bool> show-delete-dialog: false;
+    
+    // Dialog form fields
+    in-out property <string> dialog-job-title: "";
+    in-out property <string> dialog-internship: "";
+    
+    // Callbacks
+    callback load-jobs();
+    callback search-jobs(string);
+    callback add-job(string, string);
+    callback edit-job(int, string, string);
+    callback delete-job(int);
+    callback close-clicked();
+    
+    background: MaterialPalette.surface;
+    
+    VerticalBox {
+        padding: 0px;
+        
+        // Header
+        Rectangle {
+            height: 64px;
+            background: MaterialPalette.surface-container-highest;
+            
+            HorizontalBox {
+                padding: 16px;
+                spacing: 16px;
+                
+                MaterialText {
+                    text: "Управление должностями";
+                    font-size: 20px;
+                    font-weight: 600;
+                    color: MaterialPalette.on-surface;
+                    vertical-alignment: center;
+                    horizontal-stretch: 1;
+                }
+                
+                if !root.is-admin: MaterialText {
+                    text: "(Только для администраторов)";
+                    font-size: 14px;
+                    color: MaterialPalette.error;
+                    vertical-alignment: center;
+                }
+                
+                Rectangle {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 20px;
+                    background: close-touch.has-hover ? MaterialPalette.surface-container : transparent;
+                    
+                    close-touch := TouchArea {
+                        width: 100%;
+                        height: 100%;
+                        mouse-cursor: pointer;
+                        clicked => { root.close-clicked(); }
+                    }
+                    
+                    Path {
+                        width: 20px;
+                        height: 20px;
+                        x: 10px;
+                        y: 10px;
+                        fill: MaterialPalette.on-surface;
+                        commands: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z";
+                    }
+                }
+            }
+        }
+        
+        // Content
+        VerticalBox {
+            padding: 16px;
+            spacing: 16px;
+            
+            // Search and Actions Bar
+            HorizontalBox {
+                spacing: 16px;
+                
+                Rectangle {
+                    horizontal-stretch: 1;
+                    height: 48px;
+                    background: MaterialPalette.surface-container;
+                    border-radius: 24px;
+                    
+                    HorizontalBox {
+                        padding-left: 20px;
+                        padding-right: 20px;
+                        spacing: 12px;
+                        
+                        Path {
+                            width: 20px;
+                            height: 20px;
+                            fill: MaterialPalette.on-surface-variant;
+                            commands: "M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z";
+                        }
+                        
+                        search-input := LineEdit {
+                            horizontal-stretch: 1;
+                            placeholder-text: "Поиск по названию...";
+                            text <=> root.search-text;
+                            edited => { root.search-jobs(self.text); }
+                        }
+                    }
+                }
+                
+                if root.is-admin: FilledButton {
+                    text: "Добавить должность";
+                    enabled: !root.is-loading;
+                    clicked => {
+                        root.dialog-job-title = "";
+                        root.dialog-internship = "";
+                        root.show-add-dialog = true;
+                    }
+                }
+                
+                TonalButton {
+                    text: "Обновить";
+                    enabled: !root.is-loading;
+                    clicked => { root.load-jobs(); }
+                }
+            }
+            
+            // Error message
+            if root.has-error: Rectangle {
+                height: 48px;
+                background: MaterialPalette.error-container;
+                border-radius: 8px;
+                
+                HorizontalBox {
+                    padding: 12px;
+                    spacing: 8px;
+                    
+                    Path {
+                        width: 20px;
+                        height: 20px;
+                        fill: MaterialPalette.on-error-container;
+                        commands: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z";
+                    }
+                    
+                    MaterialText {
+                        text: root.error-message;
+                        color: MaterialPalette.on-error-container;
+                        vertical-alignment: center;
+                        horizontal-stretch: 1;
+                    }
+                }
+            }
+            
+            // Jobs List
+            Rectangle {
+                background: MaterialPalette.surface-container-low;
+                border-radius: 12px;
+                vertical-stretch: 1;
+                
+                if root.is-loading: VerticalBox {
+                    alignment: center;
+                    
+                    MaterialText {
+                        text: "Загрузка...";
+                        font-size: 16px;
+                        color: MaterialPalette.on-surface-variant;
+                        horizontal-alignment: center;
+                    }
+                }
+                
+                if !root.is-loading && root.jobs.length == 0: VerticalBox {
+                    alignment: center;
+                    
+                    MaterialText {
+                        text: "Нет должностей";
+                        font-size: 16px;
+                        color: MaterialPalette.on-surface-variant;
+                        horizontal-alignment: center;
+                    }
+                }
+                
+                if !root.is-loading && root.jobs.length > 0: ScrollView {
+                    VerticalBox {
+                        padding: 0px;
+                        
+                        // Table Header
+                        Rectangle {
+                            height: 48px;
+                            background: MaterialPalette.surface-container-highest;
+                            
+                            HorizontalBox {
+                                padding-left: 16px;
+                                padding-right: 16px;
+                                spacing: 16px;
+                                
+                                MaterialText {
+                                    text: "ID";
+                                    font-weight: 600;
+                                    color: MaterialPalette.on-surface;
+                                    vertical-alignment: center;
+                                    width: 60px;
+                                }
+                                
+                                MaterialText {
+                                    text: "Название";
+                                    font-weight: 600;
+                                    color: MaterialPalette.on-surface;
+                                    vertical-alignment: center;
+                                    horizontal-stretch: 2;
+                                }
+                                
+                                MaterialText {
+                                    text: "Стажировка";
+                                    font-weight: 600;
+                                    color: MaterialPalette.on-surface;
+                                    vertical-alignment: center;
+                                    horizontal-stretch: 1;
+                                }
+                                
+                                if root.is-admin: Rectangle {
+                                    width: 120px;
+                                }
+                            }
+                        }
+                        
+                        // Table Rows
+                        for job[index] in root.jobs: Rectangle {
+                            height: 64px;
+                            background: mod(index, 2) == 0 ? MaterialPalette.surface : MaterialPalette.surface-container-low;
+                            
+                            HorizontalBox {
+                                padding-left: 16px;
+                                padding-right: 16px;
+                                spacing: 16px;
+                                
+                                MaterialText {
+                                    text: job.job-id;
+                                    color: MaterialPalette.on-surface;
+                                    vertical-alignment: center;
+                                    width: 60px;
+                                }
+                                
+                                MaterialText {
+                                    text: job.job-title;
+                                    color: MaterialPalette.on-surface;
+                                    vertical-alignment: center;
+                                    horizontal-stretch: 2;
+                                    overflow: elide;
+                                }
+                                
+                                MaterialText {
+                                    text: job.internship != "" ? job.internship : "-";
+                                    color: MaterialPalette.on-surface-variant;
+                                    vertical-alignment: center;
+                                    horizontal-stretch: 1;
+                                    overflow: elide;
+                                }
+                                
+                                if root.is-admin: HorizontalBox {
+                                    width: 120px;
+                                    spacing: 8px;
+                                    
+                                    TonalButton {
+                                        text: "✏️";
+                                        enabled: !root.is-loading;
+                                        clicked => {
+                                            root.selected-job = job;
+                                            root.dialog-job-title = job.job-title;
+                                            root.dialog-internship = job.internship;
+                                            root.show-edit-dialog = true;
+                                        }
+                                    }
+                                    
+                                    TonalButton {
+                                        text: "🗑️";
+                                        enabled: !root.is-loading;
+                                        clicked => {
+                                            root.selected-job = job;
+                                            root.show-delete-dialog = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // Add Job Dialog
+    if root.show-add-dialog: Rectangle {
+        width: 100%;
+        height: 100%;
+        background: #00000080;
+        
+        TouchArea {
+            clicked => { root.show-add-dialog = false; }
+        }
+        
+        Rectangle {
+            width: 500px;
+            height: 300px;
+            background: MaterialPalette.surface;
+            border-radius: 16px;
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            
+            TouchArea { } // Prevent clicks from closing dialog
+            
+            VerticalBox {
+                padding: 24px;
+                spacing: 16px;
+                
+                MaterialText {
+                    text: "Добавить должность";
+                    font-size: 20px;
+                    font-weight: 600;
+                    color: MaterialPalette.on-surface;
+                }
+                
+                VerticalBox {
+                    spacing: 12px;
+                    
+                    MaterialText {
+                        text: "Название *";
+                        color: MaterialPalette.on-surface-variant;
+                    }
+                    
+                    LineEdit {
+                        text <=> root.dialog-job-title;
+                        placeholder-text: "Введите название должности";
+                    }
+                }
+                
+                VerticalBox {
+                    spacing: 12px;
+                    
+                    MaterialText {
+                        text: "Стажировка";
+                        color: MaterialPalette.on-surface-variant;
+                    }
+                    
+                    LineEdit {
+                        text <=> root.dialog-internship;
+                        placeholder-text: "Введите информацию о стажировке (необязательно)";
+                    }
+                }
+                
+                Rectangle {
+                    vertical-stretch: 1;
+                }
+                
+                HorizontalBox {
+                    spacing: 12px;
+                    
+                    Rectangle {
+                        horizontal-stretch: 1;
+                    }
+                    
+                    TonalButton {
+                        text: "Отмена";
+                        clicked => { root.show-add-dialog = false; }
+                    }
+                    
+                    FilledButton {
+                        text: "Сохранить";
+                        enabled: root.dialog-job-title != "";
+                        clicked => {
+                            root.add-job(root.dialog-job-title, root.dialog-internship);
+                            root.show-add-dialog = false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // Edit Job Dialog
+    if root.show-edit-dialog: Rectangle {
+        width: 100%;
+        height: 100%;
+        background: #00000080;
+        
+        TouchArea {
+            clicked => { root.show-edit-dialog = false; }
+        }
+        
+        Rectangle {
+            width: 500px;
+            height: 300px;
+            background: MaterialPalette.surface;
+            border-radius: 16px;
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            
+            TouchArea { } // Prevent clicks from closing dialog
+            
+            VerticalBox {
+                padding: 24px;
+                spacing: 16px;
+                
+                MaterialText {
+                    text: "Редактировать должность";
+                    font-size: 20px;
+                    font-weight: 600;
+                    color: MaterialPalette.on-surface;
+                }
+                
+                VerticalBox {
+                    spacing: 12px;
+                    
+                    MaterialText {
+                        text: "Название *";
+                        color: MaterialPalette.on-surface-variant;
+                    }
+                    
+                    LineEdit {
+                        text <=> root.dialog-job-title;
+                        placeholder-text: "Введите название должности";
+                    }
+                }
+                
+                VerticalBox {
+                    spacing: 12px;
+                    
+                    MaterialText {
+                        text: "Стажировка";
+                        color: MaterialPalette.on-surface-variant;
+                    }
+                    
+                    LineEdit {
+                        text <=> root.dialog-internship;
+                        placeholder-text: "Введите информацию о стажировке (необязательно)";
+                    }
+                }
+                
+                Rectangle {
+                    vertical-stretch: 1;
+                }
+                
+                HorizontalBox {
+                    spacing: 12px;
+                    
+                    Rectangle {
+                        horizontal-stretch: 1;
+                    }
+                    
+                    TonalButton {
+                        text: "Отмена";
+                        clicked => { root.show-edit-dialog = false; }
+                    }
+                    
+                    FilledButton {
+                        text: "Сохранить";
+                        enabled: root.dialog-job-title != "";
+                        clicked => {
+                            root.edit-job(root.selected-job.job-id, root.dialog-job-title, root.dialog-internship);
+                            root.show-edit-dialog = false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // Delete Confirmation Dialog
+    if root.show-delete-dialog: Rectangle {
+        width: 100%;
+        height: 100%;
+        background: #00000080;
+        
+        TouchArea {
+            clicked => { root.show-delete-dialog = false; }
+        }
+        
+        Rectangle {
+            width: 400px;
+            height: 200px;
+            background: MaterialPalette.surface;
+            border-radius: 16px;
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            
+            TouchArea { } // Prevent clicks from closing dialog
+            
+            VerticalBox {
+                padding: 24px;
+                spacing: 16px;
+                
+                MaterialText {
+                    text: "Удалить должность?";
+                    font-size: 20px;
+                    font-weight: 600;
+                    color: MaterialPalette.on-surface;
+                }
+                
+                MaterialText {
+                    text: "Вы уверены, что хотите удалить должность \"" + root.selected-job.job-title + "\"?";
+                    color: MaterialPalette.on-surface-variant;
+                    wrap: word-wrap;
+                }
+                
+                Rectangle {
+                    vertical-stretch: 1;
+                }
+                
+                HorizontalBox {
+                    spacing: 12px;
+                    
+                    Rectangle {
+                        horizontal-stretch: 1;
+                    }
+                    
+                    TonalButton {
+                        text: "Отмена";
+                        clicked => { root.show-delete-dialog = false; }
+                    }
+                    
+                    FilledButton {
+                        text: "Удалить";
+                        clicked => {
+                            root.delete-job(root.selected-job.job-id);
+                            root.show-delete-dialog = false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

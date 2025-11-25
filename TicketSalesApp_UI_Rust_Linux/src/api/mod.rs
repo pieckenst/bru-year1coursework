@@ -9,6 +9,7 @@ pub mod vacation_requests;
 pub mod buses;
 pub mod routes;
 pub mod route_schedules;
+pub mod users;
 
 use reqwest::{Client, Response, StatusCode};
 use serde::{Deserialize, Serialize};
@@ -31,6 +32,7 @@ pub enum ApiError {
     ServerError(String),
     ValidationError(String),
     Unauthorized,
+    Forbidden,
     ParseError(String),
     RequestFailed(String),
 }
@@ -44,6 +46,7 @@ impl fmt::Display for ApiError {
             ApiError::ServerError(msg) => write!(f, "Server error: {}", msg),
             ApiError::ValidationError(msg) => write!(f, "Validation error: {}", msg),
             ApiError::Unauthorized => write!(f, "Unauthorized"),
+            ApiError::Forbidden => write!(f, "Forbidden - insufficient permissions"),
             ApiError::ParseError(msg) => write!(f, "Parse error: {}", msg),
             ApiError::RequestFailed(msg) => write!(f, "Request failed: {}", msg),
         }
@@ -96,6 +99,21 @@ impl ApiClient {
     ) -> Result<Response, ApiError> {
         let url = format!("{}/{}", self.base_url, endpoint);
         let mut request = self.client.post(&url).json(body);
+
+        if let Some(token) = &self.token {
+            request = request.bearer_auth(token);
+        }
+
+        request
+            .send()
+            .await
+            .map_err(|e| ApiError::NetworkError(e.to_string()))
+    }
+
+    /// Build a POST request with no body (for endpoints that don't require a body)
+    pub(crate) async fn post_empty(&self, endpoint: &str) -> Result<Response, ApiError> {
+        let url = format!("{}/{}", self.base_url, endpoint);
+        let mut request = self.client.post(&url);
 
         if let Some(token) = &self.token {
             request = request.bearer_auth(token);

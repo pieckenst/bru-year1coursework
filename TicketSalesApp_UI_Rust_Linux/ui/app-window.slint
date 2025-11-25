@@ -8,6 +8,7 @@ import { BusManagementView, BusData } from "bus_management.slint";
 import { RouteManagementView, RouteData } from "route_management.slint";
 import { RouteSchedulesManagement, ScheduleData, RouteOption } from "route_schedules.slint";
 import { RouteScheduleDialog, DeleteScheduleConfirmDialog, RouteStopItem } from "route_schedule_dialogs.slint";
+import { JobsManagementView, JobData } from "jobs_management.slint";
 export { AuthWindow } from "auth_window.slint";
 
 // Employee data structure
@@ -187,6 +188,20 @@ export component AppWindow inherits Window {
     callback save-schedule();
     callback confirm-delete-schedule();
     callback schedule-stop-selection-changed(int, bool);
+    
+    // Jobs management state
+    in-out property <[JobData]> jobs: [];
+    in-out property <bool> jobs-loading: false;
+    in-out property <string> jobs-error: "";
+    in-out property <bool> jobs-has-error: false;
+    in-out property <bool> is-admin: false;
+    
+    // Jobs management callbacks
+    callback load-jobs();
+    callback search-jobs(string);
+    callback add-job(string, string);
+    callback edit-job(int, string, string);
+    callback delete-job(int);
     
     AppNavigation {
         current-user: root.current-user;
@@ -414,7 +429,37 @@ export component AppWindow inherits Window {
             }
         }
         
-        if root.current-nav-group == 1 && root.current-nav-index != 0: VerticalBox {
+        // Jobs Management View (Group 1, Index 1)
+        if root.current-nav-group == 1 && root.current-nav-index == 1: JobsManagementView {
+            jobs: root.jobs;
+            is-loading: root.jobs-loading;
+            error-message: root.jobs-error;
+            has-error: root.jobs-has-error;
+            is-admin: root.is-admin;
+            
+            load-jobs => {
+                root.load-jobs();
+            }
+            
+            search-jobs(text) => {
+                root.search-jobs(text);
+            }
+            
+            add-job(title, internship) => {
+                root.add-job(title, internship);
+            }
+            
+            edit-job(job-id, title, internship) => {
+                root.edit-job(job-id, title, internship);
+            }
+            
+            delete-job(job-id) => {
+                root.delete-job(job-id);
+            }
+        }
+        
+        // Placeholder for other personnel routes
+        if root.current-nav-group == 1 && root.current-nav-index > 1: VerticalBox {
             padding: 40px;
             MaterialText {
                 text: "Раздел персонала";
