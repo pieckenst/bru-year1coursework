@@ -1,0 +1,181 @@
+// COSMIC Desktop Card Component
+// Elevated surface for displaying grouped content
+// Requirements: 18.1-18.5, 48.1-48.7
+
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+import { CosmicElevation } from "../styling/elevation.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+// Card layer types (Requirements 48.1-48.4)
+export enum CardLayer {
+    background,  // On background layer - uses component hover color
+    primary,     // On primary layer - uses primary component colors
+    secondary,   // On secondary layer - uses secondary component colors
+}
+
+// Card padding sizes (Requirement 18.3)
+export enum CardPadding {
+    compact,      // 16px
+    standard,     // 24px (default)
+    comfortable,  // 32px
+}
+
+// ============================================================================
+// COSMIC CARD COMPONENT
+// ============================================================================
+
+export component CosmicCard inherits Rectangle {
+    // ============================================================================
+    // PROPERTIES
+    // ============================================================================
+    
+    // Content properties
+    in property <string> title: "";
+    in property <bool> has-header: title != "";
+    
+    // Interaction properties (Requirement 18.4)
+    in property <bool> interactive: false;
+    
+    // Layer properties (Requirements 48.1-48.4)
+    in property <CardLayer> layer: CardLayer.background;
+    
+    // Elevation properties (Requirements 18.1, 48.5)
+    in property <bool> elevated: true;
+    
+    // Border properties (Requirement 48.6)
+    in property <bool> has-border: false;
+    
+    // Padding properties (Requirement 18.3)
+    in property <CardPadding> padding-size: CardPadding.standard;
+    
+    // Callbacks
+    callback clicked();
+    
+    // ============================================================================
+    // INTERNAL STATE
+    // ============================================================================
+    
+    property <bool> is-hovered: false;
+    
+    // Computed padding based on padding-size (Requirement 18.3)
+    property <length> content-padding: {
+        if padding-size == CardPadding.compact {
+            CosmicSpacing.card-padding-small  // 16px
+        } else if padding-size == CardPadding.comfortable {
+            CosmicSpacing.card-padding-large  // 32px
+        } else {
+            CosmicSpacing.card-padding-standard  // 24px (default)
+        }
+    };
+    
+    // Computed background based on layer (Requirements 48.1-48.4)
+    property <color> card-background: {
+        if layer == CardLayer.primary {
+            CosmicPalette.primary-base
+        } else if layer == CardLayer.secondary {
+            CosmicPalette.secondary-base
+        } else {
+            // Background layer uses component hover color
+            CosmicPalette.component-hover
+        }
+    };
+    
+    // Hover background (Requirement 48.7)
+    property <color> card-background-hover: {
+        if layer == CardLayer.primary {
+            CosmicPalette.primary-hover
+        } else if layer == CardLayer.secondary {
+            CosmicPalette.secondary-hover
+        } else {
+            CosmicPalette.component-pressed
+        }
+    };
+    
+    // ============================================================================
+    // LAYOUT
+    // ============================================================================
+    
+    // Card background and styling (Requirements 18.1, 18.5, 4.2)
+    background: is-hovered ? card-background-hover : card-background;
+    border-radius: CosmicCornerRadii.card-radius-standard;  // 16px (Requirement 4.2)
+    
+    // Border styling (Requirement 48.6)
+    border-width: has-border ? 1px : 0px;
+    border-color: CosmicPalette.border-neutral;
+    
+    // Shadow/Elevation (Requirements 18.1, 18.4, 48.5, 5.4)
+    // Increase shadow on hover for interactive cards (Requirement 18.4)
+    drop-shadow-offset-y: {
+        if !elevated {
+            0px
+        } else if is-hovered {
+            CosmicElevation.shadow-md-offset-y  // Medium elevation on hover
+        } else {
+            CosmicElevation.shadow-sm-offset-y  // Subtle elevation normally
+        }
+    };
+    drop-shadow-blur: {
+        if !elevated {
+            0px
+        } else if is-hovered {
+            CosmicElevation.shadow-md-blur
+        } else {
+            CosmicElevation.shadow-sm-blur
+        }
+    };
+    drop-shadow-color: {
+        if !elevated {
+            transparent
+        } else if is-hovered {
+            CosmicPalette.shadow-color-md  // 15-20% opacity
+        } else {
+            CosmicPalette.shadow-color-sm  // 10% opacity
+        }
+    };
+    
+    // Content layout
+    VerticalLayout {
+        padding-left: content-padding;
+        padding-right: content-padding;
+        padding-top: content-padding;
+        padding-bottom: content-padding;
+        spacing: CosmicSpacing.space-s;  // 16px spacing between header and content
+        
+        // Header section (Requirement 18.2)
+        if has-header: HorizontalLayout {
+            spacing: CosmicSpacing.space-xs;
+            
+            Text {
+                text: root.title;
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.title4-size;  // 20px
+                font-weight: CosmicTypography.weight-medium;  // Medium weight (Requirement 18.2)
+                vertical-alignment: center;
+                horizontal-stretch: 1;
+            }
+        }
+        
+        // Content area - children go here
+        @children
+    }
+    
+    // Touch area for interactive cards (Requirement 18.4)
+    if interactive: touch-area := TouchArea {
+        mouse-cursor: pointer;
+        
+        clicked => {
+            root.clicked();
+        }
+        
+        changed has-hover => {
+            root.is-hovered = self.has-hover && root.interactive;
+        }
+    }
+}

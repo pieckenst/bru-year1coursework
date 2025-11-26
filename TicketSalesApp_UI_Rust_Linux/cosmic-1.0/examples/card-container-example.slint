@@ -1,0 +1,467 @@
+// COSMIC Desktop Card and Container Components Example
+// Demonstrates card, container, and divider components
+
+import { CosmicCard, CardLayer, CardPadding } from "../ui/components/card.slint";
+import { CosmicContainer, ContainerLayer, ContainerPadding } from "../ui/components/container.slint";
+import { CosmicDivider, Orientation } from "../ui/components/divider.slint";
+import { CosmicButton } from "../ui/components/button.slint";
+import { CosmicPalette } from "../ui/styling/palette.slint";
+import { CosmicSpacing } from "../ui/styling/spacing.slint";
+import { CosmicTypography } from "../ui/styling/typography.slint";
+
+export component CardContainerExample inherits Window {
+    title: "COSMIC Card & Container Example";
+    background: CosmicPalette.background-base;
+    
+    preferred-width: 900px;
+    preferred-height: 700px;
+    
+    VerticalLayout {
+        padding: CosmicSpacing.space-m;
+        spacing: CosmicSpacing.space-m;
+        
+        // Header
+        Text {
+            text: "Card & Container Components";
+            color: CosmicPalette.text-primary;
+            font-family: CosmicTypography.font-family;
+            font-size: CosmicTypography.title3-size;
+            font-weight: CosmicTypography.title3-weight;
+        }
+        
+        // Theme toggle
+        HorizontalLayout {
+            spacing: CosmicSpacing.space-xs;
+            
+            Text {
+                text: "Dark Mode:";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.body-size;
+                vertical-alignment: center;
+            }
+            
+            CosmicButton {
+                text: CosmicPalette.dark-mode ? "ON" : "OFF";
+                clicked => {
+                    CosmicPalette.dark-mode = !CosmicPalette.dark-mode;
+                }
+            }
+        }
+        
+        CosmicDivider {
+            orientation: Orientation.horizontal;
+        }
+        
+        // Scrollable content area
+        Flickable {
+            vertical-stretch: 1;
+            viewport-height: content-layout.preferred-height;
+            
+            content-layout := VerticalLayout {
+                spacing: CosmicSpacing.space-l;
+                padding: CosmicSpacing.space-xs;
+                
+                // ============================================================
+                // BASIC CARDS SECTION
+                // ============================================================
+                
+                Text {
+                    text: "Basic Cards";
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.title4-size;
+                    font-weight: CosmicTypography.title4-weight;
+                }
+                
+                HorizontalLayout {
+                    spacing: CosmicSpacing.space-m;
+                    
+                    // Simple card with title
+                    CosmicCard {
+                        title: "Card with Title";
+                        width: 250px;
+                        
+                        VerticalLayout {
+                            spacing: CosmicSpacing.space-xs;
+                            
+                            Text {
+                                text: "This is a basic card with a title and some content.";
+                                color: CosmicPalette.text-primary;
+                                font-family: CosmicTypography.font-family;
+                                font-size: CosmicTypography.body-size;
+                                wrap: word-wrap;
+                            }
+                            
+                            Text {
+                                text: "Cards have subtle shadows and rounded corners.";
+                                color: CosmicPalette.text-secondary;
+                                font-family: CosmicTypography.font-family;
+                                font-size: CosmicTypography.caption-size;
+                                wrap: word-wrap;
+                            }
+                        }
+                    }
+                    
+                    // Card without title
+                    CosmicCard {
+                        width: 250px;
+                        
+                        VerticalLayout {
+                            spacing: CosmicSpacing.space-xs;
+                            
+                            Text {
+                                text: "Card without Title";
+                                color: CosmicPalette.text-primary;
+                                font-family: CosmicTypography.font-family;
+                                font-size: CosmicTypography.heading-size;
+                                font-weight: CosmicTypography.heading-weight;
+                            }
+                            
+                            Text {
+                                text: "This card doesn't have a header, just content.";
+                                color: CosmicPalette.text-primary;
+                                font-family: CosmicTypography.font-family;
+                                font-size: CosmicTypography.body-size;
+                                wrap: word-wrap;
+                            }
+                        }
+                    }
+                    
+                    // Interactive card
+                    CosmicCard {
+                        title: "Interactive Card";
+                        interactive: true;
+                        width: 250px;
+                        
+                        clicked => {
+                            debug("Card clicked!");
+                        }
+                        
+                        VerticalLayout {
+                            spacing: CosmicSpacing.space-xs;
+                            
+                            Text {
+                                text: "Hover over this card to see the elevation increase!";
+                                color: CosmicPalette.text-primary;
+                                font-family: CosmicTypography.font-family;
+                                font-size: CosmicTypography.body-size;
+                                wrap: word-wrap;
+                            }
+                            
+                            Text {
+                                text: "Click me!";
+                                color: CosmicPalette.accent-primary;
+                                font-family: CosmicTypography.font-family;
+                                font-size: CosmicTypography.caption-size;
+                                font-weight: CosmicTypography.caption-heading-weight;
+                            }
+                        }
+                    }
+                }
+                
+                CosmicDivider {
+                    orientation: Orientation.horizontal;
+                    label: "Card Variations";
+                }
+                
+                // ============================================================
+                // CARD VARIATIONS SECTION
+                // ============================================================
+                
+                HorizontalLayout {
+                    spacing: CosmicSpacing.space-m;
+                    
+                    // Compact padding
+                    CosmicCard {
+                        title: "Compact Padding";
+                        padding-size: CardPadding.compact;
+                        width: 200px;
+                        
+                        Text {
+                            text: "This card uses compact padding (16px).";
+                            color: CosmicPalette.text-primary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.body-size;
+                            wrap: word-wrap;
+                        }
+                    }
+                    
+                    // Standard padding
+                    CosmicCard {
+                        title: "Standard Padding";
+                        padding-size: CardPadding.standard;
+                        width: 200px;
+                        
+                        Text {
+                            text: "This card uses standard padding (24px).";
+                            color: CosmicPalette.text-primary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.body-size;
+                            wrap: word-wrap;
+                        }
+                    }
+                    
+                    // Comfortable padding
+                    CosmicCard {
+                        title: "Comfortable Padding";
+                        padding-size: CardPadding.comfortable;
+                        width: 200px;
+                        
+                        Text {
+                            text: "This card uses comfortable padding (32px).";
+                            color: CosmicPalette.text-primary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.body-size;
+                            wrap: word-wrap;
+                        }
+                    }
+                    
+                    // Card with border
+                    CosmicCard {
+                        title: "With Border";
+                        has-border: true;
+                        width: 200px;
+                        
+                        Text {
+                            text: "This card has a border.";
+                            color: CosmicPalette.text-primary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.body-size;
+                            wrap: word-wrap;
+                        }
+                    }
+                }
+                
+                CosmicDivider {
+                    orientation: Orientation.horizontal;
+                    label: "Card Layers";
+                }
+                
+                // ============================================================
+                // CARD LAYERS SECTION
+                // ============================================================
+                
+                HorizontalLayout {
+                    spacing: CosmicSpacing.space-m;
+                    
+                    // Background layer
+                    CosmicCard {
+                        title: "Background Layer";
+                        layer: CardLayer.background;
+                        width: 250px;
+                        
+                        Text {
+                            text: "This card is on the background layer.";
+                            color: CosmicPalette.text-primary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.body-size;
+                            wrap: word-wrap;
+                        }
+                    }
+                    
+                    // Primary layer
+                    CosmicCard {
+                        title: "Primary Layer";
+                        layer: CardLayer.primary;
+                        width: 250px;
+                        
+                        Text {
+                            text: "This card is on the primary layer.";
+                            color: CosmicPalette.text-primary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.body-size;
+                            wrap: word-wrap;
+                        }
+                    }
+                    
+                    // Secondary layer
+                    CosmicCard {
+                        title: "Secondary Layer";
+                        layer: CardLayer.secondary;
+                        width: 250px;
+                        
+                        Text {
+                            text: "This card is on the secondary layer.";
+                            color: CosmicPalette.text-primary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.body-size;
+                            wrap: word-wrap;
+                        }
+                    }
+                }
+                
+                CosmicDivider {
+                    orientation: Orientation.horizontal;
+                    label: "Containers";
+                }
+                
+                // ============================================================
+                // CONTAINERS SECTION
+                // ============================================================
+                
+                Text {
+                    text: "Container Components";
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.title4-size;
+                    font-weight: CosmicTypography.title4-weight;
+                }
+                
+                HorizontalLayout {
+                    spacing: CosmicSpacing.space-m;
+                    
+                    // Basic container
+                    CosmicContainer {
+                        layer: ContainerLayer.background;
+                        width: 250px;
+                        
+                        VerticalLayout {
+                            spacing: CosmicSpacing.space-xs;
+                            
+                            Text {
+                                text: "Basic Container";
+                                color: CosmicPalette.text-primary;
+                                font-family: CosmicTypography.font-family;
+                                font-size: CosmicTypography.heading-size;
+                                font-weight: CosmicTypography.heading-weight;
+                            }
+                            
+                            Text {
+                                text: "Containers provide consistent padding and background colors.";
+                                color: CosmicPalette.text-primary;
+                                font-family: CosmicTypography.font-family;
+                                font-size: CosmicTypography.body-size;
+                                wrap: word-wrap;
+                            }
+                        }
+                    }
+                    
+                    // Container with border
+                    CosmicContainer {
+                        layer: ContainerLayer.primary;
+                        has-border: true;
+                        width: 250px;
+                        
+                        VerticalLayout {
+                            spacing: CosmicSpacing.space-xs;
+                            
+                            Text {
+                                text: "Container with Border";
+                                color: CosmicPalette.text-primary;
+                                font-family: CosmicTypography.font-family;
+                                font-size: CosmicTypography.heading-size;
+                                font-weight: CosmicTypography.heading-weight;
+                            }
+                            
+                            Text {
+                                text: "This container has a border.";
+                                color: CosmicPalette.text-primary;
+                                font-family: CosmicTypography.font-family;
+                                font-size: CosmicTypography.body-size;
+                                wrap: word-wrap;
+                            }
+                        }
+                    }
+                    
+                    // Elevated container
+                    CosmicContainer {
+                        layer: ContainerLayer.secondary;
+                        elevated: true;
+                        border-radius: 12px;
+                        width: 250px;
+                        
+                        VerticalLayout {
+                            spacing: CosmicSpacing.space-xs;
+                            
+                            Text {
+                                text: "Elevated Container";
+                                color: CosmicPalette.text-primary;
+                                font-family: CosmicTypography.font-family;
+                                font-size: CosmicTypography.heading-size;
+                                font-weight: CosmicTypography.heading-weight;
+                            }
+                            
+                            Text {
+                                text: "This container has elevation (shadow).";
+                                color: CosmicPalette.text-primary;
+                                font-family: CosmicTypography.font-family;
+                                font-size: CosmicTypography.body-size;
+                                wrap: word-wrap;
+                            }
+                        }
+                    }
+                }
+                
+                CosmicDivider {
+                    orientation: Orientation.horizontal;
+                    label: "Dividers";
+                }
+                
+                // ============================================================
+                // DIVIDERS SECTION
+                // ============================================================
+                
+                Text {
+                    text: "Divider Components";
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.title4-size;
+                    font-weight: CosmicTypography.title4-weight;
+                }
+                
+                VerticalLayout {
+                    spacing: CosmicSpacing.space-m;
+                    
+                    Text {
+                        text: "Simple horizontal divider:";
+                        color: CosmicPalette.text-secondary;
+                        font-family: CosmicTypography.font-family;
+                        font-size: CosmicTypography.body-size;
+                    }
+                    
+                    CosmicDivider {
+                        orientation: Orientation.horizontal;
+                    }
+                    
+                    Text {
+                        text: "Divider with label:";
+                        color: CosmicPalette.text-secondary;
+                        font-family: CosmicTypography.font-family;
+                        font-size: CosmicTypography.body-size;
+                    }
+                    
+                    CosmicDivider {
+                        orientation: Orientation.horizontal;
+                        label: "Section Label";
+                    }
+                    
+                    HorizontalLayout {
+                        spacing: CosmicSpacing.space-m;
+                        height: 100px;
+                        
+                        Text {
+                            text: "Vertical divider:";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.body-size;
+                            vertical-alignment: center;
+                        }
+                        
+                        CosmicDivider {
+                            orientation: Orientation.vertical;
+                        }
+                        
+                        Text {
+                            text: "Content on the right";
+                            color: CosmicPalette.text-primary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.body-size;
+                            vertical-alignment: center;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

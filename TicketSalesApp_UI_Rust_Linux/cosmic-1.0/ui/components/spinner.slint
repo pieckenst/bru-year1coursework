@@ -1,0 +1,133 @@
+import { CosmicPalette } from "../styling/palette.slint";
+
+// Spinner size presets
+export enum SpinnerSize {
+    small,    // 16px - for inline contexts
+    medium,   // 32px - for buttons
+    large,    // 64px - for page loading
+}
+
+// CosmicSpinner - Circular rotating loading indicator
+// Requirements: 61.1-61.5
+export component CosmicSpinner {
+    // Properties
+    in property <SpinnerSize> size: SpinnerSize.medium;
+    in property <color> color: CosmicPalette.accent-primary;
+    
+    // Computed dimensions based on size
+    property <length> spinner-size: size == SpinnerSize.small ? 16px :
+                                    size == SpinnerSize.medium ? 32px :
+                                    64px; // large
+    
+    property <length> stroke-width: size == SpinnerSize.small ? 2px :
+                                    size == SpinnerSize.medium ? 3px :
+                                    4px; // large
+    
+    // Animation property for rotation
+    property <float> rotation-progress: 0.0;
+    
+    width: spinner-size;
+    height: spinner-size;
+    
+    // Continuous rotation animation
+    animate rotation-progress {
+        duration: 1000ms;
+        iteration-count: -1; // Infinite
+        easing: linear;
+    }
+    
+    states [
+        rotating: {
+            rotation-progress: 1.0;
+        }
+    ]
+    
+    // Spinner container - using multiple arcs to simulate rotation
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        
+        // Primary arc (270 degrees) - rotates by changing opacity and position
+        Path {
+            width: parent.width;
+            height: parent.height;
+            
+            // SVG path for 270-degree arc (3/4 circle)
+            // Starts at top, goes clockwise for 270 degrees
+            commands: {
+                if size == SpinnerSize.small {
+                    "M 8 2 A 6 6 0 1 1 2 8"
+                } else if size == SpinnerSize.medium {
+                    "M 16 4 A 12 12 0 1 1 4 16"
+                } else {
+                    "M 32 8 A 24 24 0 1 1 8 32"
+                }
+            };
+            stroke: root.color;
+            stroke-width: root.stroke-width;
+            
+            // Simulate rotation by fading in/out multiple arcs
+            opacity: 1.0 - (root.rotation-progress * 0.3);
+        }
+        
+        // Secondary arc (offset by 90 degrees) for smooth rotation effect
+        Path {
+            width: parent.width;
+            height: parent.height;
+            
+            commands: {
+                if size == SpinnerSize.small {
+                    "M 14 8 A 6 6 0 1 1 8 14"
+                } else if size == SpinnerSize.medium {
+                    "M 28 16 A 12 12 0 1 1 16 28"
+                } else {
+                    "M 56 32 A 24 24 0 1 1 32 56"
+                }
+            };
+            stroke: root.color;
+            stroke-width: root.stroke-width;
+            
+            opacity: root.rotation-progress * 0.7;
+        }
+        
+        // Tertiary arc (offset by 180 degrees) for smoother rotation
+        Path {
+            width: parent.width;
+            height: parent.height;
+            
+            commands: {
+                if size == SpinnerSize.small {
+                    "M 8 14 A 6 6 0 1 1 14 8"
+                } else if size == SpinnerSize.medium {
+                    "M 16 28 A 12 12 0 1 1 28 16"
+                } else {
+                    "M 32 56 A 24 24 0 1 1 56 32"
+                }
+            };
+            stroke: root.color;
+            stroke-width: root.stroke-width;
+            
+            opacity: Math.abs(root.rotation-progress - 0.5) * 1.4;
+        }
+        
+        // Quaternary arc (offset by 270 degrees) for complete rotation effect
+        Path {
+            width: parent.width;
+            height: parent.height;
+            
+            commands: {
+                if size == SpinnerSize.small {
+                    "M 2 8 A 6 6 0 1 1 8 2"
+                } else if size == SpinnerSize.medium {
+                    "M 4 16 A 12 12 0 1 1 16 4"
+                } else {
+                    "M 8 32 A 24 24 0 1 1 32 8"
+                }
+            };
+            stroke: root.color;
+            stroke-width: root.stroke-width;
+            
+            opacity: (1.0 - root.rotation-progress) * 0.5;
+        }
+    }
+}

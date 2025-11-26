@@ -1,0 +1,66 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+
+// Progress bar mode
+export enum ProgressMode {
+    determinate,    // Shows specific progress value
+    indeterminate,  // Shows animated loading without specific value
+}
+
+// CosmicProgressBar - Linear progress indicator
+// Requirements: 61.7-61.8
+export component CosmicProgressBar {
+    // Properties
+    in property <ProgressMode> mode: ProgressMode.determinate;
+    in property <float> progress: 0.0; // 0.0 to 1.0 for determinate mode
+    in property <color> color: CosmicPalette.accent-primary;
+    in property <color> track-color: CosmicPalette.surface-variant;
+    in property <length> bar-height: 4px;
+    
+    // Computed progress value (clamped between 0 and 1)
+    property <float> clamped-progress: Math.max(0.0, Math.min(1.0, progress));
+    
+    // Indeterminate animation properties
+    property <float> indeterminate-position: 0.0;
+    property <float> indeterminate-width: 0.3; // 30% of bar width
+    
+    min-height: root.bar-height;
+    preferred-height: root.bar-height;
+    
+    // Indeterminate animation
+    animate indeterminate-position {
+        duration: 2000ms;
+        iteration-count: -1; // Infinite
+        easing: ease-in-out;
+    }
+    
+    states [
+        indeterminate when mode == ProgressMode.indeterminate: {
+            indeterminate-position: 1.0;
+        }
+    ]
+    
+    // Track (background)
+    track := Rectangle {
+        height: root.bar-height;
+        background: root.track-color;
+        border-radius: CosmicCornerRadii.progress-bar-radius;
+        
+        // Progress fill
+        if mode == ProgressMode.determinate: Rectangle {
+            width: parent.width * root.clamped-progress;
+            height: root.bar-height;
+            background: root.color;
+            border-radius: parent.border-radius;
+        }
+        
+        // Indeterminate fill (animated)
+        if mode == ProgressMode.indeterminate: Rectangle {
+            x: (parent.width - self.width) * root.indeterminate-position;
+            width: parent.width * root.indeterminate-width;
+            height: root.bar-height;
+            background: root.color;
+            border-radius: parent.border-radius;
+        }
+    }
+}

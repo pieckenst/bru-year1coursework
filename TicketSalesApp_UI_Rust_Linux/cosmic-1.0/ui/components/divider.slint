@@ -1,0 +1,126 @@
+// COSMIC Desktop Divider Component
+// Horizontal/vertical separator for content sections
+// Requirements: 36.1-36.6
+
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+export enum Orientation {
+    horizontal,
+    vertical,
+}
+
+// ============================================================================
+// COSMIC DIVIDER COMPONENT
+// ============================================================================
+
+export component CosmicDivider inherits Rectangle {
+    // ============================================================================
+    // PROPERTIES
+    // ============================================================================
+    
+    // Orientation (Requirements 36.1, 36.2)
+    in property <Orientation> orientation: Orientation.horizontal;
+    
+    // Optional label (Requirement 36.5)
+    in property <string> label: "";
+    in property <bool> has-label: label != "";
+    
+    // Spacing around label (Requirement 36.5)
+    in property <length> label-spacing: CosmicSpacing.space-s;  // 16px
+    
+    // Margins for list dividers (Requirement 36.6)
+    in property <length> margin-left: 0px;
+    in property <length> margin-right: 0px;
+    
+    // ============================================================================
+    // COMPUTED PROPERTIES
+    // ============================================================================
+    
+    // Divider color adjusted for light/dark modes (Requirements 36.3, 36.4)
+    property <color> divider-color: CosmicPalette.divider;
+    
+    // ============================================================================
+    // LAYOUT
+    // ============================================================================
+    
+    // Horizontal divider (Requirement 36.1)
+    if orientation == Orientation.horizontal && !has-label: Rectangle {
+        height: 1px;
+        x: margin-left;
+        width: parent.width - margin-left - margin-right;
+        background: divider-color;
+    }
+    
+    // Horizontal divider with label (Requirement 36.5)
+    if orientation == Orientation.horizontal && has-label: HorizontalLayout {
+        spacing: label-spacing;
+        alignment: center;
+        
+        // Left line
+        Rectangle {
+            horizontal-stretch: 1;
+            height: 1px;
+            background: divider-color;
+        }
+        
+        // Label text
+        Text {
+            text: root.label;
+            color: CosmicPalette.text-secondary;
+            font-family: CosmicTypography.font-family;
+            font-size: CosmicTypography.caption-size;  // 12px
+            font-weight: CosmicTypography.caption-weight;  // Regular
+            vertical-alignment: center;
+        }
+        
+        // Right line
+        Rectangle {
+            horizontal-stretch: 1;
+            height: 1px;
+            background: divider-color;
+        }
+    }
+    
+    // Vertical divider (Requirement 36.2)
+    if orientation == Orientation.vertical && !has-label: Rectangle {
+        width: 1px;
+        height: parent.height;
+        background: divider-color;
+    }
+    
+    // Vertical divider with label (Requirement 36.5)
+    if orientation == Orientation.vertical && has-label: VerticalLayout {
+        spacing: label-spacing;
+        alignment: center;
+        
+        // Top line
+        Rectangle {
+            vertical-stretch: 1;
+            width: 1px;
+            background: divider-color;
+        }
+        
+        // Label text (rotated for vertical)
+        Text {
+            text: root.label;
+            color: CosmicPalette.text-secondary;
+            font-family: CosmicTypography.font-family;
+            font-size: CosmicTypography.caption-size;  // 12px
+            font-weight: CosmicTypography.caption-weight;  // Regular
+            horizontal-alignment: center;
+        }
+        
+        // Bottom line
+        Rectangle {
+            vertical-stretch: 1;
+            width: 1px;
+            background: divider-color;
+        }
+    }
+}

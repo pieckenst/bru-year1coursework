@@ -1,0 +1,100 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+
+// CosmicCircularProgress - Circular progress indicator
+// Requirements: 61.6
+export component CosmicCircularProgress {
+    // Properties
+    in property <float> progress: 0.0; // 0.0 to 1.0
+    in property <color> color: CosmicPalette.accent-primary;
+    in property <color> track-color: CosmicPalette.surface-variant;
+    in property <length> size: 64px;
+    in property <length> stroke-width: 4px;
+    in property <bool> show-percentage: true;
+    
+    // Computed values
+    property <float> clamped-progress: Math.max(0.0, Math.min(1.0, progress));
+    property <int> percentage: Math.round(clamped-progress * 100);
+    property <angle> progress-angle: clamped-progress * 360deg;
+    
+    // Computed radius and center
+    property <length> radius: (size - stroke-width * 2) / 2;
+    property <length> center: size / 2;
+    
+    // Calculate end point of arc using trigonometry
+    // Start at top (270 degrees in standard coords, -90 in our rotation)
+    property <float> end-x: center / 1px + radius / 1px * Math.sin(progress-angle);
+    property <float> end-y: center / 1px - radius / 1px * Math.cos(progress-angle);
+    
+    // Determine if we need large arc flag (for arcs > 180 degrees)
+    property <int> large-arc-flag: clamped-progress > 0.5 ? 1 : 0;
+    
+    width: size;
+    height: size;
+    
+    // Container
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        
+        // Track (background circle) - full circle
+        Path {
+            width: parent.width;
+            height: parent.height;
+            
+            // Full circle path using two semicircles to ensure complete rendering
+            commands: "M " + (center / 1px) + " " + (stroke-width / 1px) + 
+                     " A " + (radius / 1px) + " " + (radius / 1px) + " 0 0 1 " + 
+                     (center / 1px) + " " + ((size - stroke-width) / 1px) +
+                     " A " + (radius / 1px) + " " + (radius / 1px) + " 0 0 1 " + 
+                     (center / 1px) + " " + (stroke-width / 1px);
+            stroke: root.track-color;
+            stroke-width: root.stroke-width;
+        }
+        
+        // Progress arc - only show if progress > 0
+        if clamped-progress > 0.0: Path {
+            width: parent.width;
+            height: parent.height;
+            
+            // Arc path from top (12 o'clock) clockwise to progress point
+            // M = move to start point (top of circle)
+            // A = arc to end point
+            commands: {
+                if clamped-progress >= 0.999 {
+                    // Nearly complete circle - draw two semicircles
+                    "M " + (center / 1px) + " " + (stroke-width / 1px) + 
+                    " A " + (radius / 1px) + " " + (radius / 1px) + " 0 0 1 " + 
+                    (center / 1px) + " " + ((size - stroke-width) / 1px) +
+                    " A " + (radius / 1px) + " " + (radius / 1px) + " 0 0 1 " + 
+                    (center / 1px) + " " + (stroke-width / 1px)
+                } else {
+                    // Partial arc
+                    "M " + (center / 1px) + " " + (stroke-width / 1px) + 
+                    " A " + (radius / 1px) + " " + (radius / 1px) + 
+                    " 0 " + large-arc-flag + " 1 " + 
+                    end-x + " " + end-y
+                }
+            };
+            stroke: root.color;
+            stroke-width: root.stroke-width;
+        }
+        
+        // Percentage text (centered)
+        if root.show-percentage: Text {
+            x: 0;
+            y: 0;
+            width: parent.width;
+            height: parent.height;
+            text: root.percentage + "%";
+            color: CosmicPalette.text-primary;
+            font-family: CosmicTypography.font-family;
+            font-size: size >= 64px ? CosmicTypography.size-16 : 
+                      size >= 48px ? CosmicTypography.size-14 :
+                      CosmicTypography.size-12;
+            font-weight: CosmicTypography.weight-semibold;
+            horizontal-alignment: TextHorizontalAlignment.center;
+            vertical-alignment: TextVerticalAlignment.center;
+        }
+    }
+}

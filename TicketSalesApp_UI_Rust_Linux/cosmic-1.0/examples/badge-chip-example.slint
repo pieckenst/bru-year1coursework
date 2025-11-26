@@ -1,0 +1,484 @@
+import { CosmicBadge, CosmicBadgeContainer, BadgeVariant } from "../ui/components/badge.slint";
+import { CosmicChip, CosmicChipGroup } from "../ui/components/chip.slint";
+import { CosmicPalette } from "../ui/styling/palette.slint";
+import { CosmicSpacing } from "../ui/styling/spacing.slint";
+import { CosmicTypography } from "../ui/styling/typography.slint";
+import { Button } from "std-widgets.slint";
+
+export component BadgeChipExample inherits Window {
+    title: "COSMIC Badge & Chip Components Example";
+    background: CosmicPalette.background-base;
+    preferred-width: 800px;
+    preferred-height: 900px;
+    
+    // State for interactive examples
+    in-out property <int> notification-count: 5;
+    in-out property <int> message-count: 127;
+    in-out property <bool> dark-mode <=> CosmicPalette.dark-mode;
+    
+    VerticalLayout {
+        padding: CosmicSpacing.space-m;
+        spacing: CosmicSpacing.space-l;
+        
+        // Header
+        HorizontalLayout {
+            spacing: CosmicSpacing.space-m;
+            
+            Text {
+                text: "Badge & Chip Components";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-32;
+                font-weight: CosmicTypography.weight-bold;
+                horizontal-stretch: 1;
+            }
+            
+            // Dark mode toggle
+            HorizontalLayout {
+                spacing: CosmicSpacing.space-xxs;
+                alignment: center;
+                
+                Text {
+                    text: "Dark Mode";
+                    color: CosmicPalette.text-secondary;
+                    font-size: CosmicTypography.size-14;
+                }
+                
+                Rectangle {
+                    width: 48px;
+                    height: 24px;
+                    border-radius: 12px;
+                    background: root.dark-mode ? CosmicPalette.accent-primary : CosmicPalette.surface-variant;
+                    
+                    Rectangle {
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 10px;
+                        background: #FFFFFF;
+                        x: root.dark-mode ? parent.width - self.width - 2px : 2px;
+                        y: 2px;
+                        
+                        animate x {
+                            duration: 150ms;
+                            easing: ease-out;
+                        }
+                    }
+                    
+                    TouchArea {
+                        clicked => {
+                            root.dark-mode = !root.dark-mode;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Section 1: Basic Badges
+        VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            Text {
+                text: "Basic Badges";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-24;
+                font-weight: CosmicTypography.weight-semibold;
+            }
+            
+            HorizontalLayout {
+                spacing: CosmicSpacing.space-m;
+                alignment: start;
+                
+                // Count badges
+                VerticalLayout {
+                    spacing: CosmicSpacing.space-xs;
+                    
+                    Text {
+                        text: "Count Badges:";
+                        color: CosmicPalette.text-secondary;
+                        font-size: CosmicTypography.size-14;
+                    }
+                    
+                    HorizontalLayout {
+                        spacing: CosmicSpacing.space-s;
+                        
+                        CosmicBadge {
+                            count: 3;
+                        }
+                        
+                        CosmicBadge {
+                            count: 42;
+                        }
+                        
+                        CosmicBadge {
+                            count: 127;
+                        }
+                    }
+                }
+                
+                // 99+ badge
+                VerticalLayout {
+                    spacing: CosmicSpacing.space-xs;
+                    
+                    Text {
+                        text: "Over 99:";
+                        color: CosmicPalette.text-secondary;
+                        font-size: CosmicTypography.size-14;
+                    }
+                    
+                    CosmicBadge {
+                        count: 150;
+                    }
+                }
+            }
+        }
+        
+        // Section 2: Badge Variants
+        VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            Text {
+                text: "Badge Variants (Semantic Colors)";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-24;
+                font-weight: CosmicTypography.weight-semibold;
+            }
+            
+            HorizontalLayout {
+                spacing: CosmicSpacing.space-m;
+                alignment: start;
+                
+                VerticalLayout {
+                    spacing: CosmicSpacing.space-xs;
+                    alignment: center;
+                    
+                    CosmicBadge {
+                        count: 5;
+                        variant: BadgeVariant.accent;
+                    }
+                    Text {
+                        text: "Accent";
+                        color: CosmicPalette.text-secondary;
+                        font-size: CosmicTypography.size-12;
+                    }
+                }
+                
+                VerticalLayout {
+                    spacing: CosmicSpacing.space-xs;
+                    alignment: center;
+                    
+                    CosmicBadge {
+                        count: 3;
+                        variant: BadgeVariant.success;
+                    }
+                    Text {
+                        text: "Success";
+                        color: CosmicPalette.text-secondary;
+                        font-size: CosmicTypography.size-12;
+                    }
+                }
+                
+                VerticalLayout {
+                    spacing: CosmicSpacing.space-xs;
+                    alignment: center;
+                    
+                    CosmicBadge {
+                        count: 7;
+                        variant: BadgeVariant.warning;
+                    }
+                    Text {
+                        text: "Warning";
+                        color: CosmicPalette.text-secondary;
+                        font-size: CosmicTypography.size-12;
+                    }
+                }
+                
+                VerticalLayout {
+                    spacing: CosmicSpacing.space-xs;
+                    alignment: center;
+                    
+                    CosmicBadge {
+                        count: 2;
+                        variant: BadgeVariant.error;
+                    }
+                    Text {
+                        text: "Error";
+                        color: CosmicPalette.text-secondary;
+                        font-size: CosmicTypography.size-12;
+                    }
+                }
+                
+                VerticalLayout {
+                    spacing: CosmicSpacing.space-xs;
+                    alignment: center;
+                    
+                    CosmicBadge {
+                        count: 9;
+                        variant: BadgeVariant.info;
+                    }
+                    Text {
+                        text: "Info";
+                        color: CosmicPalette.text-secondary;
+                        font-size: CosmicTypography.size-12;
+                    }
+                }
+                
+                VerticalLayout {
+                    spacing: CosmicSpacing.space-xs;
+                    alignment: center;
+                    
+                    CosmicBadge {
+                        count: 4;
+                        variant: BadgeVariant.neutral;
+                    }
+                    Text {
+                        text: "Neutral";
+                        color: CosmicPalette.text-secondary;
+                        font-size: CosmicTypography.size-12;
+                    }
+                }
+            }
+        }
+        
+        // Section 3: Badges on Buttons
+        VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            Text {
+                text: "Badges on Buttons (Top-Right Position)";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-24;
+                font-weight: CosmicTypography.weight-semibold;
+            }
+            
+            HorizontalLayout {
+                spacing: CosmicSpacing.space-m;
+                
+                CosmicBadgeContainer {
+                    badge-count: root.notification-count;
+                    
+                    Rectangle {
+                        width: 120px;
+                        height: 40px;
+                        background: CosmicPalette.accent-primary;
+                        border-radius: 10px;
+                        
+                        Text {
+                            text: "Notifications";
+                            color: #FFFFFF;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-14;
+                            font-weight: CosmicTypography.weight-medium;
+                            horizontal-alignment: center;
+                            vertical-alignment: center;
+                        }
+                        
+                        TouchArea {
+                            clicked => {
+                                root.notification-count += 1;
+                            }
+                        }
+                    }
+                }
+                
+                CosmicBadgeContainer {
+                    badge-count: root.message-count;
+                    badge-variant: BadgeVariant.error;
+                    
+                    Rectangle {
+                        width: 100px;
+                        height: 40px;
+                        background: CosmicPalette.surface-variant;
+                        border-radius: 10px;
+                        
+                        Text {
+                            text: "Messages";
+                            color: CosmicPalette.text-primary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-14;
+                            font-weight: CosmicTypography.weight-medium;
+                            horizontal-alignment: center;
+                            vertical-alignment: center;
+                        }
+                        
+                        TouchArea {
+                            clicked => {
+                                root.message-count += 10;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            Text {
+                text: "Click buttons to increment counts";
+                color: CosmicPalette.text-secondary;
+                font-size: CosmicTypography.size-12;
+            }
+        }
+        
+        // Section 4: Basic Chips
+        VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            Text {
+                text: "Basic Chips";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-24;
+                font-weight: CosmicTypography.weight-semibold;
+            }
+            
+            HorizontalLayout {
+                spacing: CosmicSpacing.space-s;
+                
+                CosmicChip {
+                    text: "Design";
+                }
+                
+                CosmicChip {
+                    text: "Development";
+                }
+                
+                CosmicChip {
+                    text: "Testing";
+                }
+                
+                CosmicChip {
+                    text: "Documentation";
+                }
+            }
+        }
+        
+        // Section 5: Removable Chips
+        VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            Text {
+                text: "Removable Chips";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-24;
+                font-weight: CosmicTypography.weight-semibold;
+            }
+            
+            HorizontalLayout {
+                spacing: CosmicSpacing.space-s;
+                
+                CosmicChip {
+                    text: "JavaScript";
+                    removable: true;
+                    removed => {
+                        debug("Removed: JavaScript");
+                    }
+                }
+                
+                CosmicChip {
+                    text: "TypeScript";
+                    removable: true;
+                    removed => {
+                        debug("Removed: TypeScript");
+                    }
+                }
+                
+                CosmicChip {
+                    text: "Rust";
+                    removable: true;
+                    removed => {
+                        debug("Removed: Rust");
+                    }
+                }
+            }
+        }
+        
+        // Section 6: Clickable Chips
+        VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            Text {
+                text: "Clickable Chips (Hover to See Effect)";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-24;
+                font-weight: CosmicTypography.weight-semibold;
+            }
+            
+            HorizontalLayout {
+                spacing: CosmicSpacing.space-s;
+                
+                CosmicChip {
+                    text: "All";
+                    clickable: true;
+                    selected: true;
+                    clicked => {
+                        debug("Clicked: All");
+                    }
+                }
+                
+                CosmicChip {
+                    text: "Active";
+                    clickable: true;
+                    clicked => {
+                        debug("Clicked: Active");
+                    }
+                }
+                
+                CosmicChip {
+                    text: "Completed";
+                    clickable: true;
+                    clicked => {
+                        debug("Clicked: Completed");
+                    }
+                }
+                
+                CosmicChip {
+                    text: "Archived";
+                    clickable: true;
+                    clicked => {
+                        debug("Clicked: Archived");
+                    }
+                }
+            }
+        }
+        
+        // Section 7: Chips with Avatars
+        VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            Text {
+                text: "Chips with Avatars (Placeholder)";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-24;
+                font-weight: CosmicTypography.weight-semibold;
+            }
+            
+            Text {
+                text: "Note: Avatar images would be loaded from actual image files";
+                color: CosmicPalette.text-secondary;
+                font-size: CosmicTypography.size-12;
+            }
+            
+            HorizontalLayout {
+                spacing: CosmicSpacing.space-s;
+                
+                CosmicChip {
+                    text: "Alice Johnson";
+                    removable: true;
+                }
+                
+                CosmicChip {
+                    text: "Bob Smith";
+                    removable: true;
+                }
+                
+                CosmicChip {
+                    text: "Carol Davis";
+                    removable: true;
+                }
+            }
+        }
+    }
+}

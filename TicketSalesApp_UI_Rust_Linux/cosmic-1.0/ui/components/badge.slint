@@ -1,0 +1,115 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+
+// Badge variant for semantic colors
+export enum BadgeVariant {
+    accent,     // Default accent color
+    success,    // Green for success states
+    warning,    // Orange/yellow for warnings
+    error,      // Red for errors
+    info,       // Blue for information
+    neutral,    // Neutral gray
+}
+
+// CosmicBadge - Small count or status indicator
+// Requirements: 62.1-62.4, 62.10
+export component CosmicBadge {
+    // Properties
+    in property <int> count: 0;
+    in property <string> text: "";  // Alternative to count for custom text
+    in property <BadgeVariant> variant: BadgeVariant.accent;
+    in property <bool> show-zero: false;  // Whether to show badge when count is 0
+    
+    // Computed properties
+    property <string> display-text: {
+        if text != "" {
+            text
+        } else if count > 99 {
+            "99+"  // Requirement 62.4
+        } else {
+            count
+        }
+    };
+    
+    property <bool> should-show: {
+        if text != "" {
+            true
+        } else if count == 0 {
+            show-zero
+        } else {
+            true
+        }
+    };
+    
+    property <color> background-color: {
+        if variant == BadgeVariant.success {
+            CosmicPalette.success
+        } else if variant == BadgeVariant.warning {
+            CosmicPalette.warning
+        } else if variant == BadgeVariant.error {
+            CosmicPalette.error
+        } else if variant == BadgeVariant.info {
+            CosmicPalette.info
+        } else if variant == BadgeVariant.neutral {
+            CosmicPalette.text-secondary
+        } else {
+            CosmicPalette.accent-primary  // accent variant
+        }
+    };
+    
+    // Badge dimensions - Requirement 62.1
+    min-width: 20px;
+    height: 20px;
+    
+    if should-show: Rectangle {
+        background: root.background-color;
+        border-radius: 10px;  // Requirement 62.1 - 10px radius for 20px height
+        min-width: parent.min-width;
+        height: parent.height;
+        
+        // Horizontal layout for text centering
+        HorizontalLayout {
+            padding-left: CosmicSpacing.space-xxxs;
+            padding-right: CosmicSpacing.space-xxxs;
+            alignment: center;
+            
+            Text {
+                text: root.display-text;
+                color: #FFFFFF;  // White text on colored background
+                font-family: CosmicTypography.font-family;
+                font-size: 11px;  // Small font for compact badge
+                font-weight: CosmicTypography.weight-semibold;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+        }
+    }
+}
+
+// CosmicBadgeContainer - Wrapper for positioning badge on parent element
+// Positions badge at top-right corner - Requirement 62.3
+export component CosmicBadgeContainer {
+    in property <int> badge-count: 0;
+    in property <string> badge-text: "";
+    in property <BadgeVariant> badge-variant: BadgeVariant.accent;
+    in property <bool> show-zero: false;
+    
+    // Container for the main content
+    Rectangle {
+        @children
+        
+        // Badge positioned at top-right - Requirement 62.3
+        CosmicBadge {
+            count: root.badge-count;
+            text: root.badge-text;
+            variant: root.badge-variant;
+            show-zero: root.show-zero;
+            
+            // Position at top-right corner
+            x: parent.width - self.width / 2;
+            y: -self.height / 2;
+        }
+    }
+}

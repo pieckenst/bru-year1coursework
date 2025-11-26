@@ -1,0 +1,299 @@
+import { CosmicDropdown, DropdownOption } from "../ui/components/dropdown.slint";
+import { CosmicPalette } from "../ui/styling/palette.slint";
+import { CosmicSpacing } from "../ui/styling/spacing.slint";
+
+export component DropdownExample inherits Window {
+    title: "COSMIC Dropdown Examples";
+    background: CosmicPalette.background-base;
+    preferred-width: 800px;
+    preferred-height: 600px;
+    
+    // Sample data
+    property <[DropdownOption]> simple-options: [
+        { text: "Option 1", value: "opt1", icon: @image-url(""), disabled: false, group: "" },
+        { text: "Option 2", value: "opt2", icon: @image-url(""), disabled: false, group: "" },
+        { text: "Option 3", value: "opt3", icon: @image-url(""), disabled: false, group: "" },
+        { text: "Option 4 (Disabled)", value: "opt4", icon: @image-url(""), disabled: true, group: "" },
+        { text: "Option 5", value: "opt5", icon: @image-url(""), disabled: false, group: "" },
+    ];
+    
+    property <[DropdownOption]> grouped-options: [
+        { text: "Apple", value: "apple", icon: @image-url(""), disabled: false, group: "Fruits" },
+        { text: "Banana", value: "banana", icon: @image-url(""), disabled: false, group: "Fruits" },
+        { text: "Orange", value: "orange", icon: @image-url(""), disabled: false, group: "Fruits" },
+        { text: "Carrot", value: "carrot", icon: @image-url(""), disabled: false, group: "Vegetables" },
+        { text: "Broccoli", value: "broccoli", icon: @image-url(""), disabled: false, group: "Vegetables" },
+        { text: "Spinach", value: "spinach", icon: @image-url(""), disabled: false, group: "Vegetables" },
+    ];
+    
+    property <[DropdownOption]> many-options: [
+        { text: "Item 1", value: "item1", icon: @image-url(""), disabled: false, group: "" },
+        { text: "Item 2", value: "item2", icon: @image-url(""), disabled: false, group: "" },
+        { text: "Item 3", value: "item3", icon: @image-url(""), disabled: false, group: "" },
+        { text: "Item 4", value: "item4", icon: @image-url(""), disabled: false, group: "" },
+        { text: "Item 5", value: "item5", icon: @image-url(""), disabled: false, group: "" },
+        { text: "Item 6", value: "item6", icon: @image-url(""), disabled: false, group: "" },
+        { text: "Item 7", value: "item7", icon: @image-url(""), disabled: false, group: "" },
+        { text: "Item 8", value: "item8", icon: @image-url(""), disabled: false, group: "" },
+        { text: "Item 9", value: "item9", icon: @image-url(""), disabled: false, group: "" },
+        { text: "Item 10", value: "item10", icon: @image-url(""), disabled: false, group: "" },
+        { text: "Item 11", value: "item11", icon: @image-url(""), disabled: false, group: "" },
+        { text: "Item 12", value: "item12", icon: @image-url(""), disabled: false, group: "" },
+    ];
+    
+    Flickable {
+        viewport-height: content.preferred-height;
+        
+        content := VerticalLayout {
+            padding: CosmicSpacing.space-l;
+            spacing: CosmicSpacing.space-l;
+            alignment: start;
+            
+            // Header
+            Text {
+                text: "COSMIC Dropdown Component Examples";
+                color: CosmicPalette.text-primary;
+                font-size: 24px;
+                font-weight: 700;
+            }
+            
+            // Section 1: Basic Dropdown
+            VerticalLayout {
+                spacing: CosmicSpacing.space-s;
+                
+                Text {
+                    text: "1. Basic Dropdown";
+                    color: CosmicPalette.text-primary;
+                    font-size: 18px;
+                    font-weight: 600;
+                }
+                
+                Text {
+                    text: "Simple dropdown with 5 options, one disabled.";
+                    color: CosmicPalette.text-secondary;
+                    font-size: 14px;
+                }
+                
+                HorizontalLayout {
+                    spacing: CosmicSpacing.space-m;
+                    
+                    CosmicDropdown {
+                        label: "Select an option";
+                        placeholder: "Choose...";
+                        options: root.simple-options;
+                        dropdown-width: 250px;
+                        
+                        option-selected(value) => {
+                            debug("Selected:", value);
+                        }
+                    }
+                    
+                    CosmicDropdown {
+                        label: "Disabled dropdown";
+                        placeholder: "Cannot select";
+                        options: root.simple-options;
+                        dropdown-width: 250px;
+                        disabled: true;
+                    }
+                }
+            }
+            
+            // Section 2: Searchable Dropdown
+            VerticalLayout {
+                spacing: CosmicSpacing.space-s;
+                
+                Text {
+                    text: "2. Searchable Dropdown";
+                    color: CosmicPalette.text-primary;
+                    font-size: 18px;
+                    font-weight: 600;
+                }
+                
+                Text {
+                    text: "Dropdown with search input at the top for filtering options.";
+                    color: CosmicPalette.text-secondary;
+                    font-size: 14px;
+                }
+                
+                CosmicDropdown {
+                    label: "Search and select";
+                    placeholder: "Type to search...";
+                    options: root.many-options;
+                    dropdown-width: 300px;
+                    searchable: true;
+                    
+                    option-selected(value) => {
+                        debug("Searched and selected:", value);
+                    }
+                }
+            }
+            
+            // Section 3: Multi-Select Dropdown
+            VerticalLayout {
+                spacing: CosmicSpacing.space-s;
+                
+                Text {
+                    text: "3. Multi-Select Dropdown";
+                    color: CosmicPalette.text-primary;
+                    font-size: 18px;
+                    font-weight: 600;
+                }
+                
+                Text {
+                    text: "Dropdown with checkboxes for selecting multiple options.";
+                    color: CosmicPalette.text-secondary;
+                    font-size: 14px;
+                }
+                
+                CosmicDropdown {
+                    label: "Select multiple";
+                    placeholder: "Choose multiple...";
+                    options: root.simple-options;
+                    dropdown-width: 300px;
+                    multi-select: true;
+                    
+                    options-changed(values) => {
+                        debug("Selected values:", values);
+                    }
+                }
+            }
+            
+            // Section 4: Grouped Options
+            VerticalLayout {
+                spacing: CosmicSpacing.space-s;
+                
+                Text {
+                    text: "4. Grouped Options";
+                    color: CosmicPalette.text-primary;
+                    font-size: 18px;
+                    font-weight: 600;
+                }
+                
+                Text {
+                    text: "Dropdown with options organized into groups with headers and dividers.";
+                    color: CosmicPalette.text-secondary;
+                    font-size: 14px;
+                }
+                
+                CosmicDropdown {
+                    label: "Select food";
+                    placeholder: "Choose a food...";
+                    options: root.grouped-options;
+                    dropdown-width: 300px;
+                    
+                    option-selected(value) => {
+                        debug("Selected food:", value);
+                    }
+                }
+            }
+            
+            // Section 5: Long List with Scrolling
+            VerticalLayout {
+                spacing: CosmicSpacing.space-s;
+                
+                Text {
+                    text: "5. Long List with Scrolling";
+                    color: CosmicPalette.text-primary;
+                    font-size: 18px;
+                    font-weight: 600;
+                }
+                
+                Text {
+                    text: "Dropdown with many options showing max 8 items with scrolling.";
+                    color: CosmicPalette.text-secondary;
+                    font-size: 14px;
+                }
+                
+                CosmicDropdown {
+                    label: "Select from many";
+                    placeholder: "Scroll to see more...";
+                    options: root.many-options;
+                    dropdown-width: 300px;
+                    
+                    option-selected(value) => {
+                        debug("Selected from long list:", value);
+                    }
+                }
+            }
+            
+            // Section 6: Combined Features
+            VerticalLayout {
+                spacing: CosmicSpacing.space-s;
+                
+                Text {
+                    text: "6. Combined Features";
+                    color: CosmicPalette.text-primary;
+                    font-size: 18px;
+                    font-weight: 600;
+                }
+                
+                Text {
+                    text: "Multi-select dropdown with search and grouped options.";
+                    color: CosmicPalette.text-secondary;
+                    font-size: 14px;
+                }
+                
+                CosmicDropdown {
+                    label: "Advanced dropdown";
+                    placeholder: "Search and select multiple...";
+                    options: root.grouped-options;
+                    dropdown-width: 350px;
+                    multi-select: true;
+                    searchable: true;
+                    
+                    options-changed(values) => {
+                        debug("Advanced selection:", values);
+                    }
+                }
+            }
+            
+            // Theme toggle
+            HorizontalLayout {
+                spacing: CosmicSpacing.space-m;
+                
+                Text {
+                    text: "Theme:";
+                    color: CosmicPalette.text-primary;
+                    font-size: 14px;
+                    vertical-alignment: center;
+                }
+                
+                Rectangle {
+                    width: 60px;
+                    height: 32px;
+                    border-radius: 16px;
+                    background: CosmicPalette.dark-mode ? 
+                        CosmicPalette.accent-primary : 
+                        CosmicPalette.border-neutral;
+                    
+                    Rectangle {
+                        width: 28px;
+                        height: 28px;
+                        x: CosmicPalette.dark-mode ? 30px : 2px;
+                        y: 2px;
+                        border-radius: 14px;
+                        background: Colors.white;
+                        
+                        animate x {
+                            duration: 150ms;
+                            easing: ease-out;
+                        }
+                    }
+                    
+                    TouchArea {
+                        clicked => {
+                            CosmicPalette.dark-mode = !CosmicPalette.dark-mode;
+                        }
+                    }
+                }
+                
+                Text {
+                    text: CosmicPalette.dark-mode ? "Dark" : "Light";
+                    color: CosmicPalette.text-secondary;
+                    font-size: 14px;
+                    vertical-alignment: center;
+                }
+            }
+        }
+    }
+}

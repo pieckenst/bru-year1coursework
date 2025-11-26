@@ -1,0 +1,350 @@
+import { CosmicSpinner, SpinnerSize } from "../ui/components/spinner.slint";
+import { CosmicProgressBar, ProgressMode } from "../ui/components/progress-bar.slint";
+import { CosmicCircularProgress } from "../ui/components/circular-progress.slint";
+import { CosmicSkeletonLoader, SkeletonShape, SkeletonText, SkeletonCircle, SkeletonRectangle } from "../ui/components/skeleton-loader.slint";
+import { CosmicPalette } from "../ui/styling/palette.slint";
+import { CosmicSpacing } from "../ui/styling/spacing.slint";
+import { CosmicTypography } from "../ui/styling/typography.slint";
+
+export component LoadingComponentsExample inherits Window {
+    title: "COSMIC Loading Components Example";
+    background: CosmicPalette.background-base;
+    
+    preferred-width: 800px;
+    preferred-height: 900px;
+    
+    VerticalLayout {
+        padding: CosmicSpacing.space-m;
+        spacing: CosmicSpacing.space-l;
+        
+        // Header
+        Text {
+            text: "COSMIC Loading Components";
+            color: CosmicPalette.text-primary;
+            font-family: CosmicTypography.font-family;
+            font-size: CosmicTypography.size-24;
+            font-weight: CosmicTypography.weight-bold;
+        }
+        
+        // Spinners Section
+        Rectangle {
+            background: CosmicPalette.background-surface;
+            border-radius: 12px;
+            
+            VerticalLayout {
+                padding: CosmicSpacing.space-m;
+                spacing: CosmicSpacing.space-s;
+                
+                Text {
+                    text: "Spinners";
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.size-18;
+                    font-weight: CosmicTypography.weight-semibold;
+                }
+                
+                HorizontalLayout {
+                    spacing: CosmicSpacing.space-l;
+                    alignment: start;
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicSpinner {
+                            size: SpinnerSize.small;
+                        }
+                        
+                        Text {
+                            text: "Small (16px)";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicSpinner {
+                            size: SpinnerSize.medium;
+                        }
+                        
+                        Text {
+                            text: "Medium (32px)";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicSpinner {
+                            size: SpinnerSize.large;
+                        }
+                        
+                        Text {
+                            text: "Large (64px)";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Progress Bars Section
+        Rectangle {
+            background: CosmicPalette.background-surface;
+            border-radius: 12px;
+            
+            VerticalLayout {
+                padding: CosmicSpacing.space-m;
+                spacing: CosmicSpacing.space-s;
+                
+                Text {
+                    text: "Progress Bars";
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.size-18;
+                    font-weight: CosmicTypography.weight-semibold;
+                }
+                
+                VerticalLayout {
+                    spacing: CosmicSpacing.space-m;
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        
+                        Text {
+                            text: "Determinate (30%)";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                        
+                        CosmicProgressBar {
+                            mode: ProgressMode.determinate;
+                            progress: 0.3;
+                        }
+                    }
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        
+                        Text {
+                            text: "Determinate (70%)";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                        
+                        CosmicProgressBar {
+                            mode: ProgressMode.determinate;
+                            progress: 0.7;
+                        }
+                    }
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        
+                        Text {
+                            text: "Indeterminate";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                        
+                        CosmicProgressBar {
+                            mode: ProgressMode.indeterminate;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Circular Progress Section
+        Rectangle {
+            background: CosmicPalette.background-surface;
+            border-radius: 12px;
+            
+            VerticalLayout {
+                padding: CosmicSpacing.space-m;
+                spacing: CosmicSpacing.space-s;
+                
+                Text {
+                    text: "Circular Progress";
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.size-18;
+                    font-weight: CosmicTypography.weight-semibold;
+                }
+                
+                HorizontalLayout {
+                    spacing: CosmicSpacing.space-l;
+                    alignment: start;
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicCircularProgress {
+                            progress: 0.25;
+                            size: 64px;
+                        }
+                        
+                        Text {
+                            text: "25%";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicCircularProgress {
+                            progress: 0.5;
+                            size: 64px;
+                        }
+                        
+                        Text {
+                            text: "50%";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicCircularProgress {
+                            progress: 0.75;
+                            size: 64px;
+                        }
+                        
+                        Text {
+                            text: "75%";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicCircularProgress {
+                            progress: 1.0;
+                            size: 64px;
+                        }
+                        
+                        Text {
+                            text: "100%";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Skeleton Loaders Section
+        Rectangle {
+            background: CosmicPalette.background-surface;
+            border-radius: 12px;
+            
+            VerticalLayout {
+                padding: CosmicSpacing.space-m;
+                spacing: CosmicSpacing.space-s;
+                
+                Text {
+                    text: "Skeleton Loaders";
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.size-18;
+                    font-weight: CosmicTypography.weight-semibold;
+                }
+                
+                VerticalLayout {
+                    spacing: CosmicSpacing.space-m;
+                    
+                    // Text skeleton
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        
+                        Text {
+                            text: "Text Lines";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                        
+                        SkeletonText {
+                            text-width: 400px;
+                            text-height: 16px;
+                        }
+                        
+                        SkeletonText {
+                            text-width: 320px;
+                            text-height: 16px;
+                        }
+                        
+                        SkeletonText {
+                            text-width: 240px;
+                            text-height: 16px;
+                        }
+                    }
+                    
+                    // Circle and rectangle
+                    HorizontalLayout {
+                        spacing: CosmicSpacing.space-m;
+                        
+                        VerticalLayout {
+                            spacing: CosmicSpacing.space-xs;
+                            
+                            Text {
+                                text: "Circle (Avatar)";
+                                color: CosmicPalette.text-secondary;
+                                font-family: CosmicTypography.font-family;
+                                font-size: CosmicTypography.size-12;
+                            }
+                            
+                            SkeletonCircle {
+                                circle-size: 48px;
+                            }
+                        }
+                        
+                        VerticalLayout {
+                            spacing: CosmicSpacing.space-xs;
+                            horizontal-stretch: 1;
+                            
+                            Text {
+                                text: "Rectangle (Image)";
+                                color: CosmicPalette.text-secondary;
+                                font-family: CosmicTypography.font-family;
+                                font-size: CosmicTypography.size-12;
+                            }
+                            
+                            SkeletonRectangle {
+                                rect-width: 400px;
+                                rect-height: 120px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

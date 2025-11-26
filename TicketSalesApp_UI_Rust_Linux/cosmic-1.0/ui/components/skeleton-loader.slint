@@ -1,0 +1,108 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+
+// Skeleton shape types
+export enum SkeletonShape {
+    text,       // Text line placeholder
+    circle,     // Circular placeholder (e.g., avatar)
+    rectangle,  // Rectangular placeholder (e.g., image, card)
+}
+
+// CosmicSkeletonLoader - Pulsing placeholder for loading content
+// Requirements: 61.10
+export component CosmicSkeletonLoader {
+    // Properties
+    in property <SkeletonShape> shape: SkeletonShape.rectangle;
+    in property <color> base-color: CosmicPalette.surface-variant;
+    in property <color> shimmer-color: CosmicPalette.dark-mode ? 
+        CosmicPalette.surface-variant.brighter(0.1) : 
+        CosmicPalette.surface-variant.darker(0.05);
+    
+    // Animation properties
+    property <float> pulse-opacity: 1.0;
+    property <float> shimmer-position: 0.0;
+    
+    // Pulse animation
+    animate pulse-opacity {
+        duration: 1500ms;
+        iteration-count: -1; // Infinite
+        easing: ease-in-out;
+    }
+    
+    // Shimmer animation
+    animate shimmer-position {
+        duration: 2000ms;
+        iteration-count: -1; // Infinite
+        easing: linear;
+    }
+    
+    states [
+        animating: {
+            pulse-opacity: 0.5;
+            shimmer-position: 1.0;
+        }
+    ]
+    
+    // Skeleton shape
+    skeleton := Rectangle {
+        background: root.base-color;
+        opacity: root.pulse-opacity;
+        
+        // Border radius based on shape
+        border-radius: shape == SkeletonShape.circle ? CosmicCornerRadii.radius-full :
+                      shape == SkeletonShape.text ? CosmicCornerRadii.radius-xs :
+                      CosmicCornerRadii.radius-s;
+        
+        // Shimmer effect overlay
+        Rectangle {
+            width: parent.width * 0.5; // Shimmer width is 50% of skeleton
+            height: parent.height;
+            x: (parent.width - self.width) * root.shimmer-position;
+            
+            background: @linear-gradient(90deg, 
+                Colors.transparent 0%, 
+                root.shimmer-color 50%, 
+                Colors.transparent 100%);
+            
+            border-radius: parent.border-radius;
+        }
+    }
+}
+
+// Convenience component for text line skeletons
+export component SkeletonText inherits Rectangle {
+    in property <length> text-width: 200px;
+    in property <length> text-height: 16px;
+    
+    width: text-width;
+    height: text-height;
+    
+    CosmicSkeletonLoader {
+        shape: SkeletonShape.text;
+    }
+}
+
+// Convenience component for circular skeletons (e.g., avatars)
+export component SkeletonCircle inherits Rectangle {
+    in property <length> circle-size: 40px;
+    
+    width: circle-size;
+    height: circle-size;
+    
+    CosmicSkeletonLoader {
+        shape: SkeletonShape.circle;
+    }
+}
+
+// Convenience component for rectangular skeletons
+export component SkeletonRectangle inherits Rectangle {
+    in property <length> rect-width: 200px;
+    in property <length> rect-height: 100px;
+    
+    width: rect-width;
+    height: rect-height;
+    
+    CosmicSkeletonLoader {
+        shape: SkeletonShape.rectangle;
+    }
+}

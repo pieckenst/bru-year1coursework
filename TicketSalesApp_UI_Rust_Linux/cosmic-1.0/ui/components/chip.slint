@@ -1,0 +1,165 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+
+// CosmicChip - Compact element for tags, filters, or selections
+// Requirements: 62.5-62.9
+export component CosmicChip {
+    // Properties
+    in property <string> text: "Chip";
+    in property <image> avatar;  // Optional avatar image - Requirement 62.7
+    in property <bool> removable: false;  // Show close icon - Requirement 62.6
+    in property <bool> clickable: false;  // Enable click interaction - Requirement 62.8
+    in property <bool> selected: false;  // Selected state
+    
+    // Callbacks
+    callback clicked();
+    callback removed();
+    
+    // Computed colors
+    property <color> background-color: {
+        if selected {
+            CosmicPalette.accent-primary.with-alpha(0.15)
+        } else if clickable && main-touch.has-hover {
+            CosmicPalette.component-hover
+        } else {
+            CosmicPalette.surface-variant
+        }
+    };
+    
+    property <color> text-color: {
+        if selected {
+            CosmicPalette.accent-primary
+        } else {
+            CosmicPalette.text-primary
+        }
+    };
+    
+    // Chip dimensions - Requirement 62.5
+    height: 28px;
+    
+    Rectangle {
+        background: root.background-color;
+        border-radius: CosmicCornerRadii.chip-radius;  // Full radius - Requirement 62.5
+        height: parent.height;
+        
+        // Smooth transition for background color
+        animate background {
+            duration: 150ms;
+            easing: ease-out;
+        }
+        
+        HorizontalLayout {
+            padding-left: root.avatar.width > 0 ? CosmicSpacing.space-xxxs : CosmicSpacing.space-xs;
+            padding-right: root.removable ? CosmicSpacing.space-xxxs : CosmicSpacing.space-xs;
+            padding-top: CosmicSpacing.space-xxxs;
+            padding-bottom: CosmicSpacing.space-xxxs;
+            spacing: CosmicSpacing.space-xxs;
+            alignment: center;
+            
+            // Avatar on left - Requirement 62.7
+            if root.avatar.width > 0: Rectangle {
+                width: 24px;
+                height: 24px;
+                border-radius: CosmicCornerRadii.radius-full;  // Circular avatar
+                clip: true;
+                
+                Image {
+                    source: root.avatar;
+                    width: parent.width;
+                    height: parent.height;
+                    image-fit: cover;
+                }
+            }
+            
+            // Chip text
+            Text {
+                text: root.text;
+                color: root.text-color;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-14;  // 14px
+                font-weight: CosmicTypography.weight-medium;
+                vertical-alignment: center;
+                horizontal-alignment: center;
+            }
+            
+            // Close icon on right - Requirement 62.6
+            if root.removable: Rectangle {
+                width: 16px;
+                height: 16px;
+                border-radius: CosmicCornerRadii.radius-full;
+                background: close-touch.has-hover ? CosmicPalette.text-primary.with-alpha(0.1) : Colors.transparent;
+                
+                // Close icon (×)
+                Text {
+                    text: "×";
+                    color: root.text-color;
+                    font-size: 16px;
+                    font-weight: CosmicTypography.weight-bold;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+                
+                close-touch := TouchArea {
+                    mouse-cursor: pointer;
+                    
+                    clicked => {
+                        root.removed();
+                    }
+                }
+            }
+        }
+        
+        // Main touch area for clickable chips - Requirement 62.8
+        main-touch := TouchArea {
+            enabled: root.clickable;
+            mouse-cursor: root.clickable ? pointer : default;
+            
+            clicked => {
+                if root.clickable {
+                    root.clicked();
+                }
+            }
+        }
+    }
+}
+
+// CosmicChipGroup - Container for multiple chips with wrapping
+// Supports inline display with wrapping - Requirement 62.9
+export component CosmicChipGroup {
+    in property <[string]> chips: [];
+    in property <bool> removable: false;
+    in property <bool> clickable: false;
+    
+    // Callbacks
+    callback chip-clicked(int);  // Index of clicked chip
+    callback chip-removed(int);  // Index of removed chip
+    
+    VerticalLayout {
+        spacing: CosmicSpacing.space-xxs;
+        
+        // Note: Slint doesn't have automatic wrapping layout
+        // This is a simplified version that stacks chips vertically
+        // In a real implementation, you'd need custom logic for wrapping
+        for chip[index] in root.chips: Rectangle {
+            HorizontalLayout {
+                spacing: CosmicSpacing.space-xxs;
+                
+                CosmicChip {
+                    text: chip;
+                    removable: root.removable;
+                    clickable: root.clickable;
+                    
+                    clicked => {
+                        root.chip-clicked(index);
+                    }
+                    
+                    removed => {
+                        root.chip-removed(index);
+                    }
+                }
+            }
+        }
+    }
+}

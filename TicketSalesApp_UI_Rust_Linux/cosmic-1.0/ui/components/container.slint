@@ -1,0 +1,113 @@
+// COSMIC Desktop Container Component
+// Generic container with padding and background layer support
+// Requirements: 35.1-35.7
+
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+import { CosmicElevation } from "../styling/elevation.slint";
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+// Container layer types (Requirements 35.1-35.4)
+export enum ContainerLayer {
+    background,  // Background layer - uses background.base color (Requirement 35.2)
+    primary,     // Primary layer - uses primary.base color (Requirement 35.3)
+    secondary,   // Secondary layer - uses secondary.base color (Requirement 35.4)
+}
+
+// Container padding density (Requirement 35.6)
+export enum ContainerPadding {
+    compact,      // 16px - for dense content
+    standard,     // 24px - default
+    comfortable,  // 24px - same as standard (can be adjusted if needed)
+}
+
+// ============================================================================
+// COSMIC CONTAINER COMPONENT
+// ============================================================================
+
+export component CosmicContainer inherits Rectangle {
+    // ============================================================================
+    // PROPERTIES
+    // ============================================================================
+    
+    // Layer properties (Requirements 35.1-35.4)
+    in property <ContainerLayer> layer: ContainerLayer.background;
+    
+    // Border properties (Requirement 35.5)
+    in property <bool> has-border: false;
+    
+    // Padding properties (Requirement 35.6)
+    in property <ContainerPadding> padding-density: ContainerPadding.standard;
+    
+    // Elevation properties (Requirement 35.7)
+    in property <bool> elevated: false;
+    
+    // Custom padding override (optional)
+    in property <length> custom-padding: -1px;
+    
+    // Custom border radius
+    in property <length> container-border-radius: 0px;
+    
+    // ============================================================================
+    // COMPUTED PROPERTIES
+    // ============================================================================
+    
+    // Computed padding based on density (Requirement 35.6)
+    property <length> container-padding: {
+        if custom-padding >= 0px {
+            custom-padding
+        } else if padding-density == ContainerPadding.compact {
+            CosmicSpacing.space-s  // 16px
+        } else if padding-density == ContainerPadding.comfortable {
+            CosmicSpacing.space-m  // 24px
+        } else {
+            CosmicSpacing.space-m  // 24px (standard default)
+        }
+    };
+    
+    // Computed background based on layer (Requirements 35.1-35.4)
+    property <color> container-background: {
+        if layer == ContainerLayer.background {
+            CosmicPalette.background-base  // Requirement 35.2
+        } else if layer == ContainerLayer.primary {
+            CosmicPalette.primary-base  // Requirement 35.3
+        } else if layer == ContainerLayer.secondary {
+            CosmicPalette.secondary-base  // Requirement 35.4
+        } else {
+            CosmicPalette.background-base
+        }
+    };
+    
+    // ============================================================================
+    // LAYOUT
+    // ============================================================================
+    
+    // Container background (Requirements 35.1-35.4)
+    background: container-background;
+    border-radius: root.container-border-radius;
+    
+    // Border styling (Requirement 35.5)
+    border-width: has-border ? 1px : 0px;
+    border-color: CosmicPalette.border-neutral;
+    
+    // Shadow/Elevation (Requirement 35.7)
+    // Subtle shadow with 10-20% opacity
+    drop-shadow-offset-y: elevated ? CosmicElevation.shadow-sm-offset-y : 0px;
+    drop-shadow-blur: elevated ? CosmicElevation.shadow-sm-blur : 0px;
+    drop-shadow-color: elevated ? CosmicPalette.shadow-color-sm : transparent;
+    
+    // Content layout with padding
+    VerticalLayout {
+        padding-left: container-padding;
+        padding-right: container-padding;
+        padding-top: container-padding;
+        padding-bottom: container-padding;
+        
+        // Children go here
+        @children
+    }
+}
