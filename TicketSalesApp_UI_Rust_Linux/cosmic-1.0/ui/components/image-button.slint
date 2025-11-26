@@ -15,7 +15,7 @@ export component CosmicImageButton {
     in property <length> button-height: 120px;
     
     // Callbacks
-    callback clicked <=> touch-area.clicked;
+    callback clicked();
     callback remove-clicked();
     
     width: button-width;
@@ -122,11 +122,13 @@ export component CosmicImageButton {
         
         touch-area := TouchArea {
             mouse-cursor: MouseCursor.pointer;
-            clicked => {
-                root.clicked();
-            }
+            
             moved => {
                 root.is-hovered = self.has-hover;
+            }
+            
+            clicked => {
+                root.clicked();
             }
         }
         

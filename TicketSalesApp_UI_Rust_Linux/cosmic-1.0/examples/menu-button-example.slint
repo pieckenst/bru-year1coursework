@@ -3,15 +3,15 @@ import { CosmicTextArea } from "../ui/components/text-area.slint";
 import { CosmicSearchInput, SearchSuggestion } from "../ui/components/search-input.slint";
 import { CosmicPalette } from "../ui/styling/palette.slint";
 import { CosmicSpacing } from "../ui/styling/spacing.slint";
-import { CosmicMenuButton, CosmicMenuBarItem, MenuItemType } from "../ui/components/menu-button.slint";
-
+import { CosmicMenuButton, CosmicMenuBarItem, MenuItemType, MenuItem } from "../ui/components/menu-button.slint";
+import { ButtonClass, ButtonSize } from "../ui/components/button.slint";
 
 export component MenuButtonExample inherits Window {
     title: "COSMIC Menu Button Example";
     background: CosmicPalette.background-base;
     
-    preferred-width: 600px;
-    preferred-height: 400px;
+    preferred-width: 800px;
+    preferred-height: 600px;
     
     VerticalLayout {
         padding: 24px;
@@ -24,12 +24,12 @@ export component MenuButtonExample inherits Window {
             color: CosmicPalette.text-primary;
         }
         
-        // Example 1: Simple menu button
+        // Example 1: Simple menu button (standard)
         HorizontalLayout {
             spacing: 16px;
             
             Text {
-                text: "Simple Menu:";
+                text: "Standard Menu:";
                 color: CosmicPalette.text-primary;
                 vertical-alignment: center;
             }
@@ -38,72 +38,79 @@ export component MenuButtonExample inherits Window {
                 text: "File";
                 menu-items: [
                     {
+                        id: "new",
                         label: "New",
                         icon: @image-url(""),
                         shortcut: "Ctrl+N",
                         item-type: MenuItemType.standard,
                         checked: false,
-                        disabled: false,
-                        children: [],
+                        enabled: true,
+                        has-submenu: false,
                     },
                     {
+                        id: "open",
                         label: "Open",
                         icon: @image-url(""),
                         shortcut: "Ctrl+O",
                         item-type: MenuItemType.standard,
                         checked: false,
-                        disabled: false,
-                        children: [],
+                        enabled: true,
+                        has-submenu: false,
                     },
                     {
+                        id: "sep1",
                         label: "",
                         icon: @image-url(""),
                         shortcut: "",
                         item-type: MenuItemType.divider,
                         checked: false,
-                        disabled: false,
-                        children: [],
+                        enabled: true,
+                        has-submenu: false,
                     },
                     {
+                        id: "save",
                         label: "Save",
                         icon: @image-url(""),
                         shortcut: "Ctrl+S",
                         item-type: MenuItemType.standard,
                         checked: false,
-                        disabled: false,
-                        children: [],
+                        enabled: true,
+                        has-submenu: false,
                     },
                     {
+                        id: "save-as",
                         label: "Save As...",
                         icon: @image-url(""),
                         shortcut: "Ctrl+Shift+S",
                         item-type: MenuItemType.standard,
                         checked: false,
-                        disabled: false,
-                        children: [],
+                        enabled: true,
+                        has-submenu: false,
                     },
                     {
+                        id: "sep2",
                         label: "",
                         icon: @image-url(""),
                         shortcut: "",
                         item-type: MenuItemType.divider,
                         checked: false,
-                        disabled: false,
-                        children: [],
+                        enabled: true,
+                        has-submenu: false,
                     },
                     {
+                        id: "exit",
                         label: "Exit",
                         icon: @image-url(""),
                         shortcut: "Ctrl+Q",
-                        item-type: MenuItemType.standard,
+                        item-type: MenuItemType.danger,
                         checked: false,
-                        disabled: false,
-                        children: [],
+                        enabled: true,
+                        has-submenu: false,
                     },
                 ];
                 
-                menu-item-clicked(index) => {
-                    debug("Menu item clicked:", index);
+                menu-item-clicked(id) => {
+                    debug("Menu item clicked ID:", id);
                 }
             }
         }
@@ -122,54 +129,59 @@ export component MenuButtonExample inherits Window {
                 text: "View";
                 menu-items: [
                     {
+                        id: "show-toolbar",
                         label: "Show Toolbar",
                         icon: @image-url(""),
                         shortcut: "",
                         item-type: MenuItemType.checkbox,
                         checked: true,
-                        disabled: false,
-                        children: [],
+                        enabled: true,
+                        has-submenu: false,
                     },
                     {
+                        id: "show-sidebar",
                         label: "Show Sidebar",
                         icon: @image-url(""),
                         shortcut: "",
                         item-type: MenuItemType.checkbox,
                         checked: false,
-                        disabled: false,
-                        children: [],
+                        enabled: true,
+                        has-submenu: false,
                     },
                     {
+                        id: "show-status",
                         label: "Show Status Bar",
                         icon: @image-url(""),
                         shortcut: "",
                         item-type: MenuItemType.checkbox,
                         checked: true,
-                        disabled: false,
-                        children: [],
+                        enabled: true,
+                        has-submenu: false,
                     },
                     {
+                        id: "sep3",
                         label: "",
                         icon: @image-url(""),
                         shortcut: "",
                         item-type: MenuItemType.divider,
                         checked: false,
-                        disabled: false,
-                        children: [],
+                        enabled: true,
+                        has-submenu: false,
                     },
                     {
+                        id: "fullscreen",
                         label: "Full Screen",
                         icon: @image-url(""),
                         shortcut: "F11",
                         item-type: MenuItemType.standard,
                         checked: false,
-                        disabled: false,
-                        children: [],
+                        enabled: true,
+                        has-submenu: false,
                     },
                 ];
                 
-                menu-item-clicked(index) => {
-                    debug("View menu item clicked:", index);
+                menu-item-clicked(id) => {
+                    debug("View menu item clicked ID:", id);
                 }
             }
         }
@@ -191,27 +203,29 @@ export component MenuButtonExample inherits Window {
                     text: "File";
                     menu-items: [
                         {
+                            id: "mb-new",
                             label: "New",
                             icon: @image-url(""),
                             shortcut: "Ctrl+N",
                             item-type: MenuItemType.standard,
                             checked: false,
-                            disabled: false,
-                            children: [],
+                            enabled: true,
+                            has-submenu: false,
                         },
                         {
+                            id: "mb-open",
                             label: "Open",
                             icon: @image-url(""),
                             shortcut: "Ctrl+O",
                             item-type: MenuItemType.standard,
                             checked: false,
-                            disabled: false,
-                            children: [],
+                            enabled: true,
+                            has-submenu: false,
                         },
                     ];
                     
-                    menu-item-clicked(index) => {
-                        debug("File menu item clicked:", index);
+                    menu-item-clicked(id) => {
+                        debug("File menu clicked ID:", id);
                     }
                 }
                 
@@ -219,27 +233,29 @@ export component MenuButtonExample inherits Window {
                     text: "Edit";
                     menu-items: [
                         {
+                            id: "mb-undo",
                             label: "Undo",
                             icon: @image-url(""),
                             shortcut: "Ctrl+Z",
                             item-type: MenuItemType.standard,
                             checked: false,
-                            disabled: false,
-                            children: [],
+                            enabled: true,
+                            has-submenu: false,
                         },
                         {
+                            id: "mb-redo",
                             label: "Redo",
                             icon: @image-url(""),
                             shortcut: "Ctrl+Y",
                             item-type: MenuItemType.standard,
                             checked: false,
-                            disabled: false,
-                            children: [],
+                            enabled: true,
+                            has-submenu: false,
                         },
                     ];
                     
-                    menu-item-clicked(index) => {
-                        debug("Edit menu item clicked:", index);
+                    menu-item-clicked(id) => {
+                        debug("Edit menu clicked ID:", id);
                     }
                 }
                 
@@ -247,33 +263,119 @@ export component MenuButtonExample inherits Window {
                     text: "View";
                     menu-items: [
                         {
+                            id: "mb-zoom-in",
                             label: "Zoom In",
                             icon: @image-url(""),
                             shortcut: "Ctrl++",
                             item-type: MenuItemType.standard,
                             checked: false,
-                            disabled: false,
-                            children: [],
+                            enabled: true,
+                            has-submenu: false,
                         },
                         {
+                            id: "mb-zoom-out",
                             label: "Zoom Out",
                             icon: @image-url(""),
                             shortcut: "Ctrl+-",
                             item-type: MenuItemType.standard,
                             checked: false,
-                            disabled: false,
-                            children: [],
+                            enabled: true,
+                            has-submenu: false,
                         },
                     ];
                     
-                    menu-item-clicked(index) => {
-                        debug("View menu item clicked:", index);
+                    menu-item-clicked(id) => {
+                        debug("View menu clicked ID:", id);
                     }
                 }
             }
         }
         
-        // Example 4: Disabled menu button
+        // Example 4: Suggested (primary) menu button
+        HorizontalLayout {
+            spacing: 16px;
+            
+            Text {
+                text: "Suggested:";
+                color: CosmicPalette.text-primary;
+                vertical-alignment: center;
+            }
+            
+            CosmicMenuButton {
+                text: "Actions";
+                class: ButtonClass.suggested;
+                menu-items: [
+                    {
+                        id: "create",
+                        label: "Create New",
+                        icon: @image-url(""),
+                        shortcut: "Ctrl+N",
+                        item-type: MenuItemType.standard,
+                        checked: false,
+                        enabled: true,
+                        has-submenu: false,
+                    },
+                    {
+                        id: "import",
+                        label: "Import",
+                        icon: @image-url(""),
+                        shortcut: "",
+                        item-type: MenuItemType.standard,
+                        checked: false,
+                        enabled: true,
+                        has-submenu: false,
+                    },
+                ];
+                
+                menu-item-clicked(id) => {
+                    debug("Actions menu clicked ID:", id);
+                }
+            }
+        }
+        
+        // Example 5: Destructive menu button
+        HorizontalLayout {
+            spacing: 16px;
+            
+            Text {
+                text: "Destructive:";
+                color: CosmicPalette.text-primary;
+                vertical-alignment: center;
+            }
+            
+            CosmicMenuButton {
+                text: "Delete";
+                class: ButtonClass.destructive;
+                menu-items: [
+                    {
+                        id: "delete-item",
+                        label: "Delete Item",
+                        icon: @image-url(""),
+                        shortcut: "",
+                        item-type: MenuItemType.danger,
+                        checked: false,
+                        enabled: true,
+                        has-submenu: false,
+                    },
+                    {
+                        id: "delete-all",
+                        label: "Delete All",
+                        icon: @image-url(""),
+                        shortcut: "",
+                        item-type: MenuItemType.danger,
+                        checked: false,
+                        enabled: true,
+                        has-submenu: false,
+                    },
+                ];
+                
+                menu-item-clicked(id) => {
+                    debug("Delete menu clicked ID:", id);
+                }
+            }
+        }
+        
+        // Example 6: Disabled menu button
         HorizontalLayout {
             spacing: 16px;
             
@@ -287,6 +389,85 @@ export component MenuButtonExample inherits Window {
                 text: "Disabled Menu";
                 disabled: true;
                 menu-items: [];
+            }
+        }
+        
+        // Example 7: Different sizes
+        HorizontalLayout {
+            spacing: 16px;
+            
+            Text {
+                text: "Sizes:";
+                color: CosmicPalette.text-primary;
+                vertical-alignment: center;
+            }
+            
+            CosmicMenuButton {
+                text: "XS";
+                size: ButtonSize.xs;
+                menu-items: [
+                    {
+                        id: "xs-item",
+                        label: "Extra Small",
+                        icon: @image-url(""),
+                        shortcut: "",
+                        item-type: MenuItemType.standard,
+                        checked: false,
+                        enabled: true,
+                        has-submenu: false,
+                    },
+                ];
+            }
+            
+            CosmicMenuButton {
+                text: "SM";
+                size: ButtonSize.sm;
+                menu-items: [
+                    {
+                        id: "sm-item",
+                        label: "Small",
+                        icon: @image-url(""),
+                        shortcut: "",
+                        item-type: MenuItemType.standard,
+                        checked: false,
+                        enabled: true,
+                        has-submenu: false,
+                    },
+                ];
+            }
+            
+            CosmicMenuButton {
+                text: "MD";
+                size: ButtonSize.md;
+                menu-items: [
+                    {
+                        id: "md-item",
+                        label: "Medium",
+                        icon: @image-url(""),
+                        shortcut: "",
+                        item-type: MenuItemType.standard,
+                        checked: false,
+                        enabled: true,
+                        has-submenu: false,
+                    },
+                ];
+            }
+            
+            CosmicMenuButton {
+                text: "LG";
+                size: ButtonSize.lg;
+                menu-items: [
+                    {
+                        id: "lg-item",
+                        label: "Large",
+                        icon: @image-url(""),
+                        shortcut: "",
+                        item-type: MenuItemType.standard,
+                        checked: false,
+                        enabled: true,
+                        has-submenu: false,
+                    },
+                ];
             }
         }
         

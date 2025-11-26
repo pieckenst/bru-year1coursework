@@ -1,0 +1,160 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+
+// CosmicToggle component
+// Requirements: 58.1-58.10
+export component CosmicToggle {
+    // Content properties
+    in property <string> label;
+    in property <string> description; // Optional description text below (Requirement 58.9)
+    
+    // State properties
+    in-out property <bool> checked: false;
+    in property <bool> disabled: false;
+    in property <bool> loading: false; // Loading state (Requirement 58.8)
+    
+    // Callbacks
+    callback toggled(bool);
+    
+    // Dimensions (Requirement 58.1)
+    property <length> toggle-height: 24px;
+    property <length> toggle-width: 44px;
+    property <length> knob-size: 20px;
+    property <length> knob-padding: 2px;
+    
+    // Animation properties
+    property <length> knob-x: root.checked ? 
+        (root.toggle-width - root.knob-size - root.knob-padding) : 
+        root.knob-padding;
+    
+    // Focus state
+    property <bool> has-focus: false;
+    
+    min-height: toggle-height;
+    
+    states [
+        disabled when root.disabled: {
+            container.opacity: 0.4; // Requirement 58.6
+        }
+        focused when root.has-focus: {
+            focus-indicator.opacity: 1.0; // Requirement 58.7
+        }
+    ]
+    
+    VerticalLayout {
+        spacing: CosmicSpacing.space-xxxs; // 4px spacing
+        
+        HorizontalLayout {
+            spacing: CosmicSpacing.space-xxs; // 8px spacing (Requirement 58.5)
+            alignment: start;
+            
+            // Toggle switch
+            container := Rectangle {
+                width: root.toggle-width;
+                height: root.toggle-height;
+                border-radius: CosmicCornerRadii.toggle-radius; // Pill shape (Requirement 58.1)
+                background: root.checked ? 
+                           CosmicPalette.accent-primary :  // On state (Requirement 58.3)
+                           CosmicPalette.border-neutral;   // Off state (Requirement 58.2)
+                
+                // Animated knob (Requirement 58.4)
+                knob := Rectangle {
+                    width: root.knob-size;
+                    height: root.knob-size;
+                    x: root.knob-x;
+                    y: root.knob-padding;
+                    border-radius: self.width / 2;
+                    background: #FFFFFF;
+                    
+                    // Smooth animation (Requirement 58.4)
+                    animate x {
+                        duration: 150ms;
+                        easing: ease-out;
+                    }
+                    
+                    // Loading spinner (Requirement 58.8)
+                    if root.loading: Rectangle {
+                        width: 12px;
+                        height: 12px;
+                        x: (parent.width - self.width) / 2;
+                        y: (parent.height - self.height) / 2;
+                        border-radius: self.width / 2;
+                        border-width: 2px;
+                        border-color: CosmicPalette.accent-primary;
+                        background: Colors.transparent;
+                        
+                        // Simple loading indicator (arc would be better but using border for simplicity)
+                        animate border-color {
+                            duration: 1s;
+                            iteration-count: -1;
+                        }
+                    }
+                }
+                
+                // Focus indicator (Requirement 58.7)
+                focus-indicator := Rectangle {
+                    x: -4px;
+                    y: -4px;
+                    width: parent.width + 8px;
+                    height: parent.height + 8px;
+                    border-radius: parent.border-radius + 2px;
+                    border-width: 2px;
+                    border-color: CosmicPalette.accent-primary;
+                    background: Colors.transparent;
+                    opacity: 0.0;
+                }
+            }
+            
+            // Label text (Requirement 58.5)
+            if root.label != "": Text {
+                text: root.label;
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-14;
+                font-weight: 400;
+                vertical-alignment: center;
+                wrap: word-wrap;
+            }
+        }
+        
+        // Description text (Requirement 58.9)
+        if root.description != "": Text {
+            text: root.description;
+            color: CosmicPalette.text-secondary;
+            font-family: CosmicTypography.font-family;
+            font-size: CosmicTypography.size-12;
+            font-weight: 400;
+            wrap: word-wrap;
+        }
+    }
+    
+    touch-area := TouchArea {
+        enabled: !root.disabled && !root.loading;
+        mouse-cursor: root.disabled || root.loading ? MouseCursor.default : MouseCursor.pointer;
+        
+        clicked => {
+            if !root.disabled && !root.loading {
+                root.checked = !root.checked;
+                root.toggled(root.checked);
+            }
+        }
+    }
+    
+    FocusScope {
+        key-pressed(event) => {
+            if event.text == " " && !root.disabled && !root.loading {
+                root.checked = !root.checked;
+                root.toggled(root.checked);
+                root.has-focus = true;
+                return accept;
+            }
+            return reject;
+        }
+        
+        focus-changed-event() => {
+            root.has-focus = self.has-focus;
+        }
+    }
+}

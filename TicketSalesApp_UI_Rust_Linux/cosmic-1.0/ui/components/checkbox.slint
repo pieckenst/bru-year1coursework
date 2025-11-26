@@ -1,0 +1,157 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+
+// Checkbox state enum
+export enum CheckboxState {
+    unchecked,
+    checked,
+    indeterminate,
+}
+
+// CosmicCheckBox component
+// Requirements: 57.1-57.10
+export component CosmicCheckBox {
+    // Content properties
+    in property <string> label;
+    
+    // State properties
+    in-out property <CheckboxState> state: CheckboxState.unchecked;
+    in property <bool> disabled: false;
+    in property <bool> is-parent: false; // For select-all functionality (Requirement 57.9)
+    
+    // Computed property for checked state
+    out property <bool> checked: state == CheckboxState.checked;
+    
+    // Callbacks
+    callback toggled(CheckboxState);
+    
+    // Dimensions (Requirement 57.1)
+    property <length> checkbox-size: 20px;
+    property <length> checkmark-size: 12px;
+    
+    // Focus state
+    property <bool> has-focus: false;
+    
+    min-height: checkbox-size;
+    
+    states [
+        disabled when root.disabled: {
+            container.opacity: 0.4; // Requirement 57.7
+        }
+        focused when root.has-focus: {
+            focus-indicator.opacity: 1.0; // Requirement 57.8
+        }
+    ]
+    
+    HorizontalLayout {
+        spacing: CosmicSpacing.space-xxs; // 8px spacing (Requirement 57.4)
+        alignment: start;
+        
+        // Checkbox box
+        container := Rectangle {
+            width: root.checkbox-size;
+            height: root.checkbox-size;
+            border-radius: CosmicCornerRadii.radius-xs; // 4px radius (Requirement 57.1)
+            border-width: 2px;
+            border-color: root.state == CheckboxState.unchecked ? 
+                         CosmicPalette.border-neutral : 
+                         CosmicPalette.accent-primary;
+            background: root.state == CheckboxState.unchecked ? 
+                       Colors.transparent : 
+                       CosmicPalette.accent-primary; // Requirement 57.2
+            
+            // Checkmark icon (Requirement 57.2)
+            if root.state == CheckboxState.checked: Path {
+                width: root.checkmark-size;
+                height: root.checkmark-size;
+                x: (parent.width - self.width) / 2;
+                y: (parent.height - self.height) / 2;
+                
+                // Checkmark path
+                commands: "M 2 6 L 5 9 L 10 2";
+                stroke: #FFFFFF;
+                stroke-width: 2px;
+                viewbox-width: 12;
+                viewbox-height: 12;
+            }
+            
+            // Indeterminate icon (minus) (Requirement 57.3)
+            if root.state == CheckboxState.indeterminate: Rectangle {
+                width: root.checkmark-size;
+                height: 2px;
+                x: (parent.width - self.width) / 2;
+                y: (parent.height - self.height) / 2;
+                background: #FFFFFF;
+            }
+            
+            // Focus indicator (Requirement 57.8)
+            focus-indicator := Rectangle {
+                x: -4px;
+                y: -4px;
+                width: parent.width + 8px;
+                height: parent.height + 8px;
+                border-radius: parent.border-radius + 2px;
+                border-width: 2px;
+                border-color: CosmicPalette.accent-primary;
+                background: Colors.transparent;
+                opacity: 0.0;
+            }
+        }
+        
+        // Label text (Requirement 57.4)
+        if root.label != "": Text {
+            text: root.label;
+            color: CosmicPalette.text-primary;
+            font-family: CosmicTypography.font-family;
+            font-size: CosmicTypography.size-14;
+            font-weight: 400;
+            vertical-alignment: center;
+            wrap: word-wrap;
+        }
+    }
+    
+    touch-area := TouchArea {
+        enabled: !root.disabled;
+        mouse-cursor: root.disabled ? MouseCursor.default : MouseCursor.pointer;
+        
+        clicked => {
+            if !root.disabled {
+                // Toggle logic
+                if root.state == CheckboxState.unchecked {
+                    root.state = CheckboxState.checked;
+                } else if root.state == CheckboxState.checked {
+                    root.state = CheckboxState.unchecked;
+                } else if root.state == CheckboxState.indeterminate {
+                    // Indeterminate goes to checked when clicked
+                    root.state = CheckboxState.checked;
+                }
+                root.toggled(root.state);
+            }
+        }
+    }
+    
+    FocusScope {
+        key-pressed(event) => {
+            if event.text == " " && !root.disabled {
+                // Toggle logic
+                if root.state == CheckboxState.unchecked {
+                    root.state = CheckboxState.checked;
+                } else if root.state == CheckboxState.checked {
+                    root.state = CheckboxState.unchecked;
+                } else if root.state == CheckboxState.indeterminate {
+                    root.state = CheckboxState.checked;
+                }
+                root.toggled(root.state);
+                root.has-focus = true;
+                return accept;
+            }
+            return reject;
+        }
+        
+        focus-changed-event() => {
+            root.has-focus = self.has-focus;
+        }
+    }
+}

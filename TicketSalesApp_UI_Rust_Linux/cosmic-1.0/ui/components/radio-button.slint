@@ -1,0 +1,119 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+
+// CosmicRadioButton component
+// Requirements: 57.5-57.10
+export component CosmicRadioButton {
+    // Content properties
+    in property <string> label;
+    in property <string> value; // Unique value for this radio button
+    
+    // State properties
+    in-out property <string> group-value; // The selected value in the group
+    in property <bool> disabled: false;
+    
+    // Computed property for selected state
+    out property <bool> selected: root.value == root.group-value;
+    
+    // Callbacks
+    callback selected-changed(string); // Emits the value when selected
+    
+    // Dimensions (Requirement 57.5)
+    property <length> radio-size: 20px;
+    property <length> inner-circle-size: 10px;
+    
+    // Focus state
+    property <bool> has-focus: false;
+    
+    min-height: radio-size;
+    
+    states [
+        disabled when root.disabled: {
+            container.opacity: 0.4; // Requirement 57.7
+        }
+        focused when root.has-focus: {
+            focus-indicator.opacity: 1.0; // Requirement 57.8
+        }
+    ]
+    
+    HorizontalLayout {
+        spacing: CosmicSpacing.space-xxs; // 8px spacing (Requirement 57.7)
+        alignment: start;
+        
+        // Radio button circle
+        container := Rectangle {
+            width: root.radio-size;
+            height: root.radio-size;
+            border-radius: root.radio-size / 2; // Circular (Requirement 57.5)
+            border-width: 2px;
+            border-color: root.selected ? 
+                         CosmicPalette.accent-primary : 
+                         CosmicPalette.border-neutral;
+            background: Colors.transparent;
+            
+            // Inner filled circle when selected (Requirement 57.6)
+            if root.selected: Rectangle {
+                width: root.inner-circle-size;
+                height: root.inner-circle-size;
+                x: (parent.width - self.width) / 2;
+                y: (parent.height - self.height) / 2;
+                border-radius: self.width / 2;
+                background: CosmicPalette.accent-primary;
+            }
+            
+            // Focus indicator (Requirement 57.8)
+            focus-indicator := Rectangle {
+                x: -4px;
+                y: -4px;
+                width: parent.width + 8px;
+                height: parent.height + 8px;
+                border-radius: self.width / 2;
+                border-width: 2px;
+                border-color: CosmicPalette.accent-primary;
+                background: Colors.transparent;
+                opacity: 0.0;
+            }
+        }
+        
+        // Label text (Requirement 57.7)
+        if root.label != "": Text {
+            text: root.label;
+            color: CosmicPalette.text-primary;
+            font-family: CosmicTypography.font-family;
+            font-size: CosmicTypography.size-14;
+            font-weight: 400;
+            vertical-alignment: center;
+            wrap: word-wrap;
+        }
+    }
+    
+    touch-area := TouchArea {
+        enabled: !root.disabled;
+        mouse-cursor: root.disabled ? MouseCursor.default : MouseCursor.pointer;
+        
+        clicked => {
+            if !root.disabled && !root.selected {
+                // Set this radio button as selected (Requirement 57.9)
+                root.group-value = root.value;
+                root.selected-changed(root.value);
+            }
+        }
+    }
+    
+    FocusScope {
+        key-pressed(event) => {
+            if event.text == " " && !root.disabled && !root.selected {
+                root.group-value = root.value;
+                root.selected-changed(root.value);
+                root.has-focus = true;
+                return accept;
+            }
+            return reject;
+        }
+        
+        focus-changed-event() => {
+            root.has-focus = self.has-focus;
+        }
+    }
+}

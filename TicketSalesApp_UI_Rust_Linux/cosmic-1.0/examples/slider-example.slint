@@ -1,0 +1,240 @@
+import { CosmicSlider } from "../ui/components/slider.slint";
+import { CosmicRangeSlider } from "../ui/components/range-slider.slint";
+import { CosmicPalette } from "../ui/styling/palette.slint";
+import { CosmicTypography } from "../ui/styling/typography.slint";
+import { CosmicSpacing } from "../ui/styling/spacing.slint";
+
+export component SliderExample inherits Window {
+    title: "COSMIC Slider Components Example";
+    background: CosmicPalette.background-base;
+    
+    preferred-width: 800px;
+    preferred-height: 700px;
+    
+    VerticalLayout {
+        padding: CosmicSpacing.space-m;
+        spacing: CosmicSpacing.space-l;
+        
+        // Header
+        Text {
+            text: "COSMIC Slider Components";
+            color: CosmicPalette.text-primary;
+            font-family: CosmicTypography.font-family;
+            font-size: CosmicTypography.size-24;
+            font-weight: 700;
+        }
+        
+        // Basic Slider
+        VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            Text {
+                text: "Basic Slider";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-16;
+                font-weight: 600;
+            }
+            
+            basic-slider := CosmicSlider {
+                value: 50;
+                minimum: 0;
+                maximum: 100;
+                step: 1;
+                show-value-label: true;
+                
+                value-changed(val) => {
+                    debug("Basic slider value:", val);
+                }
+            }
+            
+            Text {
+                text: "Current value: " + Math.round(basic-slider.value);
+                color: CosmicPalette.text-secondary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-14;
+            }
+        }
+        
+        // Slider with Min/Max Labels
+        VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            Text {
+                text: "Slider with Min/Max Labels";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-16;
+                font-weight: 600;
+            }
+            
+            labeled-slider := CosmicSlider {
+                value: 30;
+                minimum: 0;
+                maximum: 100;
+                step: 5;
+                min-label: "0%";
+                max-label: "100%";
+                show-value-label: true;
+                
+                value-changed(val) => {
+                    debug("Labeled slider value:", val);
+                }
+            }
+        }
+        
+        // Slider with Tick Marks
+        VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            Text {
+                text: "Slider with Tick Marks";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-16;
+                font-weight: 600;
+            }
+            
+            tick-slider := CosmicSlider {
+                value: 60;
+                minimum: 0;
+                maximum: 100;
+                step: 10;
+                min-label: "Min";
+                max-label: "Max";
+                show-value-label: true;
+                show-tick-marks: true;
+                tick-count: 10;
+                
+                value-changed(val) => {
+                    debug("Tick slider value:", val);
+                }
+            }
+        }
+        
+        // Disabled Slider
+        VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            Text {
+                text: "Disabled Slider";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-16;
+                font-weight: 600;
+            }
+            
+            disabled-slider := CosmicSlider {
+                value: 40;
+                minimum: 0;
+                maximum: 100;
+                disabled: true;
+                show-value-label: true;
+            }
+        }
+        
+        // Range Slider
+        VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            Text {
+                text: "Range Slider";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-16;
+                font-weight: 600;
+            }
+            
+            range-slider := CosmicRangeSlider {
+                min-value: 25;
+                max-value: 75;
+                minimum: 0;
+                maximum: 100;
+                step: 1;
+                show-value-labels: true;
+                
+                range-changed(min, max) => {
+                    debug("Range slider:", min, "-", max);
+                }
+            }
+            
+            Text {
+                text: "Range: " + Math.round(range-slider.min-value) + " - " + Math.round(range-slider.max-value);
+                color: CosmicPalette.text-secondary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-14;
+            }
+        }
+        
+        // Range Slider with Labels and Ticks
+        VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            Text {
+                text: "Range Slider with Labels and Ticks";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-16;
+                font-weight: 600;
+            }
+            
+            full-range-slider := CosmicRangeSlider {
+                min-value: 20;
+                max-value: 80;
+                minimum: 0;
+                maximum: 100;
+                step: 5;
+                min-label: "0";
+                max-label: "100";
+                show-value-labels: true;
+                show-tick-marks: true;
+                tick-count: 10;
+                
+                range-changed(min, max) => {
+                    debug("Full range slider:", min, "-", max);
+                }
+            }
+        }
+        
+        // Theme Toggle
+        HorizontalLayout {
+            spacing: CosmicSpacing.space-s;
+            alignment: start;
+            
+            Text {
+                text: "Dark Mode:";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-14;
+                vertical-alignment: center;
+            }
+            
+            Rectangle {
+                width: 44px;
+                height: 24px;
+                border-radius: 12px;
+                background: CosmicPalette.dark-mode ? CosmicPalette.accent-primary : CosmicPalette.border-neutral;
+                
+                Rectangle {
+                    width: 20px;
+                    height: 20px;
+                    x: CosmicPalette.dark-mode ? 22px : 2px;
+                    y: 2px;
+                    border-radius: 10px;
+                    background: #FFFFFF;
+                    
+                    animate x {
+                        duration: 150ms;
+                        easing: ease-out;
+                    }
+                }
+                
+                TouchArea {
+                    clicked => {
+                        CosmicPalette.dark-mode = !CosmicPalette.dark-mode;
+                    }
+                }
+            }
+        }
+    }
+}

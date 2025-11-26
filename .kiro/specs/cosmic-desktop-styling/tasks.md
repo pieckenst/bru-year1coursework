@@ -198,7 +198,7 @@
 
 ## Phase 3: Input Components (Tasks 6-10)
 
-- [ ] 6. Implement Text Input Components
+- [x] 6. Implement Text Input Components
 
 
 
@@ -208,7 +208,7 @@
 
 
 
-- [ ] 6.1 Create text-input.slint with CosmicTextInput
+- [x] 6.1 Create text-input.slint with CosmicTextInput
   - Implement 32px height single-line input
   - Add label above input (14px semibold)
   - Add focus state (2px accent border)
@@ -229,7 +229,7 @@
 
   - **Validates: Requirements 8.5, 56.4**
 
-- [ ] 6.2 Create text-area.slint with CosmicTextArea
+- [x] 6.2 Create text-area.slint with CosmicTextArea
   - Implement multi-line text input (minimum 3 rows)
   - Add auto-resize functionality
 
@@ -238,7 +238,7 @@
   - Apply same states as text input
   - _Requirements: 56.8_
 
-- [ ] 6.3 Create search-input.slint with CosmicSearchInput
+- [x] 6.3 Create search-input.slint with CosmicSearchInput
   - Add search icon on left (16px)
   - Add clear button on right
   - Add loading spinner state
@@ -246,10 +246,19 @@
   - Add suggestion highlighting
   - _Requirements: 56.10, 74.1-74.7_
 
-- [ ] 7. Implement Selection Input Components
+- [x] 7. Implement Selection Input Components
+
+
+
+
+
+
+
   - _Requirements: 57.1-57.10, 58.1-58.10_
 
-- [ ] 7.1 Create checkbox.slint with CosmicCheckBox
+- [x] 7.1 Create checkbox.slint with CosmicCheckBox
+
+
   - Implement 20px × 20px checkbox with 4px radius
   - Add checked state (checkmark, accent background)
   - Add indeterminate state (minus icon)
@@ -264,7 +273,11 @@
   - **Validates: Requirements 57.2, 57.3, 57.9**
 
 
-- [ ] 7.3 Create radio-button.slint with CosmicRadioButton
+
+
+- [x] 7.3 Create radio-button.slint with CosmicRadioButton
+
+
   - Implement 20px circular radio button
   - Add selected state (filled inner circle, accent)
   - Add label with 8px spacing
@@ -273,7 +286,10 @@
   - Ensure only one selection per group
   - _Requirements: 57.5-57.10_
 
-- [ ] 7.4 Create toggle.slint with CosmicToggle
+
+
+
+- [X] 7.4 Create toggle.slint with CosmicToggle
   - Implement 24px height pill-shaped toggle
   - Add off state (neutral background)
   - Add on state (accent background)
@@ -288,10 +304,14 @@
   - **Property 19: Toggle state synchronization**
   - **Validates: Requirements 58.1-58.4**
 
-- [ ] 8. Implement Slider Components
+- [-] 8. Implement Slider Components
+
+
   - _Requirements: 59.1-59.10_
 
-- [ ] 8.1 Create slider.slint with CosmicSlider
+- [x] 8.1 Create slider.slint with CosmicSlider
+
+
   - Implement 4px track height
   - Add accent-colored progress fill
   - Add 16px circular thumb
@@ -303,7 +323,10 @@
   - Support vertical orientation
   - _Requirements: 59.1-59.10_
 
-- [ ] 8.2 Create range-slider.slint with CosmicRangeSlider
+- [x] 8.2 Create range-slider.slint with CosmicRangeSlider
+
+
+
   - Implement dual-thumb range slider
   - Add min/max thumb controls
   - Add range highlight between thumbs

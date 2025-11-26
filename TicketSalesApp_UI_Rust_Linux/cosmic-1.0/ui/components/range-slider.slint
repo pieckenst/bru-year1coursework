@@ -1,0 +1,359 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+import { CosmicElevation } from "../styling/elevation.slint";
+
+// CosmicRangeSlider component - Dual-thumb range slider
+// Requirements: 59.9
+export component CosmicRangeSlider {
+    // Value properties (Requirement 59.9 - dual-thumb range)
+    in-out property <float> min-value: 25.0;
+    in-out property <float> max-value: 75.0;
+    in property <float> minimum: 0.0;
+    in property <float> maximum: 100.0;
+    in property <float> step: 1.0;
+    
+    // Display properties
+    in property <string> min-label: "";
+    in property <string> max-label: "";
+    in property <bool> show-value-labels: true;
+    in property <bool> show-tick-marks: false;
+    in property <int> tick-count: 5;
+    
+    // State properties
+    in property <bool> disabled: false;
+    
+    // Callbacks
+    callback range-changed(float /* min */, float /* max */);
+    
+    // Internal properties
+    property <bool> is-dragging-min: false;
+    property <bool> is-dragging-max: false;
+    property <bool> has-focus: false;
+    
+    // Dimensions (same as single slider)
+    property <length> track-height: 4px;
+    property <length> thumb-size-normal: 16px;
+    property <length> thumb-size-dragging: 20px;
+    property <length> min-thumb-size: root.is-dragging-min ? root.thumb-size-dragging : root.thumb-size-normal;
+    property <length> max-thumb-size: root.is-dragging-max ? root.thumb-size-dragging : root.thumb-size-normal;
+    
+    // Computed positions
+    property <float> normalized-min: (root.min-value - root.minimum) / (root.maximum - root.minimum);
+    property <float> normalized-max: (root.max-value - root.minimum) / (root.maximum - root.minimum);
+    property <length> min-thumb-position: root.normalized-min * (track-container.width - root.min-thumb-size);
+    property <length> max-thumb-position: root.normalized-max * (track-container.width - root.max-thumb-size);
+    
+    min-width: 200px;
+    min-height: 60px;
+    
+    states [
+        disabled when root.disabled: {
+            container.opacity: 0.4;
+        }
+        focused when root.has-focus: {
+            min-focus-indicator.opacity: 1.0;
+            max-focus-indicator.opacity: 1.0;
+        }
+        dragging-min when root.is-dragging-min: {
+            min-thumb.drop-shadow-blur: CosmicElevation.shadow-md-blur;
+            min-thumb.drop-shadow-offset-y: CosmicElevation.shadow-md-offset-y;
+            min-thumb.drop-shadow-color: CosmicElevation.shadow-color-md;
+        }
+        dragging-max when root.is-dragging-max: {
+            max-thumb.drop-shadow-blur: CosmicElevation.shadow-md-blur;
+            max-thumb.drop-shadow-offset-y: CosmicElevation.shadow-md-offset-y;
+            max-thumb.drop-shadow-color: CosmicElevation.shadow-color-md;
+        }
+    ]
+    
+    container := VerticalLayout {
+        spacing: CosmicSpacing.space-xxs;
+        
+        // Value labels above thumbs
+        if root.show_value_labels: Rectangle {
+            height: 20px;
+            
+            // Min value label
+            min-value-label := Text {
+                text: Math.round(root.min-value);
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-12;
+                font-weight: 500;
+                horizontal-alignment: center;
+                x: root.min-thumb-position + (root.min-thumb-size / 2) - (self.width / 2);
+                
+                animate x {
+                    duration: 100ms;
+                    easing: ease-out;
+                }
+            }
+            
+            // Max value label
+            max-value-label := Text {
+                text: Math.round(root.max-value);
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-12;
+                font-weight: 500;
+                horizontal-alignment: center;
+                x: root.max-thumb-position + (root.max-thumb-size / 2) - (self.width / 2);
+                
+                animate x {
+                    duration: 100ms;
+                    easing: ease-out;
+                }
+            }
+        }
+        
+        // Track and thumbs container
+        track-container := Rectangle {
+            height: 40px;
+            
+            // Track background
+            track-bg := Rectangle {
+                y: (parent.height - root.track-height) / 2;
+                height: root.track-height;
+                border-radius: CosmicCornerRadii.slider-track-radius;
+                background: CosmicPalette.border-neutral;
+                
+                // Range highlight between thumbs (Requirement 59.9)
+                range-fill := Rectangle {
+                    x: root.min-thumb-position + (root.min-thumb-size / 2);
+                    width: (root.max-thumb-position + (root.max-thumb-size / 2)) - (root.min-thumb-position + (root.min-thumb-size / 2));
+                    height: parent.height;
+                    border-radius: parent.border-radius;
+                    background: CosmicPalette.accent-primary;
+                    
+                    animate x, width {
+                        duration: 100ms;
+                        easing: ease-out;
+                    }
+                }
+            }
+            
+            // Min thumb
+            min-thumb := Rectangle {
+                x: root.min-thumb-position;
+                y: (parent.height - root.min-thumb-size) / 2;
+                width: root.min-thumb-size;
+                height: root.min-thumb-size;
+                border-radius: self.width / 2;
+                background: #FFFFFF;
+                border-width: 2px;
+                border-color: CosmicPalette.accent-primary;
+                
+                drop-shadow-blur: CosmicElevation.shadow-sm-blur;
+                drop-shadow-offset-y: CosmicElevation.shadow-sm-offset-y;
+                drop-shadow-color: CosmicElevation.shadow-color-sm;
+                
+                animate x, width, height, y {
+                    duration: 100ms;
+                    easing: ease-out;
+                }
+            }
+            
+            // Max thumb
+            max-thumb := Rectangle {
+                x: root.max-thumb-position;
+                y: (parent.height - root.max-thumb-size) / 2;
+                width: root.max-thumb-size;
+                height: root.max-thumb-size;
+                border-radius: self.width / 2;
+                background: #FFFFFF;
+                border-width: 2px;
+                border-color: CosmicPalette.accent-primary;
+                
+                drop-shadow-blur: CosmicElevation.shadow-sm-blur;
+                drop-shadow-offset-y: CosmicElevation.shadow-sm-offset-y;
+                drop-shadow-color: CosmicElevation.shadow-color-sm;
+                
+                animate x, width, height, y {
+                    duration: 100ms;
+                    easing: ease-out;
+                }
+            }
+            
+            // Focus indicators
+            min-focus-indicator := Rectangle {
+                x: root.min-thumb-position - 4px;
+                y: (parent.height - root.min-thumb-size) / 2 - 4px;
+                width: root.min-thumb-size + 8px;
+                height: root.min-thumb-size + 8px;
+                border-radius: self.width / 2;
+                border-width: 2px;
+                border-color: CosmicPalette.accent-primary;
+                background: Colors.transparent;
+                opacity: 0.0;
+                
+                animate x, width, height, y {
+                    duration: 100ms;
+                    easing: ease-out;
+                }
+            }
+            
+            max-focus-indicator := Rectangle {
+                x: root.max-thumb-position - 4px;
+                y: (parent.height - root.max-thumb-size) / 2 - 4px;
+                width: root.max-thumb-size + 8px;
+                height: root.max-thumb-size + 8px;
+                border-radius: self.width / 2;
+                border-width: 2px;
+                border-color: CosmicPalette.accent-primary;
+                background: Colors.transparent;
+                opacity: 0.0;
+                
+                animate x, width, height, y {
+                    duration: 100ms;
+                    easing: ease-out;
+                }
+            }
+            
+            // Touch area for min thumb
+            min-touch-area := TouchArea {
+                x: root.min-thumb-position - 10px;
+                y: (parent.height - 30px) / 2;
+                width: root.min-thumb-size + 20px;
+                height: 30px;
+                enabled: !root.disabled;
+                mouse-cursor: root.disabled ? MouseCursor.default : MouseCursor.pointer;
+                
+                pointer-event(event) => {
+                    if (event.kind == PointerEventKind.down) {
+                        root.is_dragging_min = true;
+                        self.update_min_value(self.mouse_x + self.x);
+                    } else if (event.kind == PointerEventKind.up) {
+                        root.is_dragging_min = false;
+                    }
+                }
+                
+                moved => {
+                    if (root.is_dragging_min) {
+                        self.update_min_value(self.mouse_x + self.x);
+                    }
+                }
+                
+                function update_min_value(x: length) {
+                    if (x < 0px) {
+                        root.min_value = root.minimum;
+                    } else if (x > parent.width) {
+                        root.min_value = root.max_value;
+                    } else {
+                        root.min_value = Math.max(root.minimum, Math.min(root.max_value, Math.round((root.minimum + (x / parent.width) * (root.maximum - root.minimum)) / root.step) * root.step));
+                    }
+                    root.range_changed(root.min_value, root.max_value);
+                }
+            }
+            
+            // Touch area for max thumb
+            max-touch-area := TouchArea {
+                x: root.max-thumb-position - 10px;
+                y: (parent.height - 30px) / 2;
+                width: root.max-thumb-size + 20px;
+                height: 30px;
+                enabled: !root.disabled;
+                mouse-cursor: root.disabled ? MouseCursor.default : MouseCursor.pointer;
+                
+                pointer-event(event) => {
+                    if (event.kind == PointerEventKind.down) {
+                        root.is_dragging_max = true;
+                        self.update_max_value(self.mouse_x + self.x);
+                    } else if (event.kind == PointerEventKind.up) {
+                        root.is_dragging_max = false;
+                    }
+                }
+                
+                moved => {
+                    if (root.is_dragging_max) {
+                        self.update_max_value(self.mouse_x + self.x);
+                    }
+                }
+                
+                function update_max_value(x: length) {
+                    if (x < 0px) {
+                        root.max_value = root.min_value;
+                    } else if (x > parent.width) {
+                        root.max_value = root.maximum;
+                    } else {
+                        root.max_value = Math.max(root.min_value, Math.min(root.maximum, Math.round((root.minimum + (x / parent.width) * (root.maximum - root.minimum)) / root.step) * root.step));
+                    }
+                    root.range_changed(root.min_value, root.max_value);
+                }
+            }
+        }
+        
+        // Min/Max labels and tick marks container
+        HorizontalLayout {
+            height: 20px;
+            
+            // Min label
+            if root.min_label != "": Text {
+                text: root.min_label;
+                color: CosmicPalette.text-secondary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-12;
+                font-weight: 400;
+                horizontal-alignment: left;
+            }
+            
+            Rectangle {
+                horizontal-stretch: 1;
+                
+                // Tick marks
+                if root.show_tick_marks: HorizontalLayout {
+                    spacing: 0px;
+                    padding: 0px;
+                    
+                    // Note: Tick marks would require a repeater with an array
+                    // Simplified implementation for now
+                }
+            }
+            
+            // Max label
+            if root.max_label != "": Text {
+                text: root.max_label;
+                color: CosmicPalette.text-secondary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-12;
+                font-weight: 400;
+                horizontal-alignment: right;
+            }
+        }
+    }
+    
+    FocusScope {
+        key-pressed(event) => {
+            if (!root.disabled) {
+                // Arrow keys adjust the min value
+                if (event.text == "\u{F702}" || event.text == "\u{F701}") {  // Left arrow or Down arrow
+                    root.min_value = Math.max(root.minimum, root.min_value - root.step);
+                    root.range_changed(root.min_value, root.max_value);
+                    root.has_focus = true;
+                    return accept;
+                } else if (event.text == "\u{F703}" || event.text == "\u{F700}") {  // Right arrow or Up arrow
+                    root.min_value = Math.min(root.max_value, root.min_value + root.step);
+                    root.range_changed(root.min_value, root.max_value);
+                    root.has_focus = true;
+                    return accept;
+                } else if (event.text == "\u{F729}") {  // Home
+                    root.min_value = root.minimum;
+                    root.range_changed(root.min_value, root.max_value);
+                    root.has_focus = true;
+                    return accept;
+                } else if (event.text == "\u{F72B}") {  // End
+                    root.max_value = root.maximum;
+                    root.range_changed(root.min_value, root.max_value);
+                    root.has_focus = true;
+                    return accept;
+                }
+            }
+            return reject;
+        }
+        
+        focus-changed-event() => {
+            root.has-focus = self.has-focus;
+        }
+    }
+}

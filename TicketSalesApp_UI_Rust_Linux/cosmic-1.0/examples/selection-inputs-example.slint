@@ -1,0 +1,207 @@
+import { CosmicCheckBox, CheckboxState } from "../ui/components/checkbox.slint";
+import { CosmicRadioButton } from "../ui/components/radio-button.slint";
+import { CosmicToggle } from "../ui/components/toggle.slint";
+import { CosmicPalette } from "../ui/styling/palette.slint";
+import { CosmicSpacing } from "../ui/styling/spacing.slint";
+
+export component SelectionInputsExample inherits Window {
+    title: "COSMIC Selection Inputs Example";
+    background: CosmicPalette.background-base;
+    preferred-width: 600px;
+    preferred-height: 700px;
+    
+    VerticalLayout {
+        padding: CosmicSpacing.space-m;
+        spacing: CosmicSpacing.space-l;
+        
+        // Header
+        Text {
+            text: "Selection Input Components";
+            color: CosmicPalette.text-primary;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        // Checkboxes Section
+        VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            Text {
+                text: "Checkboxes";
+                color: CosmicPalette.text-primary;
+                font-size: 18px;
+                font-weight: 600;
+            }
+            
+            CosmicCheckBox {
+                label: "Normal checkbox";
+                state: CheckboxState.unchecked;
+                toggled(state) => {
+                    debug("Checkbox 1 toggled:", state);
+                }
+            }
+            
+            CosmicCheckBox {
+                label: "Checked checkbox";
+                state: CheckboxState.checked;
+                toggled(state) => {
+                    debug("Checkbox 2 toggled:", state);
+                }
+            }
+            
+            CosmicCheckBox {
+                label: "Indeterminate checkbox";
+                state: CheckboxState.indeterminate;
+                toggled(state) => {
+                    debug("Checkbox 3 toggled:", state);
+                }
+            }
+            
+            CosmicCheckBox {
+                label: "Disabled checkbox";
+                state: CheckboxState.unchecked;
+                disabled: true;
+            }
+            
+            CosmicCheckBox {
+                label: "Parent checkbox (select all)";
+                state: CheckboxState.indeterminate;
+                is-parent: true;
+                toggled(state) => {
+                    debug("Parent checkbox toggled:", state);
+                }
+            }
+        }
+        
+        Rectangle {
+            height: 1px;
+            background: CosmicPalette.divider;
+        }
+        
+        // Radio Buttons Section
+        VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            Text {
+                text: "Radio Buttons";
+                color: CosmicPalette.text-primary;
+                font-size: 18px;
+                font-weight: 600;
+            }
+            
+            property <string> selected-option: "option1";
+            
+            CosmicRadioButton {
+                label: "Option 1";
+                value: "option1";
+                group-value <=> parent.selected-option;
+                selected-changed(val) => {
+                    debug("Radio selected:", val);
+                }
+            }
+            
+            CosmicRadioButton {
+                label: "Option 2";
+                value: "option2";
+                group-value <=> parent.selected-option;
+                selected-changed(val) => {
+                    debug("Radio selected:", val);
+                }
+            }
+            
+            CosmicRadioButton {
+                label: "Option 3";
+                value: "option3";
+                group-value <=> parent.selected-option;
+                selected-changed(val) => {
+                    debug("Radio selected:", val);
+                }
+            }
+            
+            CosmicRadioButton {
+                label: "Disabled option";
+                value: "option4";
+                group-value <=> parent.selected-option;
+                disabled: true;
+            }
+            
+            Text {
+                text: "Selected: " + parent.selected-option;
+                color: CosmicPalette.text-secondary;
+                font-size: 14px;
+            }
+        }
+        
+        Rectangle {
+            height: 1px;
+            background: CosmicPalette.divider;
+        }
+        
+        // Toggle Switches Section
+        VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            Text {
+                text: "Toggle Switches";
+                color: CosmicPalette.text-primary;
+                font-size: 18px;
+                font-weight: 600;
+            }
+            
+            CosmicToggle {
+                label: "Normal toggle (off)";
+                checked: false;
+                toggled(checked) => {
+                    debug("Toggle 1:", checked);
+                }
+            }
+            
+            CosmicToggle {
+                label: "Normal toggle (on)";
+                checked: true;
+                toggled(checked) => {
+                    debug("Toggle 2:", checked);
+                }
+            }
+            
+            CosmicToggle {
+                label: "Toggle with description";
+                description: "This toggle has additional descriptive text below it";
+                checked: false;
+                toggled(checked) => {
+                    debug("Toggle 3:", checked);
+                }
+            }
+            
+            CosmicToggle {
+                label: "Disabled toggle";
+                checked: false;
+                disabled: true;
+            }
+            
+            CosmicToggle {
+                label: "Loading toggle";
+                checked: true;
+                loading: true;
+            }
+        }
+        
+        Rectangle {
+            height: 1px;
+            background: CosmicPalette.divider;
+        }
+        
+        // Dark Mode Toggle
+        HorizontalLayout {
+            spacing: CosmicSpacing.space-m;
+            
+            CosmicToggle {
+                label: "Dark Mode";
+                checked <=> CosmicPalette.dark-mode;
+                toggled(checked) => {
+                    debug("Dark mode:", checked);
+                }
+            }
+        }
+    }
+}
