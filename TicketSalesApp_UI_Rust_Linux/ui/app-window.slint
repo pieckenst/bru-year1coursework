@@ -10,6 +10,8 @@ import { RouteSchedulesManagement, ScheduleData, RouteOption } from "route_sched
 import { RouteScheduleDialog, DeleteScheduleConfirmDialog, RouteStopItem } from "route_schedule_dialogs.slint";
 import { JobsManagementView, JobData } from "jobs_management.slint";
 import { UsersManagementView, UserData } from "users_management.slint";
+import { MaintenanceManagementView, MaintenanceData } from "maintenance_management.slint";
+import { ReportsView, MonthlyIncomeData, RouteIncomeData, RouteStatisticData, DailyStatisticData } from "reports_view.slint";
 export { AuthWindow } from "auth_window.slint";
 
 // Employee data structure
@@ -27,13 +29,13 @@ export component AppWindow inherits Window {
     width: 1600px;
     height: 980px;
     default-font-family: "Arial";
-    
+
     in-out property <string> current-user: "";
     in-out property <[EmployeeData]> employees;
     in-out property <int> current-nav-group: 1;
     in-out property <int> current-nav-index: 0;
     in-out property <bool> drawer-open: true;
-    
+
     // Employee dialog state - Basic
     in-out property <bool> show-employee-dialog: false;
     in-out property <string> dialog-mode: "add";
@@ -64,12 +66,12 @@ export component AppWindow inherits Window {
     in-out property <string> medical-cert-issue-date: "";
     in-out property <string> medical-cert-expiry: "";
     in-out property <string> employee-error: "";
-    
+
     // Delete dialog state
     in-out property <bool> show-delete-dialog: false;
     in-out property <int> delete-employee-id: 0;
     in-out property <string> delete-employee-name: "";
-    
+
     // Employee detail view state
     in-out property <bool> show-employee-detail: false;
     in-out property <int> detail-employee-id: 0;
@@ -78,7 +80,7 @@ export component AppWindow inherits Window {
     in-out property <[TrainingData]> employee-training: [];
     in-out property <[EmergencyContactData]> employee-contacts: [];
     in-out property <[VacationData]> employee-vacations: [];
-    
+
     callback logout-clicked();
     callback refresh-employees();
     callback add-employee-clicked();
@@ -88,7 +90,7 @@ export component AppWindow inherits Window {
     callback navigation-changed(int, int);
     callback save-employee();
     callback confirm-delete();
-    
+
     // Employee detail callbacks
     callback load-employee-documents(int);
     callback add-document-clicked();
@@ -104,20 +106,20 @@ export component AppWindow inherits Window {
     callback approve-vacation-clicked(int);
     callback reject-vacation-clicked(int);
     callback delete-vacation-clicked(int);
-    
+
     // Bus management state
     in-out property <[BusData]> buses: [];
     in-out property <bool> buses-loading: false;
     in-out property <string> buses-error: "";
     in-out property <bool> buses-has-error: false;
-    
+
     // Bus management callbacks
     callback load-buses();
     callback search-buses(string);
     callback add-bus(string);
     callback edit-bus(int, string);
     callback delete-bus(int);
-    
+
     // Route management state
     in-out property <[RouteData]> routes: [];
     in-out property <bool> routes-loading: false;
@@ -125,7 +127,7 @@ export component AppWindow inherits Window {
     in-out property <bool> routes-has-error: false;
     in-out property <[string]> route-bus-options: [];
     in-out property <[string]> route-driver-options: [];
-    
+
     // Route management callbacks
     callback load-routes();
     callback search-routes(string);
@@ -133,7 +135,7 @@ export component AppWindow inherits Window {
     callback edit-route(int, string, string, string, int, int);
     callback delete-route(int);
     callback load-route-dropdown-data();
-    
+
     // Route schedule management state
     in-out property <[ScheduleData]> schedules: [];
     in-out property <[RouteOption]> schedule-routes: [];
@@ -144,12 +146,12 @@ export component AppWindow inherits Window {
     in-out property <bool> schedules-loading: false;
     in-out property <string> schedules-error: "";
     in-out property <bool> schedules-has-error: false;
-    
+
     // Pagination properties
     in-out property <int> current-page: 0;
     in-out property <int> page-size: 100;
     in-out property <int> total-schedules: 0;
-    
+
     // Route schedule dialog state
     in-out property <bool> show-schedule-dialog: false;
     in-out property <string> schedule-dialog-mode: "add";
@@ -169,12 +171,12 @@ export component AppWindow inherits Window {
     in-out property <[string]> schedule-stop-distances: [];
     in-out property <string> schedule-error: "";
     in-out property <string> schedule-validation-error: "";
-    
+
     // Delete schedule dialog state
     in-out property <bool> show-delete-schedule-dialog: false;
     in-out property <int> delete-schedule-id: 0;
     in-out property <string> delete-schedule-description: "";
-    
+
     // Route schedule management callbacks
     callback load-schedules();
     callback load-routes-for-selector();
@@ -189,99 +191,137 @@ export component AppWindow inherits Window {
     callback save-schedule();
     callback confirm-delete-schedule();
     callback schedule-stop-selection-changed(int, bool);
-    
+
     // Jobs management state
     in-out property <[JobData]> jobs: [];
     in-out property <bool> jobs-loading: false;
     in-out property <string> jobs-error: "";
     in-out property <bool> jobs-has-error: false;
     in-out property <bool> is-admin: false;
-    
+
     // Jobs management callbacks
     callback load-jobs();
     callback search-jobs(string);
     callback add-job(string, string);
     callback edit-job(int, string, string);
     callback delete-job(int);
-    
+
     // Users management state
     in-out property <[UserData]> users: [];
     in-out property <bool> users-loading: false;
     in-out property <string> users-error: "";
     in-out property <bool> users-has-error: false;
     in-out property <int> current-user-id: -1;
-    
+
     // Users management callbacks
     callback load-users();
     callback search-users(string);
     callback add-user(string, string, string, string, int, bool, bool, string);
     callback edit-user(int, string, string, string, string, int, bool, bool, string);
     callback delete-user(int);
-    
+
+    // Maintenance management state
+    in-out property <[MaintenanceData]> maintenance_records: [];
+    in-out property <bool> maintenance-loading: false;
+    in-out property <string> maintenance-error: "";
+    in-out property <bool> maintenance-has-error: false;
+
+    // Maintenance management callbacks
+    callback load-maintenance();
+    callback search-maintenance(string);
+    callback add-maintenance();
+    callback edit-maintenance(int);
+    callback delete-maintenance(int);
+    callback refresh-maintenance();
+
+    // Reports view state
+    in-out property <int> reports-active-tab: 0;
+    in-out property <[MonthlyIncomeData]> monthly-incomes: [];
+    in-out property <[RouteIncomeData]> route-incomes: [];
+    in-out property <[RouteStatisticData]> route-statistics: [];
+    in-out property <[DailyStatisticData]> daily-statistics: [];
+    in-out property <string> reports-start-date: "";
+    in-out property <string> reports-end-date: "";
+    in-out property <float> total-income: 0.0;
+    in-out property <int> total-tickets-sold: 0;
+    in-out property <float> average-ticket-price: 0.0;
+    in-out property <int> total-sales: 0;
+    in-out property <float> total-revenue: 0.0;
+    in-out property <float> average-growth-rate: 0.0;
+    in-out property <bool> reports-loading: false;
+    in-out property <string> reports-error: "";
+    in-out property <bool> reports-has-error: false;
+
+    // Reports callbacks
+    callback load-income-report();
+    callback load-sales-statistics();
+    callback refresh-income-report();
+    callback refresh-sales-statistics();
+
     AppNavigation {
         current-user: root.current-user;
         current-group: root.current-nav-group;
         current-index: root.current-nav-index;
         drawer-open: root.drawer-open;
-        
+
         navigation-selected(group, index) => {
             root.current-nav-group = group;
             root.current-nav-index = index;
             root.navigation-changed(group, index);
         }
-        
+
         logout => {
             root.logout-clicked();
         }
-        
+
         // Content based on navigation - Employees view (Group 1, Index 0)
         if root.current-nav-group == 1 && root.current-nav-index == 0: VerticalBox {
-                
+
                 VerticalBox {
                     padding: 10px;
-                    
+
                     // Toolbar
                     HorizontalBox {
                         padding: 16px;
                         spacing: 12px;
                         alignment: start;
-                        
+
                         FilledButton {
                             text: "Добавить сотрудника";
                             clicked => {
                                 root.add-employee-clicked();
                             }
                         }
-                        
+
                         TonalButton {
                             text: "Обновить";
                             clicked => {
                                 root.refresh-employees();
                             }
                         }
-                        
+
                         Rectangle {
                             horizontal-stretch: 1;
                         }
                     }
-                    
+
                     HorizontalDivider {}
-                    
+
                     // Employee list with Material Design
                     ScrollView {
                         VerticalBox {
                             spacing: 0px;
-                            
+
                             // Table header
                             Rectangle {
                                 height: 48px;
                                 background: MaterialPalette.surface_container_high;
-                                
+
                                 HorizontalBox {
                                     padding-left: 16px;
                                     padding-right: 16px;
                                     spacing: 12px;
-                                    
+
                                     MaterialText {
                                         width: 50px;
                                         text: "ID";
@@ -314,19 +354,19 @@ export component AppWindow inherits Window {
                                     }
                                 }
                             }
-                            
+
                             // Employee rows with Material Design styling
                             for employee[index] in root.employees: Rectangle {
                                 height: 56px;
                                 background: touch.has-hover ? MaterialPalette.surface_container_highest : (mod(index, 2) == 0 ? MaterialPalette.surface_container : MaterialPalette.surface_container_low);
-                                
+
                                 touch := TouchArea {}
-                                
+
                                 HorizontalBox {
                                     padding-left: 16px;
                                     padding-right: 16px;
                                     spacing: 12px;
-                                    
+
                                     MaterialText {
                                         width: 50px;
                                         text: employee.id;
@@ -352,25 +392,25 @@ export component AppWindow inherits Window {
                                         text: employee.position;
                                         vertical-alignment: center;
                                     }
-                                    
+
                                     // Action buttons
                                     HorizontalBox {
                                         spacing: 8px;
                                         alignment: center;
-                                        
+
                                         // View Details button
                                         Rectangle {
                                             width: 40px;
                                             height: 40px;
                                             border-radius: 20px;
                                             background: view-touch.has-hover ? MaterialPalette.primary_container : transparent;
-                                            
+
                                             view-touch := TouchArea {
                                                 clicked => {
                                                     root.view-employee-detail-clicked(employee.id);
                                                 }
                                             }
-                                            
+
                                             MaterialText {
                                                 text: "👁️";
                                                 font-size: 18px;
@@ -378,20 +418,20 @@ export component AppWindow inherits Window {
                                                 horizontal-alignment: center;
                                             }
                                         }
-                                        
+
                                         // Edit button
                                         Rectangle {
                                             width: 40px;
                                             height: 40px;
                                             border-radius: 20px;
                                             background: edit-touch.has-hover ? MaterialPalette.secondary_container : transparent;
-                                            
+
                                             edit-touch := TouchArea {
                                                 clicked => {
                                                     root.edit-employee-clicked(employee.id);
                                                 }
                                             }
-                                            
+
                                             MaterialText {
                                                 text: "✏️";
                                                 font-size: 18px;
@@ -399,20 +439,20 @@ export component AppWindow inherits Window {
                                                 horizontal-alignment: center;
                                             }
                                         }
-                                        
+
                                         // Delete button
                                         Rectangle {
                                             width: 40px;
                                             height: 40px;
                                             border-radius: 20px;
                                             background: delete-touch.has-hover ? MaterialPalette.error_container : transparent;
-                                            
+
                                             delete-touch := TouchArea {
                                                 clicked => {
                                                     root.delete-employee-clicked(employee.id);
                                                 }
                                             }
-                                            
+
                                             MaterialText {
                                                 text: "🗑️";
                                                 font-size: 18px;
@@ -427,7 +467,7 @@ export component AppWindow inherits Window {
                     }
                 }
             }
-        
+
         // Placeholder for other navigation routes
         if root.current-nav-group == 0 && root.current-nav-index == 0: VerticalBox {
             padding: 40px;
@@ -443,7 +483,7 @@ export component AppWindow inherits Window {
                 horizontal-alignment: center;
             }
         }
-        
+
         // Jobs Management View (Group 1, Index 1)
         if root.current-nav-group == 1 && root.current-nav-index == 1: JobsManagementView {
             jobs: root.jobs;
@@ -451,28 +491,28 @@ export component AppWindow inherits Window {
             error-message: root.jobs-error;
             has-error: root.jobs-has-error;
             is-admin: root.is-admin;
-            
+
             load-jobs => {
                 root.load-jobs();
             }
-            
+
             search-jobs(text) => {
                 root.search-jobs(text);
             }
-            
+
             add-job(title, internship) => {
                 root.add-job(title, internship);
             }
-            
+
             edit-job(job-id, title, internship) => {
                 root.edit-job(job-id, title, internship);
             }
-            
+
             delete-job(job-id) => {
                 root.delete-job(job-id);
             }
         }
-        
+
         // Users Management View (Group 1, Index 2)
         if root.current-nav-group == 1 && root.current-nav-index == 2: UsersManagementView {
             users: root.users;
@@ -481,34 +521,34 @@ export component AppWindow inherits Window {
             has-error: root.users-has-error;
             is-admin: root.is-admin;
             current-user-id: root.current-user-id;
-            
+
             load-users => {
                 root.load-users();
             }
-            
+
             search-users(text) => {
                 root.search-users(text);
             }
-            
+
             add-user(login, password, email, phone, role, is-active, is-windows-auth, windows-identity) => {
                 root.add-user(login, password, email, phone, role, is-active, is-windows-auth, windows-identity);
             }
-            
+
             edit-user(user-id, login, password, email, phone, role, is-active, is-windows-auth, windows-identity) => {
                 root.edit-user(user-id, login, password, email, phone, role, is-active, is-windows-auth, windows-identity);
             }
-            
+
             delete-user(user-id) => {
                 root.delete-user(user-id);
             }
-            
+
             close-clicked => {
                 // Navigate back to employees or dashboard
                 root.current-nav-group = 1;
                 root.current-nav-index = 0;
             }
         }
-        
+
         // Placeholder for other personnel routes
         if root.current-nav-group == 1 && root.current-nav-index > 2: VerticalBox {
             padding: 40px;
@@ -524,35 +564,35 @@ export component AppWindow inherits Window {
                 horizontal-alignment: center;
             }
         }
-        
+
         // Bus Management View (Group 2, Index 0)
         if root.current-nav-group == 2 && root.current-nav-index == 0: BusManagementView {
             buses: root.buses;
             is-loading: root.buses-loading;
             error-message: root.buses-error;
             has-error: root.buses-has-error;
-            
+
             load-buses => {
                 root.load-buses();
             }
-            
+
             search-buses(text) => {
                 root.search-buses(text);
             }
-            
+
             add-bus(model) => {
                 root.add-bus(model);
             }
-            
+
             edit-bus(bus-id, model) => {
                 root.edit-bus(bus-id, model);
             }
-            
+
             delete-bus(bus-id) => {
                 root.delete-bus(bus-id);
             }
         }
-        
+
         // Route Management View (Group 2, Index 1)
         if root.current-nav-group == 2 && root.current-nav-index == 1: RouteManagementView {
             routes: root.routes;
@@ -561,32 +601,32 @@ export component AppWindow inherits Window {
             has-error: root.routes-has-error;
             bus-options: root.route-bus-options;
             driver-options: root.route-driver-options;
-            
+
             load-routes => {
                 root.load-routes();
             }
-            
+
             search-routes(text) => {
                 root.search-routes(text);
             }
-            
+
             add-route(start, end, time, bus-idx, driver-idx) => {
                 root.add-route(start, end, time, bus-idx, driver-idx);
             }
-            
+
             edit-route(route-id, start, end, time, bus-idx, driver-idx) => {
                 root.edit-route(route-id, start, end, time, bus-idx, driver-idx);
             }
-            
+
             delete-route(route-id) => {
                 root.delete-route(route-id);
             }
-            
+
             load-dropdown-data => {
                 root.load-route-dropdown-data();
             }
         }
-        
+
         // Route Schedules Management View (Group 2, Index 2)
         if root.current-nav-group == 2 && root.current-nav-index == 2: RouteSchedulesManagement {
             schedules: root.schedules;
@@ -598,70 +638,111 @@ export component AppWindow inherits Window {
             is_loading: root.schedules-loading;
             error_message: root.schedules-error;
             has_error: root.schedules-has-error;
-            
+
             // Pagination properties
             current_page: root.current-page;
             page_size: root.page-size;
             total_schedules: root.total-schedules;
-            
+
             load_schedules => {
                 root.load-schedules();
             }
-            
+
             load_routes => {
                 root.load-routes-for-selector();
             }
-            
+
             add_schedule => {
                 root.add-schedule();
             }
-            
+
             edit_schedule(schedule-id) => {
                 root.edit-schedule(schedule-id);
             }
-            
+
             delete_schedule(schedule-id) => {
                 root.delete-schedule(schedule-id);
             }
-            
+
             route_selected(route-idx) => {
                 root.schedule-route-selected(route-idx);
             }
-            
+
             date_changed(date-str) => {
                 root.schedule-date-changed(date-str);
             }
-            
+
             next_page => {
                 root.next-page();
             }
-            
+
             previous_page => {
                 root.previous-page();
             }
-            
+
             schedule_selected(schedule-id) => {
                 root.schedule-selected(schedule-id);
             }
         }
-        
-        // Placeholder for other transport routes
-        if root.current-nav-group == 2 && root.current-nav-index > 2: VerticalBox {
-            padding: 40px;
-            MaterialText {
-                text: "Раздел транспорта";
-                font-size: 24px;
-                font-weight: 700;
-                horizontal-alignment: center;
+
+        // Maintenance Management View (Group 2, Index 3)
+        if root.current-nav-group == 2 && root.current-nav-index == 3: MaintenanceManagementView {
+            maintenance_records: root.maintenance_records;
+            is_busy: root.maintenance-loading;
+            error_message: root.maintenance-error;
+            has_error: root.maintenance-has-error;
+
+            add_clicked => {
+                root.add-maintenance();
             }
-            Rectangle { vertical-stretch: 1; }
-            MaterialText {
-                text: "В разработке";
-                horizontal-alignment: center;
+
+            edit_clicked(maintenance-id) => {
+                root.edit-maintenance(maintenance-id);
+            }
+
+            delete_clicked(maintenance-id) => {
+                root.delete-maintenance(maintenance-id);
+            }
+
+            search_changed(text) => {
+                root.search-maintenance(text);
+            }
+
+            refresh_clicked => {
+                root.refresh-maintenance();
             }
         }
-        
-        if root.current-nav-group >= 3: VerticalBox {
+
+        // Reports View (Group 4, Index 0)
+        if root.current-nav-group == 4 && root.current-nav-index == 0: ReportsView {
+            active_tab: root.reports-active-tab;
+            monthly_incomes: root.monthly-incomes;
+            route_incomes: root.route-incomes;
+            route_statistics: root.route-statistics;
+            daily_statistics: root.daily-statistics;
+            start_date: root.reports-start-date;
+            end_date: root.reports-end-date;
+            total_income: root.total-income;
+            total_tickets_sold: root.total-tickets-sold;
+            average_ticket_price: root.average-ticket-price;
+            total_sales: root.total-sales;
+            total_revenue: root.total-revenue;
+            average_growth_rate: root.average-growth-rate;
+            is_busy: root.reports-loading;
+            error_message: root.reports-error;
+            has_error: root.reports-has-error;
+
+            refresh_income_report => {
+                root.refresh-income-report();
+            }
+
+            refresh_sales_statistics => {
+                root.refresh-sales-statistics();
+            }
+        }
+
+        // Placeholder for other groups
+        if root.current-nav-group == 3 || (root.current-nav-group >= 5): VerticalBox {
             padding: 40px;
             MaterialText {
                 text: "Раздел в разработке";
@@ -676,7 +757,7 @@ export component AppWindow inherits Window {
             }
         }
     }
-    
+
     // Employee Add/Edit Dialog
     if root.show-employee-dialog: EmployeeDialog {
         dialog-title: root.dialog-title;
@@ -707,36 +788,36 @@ export component AppWindow inherits Window {
         medical-cert-expiry <=> root.medical-cert-expiry;
         error-message <=> root.employee-error;
         is-edit-mode: root.dialog-mode == "edit";
-        
+
         save-clicked => {
             root.save-employee();
         }
-        
+
         cancel-clicked => {
             root.show-employee-dialog = false;
             root.employee-error = "";
         }
     }
-    
+
     // Delete Confirmation Dialog
     if root.show-delete-dialog: DeleteConfirmDialog {
         employee-name: root.delete-employee-name;
-        
+
         confirm-delete => {
             root.confirm-delete();
         }
-        
+
         cancel-delete => {
             root.show-delete-dialog = false;
         }
     }
-    
+
     // Employee Detail View Overlay
     if root.show-employee-detail: Rectangle {
         width: 100%;
         height: 100%;
         background: #00000088;
-        
+
         Rectangle {
             width: 800px;
             height: parent.height;
@@ -744,7 +825,7 @@ export component AppWindow inherits Window {
             background: MaterialPalette.surface;
             drop-shadow-blur: 24px;
             drop-shadow-color: #00000044;
-            
+
             EmployeeDetailView {
                 employee-id: root.detail-employee-id;
                 employee-name: root.detail-employee-name;
@@ -752,66 +833,66 @@ export component AppWindow inherits Window {
                 training: root.employee-training;
                 contacts: root.employee-contacts;
                 vacations: root.employee-vacations;
-                
+
                 close-clicked => {
                     root.show-employee-detail = false;
                 }
-                
+
                 add-document-clicked => {
                     root.add-document-clicked();
                 }
-                
+
                 edit-document-clicked(doc-id) => {
                     root.edit-document-clicked(doc-id);
                 }
-                
+
                 delete-document-clicked(doc-id) => {
                     root.delete-document-clicked(doc-id);
                 }
-                
+
                 add-training-clicked => {
                     root.add-training-clicked();
                 }
-                
+
                 edit-training-clicked(train-id) => {
                     root.edit-training-clicked(train-id);
                 }
-                
+
                 delete-training-clicked(train-id) => {
                     root.delete-training-clicked(train-id);
                 }
-                
+
                 add-contact-clicked => {
                     root.add-contact-clicked();
                 }
-                
+
                 edit-contact-clicked(contact-id) => {
                     root.edit-contact-clicked(contact-id);
                 }
-                
+
                 delete-contact-clicked(contact-id) => {
                     root.delete-contact-clicked(contact-id);
                 }
-                
+
                 add-vacation-clicked => {
                     root.add-vacation-clicked();
                 }
-                
+
                 approve-vacation-clicked(req-id) => {
                     root.approve-vacation-clicked(req-id);
                 }
-                
+
                 reject-vacation-clicked(req-id) => {
                     root.reject-vacation-clicked(req-id);
                 }
-                
+
                 delete-vacation-clicked(req-id) => {
                     root.delete-vacation-clicked(req-id);
                 }
             }
         }
     }
-    
+
     // Route Schedule Dialog
     if root.show-schedule-dialog: RouteScheduleDialog {
         dialog-title: root.schedule-dialog-title;
@@ -830,30 +911,30 @@ export component AppWindow inherits Window {
         error-message <=> root.schedule-error;
         validation-error <=> root.schedule-validation-error;
         is-edit-mode: root.schedule-dialog-mode == "edit";
-        
+
         save-clicked => {
             root.save-schedule();
         }
-        
+
         cancel-clicked => {
             root.show-schedule-dialog = false;
             root.schedule-error = "";
             root.schedule-validation-error = "";
         }
-        
+
         stop-selection-changed(index, selected) => {
             root.schedule-stop-selection-changed(index, selected);
         }
     }
-    
+
     // Delete Schedule Confirmation Dialog
     if root.show-delete-schedule-dialog: DeleteScheduleConfirmDialog {
         schedule-description: root.delete-schedule-description;
-        
+
         confirm-delete => {
             root.confirm-delete-schedule();
         }
-        
+
         cancel-delete => {
             root.show-delete-schedule-dialog = false;
         }

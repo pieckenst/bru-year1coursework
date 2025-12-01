@@ -1,0 +1,305 @@
+import { Button, VerticalBox, HorizontalBox, LineEdit, ScrollView } from "std-widgets.slint";
+import { MaterialPalette } from "../material-1.0/ui/styling/material_palette.slint";
+import { FilledCard, TextField, FilledButton, TonalButton, HorizontalDivider, MaterialText } from "../material-1.0/material.slint";
+
+export struct MaintenanceData {
+    maintenance_id: int,
+    bus_id: int,
+    bus_model: string,
+    last_service_date: string,
+    next_service_date: string,
+    mileage_threshold: string,
+    maintenance_type: string,
+    service_engineer: string,
+    found_issues: string,
+    roadworthiness: string,
+}
+
+export component MaintenanceManagementView inherits Rectangle {
+    in-out property <[MaintenanceData]> maintenance_records: [];
+    in-out property <string> search_text: "";
+    in-out property <string> error_message: "";
+    in-out property <bool> has_error: false;
+    in-out property <bool> is_busy: false;
+    in-out property <int> selected_index: -1;
+
+    callback add_clicked();
+    callback edit_clicked(int);
+    callback delete_clicked(int);
+    callback search_changed(string);
+    callback refresh_clicked();
+
+    background: MaterialPalette.background;
+
+    VerticalBox {
+        padding: 20px;
+        spacing: 15px;
+
+        // Header section
+        HorizontalBox {
+            spacing: 10px;
+            alignment: start;
+
+            Text {
+                text: "Управление обслуживанием";
+                font-size: 24px;
+                font-weight: 700;
+                color: MaterialPalette.on-background;
+                vertical-alignment: center;
+            }
+        }
+
+        // Search and Add section
+        HorizontalBox {
+            spacing: 10px;
+
+            TextField {
+                horizontal-stretch: 1;
+                text <=> search_text;
+                placeholder-text: "Поиск по инженеру, проблемам, состоянию или модели автобуса...";
+                enabled: !is_busy;
+                edited => {
+                    search_changed(self.text);
+                }
+            }
+
+            FilledButton {
+                text: "Обновить";
+                enabled: !is_busy;
+                clicked => {
+                    refresh_clicked();
+                }
+            }
+
+            FilledButton {
+                text: "Добавить запись";
+                enabled: !is_busy;
+                clicked => {
+                    add_clicked();
+                }
+            }
+        }
+
+        // Error message
+        if has_error: HorizontalBox {
+            padding: 10px;
+            Rectangle {
+                background: #ffebee;
+                border-radius: 4px;
+
+                Text {
+                    text: error_message;
+                    color: #c62828;
+                    font-size: 14px;
+                    padding: 8px;
+                    wrap: word-wrap;
+                }
+            }
+        }
+
+        // Loading indicator
+        if is_busy: HorizontalBox {
+            alignment: center;
+            Text {
+                text: "Загрузка...";
+                color: MaterialPalette.on-background;
+                font-size: 16px;
+            }
+        }
+
+        // Table Header
+        FilledCard {
+            HorizontalBox {
+                padding: 10px;
+                spacing: 5px;
+
+                Rectangle {
+                    width: 60px;
+                    Text {
+                        text: "ID";
+                        font-weight: 700;
+                        color: MaterialPalette.on-background;
+                    }
+                }
+                Rectangle {
+                    width: 120px;
+                    Text {
+                        text: "Автобус";
+                        font-weight: 700;
+                        color: MaterialPalette.on-background;
+                    }
+                }
+                Rectangle {
+                    width: 130px;
+                    Text {
+                        text: "Дата обслуживания";
+                        font-weight: 700;
+                        color: MaterialPalette.on-background;
+                        wrap: word-wrap;
+                    }
+                }
+                Rectangle {
+                    width: 130px;
+                    Text {
+                        text: "След. обслуживание";
+                        font-weight: 700;
+                        color: MaterialPalette.on-background;
+                        wrap: word-wrap;
+                    }
+                }
+                Rectangle {
+                    horizontal-stretch: 1;
+                    Text {
+                        text: "Инженер";
+                        font-weight: 700;
+                        color: MaterialPalette.on-background;
+                    }
+                }
+                Rectangle {
+                    horizontal-stretch: 2;
+                    Text {
+                        text: "Найденные проблемы";
+                        font-weight: 700;
+                        color: MaterialPalette.on-background;
+                    }
+                }
+                Rectangle {
+                    width: 100px;
+                    Text {
+                        text: "Состояние";
+                        font-weight: 700;
+                        color: MaterialPalette.on-background;
+                    }
+                }
+                Rectangle {
+                    width: 150px;
+                    Text {
+                        text: "Действия";
+                        font-weight: 700;
+                        color: MaterialPalette.on-background;
+                    }
+                }
+            }
+        }
+
+        // Table Content
+        ScrollView {
+            vertical-stretch: 1;
+            viewport-height: maintenance_records.length * 80px;
+
+            VerticalBox {
+                spacing: 5px;
+
+                for record[index] in maintenance_records: FilledCard {
+                    HorizontalBox {
+                        padding: 10px;
+                        spacing: 5px;
+
+                        Rectangle {
+                            width: 60px;
+                            Text {
+                                text: record.maintenance_id;
+                                color: MaterialPalette.on-background;
+                                vertical-alignment: center;
+                            }
+                        }
+                        Rectangle {
+                            width: 120px;
+                            Text {
+                                text: record.bus_model;
+                                color: MaterialPalette.on-background;
+                                vertical-alignment: center;
+                                wrap: word-wrap;
+                            }
+                        }
+                        Rectangle {
+                            width: 130px;
+                            Text {
+                                text: record.last_service_date;
+                                color: MaterialPalette.on-background;
+                                vertical-alignment: center;
+                            }
+                        }
+                        Rectangle {
+                            width: 130px;
+                            Text {
+                                text: record.next_service_date;
+                                color: MaterialPalette.on-background;
+                                vertical-alignment: center;
+                            }
+                        }
+                        Rectangle {
+                            horizontal-stretch: 1;
+                            Text {
+                                text: record.service_engineer;
+                                color: MaterialPalette.on-background;
+                                vertical-alignment: center;
+                                wrap: word-wrap;
+                            }
+                        }
+                        Rectangle {
+                            horizontal-stretch: 2;
+                            Text {
+                                text: record.found_issues;
+                                color: MaterialPalette.on-background;
+                                vertical-alignment: center;
+                                wrap: word-wrap;
+                            }
+                        }
+                        Rectangle {
+                            width: 100px;
+                            Text {
+                                text: record.roadworthiness;
+                                color: MaterialPalette.on-background;
+                                vertical-alignment: center;
+                                wrap: word-wrap;
+                            }
+                        }
+                        Rectangle {
+                            width: 150px;
+                            HorizontalBox {
+                                spacing: 5px;
+
+                                TonalButton {
+                                    text: "Изменить";
+                                    enabled: !is_busy;
+                                    clicked => {
+                                        edit_clicked(record.maintenance_id);
+                                    }
+                                }
+
+                                TonalButton {
+                                    text: "Удалить";
+                                    enabled: !is_busy;
+                                    clicked => {
+                                        delete_clicked(record.maintenance_id);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Empty state
+        if maintenance_records.length == 0 && !is_busy: VerticalBox {
+            alignment: center;
+            spacing: 10px;
+
+            Text {
+                text: "Нет записей об обслуживании";
+                font-size: 18px;
+                color: MaterialPalette.on-background;
+                horizontal-alignment: center;
+            }
+
+            Text {
+                text: "Нажмите 'Добавить запись' для создания новой записи";
+                font-size: 14px;
+                color: MaterialPalette.on-surface-variant;
+                horizontal-alignment: center;
+            }
+        }
+    }
+}

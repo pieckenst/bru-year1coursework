@@ -1,15 +1,17 @@
 pub mod auth;
-pub mod employees;
+pub mod buses;
 pub mod departments;
-pub mod jobs;
+pub mod emergency_contacts;
 pub mod employee_documents;
 pub mod employee_training;
-pub mod emergency_contacts;
-pub mod vacation_requests;
-pub mod buses;
-pub mod routes;
+pub mod employees;
+pub mod jobs;
+pub mod maintenance;
 pub mod route_schedules;
+pub mod routes;
+pub mod ticket_sales;
 pub mod users;
+pub mod vacation_requests;
 
 use reqwest::{Client, Response, StatusCode};
 use serde::{Deserialize, Serialize};
@@ -74,6 +76,50 @@ impl ApiClient {
 
     pub fn clear_token(&mut self) {
         self.token = None;
+    }
+
+    // ========== MAINTENANCE API ==========
+    
+    pub async fn get_maintenance_records(&self) -> Result<Vec<crate::models::Maintenance>, Box<dyn Error>> {
+        let api = maintenance::MaintenanceApi::new(&self.base_url, self.client.clone());
+        api.get_all().await
+    }
+
+    pub async fn get_maintenance_by_id(&self, id: i64) -> Result<crate::models::Maintenance, Box<dyn Error>> {
+        let api = maintenance::MaintenanceApi::new(&self.base_url, self.client.clone());
+        api.get_by_id(id).await
+    }
+
+    pub async fn create_maintenance(&self, request: &crate::models::CreateMaintenanceRequest) -> Result<crate::models::Maintenance, Box<dyn Error>> {
+        let api = maintenance::MaintenanceApi::new(&self.base_url, self.client.clone());
+        api.create(request.clone()).await
+    }
+
+    pub async fn update_maintenance(&self, request: &crate::models::UpdateMaintenanceRequest) -> Result<crate::models::Maintenance, Box<dyn Error>> {
+        let api = maintenance::MaintenanceApi::new(&self.base_url, self.client.clone());
+        api.update(request.clone()).await
+    }
+
+    pub async fn delete_maintenance(&self, id: i64) -> Result<(), Box<dyn Error>> {
+        let api = maintenance::MaintenanceApi::new(&self.base_url, self.client.clone());
+        api.delete(id).await
+    }
+
+    pub async fn search_maintenance(&self, query: &str) -> Result<Vec<crate::models::Maintenance>, Box<dyn Error>> {
+        let api = maintenance::MaintenanceApi::new(&self.base_url, self.client.clone());
+        api.search(query).await
+    }
+
+    // ========== REPORTS API ==========
+    
+    pub async fn get_income_report(&self, start_date: Option<&str>, end_date: Option<&str>) -> Result<Vec<crate::models::ticket_sales::TicketSale>, Box<dyn Error>> {
+        let api = ticket_sales::TicketSalesApi::new(&self.base_url, self.client.clone());
+        api.search(start_date, end_date).await
+    }
+
+    pub async fn get_all_ticket_sales(&self) -> Result<Vec<crate::models::ticket_sales::TicketSale>, Box<dyn Error>> {
+        let api = ticket_sales::TicketSalesApi::new(&self.base_url, self.client.clone());
+        api.get_all().await
     }
 
     /// Build a GET request with authentication
@@ -166,13 +212,17 @@ impl ApiClient {
         match response.status() {
             StatusCode::OK | StatusCode::CREATED => {
                 // Debug: print raw response text
-                let text = response.text().await
-                    .map_err(|e| ApiError::ServerError(format!("Failed to read response: {}", e)))?;
-                println!("[DEBUG] Raw response (first 500 chars): {}", &text[..text.len().min(500)]);
-                
+                let text = response.text().await.map_err(|e| {
+                    ApiError::ServerError(format!("Failed to read response: {}", e))
+                })?;
+                println!(
+                    "[DEBUG] Raw response (first 500 chars): {}",
+                    &text[..text.len().min(500)]
+                );
+
                 serde_json::from_str::<T>(&text)
                     .map_err(|e| ApiError::ServerError(format!("Failed to parse response: {}", e)))
-            },
+            }
             StatusCode::UNAUTHORIZED => Err(ApiError::AuthenticationError(
                 "Unauthorized access".to_string(),
             )),
@@ -186,10 +236,7 @@ impl ApiClient {
             }
             _ => {
                 let msg = response.text().await.unwrap_or_default();
-                Err(ApiError::ServerError(format!(
-                    "Server error: {}",
-                    msg
-                )))
+                Err(ApiError::ServerError(format!("Server error: {}", msg)))
             }
         }
     }

@@ -1,0 +1,514 @@
+import { Button, VerticalBox, HorizontalBox, LineEdit, ScrollView } from "std-widgets.slint";
+import { MaterialPalette } from "../material-1.0/ui/styling/material_palette.slint";
+import { FilledCard, TextField, FilledButton, TonalButton, HorizontalDivider, MaterialText } from "../material-1.0/material.slint";
+
+export struct RouteStatisticData {
+    route_name: string,
+    total_sales: int,
+    total_revenue: float,
+    sales_percentage: float,
+}
+
+export struct DailyStatisticData {
+    date: string,
+    total_sales: int,
+    total_revenue: float,
+    growth_rate: float,
+}
+
+export component SalesStatisticsView inherits Rectangle {
+    in-out property <[RouteStatisticData]> route_statistics: [];
+    in-out property <[DailyStatisticData]> daily_statistics: [];
+    in-out property <string> start_date: "";
+    in-out property <string> end_date: "";
+    in-out property <int> total_sales: 0;
+    in-out property <float> total_revenue: 0.0;
+    in-out property <float> average_growth_rate: 0.0;
+    in-out property <string> error_message: "";
+    in-out property <bool> has_error: false;
+    in-out property <bool> is_busy: false;
+
+    callback date_range_changed(string, string);
+    callback refresh_clicked();
+
+    background: MaterialPalette.background;
+
+    ScrollView {
+        VerticalBox {
+            padding: 20px;
+            spacing: 20px;
+
+            // Header section
+            HorizontalBox {
+                spacing: 10px;
+                alignment: space-between;
+
+                VerticalBox {
+                    spacing: 5px;
+                    Text {
+                        text: "Статистика продаж";
+                        font-size: 28px;
+                        font-weight: 700;
+                        color: MaterialPalette.on-background;
+                    }
+                    Text {
+                        text: "Анализ продаж билетов по маршрутам и периодам";
+                        font-size: 14px;
+                        color: MaterialPalette.on-surface-variant;
+                    }
+                }
+
+                VerticalBox {
+                    spacing: 5px;
+                    alignment: center;
+
+                    HorizontalBox {
+                        spacing: 10px;
+
+                        TextField {
+                            text <=> start_date;
+                            placeholder-text: "Начальная дата (YYYY-MM-DD)";
+                            enabled: !is_busy;
+                            min-width: 200px;
+                        }
+
+                        Text {
+                            text: "-";
+                            vertical-alignment: center;
+                            color: MaterialPalette.on-background;
+                        }
+
+                        TextField {
+                            text <=> end_date;
+                            placeholder-text: "Конечная дата (YYYY-MM-DD)";
+                            enabled: !is_busy;
+                            min-width: 200px;
+                        }
+                    }
+
+                    FilledButton {
+                        text: "Обновить";
+                        enabled: !is_busy;
+                        clicked => {
+                            refresh_clicked();
+                        }
+                    }
+                }
+            }
+
+            HorizontalDivider {}
+
+            // Error message
+            if has_error: Rectangle {
+                background: #ffebee;
+                border-radius: 4px;
+                padding: 10px;
+
+                Text {
+                    text: error_message;
+                    color: #c62828;
+                    font-size: 14px;
+                    wrap: word-wrap;
+                }
+            }
+
+            // Loading indicator
+            if is_busy: HorizontalBox {
+                alignment: center;
+                Text {
+                    text: "Загрузка данных...";
+                    color: MaterialPalette.on-background;
+                    font-size: 16px;
+                }
+            }
+
+            // Summary Cards
+            HorizontalBox {
+                spacing: 15px;
+                alignment: stretch;
+
+                // Total Sales Card
+                FilledCard {
+                    horizontal-stretch: 1;
+                    VerticalBox {
+                        padding: 20px;
+                        spacing: 10px;
+
+                        HorizontalBox {
+                            spacing: 10px;
+                            alignment: start;
+
+                            Rectangle {
+                                width: 24px;
+                                height: 24px;
+                                background: MaterialPalette.primary;
+                                border-radius: 12px;
+                            }
+
+                            Text {
+                                text: "Общие продажи";
+                                font-size: 14px;
+                                font-weight: 600;
+                                color: MaterialPalette.on-background;
+                                vertical-alignment: center;
+                            }
+                        }
+
+                        Text {
+                            text: total_sales;
+                            font-size: 32px;
+                            font-weight: 700;
+                            color: MaterialPalette.primary;
+                        }
+                    }
+                }
+
+                // Total Revenue Card
+                FilledCard {
+                    horizontal-stretch: 1;
+                    VerticalBox {
+                        padding: 20px;
+                        spacing: 10px;
+
+                        HorizontalBox {
+                            spacing: 10px;
+                            alignment: start;
+
+                            Rectangle {
+                                width: 24px;
+                                height: 24px;
+                                background: #2e7d32;
+                                border-radius: 12px;
+                            }
+
+                            Text {
+                                text: "Общий доход";
+                                font-size: 14px;
+                                font-weight: 600;
+                                color: MaterialPalette.on-background;
+                                vertical-alignment: center;
+                            }
+                        }
+
+                        Text {
+                            text: total_revenue + " ₽";
+                            font-size: 32px;
+                            font-weight: 700;
+                            color: #2e7d32;
+                        }
+                    }
+                }
+
+                // Growth Rate Card
+                FilledCard {
+                    horizontal-stretch: 1;
+                    VerticalBox {
+                        padding: 20px;
+                        spacing: 10px;
+
+                        HorizontalBox {
+                            spacing: 10px;
+                            alignment: start;
+
+                            Rectangle {
+                                width: 24px;
+                                height: 24px;
+                                background: #f57c00;
+                                border-radius: 12px;
+                            }
+
+                            Text {
+                                text: "Средний рост";
+                                font-size: 14px;
+                                font-weight: 600;
+                                color: MaterialPalette.on-background;
+                                vertical-alignment: center;
+                            }
+                        }
+
+                        Text {
+                            text: average_growth_rate + "%";
+                            font-size: 32px;
+                            font-weight: 700;
+                            color: #f57c00;
+                        }
+                    }
+                }
+            }
+
+            // Charts Section Placeholder
+            HorizontalBox {
+                spacing: 15px;
+
+                FilledCard {
+                    horizontal-stretch: 1;
+                    VerticalBox {
+                        padding: 20px;
+                        spacing: 15px;
+
+                        Text {
+                            text: "Динамика продаж";
+                            font-size: 18px;
+                            font-weight: 600;
+                            color: MaterialPalette.on-background;
+                        }
+
+                        Rectangle {
+                            height: 250px;
+                            background: MaterialPalette.surface-variant;
+                            border-radius: 8px;
+
+                            Text {
+                                text: "График динамики продаж\n(требуется внешняя библиотека)";
+                                color: MaterialPalette.on-surface-variant;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+                    }
+                }
+
+                FilledCard {
+                    horizontal-stretch: 1;
+                    VerticalBox {
+                        padding: 20px;
+                        spacing: 15px;
+
+                        Text {
+                            text: "Распределение по маршрутам";
+                            font-size: 18px;
+                            font-weight: 600;
+                            color: MaterialPalette.on-background;
+                        }
+
+                        Rectangle {
+                            height: 250px;
+                            background: MaterialPalette.surface-variant;
+                            border-radius: 8px;
+
+                            Text {
+                                text: "Круговая диаграмма\n(требуется внешняя библиотека)";
+                                color: MaterialPalette.on-surface-variant;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Data Tables Section
+            HorizontalBox {
+                spacing: 15px;
+                alignment: stretch;
+
+                // Daily Statistics Table
+                FilledCard {
+                    horizontal-stretch: 1;
+                    VerticalBox {
+                        padding: 20px;
+                        spacing: 15px;
+
+                        Text {
+                            text: "Ежедневная статистика";
+                            font-size: 18px;
+                            font-weight: 600;
+                            color: MaterialPalette.on-background;
+                        }
+
+                        // Table Header
+                        Rectangle {
+                            background: MaterialPalette.surface-variant;
+                            border-radius: 4px;
+                            
+                            HorizontalBox {
+                                padding: 10px;
+                                spacing: 10px;
+
+                                Text {
+                                    text: "Дата";
+                                    font-weight: 700;
+                                    width: 120px;
+                                    color: MaterialPalette.on-background;
+                                }
+                                Text {
+                                    text: "Продажи";
+                                    font-weight: 700;
+                                    width: 80px;
+                                    color: MaterialPalette.on-background;
+                                }
+                                Text {
+                                    text: "Доход";
+                                    font-weight: 700;
+                                    horizontal-stretch: 1;
+                                    color: MaterialPalette.on-background;
+                                }
+                                Text {
+                                    text: "Рост";
+                                    font-weight: 700;
+                                    width: 80px;
+                                    color: MaterialPalette.on-background;
+                                }
+                            }
+                        }
+
+                        // Table Content
+                        ScrollView {
+                            height: 300px;
+                            viewport-height: daily_statistics.length * 45px;
+
+                            VerticalBox {
+                                spacing: 2px;
+
+                                for stat[index] in daily_statistics: Rectangle {
+                                    height: 40px;
+                                    background: mod(index, 2) == 0 ? MaterialPalette.surface : MaterialPalette.background;
+
+                                    HorizontalBox {
+                                        padding: 8px;
+                                        spacing: 10px;
+
+                                        Text {
+                                            text: stat.date;
+                                            width: 120px;
+                                            color: MaterialPalette.on-background;
+                                            vertical-alignment: center;
+                                        }
+                                        Text {
+                                            text: stat.total_sales;
+                                            width: 80px;
+                                            color: MaterialPalette.on-background;
+                                            vertical-alignment: center;
+                                        }
+                                        Text {
+                                            text: stat.total_revenue + " ₽";
+                                            horizontal-stretch: 1;
+                                            color: MaterialPalette.on-background;
+                                            vertical-alignment: center;
+                                        }
+                                        Text {
+                                            text: stat.growth_rate + "%";
+                                            width: 80px;
+                                            color: stat.growth_rate >= 0 ? #2e7d32 : #c62828;
+                                            vertical-alignment: center;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if daily_statistics.length == 0 && !is_busy: Text {
+                            text: "Нет данных для отображения";
+                            color: MaterialPalette.on-surface-variant;
+                            horizontal-alignment: center;
+                        }
+                    }
+                }
+
+                // Route Statistics Table
+                FilledCard {
+                    horizontal-stretch: 1;
+                    VerticalBox {
+                        padding: 20px;
+                        spacing: 15px;
+
+                        Text {
+                            text: "Статистика по маршрутам";
+                            font-size: 18px;
+                            font-weight: 600;
+                            color: MaterialPalette.on-background;
+                        }
+
+                        // Table Header
+                        Rectangle {
+                            background: MaterialPalette.surface-variant;
+                            border-radius: 4px;
+                            
+                            HorizontalBox {
+                                padding: 10px;
+                                spacing: 10px;
+
+                                Text {
+                                    text: "Маршрут";
+                                    font-weight: 700;
+                                    horizontal-stretch: 2;
+                                    color: MaterialPalette.on-background;
+                                }
+                                Text {
+                                    text: "Продажи";
+                                    font-weight: 700;
+                                    width: 80px;
+                                    color: MaterialPalette.on-background;
+                                }
+                                Text {
+                                    text: "Доход";
+                                    font-weight: 700;
+                                    horizontal-stretch: 1;
+                                    color: MaterialPalette.on-background;
+                                }
+                                Text {
+                                    text: "Доля";
+                                    font-weight: 700;
+                                    width: 80px;
+                                    color: MaterialPalette.on-background;
+                                }
+                            }
+                        }
+
+                        // Table Content
+                        ScrollView {
+                            height: 300px;
+                            viewport-height: route_statistics.length * 45px;
+
+                            VerticalBox {
+                                spacing: 2px;
+
+                                for stat[index] in route_statistics: Rectangle {
+                                    height: 40px;
+                                    background: mod(index, 2) == 0 ? MaterialPalette.surface : MaterialPalette.background;
+
+                                    HorizontalBox {
+                                        padding: 8px;
+                                        spacing: 10px;
+
+                                        Text {
+                                            text: stat.route_name;
+                                            horizontal-stretch: 2;
+                                            color: MaterialPalette.on-background;
+                                            vertical-alignment: center;
+                                            overflow: elide;
+                                        }
+                                        Text {
+                                            text: stat.total_sales;
+                                            width: 80px;
+                                            color: MaterialPalette.on-background;
+                                            vertical-alignment: center;
+                                        }
+                                        Text {
+                                            text: stat.total_revenue + " ₽";
+                                            horizontal-stretch: 1;
+                                            color: MaterialPalette.on-background;
+                                            vertical-alignment: center;
+                                        }
+                                        Text {
+                                            text: stat.sales_percentage + "%";
+                                            width: 80px;
+                                            color: MaterialPalette.on-background;
+                                            vertical-alignment: center;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if route_statistics.length == 0 && !is_busy: Text {
+                            text: "Нет данных для отображения";
+                            color: MaterialPalette.on-surface-variant;
+                            horizontal-alignment: center;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
