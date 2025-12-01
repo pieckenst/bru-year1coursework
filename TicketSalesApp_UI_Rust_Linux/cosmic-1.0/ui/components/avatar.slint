@@ -1,0 +1,179 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+
+// Avatar size variants
+export enum AvatarSize {
+    xs,     // 24px - Requirement 63.2
+    sm,     // 32px - Requirement 63.3
+    md,     // 40px - Requirement 63.4
+    lg,     // 56px - Requirement 63.5
+}
+
+// Avatar shape variants
+export enum AvatarShape {
+    circle,     // Circular (default) - Requirement 63.1
+    square,     // Square with 8px radius - Requirement 63.10
+}
+
+// Status indicator colors
+export enum AvatarStatus {
+    none,       // No status indicator
+    online,     // Green dot
+    away,       // Yellow dot
+    busy,       // Red dot
+    offline,    // Gray dot
+}
+
+// CosmicAvatar - User representation component
+// Requirements: 63.1-63.10
+export component CosmicAvatar {
+    // Properties
+    in property <image> avatar-image;
+    in property <string> initials: "";  // Fallback initials - Requirement 63.6
+    in property <AvatarSize> size: AvatarSize.md;
+    in property <AvatarShape> shape: AvatarShape.circle;  // Requirement 63.1
+    in property <AvatarStatus> status: AvatarStatus.none;  // Requirement 63.7
+    in property <bool> clickable: false;  // Requirement 63.9
+    in property <color> fallback-color: #8B7355;  // Background color for initials
+    
+    // Callbacks
+    callback clicked();
+    
+    // Computed dimensions based on size - Requirements 63.2-63.5
+    property <length> avatar-size: {
+        if size == AvatarSize.xs {
+            24px
+        } else if size == AvatarSize.sm {
+            32px
+        } else if size == AvatarSize.lg {
+            56px
+        } else {
+            40px  // md (default)
+        }
+    };
+    
+    // Font size for initials based on avatar size
+    property <length> initials-font-size: {
+        if size == AvatarSize.xs {
+            10px
+        } else if size == AvatarSize.sm {
+            12px
+        } else if size == AvatarSize.lg {
+            20px
+        } else {
+            16px  // md
+        }
+    };
+    
+    // Status indicator size (proportional to avatar size)
+    property <length> status-size: {
+        if size == AvatarSize.xs {
+            6px
+        } else if size == AvatarSize.sm {
+            8px
+        } else if size == AvatarSize.lg {
+            12px
+        } else {
+            10px  // md
+        }
+    };
+    
+    // Border radius based on shape - Requirements 63.1, 63.10
+    property <length> border-radius: {
+        if shape == AvatarShape.square {
+            CosmicCornerRadii.avatar-radius  // 8px - Requirement 63.10
+        } else {
+            CosmicCornerRadii.radius-full  // Circular - Requirement 63.1
+        }
+    };
+    
+    // Status indicator color
+    property <color> status-color: {
+        if status == AvatarStatus.online {
+            CosmicPalette.success  // Green
+        } else if status == AvatarStatus.away {
+            CosmicPalette.warning  // Yellow
+        } else if status == AvatarStatus.busy {
+            CosmicPalette.error  // Red
+        } else if status == AvatarStatus.offline {
+            CosmicPalette.text-secondary  // Gray
+        } else {
+            Colors.transparent
+        }
+    };
+    
+    // Hover border for clickable avatars - Requirement 63.9
+    property <bool> show-hover-border: clickable && main-touch.has-hover;
+    
+    width: root.avatar-size;
+    height: root.avatar-size;
+    
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        border-radius: root.border-radius;
+        clip: true;
+        
+        // Hover border for clickable avatars - Requirement 63.9
+        border-width: root.show-hover-border ? 2px : 0px;
+        border-color: CosmicPalette.accent-primary;
+        
+        // Smooth transition for border
+        animate border-width {
+            duration: 150ms;
+            easing: ease-out;
+        }
+        
+        // Show image if available, otherwise show initials fallback
+        if root.avatar-image.width > 0: Image {
+            source: root.avatar-image;
+            width: parent.width;
+            height: parent.height;
+            image-fit: cover;
+        }
+        
+        // Initials fallback - Requirement 63.6
+        if root.avatar-image.width == 0 && root.initials != "": Rectangle {
+            background: root.fallback-color;
+            width: parent.width;
+            height: parent.height;
+            
+            Text {
+                text: root.initials;
+                color: #FFFFFF;  // White text on colored background
+                font-family: CosmicTypography.font-family;
+                font-size: root.initials-font-size;
+                font-weight: CosmicTypography.weight-semibold;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+        }
+        
+        // Touch area for clickable avatars - Requirement 63.9
+        main-touch := TouchArea {
+            enabled: root.clickable;
+            mouse-cursor: root.clickable ? pointer : default;
+            
+            clicked => {
+                if root.clickable {
+                    root.clicked();
+                }
+            }
+        }
+    }
+    
+    // Status indicator at bottom-right - Requirement 63.7
+    if root.status != AvatarStatus.none: Rectangle {
+        width: root.status-size;
+        height: root.status-size;
+        border-radius: CosmicCornerRadii.radius-full;  // Circular dot
+        background: root.status-color;
+        border-width: 2px;
+        border-color: CosmicPalette.background-surface;  // White border to separate from avatar
+        
+        // Position at bottom-right corner - Requirement 63.7
+        x: parent.width - self.width;
+        y: parent.height - self.height;
+    }
+}

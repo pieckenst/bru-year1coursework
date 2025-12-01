@@ -603,19 +603,22 @@ or validation error display
   - **Validates: Requirements 23.5**
 
 
-- [ ] 13.11 Add navigation integration for jobs management
+- [x] 13.11 Add navigation integration for jobs management
   - Update AppRoute enum to include JobsManagement
   - Add navigation handler to show jobs management view
   - _Requirements: 31.1_
 
-- [ ] 14. Implement Users Management UI and Backend
+- [x] 14. Implement Users Management UI and Backend
+
+
+
   - Create users_management.slint with Material Design styling
   - Implement Rust backend with CRUD operations
   - Add role and permission management
   - Add administrator-only access control
   - _Requirements: 24.1-24.6, 25.1-25.7, 26.1-26.6, 27.1-27.7, 28.1-28.5, 29.1-29.5_
 
-- [ ] 14.1 Create users_management.slint UI component
+- [x] 14.1 Create users_management.slint UI component
   - Define UserData struct with all user fields including roles
   - Define RoleOption struct for role selection
   - Create main view with action buttons
@@ -624,7 +627,7 @@ or validation error display
   - Add admin-only UI indicators
   - _Requirements: 24.1, 24.2_
 
-- [ ] 14.2 Create user add/edit dialogs in Slint
+- [x] 14.2 Create user add/edit dialogs in Slint
   - Create dialog with fields for login, password, email, phone, role
   - Add ComboBox for role selection (Administrator, Cashier, Controller, Senior Cashier)
   - Add checkbox for is_active status
@@ -634,20 +637,20 @@ or validation error display
   - Style dialogs with Material Design
   - _Requirements: 25.1, 25.2, 26.1, 26.2_
 
-- [ ] 14.3 Create user delete confirmation dialog
+- [x] 14.3 Create user delete confirmation dialog
   - Create confirmation dialog showing user login
   - Add warning for self-deletion attempt
   - Add warning for last admin deletion attempt
   - Add cancel and confirm buttons
   - _Requirements: 27.1_
 
-- [ ] 14.4 Create role/permission view dialogs
+- [x] 14.4 Create role/permission view dialogs
   - Create dialog to display user's assigned roles
   - Create dialog to display user's effective permissions
   - Add ability to assign/remove roles
   - _Requirements: 28.1, 28.2_
 
-- [ ] 14.5 Implement users management callbacks in main.rs
+- [x] 14.5 Implement users management callbacks in main.rs
   - Add `load_users()` to fetch users with nested roles/permissions
   - Add `add_user()`, `edit_user()`, `delete_user()` callbacks
   - Add `view_user_roles()` and `view_user_permissions()` callbacks
@@ -682,7 +685,7 @@ or validation error display
   - **Property 36: Role changes refresh display**
   - **Validates: Requirements 28.5**
 
-- [ ] 14.12 Add navigation integration for users management
+- [x] 14.12 Add navigation integration for users management
   - Update AppRoute enum to include UsersManagement
   - Add `requires_admin()` method to AppRoute
   - Add navigation handler to show users management view

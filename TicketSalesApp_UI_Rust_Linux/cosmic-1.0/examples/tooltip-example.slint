@@ -1,0 +1,265 @@
+import { CosmicTooltip, CosmicTooltipContainer, TooltipPosition } from "../ui/components/tooltip.slint";
+import { CosmicButton } from "../ui/components/button.slint";
+import { CosmicIconButton } from "../ui/components/icon-button.slint";
+import { CosmicPalette } from "../ui/styling/palette.slint";
+import { CosmicSpacing } from "../ui/styling/spacing.slint";
+import { CosmicTypography } from "../ui/styling/typography.slint";
+
+export component TooltipExample inherits Window {
+    title: "COSMIC Tooltip Component Example";
+    background: CosmicPalette.background-base;
+    preferred-width: 800px;
+    preferred-height: 600px;
+    
+    VerticalLayout {
+        padding: CosmicSpacing.space-l;
+        spacing: CosmicSpacing.space-l;
+        
+        // Header
+        Text {
+            text: "Tooltip Component Examples";
+            color: CosmicPalette.text-primary;
+            font-family: CosmicTypography.font-family;
+            font-size: CosmicTypography.title3-size;
+            font-weight: CosmicTypography.title3-weight;
+        }
+        
+        // Description
+        Text {
+            text: "Hover over elements to see tooltips. Tooltips appear after 500ms delay.";
+            color: CosmicPalette.text-secondary;
+            font-family: CosmicTypography.font-family;
+            font-size: CosmicTypography.body-size;
+            wrap: word-wrap;
+        }
+        
+        Rectangle {
+            height: 1px;
+            background: CosmicPalette.divider;
+        }
+        
+        // Example 1: Basic tooltip on button
+        VerticalLayout {
+            spacing: CosmicSpacing.space-xs;
+            
+            Text {
+                text: "1. Basic Tooltip on Button";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.heading-size;
+                font-weight: CosmicTypography.heading-weight;
+            }
+            
+            HorizontalLayout {
+                spacing: CosmicSpacing.space-s;
+                
+                CosmicTooltipContainer {
+                    tooltip-text: "This is a helpful tooltip that provides additional information";
+                    tooltip-position: TooltipPosition.top;
+                    
+                    CosmicButton {
+                        text: "Hover for Tooltip";
+                    }
+                }
+                
+                CosmicTooltipContainer {
+                    tooltip-text: "This tooltip appears below the button";
+                    tooltip-position: TooltipPosition.bottom;
+                    
+                    CosmicButton {
+                        text: "Bottom Tooltip";
+                    }
+                }
+            }
+        }
+        
+        // Example 2: Tooltip on icon button
+        VerticalLayout {
+            spacing: CosmicSpacing.space-xs;
+            
+            Text {
+                text: "2. Tooltip on Icon Button";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.heading-size;
+                font-weight: CosmicTypography.heading-weight;
+            }
+            
+            HorizontalLayout {
+                spacing: CosmicSpacing.space-s;
+                
+                CosmicTooltipContainer {
+                    tooltip-text: "Settings";
+                    
+                    Rectangle {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 8px;
+                        background: CosmicPalette.surface-variant;
+                        
+                        Text {
+                            text: "⚙";
+                            font-size: 20px;
+                            horizontal-alignment: center;
+                            vertical-alignment: center;
+                        }
+                    }
+                }
+                
+                CosmicTooltipContainer {
+                    tooltip-text: "Notifications";
+                    
+                    Rectangle {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 8px;
+                        background: CosmicPalette.surface-variant;
+                        
+                        Text {
+                            text: "🔔";
+                            font-size: 20px;
+                            horizontal-alignment: center;
+                            vertical-alignment: center;
+                        }
+                    }
+                }
+                
+                CosmicTooltipContainer {
+                    tooltip-text: "User Profile";
+                    
+                    Rectangle {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 8px;
+                        background: CosmicPalette.surface-variant;
+                        
+                        Text {
+                            text: "👤";
+                            font-size: 20px;
+                            horizontal-alignment: center;
+                            vertical-alignment: center;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Example 3: Long text tooltip with wrapping
+        VerticalLayout {
+            spacing: CosmicSpacing.space-xs;
+            
+            Text {
+                text: "3. Long Text Tooltip (max 300px width with wrapping)";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.heading-size;
+                font-weight: CosmicTypography.heading-weight;
+            }
+            
+            CosmicTooltipContainer {
+                tooltip-text: "This is a much longer tooltip that demonstrates text wrapping. When the tooltip content exceeds the maximum width of 300px, it will automatically wrap to multiple lines to ensure readability.";
+                
+                CosmicButton {
+                    text: "Long Tooltip Example";
+                }
+            }
+        }
+        
+        // Example 4: Disabled tooltip
+        VerticalLayout {
+            spacing: CosmicSpacing.space-xs;
+            
+            Text {
+                text: "4. Disabled Tooltip";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.heading-size;
+                font-weight: CosmicTypography.heading-weight;
+            }
+            
+            CosmicTooltipContainer {
+                tooltip-text: "This tooltip is disabled and won't appear";
+                disabled: true;
+                
+                CosmicButton {
+                    text: "No Tooltip (Disabled)";
+                }
+            }
+        }
+        
+        // Example 5: Touch device support note
+        VerticalLayout {
+            spacing: CosmicSpacing.space-xs;
+            
+            Text {
+                text: "5. Touch Device Support";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.heading-size;
+                font-weight: CosmicTypography.heading-weight;
+            }
+            
+            Text {
+                text: "On touch devices, tap once to show tooltip, tap again to dismiss.";
+                color: CosmicPalette.text-secondary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.body-size;
+                wrap: word-wrap;
+            }
+            
+            CosmicTooltipContainer {
+                tooltip-text: "Tap once to show, tap again to hide";
+                
+                CosmicButton {
+                    text: "Touch-Friendly Tooltip";
+                }
+            }
+        }
+        
+        // Theme toggle
+        Rectangle {
+            height: 1px;
+            background: CosmicPalette.divider;
+        }
+        
+        HorizontalLayout {
+            spacing: CosmicSpacing.space-s;
+            alignment: start;
+            
+            Text {
+                text: "Dark Mode:";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.body-size;
+                vertical-alignment: center;
+            }
+            
+            Rectangle {
+                width: 50px;
+                height: 28px;
+                border-radius: 14px;
+                background: CosmicPalette.dark-mode ? CosmicPalette.accent-primary : CosmicPalette.border-neutral;
+                
+                Rectangle {
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 12px;
+                    background: #FFFFFF;
+                    x: CosmicPalette.dark-mode ? parent.width - self.width - 2px : 2px;
+                    y: 2px;
+                    
+                    animate x {
+                        duration: 150ms;
+                        easing: ease-out;
+                    }
+                }
+                
+                TouchArea {
+                    clicked => {
+                        CosmicPalette.dark-mode = !CosmicPalette.dark-mode;
+                    }
+                }
+            }
+        }
+    }
+}

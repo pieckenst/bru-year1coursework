@@ -1,0 +1,154 @@
+// COSMIC Alert Component Example
+// Demonstrates all alert variants and features
+
+import { CosmicAlert, AlertSeverity } from "../ui/components/alert.slint";
+import { CosmicPalette } from "../ui/styling/palette.slint";
+import { CosmicSpacing } from "../ui/styling/spacing.slint";
+
+export component AlertExample inherits Window {
+    title: "COSMIC Alert Component Example";
+    background: CosmicPalette.background-base;
+    preferred-width: 800px;
+    preferred-height: 600px;
+    
+    VerticalLayout {
+        padding: CosmicSpacing.space-l;
+        spacing: CosmicSpacing.space-m;
+        
+        // Title
+        Text {
+            text: "COSMIC Alert Component Examples";
+            color: CosmicPalette.text-primary;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        // Description
+        Text {
+            text: "Notification banners with semantic colors, icons, and close buttons";
+            color: CosmicPalette.text-secondary;
+            font-size: 14px;
+            wrap: word-wrap;
+        }
+        
+        Rectangle {
+            height: CosmicSpacing.space-m;
+        }
+        
+        // Warning Alert (Default - Requirement 47.1)
+        Text {
+            text: "Warning Alert (Default)";
+            color: CosmicPalette.text-primary;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        warning-alert := CosmicAlert {
+            message: "This is a warning message. Please review the information carefully.";
+            severity: AlertSeverity.warning;
+            dismissible: true;
+        }
+        
+        Rectangle {
+            height: CosmicSpacing.space-s;
+        }
+        
+        // Error Alert
+        Text {
+            text: "Error Alert";
+            color: CosmicPalette.text-primary;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        error-alert := CosmicAlert {
+            message: "An error occurred while processing your request. Please try again.";
+            severity: AlertSeverity.error;
+            dismissible: true;
+        }
+        
+        Rectangle {
+            height: CosmicSpacing.space-s;
+        }
+        
+        // Success Alert
+        Text {
+            text: "Success Alert";
+            color: CosmicPalette.text-primary;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        success-alert := CosmicAlert {
+            message: "Operation completed successfully! Your changes have been saved.";
+            severity: AlertSeverity.success;
+            dismissible: true;
+        }
+        
+        Rectangle {
+            height: CosmicSpacing.space-s;
+        }
+        
+        // Info Alert
+        Text {
+            text: "Info Alert";
+            color: CosmicPalette.text-primary;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        info-alert := CosmicAlert {
+            message: "Here's some helpful information about this feature.";
+            severity: AlertSeverity.info;
+            dismissible: true;
+        }
+        
+        Rectangle {
+            height: CosmicSpacing.space-s;
+        }
+        
+        // Persistent Alert (No close button - Requirement 47.6)
+        Text {
+            text: "Persistent Alert (No Close Button)";
+            color: CosmicPalette.text-primary;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        persistent-alert := CosmicAlert {
+            message: "This is a persistent alert that cannot be dismissed by the user.";
+            severity: AlertSeverity.warning;
+            dismissible: false;  // No close button (Requirement 47.6)
+        }
+        
+        Rectangle {
+            height: CosmicSpacing.space-s;
+        }
+        
+        // Long message alert (text wrapping)
+        Text {
+            text: "Alert with Long Message";
+            color: CosmicPalette.text-primary;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        long-alert := CosmicAlert {
+            message: "This is a much longer alert message that demonstrates how the component handles text wrapping. The message will wrap to multiple lines when it exceeds the available width, ensuring all content remains readable.";
+            severity: AlertSeverity.info;
+            dismissible: true;
+        }
+        
+        Rectangle {
+            vertical-stretch: 1;
+        }
+        
+        // Instructions
+        Text {
+            text: "Click the × button to dismiss alerts (except the persistent one)";
+            color: CosmicPalette.text-secondary;
+            font-size: 12px;
+            horizontal-alignment: center;
+        }
+    }
+}

@@ -1,0 +1,217 @@
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+
+// Tooltip position relative to trigger element
+export enum TooltipPosition {
+    top,
+    bottom,
+    left,
+    right,
+    auto,  // Automatically position based on viewport space
+}
+
+// Global singleton to ensure only one tooltip is visible at a time
+// Requirement 64.10
+export global TooltipManager {
+    in-out property <int> active-tooltip-id: -1;
+    
+    callback request-show(int);
+    callback request-hide(int);
+    
+    request-show(id) => {
+        active-tooltip-id = id;
+    }
+    
+    request-hide(id) => {
+        if active-tooltip-id == id {
+            active-tooltip-id = -1;
+        }
+    }
+}
+
+// CosmicTooltip - Tooltip component with hover delay and positioning
+// Requirements: 64.1-64.10
+export component CosmicTooltip {
+    // Properties
+    in property <string> text: "";
+    in property <TooltipPosition> position: TooltipPosition.top;
+    in property <int> hover-delay-ms: 500;  // Requirement 64.1 - 500ms hover delay
+    in property <length> tooltip-max-width: 300px;  // Requirement 64.9 - max width 300px
+    in property <bool> disabled: false;
+    
+    // Internal state
+    property <bool> is-visible: false;
+    property <bool> is-touch-active: false;
+    property <int> tooltip-id: 0;  // Will be set uniquely per instance
+    
+    // Computed visibility - only show if this is the active tooltip
+    property <bool> should-show: is-visible && TooltipManager.active-tooltip-id == tooltip-id;
+    
+    // Animation state for fade in/out
+    property <float> opacity-value: should-show ? 1.0 : 0.0;
+    
+    // Trigger area that wraps the content
+    Rectangle {
+        @children
+        
+        // Touch/Mouse interaction area
+        TouchArea {
+            // Mouse hover handling
+            pointer-event(event) => {
+                if !root.disabled {
+                    if event.kind == PointerEventKind.move {
+                        // Start hover timer
+                        if !root.is-visible && !root.is-touch-active {
+                            hover-timer.restart();
+                        }
+                    }
+                }
+            }
+            
+            // Touch device support - Requirement 64.8
+            clicked => {
+                if !root.disabled {
+                    if root.is-touch-active {
+                        // Second tap dismisses
+                        root.is-touch-active = false;
+                        root.is-visible = false;
+                        TooltipManager.request-hide(root.tooltip-id);
+                    } else {
+                        // First tap shows
+                        root.is-touch-active = true;
+                        root.is-visible = true;
+                        TooltipManager.request-show(root.tooltip-id);
+                    }
+                }
+            }
+            
+            // Mouse exit handling
+            mouse-cursor: MouseCursor.default;
+        }
+        
+        // Hover delay timer - Requirement 64.1
+        hover-timer := Timer {
+            interval: root.hover-delay-ms * 1ms;
+            triggered => {
+                if !root.disabled && !root.is-touch-active {
+                    root.is-visible = true;
+                    TooltipManager.request-show(root.tooltip-id);
+                }
+            }
+        }
+        
+        // Hide timer for mouse leave
+        hide-timer := Timer {
+            interval: 100ms;
+            triggered => {
+                if !root.is-touch-active {
+                    root.is-visible = false;
+                    TooltipManager.request-hide(root.tooltip-id);
+                }
+            }
+        }
+        
+        // Tooltip popup
+        if should-show: tooltip-popup := Rectangle {
+            // Position based on preference
+            // For now, positioning above the trigger element
+            x: (parent.width - self.width) / 2;
+            y: root.position == TooltipPosition.bottom ? 
+                parent.height + CosmicSpacing.space-xxs : 
+                -self.height - CosmicSpacing.space-xxs;
+            
+            width: Math.min(root.tooltip-max-width, tooltip-content.preferred-width + 2 * CosmicSpacing.space-xs);
+            height: tooltip-content.preferred-height + 2 * CosmicSpacing.space-xxs;
+            
+            // Dark background - Requirement 64.2
+            background: #2B2B2B;
+            border-radius: CosmicCornerRadii.radius-s;
+            
+            // Subtle shadow for depth
+            drop-shadow-offset-y: 2px;
+            drop-shadow-blur: 4px;
+            drop-shadow-color: #00000040;
+            
+            // Fade animation - Requirement 64.6
+            opacity: root.opacity-value;
+            
+            animate opacity {
+                duration: 150ms;
+                easing: ease-out;
+            }
+            
+            // Tooltip content
+            tooltip-content := Text {
+                text: root.text;
+                color: #FFFFFF;  // White text - Requirement 64.2
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.tooltip-size;  // 12px - Requirement 64.5
+                font-weight: CosmicTypography.tooltip-weight;
+                wrap: word-wrap;  // Text wrapping - Requirement 64.9
+                horizontal-alignment: left;
+                vertical-alignment: center;
+                x: CosmicSpacing.space-xs;
+                y: CosmicSpacing.space-xxs;
+                width: parent.width - 2 * CosmicSpacing.space-xs;
+            }
+            
+            // Arrow pointing to trigger - Requirement 64.3
+            // Simple triangle using Path for better compatibility
+            arrow := Path {
+                width: 8px;
+                height: 8px;
+                
+                // Position arrow based on tooltip position
+                x: (parent.width - self.width) / 2;
+                y: root.position == TooltipPosition.bottom ? 
+                    -self.height / 2 : 
+                    parent.height - self.height / 2;
+                
+                // Draw a triangle pointing down (for top tooltip) or up (for bottom tooltip)
+                viewbox-width: 8;
+                viewbox-height: 8;
+                fill: #2B2B2B;
+                
+                // Triangle path: starts at top center, goes to bottom-left, then bottom-right, back to top
+                commands: root.position == TooltipPosition.bottom ?
+                    "M 4 0 L 0 8 L 8 8 Z" :  // Arrow pointing up
+                    "M 4 8 L 0 0 L 8 0 Z";    // Arrow pointing down
+            }
+        }
+    }
+    
+    // Cleanup when component is removed
+    init => {
+        // Register tooltip
+    }
+    
+    // Handle mouse leave to hide tooltip
+    states [
+        hidden when !should-show: {
+            opacity-value: 0.0;
+        }
+        visible when should-show: {
+            opacity-value: 1.0;
+        }
+    ]
+}
+
+// CosmicTooltipContainer - Wrapper component for easier usage
+// Automatically wraps content and adds tooltip
+export component CosmicTooltipContainer {
+    in property <string> tooltip-text: "";
+    in property <TooltipPosition> tooltip-position: TooltipPosition.top;
+    in property <int> hover-delay-ms: 500;
+    in property <bool> disabled: false;
+    
+    CosmicTooltip {
+        text: root.tooltip-text;
+        position: root.tooltip-position;
+        hover-delay-ms: root.hover-delay-ms;
+        disabled: root.disabled;
+        
+        @children
+    }
+}

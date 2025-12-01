@@ -2541,6 +2541,315 @@ fn show_main_window(
         }
     });
 
+    // ========== USERS MANAGEMENT CALLBACKS ==========
+    
+    // Handle load users
+    let api_load_users = api_client.clone();
+    main_ui.on_load_users({
+        let ui_handle = main_ui.as_weak();
+        move || {
+            let ui = ui_handle.unwrap();
+            let api = api_load_users.clone();
+            let ui_weak = ui.as_weak();
+            
+            ui.set_users_loading(true);
+            ui.set_users_error(slint::SharedString::from(""));
+            ui.set_users_has_error(false);
+            
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_users().await
+                });
+                
+                let result_send = result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_users_loading(false);
+                    
+                    match result_send {
+                        Ok(users) => {
+                            let user_data: Vec<_> = users.iter().map(|user| {
+                                UserData {
+                                    user_id: user.user_id as i32,
+                                    login: slint::SharedString::from(&user.login),
+                                    email: slint::SharedString::from(user.email.as_deref().unwrap_or("")),
+                                    phone: slint::SharedString::from(user.phone_number.as_deref().unwrap_or("")),
+                                    role: user.role,
+                                    role_name: slint::SharedString::from(user.role_name()),
+                                    is_active: user.is_active,
+                                    is_windows_auth: user.is_windows_auth,
+                                    windows_identity: slint::SharedString::from(user.windows_identity.as_deref().unwrap_or("")),
+                                }
+                            }).collect();
+                            
+                            let count = user_data.len();
+                            let model = std::rc::Rc::new(slint::VecModel::from(user_data));
+                            ui.set_users(model.into());
+                            println!("✅ Loaded {} users", count);
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to load users: {}", e);
+                            ui.set_users_error(slint::SharedString::from(format!("Ошибка загрузки: {}", e)));
+                            ui.set_users_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle search users
+    let api_search_users = api_client.clone();
+    main_ui.on_search_users({
+        let ui_handle = main_ui.as_weak();
+        move |search_text| {
+            let ui = ui_handle.unwrap();
+            let api = api_search_users.clone();
+            let ui_weak = ui.as_weak();
+            let query = search_text.to_string();
+            
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.get_users().await
+                });
+                
+                let result_send = result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    
+                    match result_send {
+                        Ok(users) => {
+                            let filtered_users: Vec<_> = if query.trim().is_empty() {
+                                users.iter().map(|user| {
+                                    UserData {
+                                        user_id: user.user_id as i32,
+                                        login: slint::SharedString::from(&user.login),
+                                        email: slint::SharedString::from(user.email.as_deref().unwrap_or("")),
+                                        phone: slint::SharedString::from(user.phone_number.as_deref().unwrap_or("")),
+                                        role: user.role,
+                                        role_name: slint::SharedString::from(user.role_name()),
+                                        is_active: user.is_active,
+                                        is_windows_auth: user.is_windows_auth,
+                                        windows_identity: slint::SharedString::from(user.windows_identity.as_deref().unwrap_or("")),
+                                    }
+                                }).collect()
+                            } else {
+                                users.iter()
+                                    .filter(|user| {
+                                        let query_lower = query.to_lowercase();
+                                        user.login.to_lowercase().contains(&query_lower) ||
+                                        user.email.as_ref().map(|e| e.to_lowercase().contains(&query_lower)).unwrap_or(false)
+                                    })
+                                    .map(|user| {
+                                        UserData {
+                                            user_id: user.user_id as i32,
+                                            login: slint::SharedString::from(&user.login),
+                                            email: slint::SharedString::from(user.email.as_deref().unwrap_or("")),
+                                            phone: slint::SharedString::from(user.phone_number.as_deref().unwrap_or("")),
+                                            role: user.role,
+                                            role_name: slint::SharedString::from(user.role_name()),
+                                            is_active: user.is_active,
+                                            is_windows_auth: user.is_windows_auth,
+                                            windows_identity: slint::SharedString::from(user.windows_identity.as_deref().unwrap_or("")),
+                                        }
+                                    })
+                                    .collect()
+                            };
+                            
+                            let count = filtered_users.len();
+                            let model = std::rc::Rc::new(slint::VecModel::from(filtered_users));
+                            ui.set_users(model.into());
+                            println!("🔍 Found {} users matching '{}'", count, query);
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to search users: {}", e);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle add user
+    let api_add_user = api_client.clone();
+    main_ui.on_add_user({
+        let ui_handle = main_ui.as_weak();
+        move |login, password, email, phone, role, is_active, is_windows_auth, windows_identity| {
+            let ui = ui_handle.unwrap();
+            let api = api_add_user.clone();
+            let ui_weak = ui.as_weak();
+            
+            let login_str = login.to_string();
+            let password_str = password.to_string();
+            let email_str = email.to_string();
+            let phone_str = phone.to_string();
+            let windows_identity_str = windows_identity.to_string();
+            
+            // Validate required fields
+            if login_str.trim().is_empty() || password_str.trim().is_empty() {
+                ui.set_users_error(slint::SharedString::from("Логин и пароль обязательны"));
+                ui.set_users_has_error(true);
+                return;
+            }
+            
+            ui.set_users_loading(true);
+            
+            std::thread::spawn(move || {
+                use models::CreateUserRequest;
+                
+                let request = CreateUserRequest {
+                    login: login_str,
+                    password: password_str,
+                    role,
+                    phone_number: if phone_str.is_empty() { None } else { Some(phone_str) },
+                    email: if email_str.is_empty() { None } else { Some(email_str) },
+                    is_windows_auth,
+                    windows_identity: if windows_identity_str.is_empty() { None } else { Some(windows_identity_str) },
+                };
+                
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.create_user(&request).await
+                });
+                
+                let result_send = result.map(|u| u.login.clone()).map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_users_loading(false);
+                    
+                    match result_send {
+                        Ok(login) => {
+                            println!("✅ Created user: {}", login);
+                            // Reload users
+                            ui.invoke_load_users();
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to create user: {}", e);
+                            ui.set_users_error(slint::SharedString::from(format!("Ошибка создания: {}", e)));
+                            ui.set_users_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle edit user
+    let api_edit_user = api_client.clone();
+    main_ui.on_edit_user({
+        let ui_handle = main_ui.as_weak();
+        move |user_id, login, password, email, phone, role, is_active, is_windows_auth, windows_identity| {
+            let ui = ui_handle.unwrap();
+            let api = api_edit_user.clone();
+            let ui_weak = ui.as_weak();
+            
+            let login_str = login.to_string();
+            let password_str = password.to_string();
+            let email_str = email.to_string();
+            let phone_str = phone.to_string();
+            let windows_identity_str = windows_identity.to_string();
+            
+            // Validate required fields
+            if login_str.trim().is_empty() {
+                ui.set_users_error(slint::SharedString::from("Логин обязателен"));
+                ui.set_users_has_error(true);
+                return;
+            }
+            
+            ui.set_users_loading(true);
+            
+            std::thread::spawn(move || {
+                use models::UpdateUserRequest;
+                
+                let request = UpdateUserRequest {
+                    login: Some(login_str),
+                    password: if password_str.is_empty() { None } else { Some(password_str) },
+                    role: Some(role),
+                    phone_number: if phone_str.is_empty() { None } else { Some(phone_str) },
+                    email: if email_str.is_empty() { None } else { Some(email_str) },
+                    is_active: Some(is_active),
+                    is_windows_auth: Some(is_windows_auth),
+                    windows_identity: if windows_identity_str.is_empty() { None } else { Some(windows_identity_str) },
+                };
+                
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.update_user(user_id as i64, &request).await
+                });
+                
+                let result_send = result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_users_loading(false);
+                    
+                    match result_send {
+                        Ok(_) => {
+                            println!("✅ Updated user {}", user_id);
+                            // Reload users
+                            ui.invoke_load_users();
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to update user: {}", e);
+                            ui.set_users_error(slint::SharedString::from(format!("Ошибка обновления: {}", e)));
+                            ui.set_users_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    
+    // Handle delete user
+    let api_delete_user = api_client.clone();
+    main_ui.on_delete_user({
+        let ui_handle = main_ui.as_weak();
+        move |user_id| {
+            let ui = ui_handle.unwrap();
+            let api = api_delete_user.clone();
+            let ui_weak = ui.as_weak();
+            
+            ui.set_users_loading(true);
+            
+            std::thread::spawn(move || {
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                let result = rt.block_on(async {
+                    let client = api.lock().unwrap();
+                    client.delete_user(user_id as i64).await
+                });
+                
+                let result_send = result.map_err(|e| e.to_string());
+                
+                let _ = slint::invoke_from_event_loop(move || {
+                    let ui = ui_weak.unwrap();
+                    ui.set_users_loading(false);
+                    
+                    match result_send {
+                        Ok(_) => {
+                            println!("✅ Deleted user {}", user_id);
+                            // Reload users
+                            ui.invoke_load_users();
+                        }
+                        Err(e) => {
+                            eprintln!("❌ Failed to delete user: {}", e);
+                            ui.set_users_error(slint::SharedString::from(format!("Ошибка удаления: {}", e)));
+                            ui.set_users_has_error(true);
+                        }
+                    }
+                });
+            });
+        }
+    });
+
     // Handle logout
     let api_client_clone = api_client.clone();
     main_ui.on_logout_clicked({
@@ -2579,6 +2888,11 @@ fn show_main_window(
                         println!("Loading jobs...");
                         let ui = ui_weak.unwrap();
                         ui.invoke_load_jobs();
+                    }
+                    AppRoute::Users => {
+                        println!("Loading users...");
+                        let ui = ui_weak.unwrap();
+                        ui.invoke_load_users();
                     }
                     AppRoute::Buses => {
                         println!("Loading buses...");

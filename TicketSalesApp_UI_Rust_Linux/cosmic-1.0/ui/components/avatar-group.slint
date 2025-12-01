@@ -1,0 +1,156 @@
+import { CosmicAvatar, AvatarSize, AvatarShape, AvatarStatus } from "./avatar.slint";
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+
+// Avatar data structure for group
+export struct AvatarData {
+    image: image,
+    initials: string,
+    fallback_color: color,
+    status: AvatarStatus,
+}
+
+// CosmicAvatarGroup - Display multiple overlapping avatars
+// Requirements: 63.8
+export component CosmicAvatarGroup {
+    // Properties
+    in property <[AvatarData]> avatars: [];
+    in property <AvatarSize> size: AvatarSize.md;
+    in property <AvatarShape> shape: AvatarShape.circle;
+    in property <int> max-visible: 5;  // Maximum avatars to show before overflow
+    in property <bool> clickable: false;
+    
+    // Callbacks
+    callback avatar-clicked(int);  // Index of clicked avatar
+    
+    // Computed properties
+    property <int> overflow-count: max(0, avatars.length - max-visible);
+    property <bool> has-overflow: overflow-count > 0;
+    
+    // Avatar size for positioning calculations
+    property <length> avatar-size: {
+        if size == AvatarSize.xs {
+            24px
+        } else if size == AvatarSize.sm {
+            32px
+        } else if size == AvatarSize.lg {
+            56px
+        } else {
+            40px  // md (default)
+        }
+    };
+    
+    // Overlap margin - Requirement 63.8 (-8px margin)
+    property <length> overlap-margin: -8px;
+    
+    // Font size for overflow count
+    property <length> overflow-font-size: {
+        if size == AvatarSize.xs {
+            10px
+        } else if size == AvatarSize.sm {
+            12px
+        } else if size == AvatarSize.lg {
+            20px
+        } else {
+            16px  // md
+        }
+    };
+    
+    // Calculate total width needed
+    property <length> total-width: {
+        // Number of visible avatars
+        root.visible-avatar-count * (root.avatar-size + root.overlap-margin) - root.overlap-margin
+    };
+    
+    property <int> visible-avatar-count: min(avatars.length, max-visible);
+    
+    width: root.total-width;
+    height: root.avatar-size;
+    
+    // Container for overlapping avatars
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        
+        // Display visible avatars with overlap - Requirement 63.8
+        for avatar[index] in root.avatars: Rectangle {
+            // Only show up to max-visible avatars
+            visible: index < root.max-visible;
+            
+            width: root.avatar-size;
+            height: root.avatar-size;
+            
+            // Position with overlap (-8px margin) - Requirement 63.8
+            x: index * (root.avatar-size + root.overlap-margin);
+            y: 0px;
+            
+            // Higher z-index for later avatars (stack on top)
+            // Note: Slint doesn't have explicit z-index, but later elements render on top
+            
+            CosmicAvatar {
+                avatar-image: avatar.image;
+                initials: avatar.initials;
+                size: root.size;
+                shape: root.shape;
+                status: avatar.status;
+                fallback-color: avatar.fallback-color;
+                clickable: root.clickable;
+                
+                // Support click events on individual avatars - Requirement 63.8
+                clicked => {
+                    root.avatar-clicked(index);
+                }
+            }
+        }
+        
+        // Overflow count display - Requirement 63.8
+        if root.has-overflow: Rectangle {
+            width: root.avatar-size;
+            height: root.avatar-size;
+            
+            // Position after the last visible avatar
+            x: root.visible-avatar-count * (root.avatar-size + root.overlap-margin);
+            y: 0px;
+            
+            Rectangle {
+                width: parent.width;
+                height: parent.height;
+                border-radius: root.shape == AvatarShape.square ? 
+                    CosmicCornerRadii.avatar-radius : CosmicCornerRadii.radius-full;
+                background: CosmicPalette.surface-variant;
+                border-width: 2px;
+                border-color: CosmicPalette.background-surface;
+                
+                // Hover effect for clickable overflow
+                states [
+                    hover when overflow-touch.has-hover && root.clickable: {
+                        background: CosmicPalette.component-hover;
+                    }
+                ]
+                
+                // Display overflow count (e.g., "+3")
+                Text {
+                    text: "+" + root.overflow-count;
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: root.overflow-font-size;
+                    font-weight: CosmicTypography.weight-semibold;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+                
+                // Touch area for overflow indicator
+                overflow-touch := TouchArea {
+                    enabled: root.clickable;
+                    mouse-cursor: root.clickable ? pointer : default;
+                    
+                    clicked => {
+                        // Emit click with -1 to indicate overflow was clicked
+                        root.avatar-clicked(-1);
+                    }
+                }
+            }
+        }
+    }
+}

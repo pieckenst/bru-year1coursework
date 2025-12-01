@@ -1,0 +1,241 @@
+// COSMIC Navigation Bar Component Example
+// Demonstrates horizontal navigation with icon-only and icon+text modes
+
+import { CosmicNavigationBar, NavigationBarItem, NavigationDisplayMode } from "../ui/components/navigation-bar.slint";
+import { CosmicPalette } from "../ui/styling/palette.slint";
+import { CosmicButton } from "../ui/components/button.slint";
+
+export component NavigationBarExample inherits Window {
+    title: "COSMIC Navigation Bar Example";
+    preferred-width: 900px;
+    preferred-height: 600px;
+    background: CosmicPalette.background-base;
+    
+    VerticalLayout {
+        // Example 1: Icon + Text mode
+        Rectangle {
+            height: 50px;
+            background: CosmicPalette.background-surface;
+            
+            nav1 := CosmicNavigationBar {
+                items: [
+                    {
+                        icon: @image-url("../ui/icons/home.svg"),
+                        label: "Home",
+                        enabled: true,
+                    },
+                    {
+                        icon: @image-url("../ui/icons/search.svg"),
+                        label: "Search",
+                        enabled: true,
+                    },
+                    {
+                        icon: @image-url("../ui/icons/favorites.svg"),
+                        label: "Favorites",
+                        enabled: true,
+                    },
+                    {
+                        icon: @image-url("../ui/icons/settings.svg"),
+                        label: "Settings",
+                        enabled: true,
+                    },
+                    {
+                        icon: @image-url("../ui/icons/profile.svg"),
+                        label: "Profile",
+                        enabled: false,  // Disabled item
+                    },
+                ];
+                
+                selected-index: 0;
+                display-mode: NavigationDisplayMode.icon-text;
+                enable-scrolling: false;
+                
+                item-clicked(index) => {
+                    debug("Navigation item clicked:", index);
+                }
+            }
+        }
+        
+        // Divider
+        Rectangle {
+            height: 1px;
+            background: CosmicPalette.divider;
+        }
+        
+        // Example 2: Icon-only mode (collapsed)
+        Rectangle {
+            height: 50px;
+            background: CosmicPalette.background-surface;
+            
+            nav2 := CosmicNavigationBar {
+                items: [
+                    {
+                        icon: @image-url("../ui/icons/dashboard.svg"),
+                        label: "Dashboard",
+                        enabled: true,
+                    },
+                    {
+                        icon: @image-url("../ui/icons/projects.svg"),
+                        label: "Projects",
+                        enabled: true,
+                    },
+                    {
+                        icon: @image-url("../ui/icons/tasks.svg"),
+                        label: "Tasks",
+                        enabled: true,
+                    },
+                    {
+                        icon: @image-url("../ui/icons/calendar.svg"),
+                        label: "Calendar",
+                        enabled: true,
+                    },
+                    {
+                        icon: @image-url("../ui/icons/messages.svg"),
+                        label: "Messages",
+                        enabled: true,
+                    },
+                ];
+                
+                selected-index: 0;
+                display-mode: NavigationDisplayMode.icon-only;
+                enable-scrolling: false;
+                
+                item-clicked(index) => {
+                    debug("Icon-only navigation item clicked:", index);
+                }
+            }
+        }
+        
+        // Divider
+        Rectangle {
+            height: 1px;
+            background: CosmicPalette.divider;
+        }
+        
+        // Example 3: Scrollable navigation with many items
+        Rectangle {
+            height: 50px;
+            background: CosmicPalette.background-surface;
+            
+            nav3 := CosmicNavigationBar {
+                items: [
+                    { icon: @image-url("../ui/icons/item1.svg"), label: "Item 1", enabled: true },
+                    { icon: @image-url("../ui/icons/item2.svg"), label: "Item 2", enabled: true },
+                    { icon: @image-url("../ui/icons/item3.svg"), label: "Item 3", enabled: true },
+                    { icon: @image-url("../ui/icons/item4.svg"), label: "Item 4", enabled: true },
+                    { icon: @image-url("../ui/icons/item5.svg"), label: "Item 5", enabled: true },
+                    { icon: @image-url("../ui/icons/item6.svg"), label: "Item 6", enabled: true },
+                    { icon: @image-url("../ui/icons/item7.svg"), label: "Item 7", enabled: true },
+                    { icon: @image-url("../ui/icons/item8.svg"), label: "Item 8", enabled: true },
+                    { icon: @image-url("../ui/icons/item9.svg"), label: "Item 9", enabled: true },
+                    { icon: @image-url("../ui/icons/item10.svg"), label: "Item 10", enabled: true },
+                ];
+                
+                selected-index: 0;
+                display-mode: NavigationDisplayMode.icon-text;
+                enable-scrolling: true;  // Enable horizontal scrolling
+                
+                item-clicked(index) => {
+                    debug("Scrollable navigation item clicked:", index);
+                }
+            }
+        }
+        
+        // Divider
+        Rectangle {
+            height: 1px;
+            background: CosmicPalette.divider;
+        }
+        
+        // Example 4: Navigation with context menu support
+        Rectangle {
+            height: 50px;
+            background: CosmicPalette.background-surface;
+            
+            nav4 := CosmicNavigationBar {
+                items: [
+                    {
+                        icon: @image-url("../ui/icons/file.svg"),
+                        label: "Files",
+                        enabled: true,
+                    },
+                    {
+                        icon: @image-url("../ui/icons/folder.svg"),
+                        label: "Folders",
+                        enabled: true,
+                    },
+                    {
+                        icon: @image-url("../ui/icons/recent.svg"),
+                        label: "Recent",
+                        enabled: true,
+                    },
+                ];
+                
+                selected-index: 0;
+                display-mode: NavigationDisplayMode.icon-text;
+                enable-context-menu: true;  // Enable right-click context menu
+                
+                item-clicked(index) => {
+                    debug("Context menu navigation item clicked:", index);
+                }
+                
+                item-context-menu(index) => {
+                    debug("Context menu requested for item:", index);
+                    // In a real app, show a context menu here
+                }
+            }
+        }
+        
+        // Content area
+        Rectangle {
+            background: CosmicPalette.background-surface;
+            
+            VerticalLayout {
+                padding: 24px;
+                spacing: 16px;
+                
+                Text {
+                    text: "COSMIC Navigation Bar Examples";
+                    color: CosmicPalette.text-primary;
+                    font-size: 24px;
+                    font-weight: 700;
+                }
+                
+                Text {
+                    text: "Four navigation bar examples demonstrating different modes and features";
+                    color: CosmicPalette.text-secondary;
+                    font-size: 14px;
+                    wrap: word-wrap;
+                }
+                
+                Text {
+                    text: "Features demonstrated:";
+                    color: CosmicPalette.text-primary;
+                    font-size: 16px;
+                    font-weight: 600;
+                }
+                
+                Text {
+                    text: "• 32px button height navigation\n• Icon-only mode (collapsed)\n• Icon + text mode\n• Selected state highlighting with accent color\n• Scrolling for many items\n• Context menu support (right-click)\n• Drag-drop reordering support\n• Disabled items with reduced opacity";
+                    color: CosmicPalette.text-secondary;
+                    font-size: 14px;
+                    wrap: word-wrap;
+                }
+                
+                Text {
+                    text: "Try:";
+                    color: CosmicPalette.text-primary;
+                    font-size: 16px;
+                    font-weight: 600;
+                }
+                
+                Text {
+                    text: "• Click items to select them\n• Right-click items in the bottom navigation for context menu\n• Scroll horizontally in the third navigation bar";
+                    color: CosmicPalette.text-secondary;
+                    font-size: 14px;
+                    wrap: word-wrap;
+                }
+            }
+        }
+    }
+}

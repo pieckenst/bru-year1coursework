@@ -1,0 +1,380 @@
+// COSMIC Drawer Component Example
+// Demonstrates navigation sidebar with icon + text layout matching COSMIC Desktop style
+
+import { CosmicDrawer, DrawerItem, DrawerSection } from "../ui/components/drawer.slint";
+import { CosmicPalette } from "../ui/styling/palette.slint";
+import { CosmicTypography } from "../ui/styling/typography.slint";
+import { CosmicSpacing } from "../ui/styling/spacing.slint";
+
+export component DrawerExample inherits Window {
+    title: "COSMIC Drawer - Navigation Sidebar";
+    preferred-width: 1000px;
+    preferred-height: 700px;
+    background: CosmicPalette.background-base;
+    
+    // Track current view
+    property <string> current-view: "Explore";
+    property <string> current-description: "Browse and discover applications";
+    
+    HorizontalLayout {
+        // Main navigation drawer (like COSMIC Store)
+        main-drawer := CosmicDrawer {
+            width: 280px;
+            
+            sections: [
+                {
+                    header: "",  // No header for main section
+                    items: [
+                        {
+                            icon: @image-url("../ui/icons/home.svg"),
+                            label: "Explore",
+                            enabled: true,
+                        },
+                        {
+                            icon: @image-url("../ui/icons/add.svg"),
+                            label: "Create",
+                            enabled: true,
+                        },
+                    ],
+                },
+                {
+                    header: "CATEGORIES",
+                    items: [
+                        {
+                            icon: @image-url("../ui/icons/briefcase.svg"),
+                            label: "Work",
+                            enabled: true,
+                        },
+                        {
+                            icon: @image-url("../ui/icons/code.svg"),
+                            label: "Develop",
+                            enabled: true,
+                        },
+                        {
+                            icon: @image-url("../ui/icons/book.svg"),
+                            label: "Learn",
+                            enabled: true,
+                        },
+                        {
+                            icon: @image-url("../ui/icons/gamepad.svg"),
+                            label: "Game",
+                            enabled: true,
+                        },
+                        {
+                            icon: @image-url("../ui/icons/music.svg"),
+                            label: "Relax",
+                            enabled: true,
+                        },
+                        {
+                            icon: @image-url("../ui/icons/users.svg"),
+                            label: "Socialize",
+                            enabled: true,
+                        },
+                        {
+                            icon: @image-url("../ui/icons/tool.svg"),
+                            label: "Utilities",
+                            enabled: true,
+                        },
+                    ],
+                },
+                {
+                    header: "SYSTEM",
+                    items: [
+                        {
+                            icon: @image-url("../ui/icons/download.svg"),
+                            label: "Installed apps",
+                            enabled: true,
+                        },
+                        {
+                            icon: @image-url("../ui/icons/refresh.svg"),
+                            label: "Updates",
+                            enabled: true,
+                        },
+                    ],
+                },
+            ];
+            
+            selected-section: 0;
+            selected-item: 0;
+            
+            section-item-clicked(section-index, item-index) => {
+                if section-index == 0 && item-index == 0 {
+                    root.current-view = "Explore";
+                    root.current-description = "Browse and discover applications";
+                } else if section-index == 0 && item-index == 1 {
+                    root.current-view = "Create";
+                    root.current-description = "Create new projects and content";
+                } else if section-index == 1 && item-index == 0 {
+                    root.current-view = "Work";
+                    root.current-description = "Productivity and business applications";
+                } else if section-index == 1 && item-index == 1 {
+                    root.current-view = "Develop";
+                    root.current-description = "Development tools and IDEs";
+                } else if section-index == 1 && item-index == 2 {
+                    root.current-view = "Learn";
+                    root.current-description = "Educational resources and tutorials";
+                } else if section-index == 1 && item-index == 3 {
+                    root.current-view = "Game";
+                    root.current-description = "Gaming and entertainment";
+                } else if section-index == 1 && item-index == 4 {
+                    root.current-view = "Relax";
+                    root.current-description = "Music, videos, and media";
+                } else if section-index == 1 && item-index == 5 {
+                    root.current-view = "Socialize";
+                    root.current-description = "Communication and social apps";
+                } else if section-index == 1 && item-index == 6 {
+                    root.current-view = "Utilities";
+                    root.current-description = "System tools and utilities";
+                } else if section-index == 2 && item-index == 0 {
+                    root.current-view = "Installed apps";
+                    root.current-description = "Manage your installed applications";
+                } else if section-index == 2 && item-index == 1 {
+                    root.current-view = "Updates";
+                    root.current-description = "Check for application updates";
+                }
+            }
+        }
+        
+        // Main content area
+        Rectangle {
+            background: CosmicPalette.background-base;
+            
+            VerticalLayout {
+                spacing: 0px;
+                
+                // Content header
+                Rectangle {
+                    height: 80px;
+                    background: CosmicPalette.background-surface;
+                    
+                    VerticalLayout {
+                        padding-left: CosmicSpacing.space-l;
+                        padding-right: CosmicSpacing.space-l;
+                        padding-top: CosmicSpacing.space-m;
+                        padding-bottom: CosmicSpacing.space-m;
+                        spacing: CosmicSpacing.space-xxxs;
+                        
+                        Text {
+                            text: root.current-view;
+                            color: CosmicPalette.text-primary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.title3-size;
+                            font-weight: CosmicTypography.title3-weight;
+                        }
+                        
+                        Text {
+                            text: root.current-description;
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.body-size;
+                        }
+                    }
+                }
+                
+                // Content body
+                Rectangle {
+                    background: CosmicPalette.background-base;
+                    
+                    VerticalLayout {
+                        padding: CosmicSpacing.space-l;
+                        spacing: CosmicSpacing.space-m;
+                        
+                        // Feature showcase
+                        Rectangle {
+                            background: CosmicPalette.background-surface;
+                            border-radius: 12px;
+                            
+                            VerticalLayout {
+                                padding: CosmicSpacing.space-m;
+                                spacing: CosmicSpacing.space-s;
+                                
+                                Text {
+                                    text: "COSMIC Drawer Features";
+                                    color: CosmicPalette.text-primary;
+                                    font-family: CosmicTypography.font-family;
+                                    font-size: CosmicTypography.title4-size;
+                                    font-weight: CosmicTypography.title4-weight;
+                                }
+                                
+                                Text {
+                                    text: "This example demonstrates the COSMIC Desktop navigation drawer style:";
+                                    color: CosmicPalette.text-secondary;
+                                    font-family: CosmicTypography.font-family;
+                                    font-size: CosmicTypography.body-size;
+                                    wrap: word-wrap;
+                                }
+                            }
+                        }
+                        
+                        // Features grid
+                        VerticalLayout {
+                            spacing: CosmicSpacing.space-s;
+                            
+                            feature-item1 := Rectangle {
+                                height: 60px;
+                                background: CosmicPalette.background-surface;
+                                border-radius: 8px;
+                                
+                                HorizontalLayout {
+                                    padding: CosmicSpacing.space-s;
+                                    spacing: CosmicSpacing.space-s;
+                                    
+                                    Rectangle {
+                                        width: 40px;
+                                        height: 40px;
+                                        border-radius: 20px;
+                                        background: CosmicPalette.accent-primary.with-alpha(0.15);
+                                        
+                                        Text {
+                                            text: "✓";
+                                            color: CosmicPalette.accent-primary;
+                                            font-size: 20px;
+                                            horizontal-alignment: center;
+                                            vertical-alignment: center;
+                                        }
+                                    }
+                                    
+                                    VerticalLayout {
+                                        spacing: 2px;
+                                        
+                                        Text {
+                                            text: "Clean, Minimal Design";
+                                            color: CosmicPalette.text-primary;
+                                            font-family: CosmicTypography.font-family;
+                                            font-size: CosmicTypography.body-size;
+                                            font-weight: CosmicTypography.weight-medium;
+                                        }
+                                        
+                                        Text {
+                                            text: "Subtle 4px radius, generous spacing, no harsh borders";
+                                            color: CosmicPalette.text-secondary;
+                                            font-family: CosmicTypography.font-family;
+                                            font-size: CosmicTypography.caption-size;
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            feature-item2 := Rectangle {
+                                height: 60px;
+                                background: CosmicPalette.background-surface;
+                                border-radius: 8px;
+                                
+                                HorizontalLayout {
+                                    padding: CosmicSpacing.space-s;
+                                    spacing: CosmicSpacing.space-s;
+                                    
+                                    Rectangle {
+                                        width: 40px;
+                                        height: 40px;
+                                        border-radius: 20px;
+                                        background: CosmicPalette.accent-primary.with-alpha(0.15);
+                                        
+                                        Text {
+                                            text: "✓";
+                                            color: CosmicPalette.accent-primary;
+                                            font-size: 20px;
+                                            horizontal-alignment: center;
+                                            vertical-alignment: center;
+                                        }
+                                    }
+                                    
+                                    VerticalLayout {
+                                        spacing: 2px;
+                                        
+                                        Text {
+                                            text: "Organized Sections";
+                                            color: CosmicPalette.text-primary;
+                                            font-family: CosmicTypography.font-family;
+                                            font-size: CosmicTypography.body-size;
+                                            font-weight: CosmicTypography.weight-medium;
+                                        }
+                                        
+                                        Text {
+                                            text: "Group related items with headers and dividers";
+                                            color: CosmicPalette.text-secondary;
+                                            font-family: CosmicTypography.font-family;
+                                            font-size: CosmicTypography.caption-size;
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            feature-item3 := Rectangle {
+                                height: 60px;
+                                background: CosmicPalette.background-surface;
+                                border-radius: 8px;
+                                
+                                HorizontalLayout {
+                                    padding: CosmicSpacing.space-s;
+                                    spacing: CosmicSpacing.space-s;
+                                    
+                                    Rectangle {
+                                        width: 40px;
+                                        height: 40px;
+                                        border-radius: 20px;
+                                        background: CosmicPalette.accent-primary.with-alpha(0.15);
+                                        
+                                        Text {
+                                            text: "✓";
+                                            color: CosmicPalette.accent-primary;
+                                            font-size: 20px;
+                                            horizontal-alignment: center;
+                                            vertical-alignment: center;
+                                        }
+                                    }
+                                    
+                                    VerticalLayout {
+                                        spacing: 2px;
+                                        
+                                        Text {
+                                            text: "Smooth Interactions";
+                                            color: CosmicPalette.text-primary;
+                                            font-family: CosmicTypography.font-family;
+                                            font-size: CosmicTypography.body-size;
+                                            font-weight: CosmicTypography.weight-medium;
+                                        }
+                                        
+                                        Text {
+                                            text: "Hover and active states with accent color highlighting";
+                                            color: CosmicPalette.text-secondary;
+                                            font-family: CosmicTypography.font-family;
+                                            font-size: CosmicTypography.caption-size;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // Instructions
+                        Rectangle {
+                            background: CosmicPalette.accent-primary.with-alpha(0.1);
+                            border-radius: 8px;
+                            
+                            VerticalLayout {
+                                padding: CosmicSpacing.space-s;
+                                spacing: CosmicSpacing.space-xxs;
+                                
+                                Text {
+                                    text: "💡 Try it out";
+                                    color: CosmicPalette.text-primary;
+                                    font-family: CosmicTypography.font-family;
+                                    font-size: CosmicTypography.body-size;
+                                    font-weight: CosmicTypography.weight-semibold;
+                                }
+                                
+                                Text {
+                                    text: "Click different items in the sidebar to see the content update. Notice the smooth hover effects and accent color highlighting on the selected item.";
+                                    color: CosmicPalette.text-secondary;
+                                    font-family: CosmicTypography.font-family;
+                                    font-size: CosmicTypography.body-size;
+                                    wrap: word-wrap;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

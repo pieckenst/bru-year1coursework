@@ -1,0 +1,284 @@
+// COSMIC Desktop Navigation Bar Component
+// Horizontal navigation with icon-only and icon+text modes
+// Requirements: 41.1-41.7
+
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+
+// Navigation bar item structure
+export struct NavigationBarItem {
+    icon: image,
+    label: string,
+    enabled: bool,
+}
+
+// Display mode for navigation items
+export enum NavigationDisplayMode {
+    icon-only,      // Show only icons (collapsed mode)
+    icon-text,      // Show icons with text labels
+}
+
+// COSMIC Navigation Bar Component
+// Horizontal navigation with 32px button height and multiple display modes
+export component CosmicNavigationBar inherits Rectangle {
+    // ============================================================================
+    // PUBLIC PROPERTIES
+    // ============================================================================
+    
+    // Navigation items
+    in property <[NavigationBarItem]> items: [];
+    
+    // Selected item index
+    in-out property <int> selected-index: -1;
+    
+    // Display mode (Requirement 41.2, 41.7)
+    in-out property <NavigationDisplayMode> display-mode: NavigationDisplayMode.icon-text;
+    
+    // Enable scrolling for many items (Requirement 41.4)
+    in property <bool> enable-scrolling: true;
+    
+    // Disabled state
+    in property <bool> disabled: false;
+    
+    // Drag and drop support (Requirement 41.6)
+    in property <bool> enable-drag-drop: false;
+    
+    // Context menu support (Requirement 41.5)
+    in property <bool> enable-context-menu: false;
+    
+    // ============================================================================
+    // PRIVATE PROPERTIES
+    // ============================================================================
+    
+    // Track which item is being dragged
+    property <int> dragging-index: -1;
+    property <bool> is-dragging: false;
+    
+    // Track which item has context menu open
+    property <int> context-menu-index: -1;
+    
+    // ============================================================================
+    // CALLBACKS
+    // ============================================================================
+    
+    callback item-clicked(int);
+    callback item-context-menu(int);  // Right-click on item
+    callback item-drag-start(int);
+    callback item-drag-drop(int, int);  // from-index, to-index
+    
+    // ============================================================================
+    // STYLING
+    // ============================================================================
+    
+    background: CosmicPalette.background-surface;
+    
+    // ============================================================================
+    // LAYOUT
+    // ============================================================================
+    
+    // Scrollable container for many items (Requirement 41.4)
+    if root.enable-scrolling: Flickable {
+        viewport-width: nav-layout.preferred-width;
+        
+        nav-layout := HorizontalLayout {
+            padding: CosmicSpacing.space-xxs;
+            spacing: CosmicSpacing.space-xxxs;
+            
+            for item[index] in root.items: nav-item := Rectangle {
+                // 32px button height (Requirement 41.1)
+                height: 32px;
+                
+                // Width depends on display mode
+                // Icon-only: fixed 40px, Icon-text: auto-size with minimum 40px
+                width: root.display-mode == NavigationDisplayMode.icon-only ? 40px : self.preferred-width;
+                
+                border-radius: CosmicCornerRadii.nav-item-radius;
+                
+                // Selected state highlighting (Requirement 41.3)
+                background: {
+                    if index == root.selected-index {
+                        // Selected: accent color background
+                        CosmicPalette.accent-primary.with-alpha(0.15)
+                    } else if item-touch.has-hover && item.enabled {
+                        // Hover: subtle background
+                        CosmicPalette.surface-variant.with-alpha(0.5)
+                    } else {
+                        Colors.transparent
+                    }
+                };
+                
+                // Disabled state and drag visual feedback (Requirement 41.6)
+                opacity: {
+                    if !item.enabled {
+                        CosmicPalette.opacity-disabled
+                    } else if root.is-dragging && root.dragging-index == index {
+                        0.5
+                    } else {
+                        1.0
+                    }
+                };
+                
+                // Icon + optional text layout (Requirement 41.2)
+                HorizontalLayout {
+                    padding-left: CosmicSpacing.space-xxs;
+                    padding-right: CosmicSpacing.space-xxs;
+                    spacing: CosmicSpacing.space-xxxs;
+                    alignment: center;
+                    
+                    // Icon (always shown)
+                    Image {
+                        source: item.icon;
+                        width: 16px;
+                        height: 16px;
+                        colorize: index == root.selected-index ? 
+                            CosmicPalette.accent-primary : 
+                            CosmicPalette.text-primary;
+                        vertical-alignment: center;
+                    }
+                    
+                    // Text label (shown in icon-text mode) (Requirement 41.2, 41.7)
+                    if root.display-mode == NavigationDisplayMode.icon-text: Text {
+                        text: item.label;
+                        color: index == root.selected-index ? 
+                            CosmicPalette.accent-primary : 
+                            CosmicPalette.text-primary;
+                        font-family: CosmicTypography.font-family;
+                        font-size: CosmicTypography.body-size;
+                        font-weight: index == root.selected-index ? 
+                            CosmicTypography.weight-medium : 
+                            CosmicTypography.weight-regular;
+                        vertical-alignment: center;
+                    }
+                }
+                
+                item-touch := TouchArea {
+                    enabled: !root.disabled && item.enabled;
+                    mouse-cursor: item.enabled ? pointer : default;
+                    
+                    // Left click
+                    clicked => {
+                        if item.enabled {
+                            root.selected-index = index;
+                            root.item-clicked(index);
+                        }
+                    }
+                    
+                    // Right click for context menu (Requirement 41.5)
+                    pointer-event(event) => {
+                        if root.enable-context-menu && item.enabled && event.button == PointerEventButton.right {
+                            root.context-menu-index = index;
+                            root.item-context-menu(index);
+                        }
+                    }
+                }
+                
+                // Drag and drop support (Requirement 41.6)
+                if root.enable-drag-drop && item.enabled: TouchArea {
+                    // Drag start
+                    pointer-event(event) => {
+                        if event.kind == PointerEventKind.down && event.button == PointerEventButton.left {
+                            root.dragging-index = index;
+                            root.is-dragging = true;
+                            root.item-drag-start(index);
+                        } else if event.kind == PointerEventKind.up && root.is-dragging {
+                            // Drag end - determine drop target
+                            root.is-dragging = false;
+                            // Note: Full drag-drop implementation would require
+                            // tracking mouse position and determining drop target
+                            // This is a simplified version
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // Non-scrollable layout (when scrolling is disabled)
+    if !root.enable-scrolling: HorizontalLayout {
+        padding: CosmicSpacing.space-xxs;
+        spacing: CosmicSpacing.space-xxxs;
+        
+        for item[index] in root.items: nav-item-static := Rectangle {
+            // 32px button height (Requirement 41.1)
+            height: 32px;
+            
+            // Width depends on display mode
+            // Icon-only: fixed 40px, Icon-text: auto-size with minimum 40px
+            width: root.display-mode == NavigationDisplayMode.icon-only ? 40px : self.preferred-width;
+            
+            border-radius: CosmicCornerRadii.nav-item-radius;
+            
+            // Selected state highlighting (Requirement 41.3)
+            background: {
+                if index == root.selected-index {
+                    // Selected: accent color background
+                    CosmicPalette.accent-primary.with-alpha(0.15)
+                } else if item-touch-static.has-hover && item.enabled {
+                    // Hover: subtle background
+                    CosmicPalette.surface-variant.with-alpha(0.5)
+                } else {
+                    Colors.transparent
+                }
+            };
+            
+            // Disabled state
+            opacity: item.enabled ? 1.0 : CosmicPalette.opacity-disabled;
+            
+            // Icon + optional text layout (Requirement 41.2)
+            HorizontalLayout {
+                padding-left: CosmicSpacing.space-xxs;
+                padding-right: CosmicSpacing.space-xxs;
+                spacing: CosmicSpacing.space-xxxs;
+                alignment: center;
+                
+                // Icon (always shown)
+                Image {
+                    source: item.icon;
+                    width: 16px;
+                    height: 16px;
+                    colorize: index == root.selected-index ? 
+                        CosmicPalette.accent-primary : 
+                        CosmicPalette.text-primary;
+                    vertical-alignment: center;
+                }
+                
+                // Text label (shown in icon-text mode) (Requirement 41.2, 41.7)
+                if root.display-mode == NavigationDisplayMode.icon-text: Text {
+                    text: item.label;
+                    color: index == root.selected-index ? 
+                        CosmicPalette.accent-primary : 
+                        CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.body-size;
+                    font-weight: index == root.selected-index ? 
+                        CosmicTypography.weight-medium : 
+                        CosmicTypography.weight-regular;
+                    vertical-alignment: center;
+                }
+            }
+            
+            item-touch-static := TouchArea {
+                enabled: !root.disabled && item.enabled;
+                mouse-cursor: item.enabled ? pointer : default;
+                
+                // Left click
+                clicked => {
+                    if item.enabled {
+                        root.selected-index = index;
+                        root.item-clicked(index);
+                    }
+                }
+                
+                // Right click for context menu (Requirement 41.5)
+                pointer-event(event) => {
+                    if root.enable-context-menu && item.enabled && event.button == PointerEventButton.right {
+                        root.context-menu-index = index;
+                        root.item-context-menu(index);
+                    }
+                }
+            }
+        }
+    }
+}

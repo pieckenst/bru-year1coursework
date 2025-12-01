@@ -450,7 +450,7 @@
   - Adjust color for light/dark modes
   - _Requirements: 36.1-36.6_
 
-- [-] 12. Implement Badge and Chip Components
+- [x] 12. Implement Badge and Chip Components
 
 
   - _Requirements: 62.1-62.10_
@@ -466,7 +466,7 @@
   - _Requirements: 62.1-62.4, 62.10_
 
 
-- [ ] 12.2 Create chip.slint with CosmicChip
+- [x] 12.2 Create chip.slint with CosmicChip
 
 
 
@@ -477,10 +477,13 @@
   - Support inline display with wrapping
   - _Requirements: 62.5-62.9_
 
-- [ ] 13. Implement Avatar Components
+- [x] 13. Implement Avatar Components
+
   - _Requirements: 63.1-63.10_
 
-- [ ] 13.1 Create avatar.slint with CosmicAvatar
+- [x] 13.1 Create avatar.slint with CosmicAvatar
+
+
   - Implement circular shape by default
   - Add size variants (xs: 24px, sm: 32px, md: 40px, lg: 56px)
   - Add initials fallback with colored background
@@ -489,16 +492,25 @@
   - Add clickable variant with hover border
   - _Requirements: 63.1-63.10_
 
-- [ ] 13.2 Create avatar-group.slint
+- [x] 13.2 Create avatar-group.slint
+
+
+
   - Implement overlapping avatars (-8px margin)
   - Add overflow count display
   - Support click events on individual avatars
   - _Requirements: 63.8_
 
-- [ ] 14. Implement Tooltip Component
+- [x] 14. Implement Tooltip Component
+
+
+
+
+
   - _Requirements: 64.1-64.10_
 
-- [ ] 14.1 Create tooltip.slint with CosmicTooltip
+- [x] 14.1 Create tooltip.slint with CosmicTooltip
+
   - Implement dark background with white text
   - Add 500ms hover delay
   - Add arrow pointing to trigger
@@ -515,10 +527,15 @@
   - **Property: Tooltip viewport containment**
   - **Validates: Requirements 64.4**
 
-- [ ] 15. Implement Alert Components
+- [x] 15. Implement Alert Components
+
+
+
+
   - _Requirements: 47.1-47.7_
 
-- [ ] 15.1 Create alert.slint with CosmicAlert
+- [x] 15.1 Create alert.slint with CosmicAlert
+
   - Implement warning color background (#F39C12)
   - Add close button on right side
   - Ensure sufficient text contrast
@@ -530,10 +547,15 @@
 
 ## Phase 5: Layout Components (Tasks 16-20)
 
-- [ ] 16. Implement App Bar and Header Components
+- [x] 16. Implement App Bar and Header Components
+
+
+
+
   - _Requirements: 16.1-16.7, 22.1-22.7, 45.1-45.8_
 
-- [ ] 16.1 Create app-bar.slint with CosmicAppBar
+
+- [x] 16.1 Create app-bar.slint with CosmicAppBar
   - Implement surface background with minimal elevation
   - Add title (18-20px, semibold)
   - Add action buttons (40x40px, 8px radius)
@@ -543,7 +565,8 @@
   - _Requirements: 16.1-16.7_
 
 
-- [ ] 16.2 Create header-bar.slint with CosmicHeaderBar
+
+- [x] 16.2 Create header-bar.slint with CosmicHeaderBar
   - Implement 32-40px height header
   - Add window control buttons (minimize, maximize, close)
   - Use symbolic icons at 16px
@@ -558,10 +581,16 @@
   - **Property: Header bar emits drag-requested callback**
   - **Validates: Requirements 22.7**
 
-- [ ] 17. Implement Navigation Components
+- [x] 17. Implement Navigation Components
+
+
+
+
   - _Requirements: 11.1-11.7, 17.1-17.5, 41.1-41.7_
 
-- [ ] 17.1 Create drawer.slint with CosmicDrawer
+- [x] 17.1 Create drawer.slint with CosmicDrawer
+
+
   - Implement navigation sidebar with surface-variant background
   - Add icon + text layout (20-24px icons, 12px spacing)
   - Set item height to 44px with 8px radius
@@ -576,7 +605,9 @@
   - **Property 15: Navigation items show active state**
   - **Validates: Requirements 11.4, 17.4**
 
-- [ ] 17.2 Create navigation-bar.slint
+- [x] 17.2 Create navigation-bar.slint
+
+
   - Implement 32px button height navigation
   - Support icon-only and icon+text modes
   - Add selected state highlighting

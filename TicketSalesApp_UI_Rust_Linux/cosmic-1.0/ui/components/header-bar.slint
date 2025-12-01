@@ -1,0 +1,211 @@
+// COSMIC Desktop Header Bar Component
+// Requirements: 22.1-22.7, 45.1-45.8
+
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+
+// Window state enum
+export enum WindowState {
+    normal,
+    maximized,
+    minimized,
+}
+
+// COSMIC Header Bar Component
+// A consistent header bar for windows with window controls and title display
+export component CosmicHeaderBar inherits Rectangle {
+    // ============================================================================
+    // PUBLIC PROPERTIES
+    // ============================================================================
+    
+    // Window state (Requirement 22.3, 45.3)
+    in-out property <WindowState> window-state: WindowState.normal;
+    
+    // Focus state (Requirements 22.4, 22.5, 45.4, 45.5)
+    in property <bool> focused: true;
+    
+    // Window control icons (Requirement 22.2)
+    in property <image> minimize-icon;
+    in property <image> maximize-icon;
+    in property <image> restore-icon;
+    in property <image> close-icon;
+    
+    // Show window controls (Requirement 45.2)
+    in property <bool> show-controls: true;
+    
+    // Title text (simple alternative to custom content)
+    in property <string> title: "";
+    
+    // ============================================================================
+    // CALLBACKS
+    // ============================================================================
+    
+    callback minimize-clicked();
+    callback maximize-clicked();
+    callback close-clicked();
+    callback drag-requested();  // Requirement 22.7, 45.6
+    
+    // ============================================================================
+    // COMPUTED PROPERTIES
+    // ============================================================================
+    
+    // Opacity based on focus state (Requirements 22.4, 22.5, 45.4, 45.5)
+    property <float> control-opacity: root.focused ? 1.0 : 0.75;
+    
+    // Current maximize/restore icon (Requirement 22.3)
+    property <image> maximize-restore-icon: root.window-state == WindowState.maximized ? 
+        root.restore-icon : 
+        root.maximize-icon;
+    
+    // ============================================================================
+    // STYLING (Requirements 22.1, 45.1)
+    // ============================================================================
+    
+    // 32-40px height based on density (Requirement 22.1, 45.1)
+    height: 40px;
+    background: CosmicPalette.background-surface;
+    
+    // ============================================================================
+    // LAYOUT
+    // ============================================================================
+    
+    HorizontalLayout {
+        padding-left: CosmicSpacing.space-xs;
+        padding-right: CosmicSpacing.space-xs;
+        spacing: CosmicSpacing.space-xs;
+        
+        // Draggable area for window movement (Requirements 22.7, 45.6, 45.7)
+        Rectangle {
+            horizontal-stretch: 1;
+            
+            // Title display (centered)
+            if root.title != "": Text {
+                text: root.title;
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.body-size;
+                font-weight: CosmicTypography.weight-semibold;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                opacity: root.control-opacity;
+            }
+            
+            drag-area := TouchArea {
+                // Double-click to toggle maximize (Requirement 45.7)
+                double-clicked => {
+                    root.maximize-clicked();
+                }
+                
+                // Drag to move window (Requirement 22.7, 45.6)
+                pointer-event(event) => {
+                    if event.kind == PointerEventKind.down && event.button == PointerEventButton.left {
+                        root.drag-requested();
+                    }
+                }
+            }
+        }
+        
+        // Window control buttons (Requirements 22.2, 45.2)
+        if root.show-controls: HorizontalLayout {
+            spacing: CosmicSpacing.space-xxxs;
+            horizontal-stretch: 0;
+            
+            // Minimize button
+            Rectangle {
+                width: 32px;
+                height: 32px;
+                border-radius: CosmicCornerRadii.icon-button-radius;
+                
+                background: minimize-touch.has-hover ? 
+                    CosmicPalette.surface-variant : 
+                    Colors.transparent;
+                
+                // Focused/unfocused opacity (Requirements 22.4, 22.5)
+                opacity: root.control-opacity;
+                
+                Image {
+                    source: root.minimize-icon;
+                    width: 16px;  // Symbolic icons at 16px (Requirement 22.6)
+                    height: 16px;
+                    colorize: CosmicPalette.text-primary;
+                    x: (parent.width - self.width) / 2;
+                    y: (parent.height - self.height) / 2;
+                }
+                
+                minimize-touch := TouchArea {
+                    mouse-cursor: pointer;
+                    
+                    clicked => {
+                        root.minimize-clicked();
+                    }
+                }
+            }
+            
+            // Maximize/Restore button (Requirement 22.3)
+            Rectangle {
+                width: 32px;
+                height: 32px;
+                border-radius: CosmicCornerRadii.icon-button-radius;
+                
+                background: maximize-touch.has-hover ? 
+                    CosmicPalette.surface-variant : 
+                    Colors.transparent;
+                
+                // Focused/unfocused opacity (Requirements 22.4, 22.5)
+                opacity: root.control-opacity;
+                
+                Image {
+                    source: root.maximize-restore-icon;
+                    width: 16px;  // Symbolic icons at 16px (Requirement 22.6)
+                    height: 16px;
+                    colorize: CosmicPalette.text-primary;
+                    x: (parent.width - self.width) / 2;
+                    y: (parent.height - self.height) / 2;
+                }
+                
+                maximize-touch := TouchArea {
+                    mouse-cursor: pointer;
+                    
+                    clicked => {
+                        root.maximize-clicked();
+                    }
+                }
+            }
+            
+            // Close button
+            Rectangle {
+                width: 32px;
+                height: 32px;
+                border-radius: CosmicCornerRadii.icon-button-radius;
+                
+                background: close-touch.has-hover ? 
+                    CosmicPalette.error.with-alpha(0.8) : 
+                    Colors.transparent;
+                
+                // Focused/unfocused opacity (Requirements 22.4, 22.5)
+                opacity: root.control-opacity;
+                
+                Image {
+                    source: root.close-icon;
+                    width: 16px;  // Symbolic icons at 16px (Requirement 22.6)
+                    height: 16px;
+                    colorize: close-touch.has-hover ? 
+                        Colors.white : 
+                        CosmicPalette.text-primary;
+                    x: (parent.width - self.width) / 2;
+                    y: (parent.height - self.height) / 2;
+                }
+                
+                close-touch := TouchArea {
+                    mouse-cursor: pointer;
+                    
+                    clicked => {
+                        root.close-clicked();
+                    }
+                }
+            }
+        }
+    }
+}

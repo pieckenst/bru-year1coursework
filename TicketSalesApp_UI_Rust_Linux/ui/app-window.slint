@@ -9,6 +9,7 @@ import { RouteManagementView, RouteData } from "route_management.slint";
 import { RouteSchedulesManagement, ScheduleData, RouteOption } from "route_schedules.slint";
 import { RouteScheduleDialog, DeleteScheduleConfirmDialog, RouteStopItem } from "route_schedule_dialogs.slint";
 import { JobsManagementView, JobData } from "jobs_management.slint";
+import { UsersManagementView, UserData } from "users_management.slint";
 export { AuthWindow } from "auth_window.slint";
 
 // Employee data structure
@@ -202,6 +203,20 @@ export component AppWindow inherits Window {
     callback add-job(string, string);
     callback edit-job(int, string, string);
     callback delete-job(int);
+    
+    // Users management state
+    in-out property <[UserData]> users: [];
+    in-out property <bool> users-loading: false;
+    in-out property <string> users-error: "";
+    in-out property <bool> users-has-error: false;
+    in-out property <int> current-user-id: -1;
+    
+    // Users management callbacks
+    callback load-users();
+    callback search-users(string);
+    callback add-user(string, string, string, string, int, bool, bool, string);
+    callback edit-user(int, string, string, string, string, int, bool, bool, string);
+    callback delete-user(int);
     
     AppNavigation {
         current-user: root.current-user;
@@ -458,8 +473,44 @@ export component AppWindow inherits Window {
             }
         }
         
+        // Users Management View (Group 1, Index 2)
+        if root.current-nav-group == 1 && root.current-nav-index == 2: UsersManagementView {
+            users: root.users;
+            is-loading: root.users-loading;
+            error-message: root.users-error;
+            has-error: root.users-has-error;
+            is-admin: root.is-admin;
+            current-user-id: root.current-user-id;
+            
+            load-users => {
+                root.load-users();
+            }
+            
+            search-users(text) => {
+                root.search-users(text);
+            }
+            
+            add-user(login, password, email, phone, role, is-active, is-windows-auth, windows-identity) => {
+                root.add-user(login, password, email, phone, role, is-active, is-windows-auth, windows-identity);
+            }
+            
+            edit-user(user-id, login, password, email, phone, role, is-active, is-windows-auth, windows-identity) => {
+                root.edit-user(user-id, login, password, email, phone, role, is-active, is-windows-auth, windows-identity);
+            }
+            
+            delete-user(user-id) => {
+                root.delete-user(user-id);
+            }
+            
+            close-clicked => {
+                // Navigate back to employees or dashboard
+                root.current-nav-group = 1;
+                root.current-nav-index = 0;
+            }
+        }
+        
         // Placeholder for other personnel routes
-        if root.current-nav-group == 1 && root.current-nav-index > 1: VerticalBox {
+        if root.current-nav-group == 1 && root.current-nav-index > 2: VerticalBox {
             padding: 40px;
             MaterialText {
                 text: "Раздел персонала";

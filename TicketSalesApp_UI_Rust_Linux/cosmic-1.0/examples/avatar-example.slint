@@ -1,0 +1,411 @@
+import { CosmicAvatar, AvatarSize, AvatarShape, AvatarStatus } from "../ui/components/avatar.slint";
+import { CosmicAvatarGroup, AvatarData } from "../ui/components/avatar-group.slint";
+import { CosmicPalette } from "../ui/styling/palette.slint";
+import { CosmicSpacing } from "../ui/styling/spacing.slint";
+import { CosmicTypography } from "../ui/styling/typography.slint";
+
+export component AvatarExample inherits Window {
+    title: "COSMIC Avatar Components Example";
+    background: CosmicPalette.background-base;
+    preferred-width: 900px;
+    preferred-height: 700px;
+    
+    VerticalLayout {
+        padding: CosmicSpacing.space-l;
+        spacing: CosmicSpacing.space-l;
+            
+            // Title
+            Text {
+                text: "Avatar Components";
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.size-32;
+                font-weight: CosmicTypography.weight-bold;
+            }
+            
+            // Section: Avatar Sizes
+            VerticalLayout {
+                spacing: CosmicSpacing.space-m;
+                
+                Text {
+                    text: "Avatar Sizes (Requirements 63.2-63.5)";
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.size-20;
+                    font-weight: CosmicTypography.weight-semibold;
+                }
+                
+                HorizontalLayout {
+                    spacing: CosmicSpacing.space-m;
+                    alignment: center;
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicAvatar {
+                            size: AvatarSize.xs;
+                            initials: "XS";
+                            fallback-color: #8B7355;
+                        }
+                        
+                        Text {
+                            text: "XS (24px)";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicAvatar {
+                            size: AvatarSize.sm;
+                            initials: "SM";
+                            fallback-color: #FF6B35;
+                        }
+                        
+                        Text {
+                            text: "SM (32px)";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicAvatar {
+                            size: AvatarSize.md;
+                            initials: "MD";
+                            fallback-color: #3498DB;
+                        }
+                        
+                        Text {
+                            text: "MD (40px)";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicAvatar {
+                            size: AvatarSize.lg;
+                            initials: "LG";
+                            fallback-color: #27AE60;
+                        }
+                        
+                        Text {
+                            text: "LG (56px)";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                }
+            }
+            
+            // Section: Avatar Shapes
+            VerticalLayout {
+                spacing: CosmicSpacing.space-m;
+                
+                Text {
+                    text: "Avatar Shapes (Requirements 63.1, 63.10)";
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.size-20;
+                    font-weight: CosmicTypography.weight-semibold;
+                }
+                
+                HorizontalLayout {
+                    spacing: CosmicSpacing.space-l;
+                    alignment: center;
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicAvatar {
+                            size: AvatarSize.md;
+                            shape: AvatarShape.circle;
+                            initials: "JD";
+                            fallback-color: #8B7355;
+                        }
+                        
+                        Text {
+                            text: "Circle (Default)";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicAvatar {
+                            size: AvatarSize.md;
+                            shape: AvatarShape.square;
+                            initials: "AS";
+                            fallback-color: #FF6B35;
+                        }
+                        
+                        Text {
+                            text: "Square (8px radius)";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                }
+            }
+            
+            // Section: Status Indicators
+            VerticalLayout {
+                spacing: CosmicSpacing.space-m;
+                
+                Text {
+                    text: "Status Indicators (Requirement 63.7)";
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.size-20;
+                    font-weight: CosmicTypography.weight-semibold;
+                }
+                
+                HorizontalLayout {
+                    spacing: CosmicSpacing.space-m;
+                    alignment: center;
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicAvatar {
+                            size: AvatarSize.md;
+                            initials: "ON";
+                            fallback-color: #8B7355;
+                            status: AvatarStatus.online;
+                        }
+                        
+                        Text {
+                            text: "Online";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicAvatar {
+                            size: AvatarSize.md;
+                            initials: "AW";
+                            fallback-color: #FF6B35;
+                            status: AvatarStatus.away;
+                        }
+                        
+                        Text {
+                            text: "Away";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicAvatar {
+                            size: AvatarSize.md;
+                            initials: "BS";
+                            fallback-color: #3498DB;
+                            status: AvatarStatus.busy;
+                        }
+                        
+                        Text {
+                            text: "Busy";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                    
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        alignment: center;
+                        
+                        CosmicAvatar {
+                            size: AvatarSize.md;
+                            initials: "OF";
+                            fallback-color: #27AE60;
+                            status: AvatarStatus.offline;
+                        }
+                        
+                        Text {
+                            text: "Offline";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                    }
+                }
+            }
+            
+            // Section: Clickable Avatars
+            VerticalLayout {
+                spacing: CosmicSpacing.space-m;
+                
+                Text {
+                    text: "Clickable Avatars (Requirement 63.9)";
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.size-20;
+                    font-weight: CosmicTypography.weight-semibold;
+                }
+                
+                Text {
+                    text: "Hover over the avatar to see the border effect";
+                    color: CosmicPalette.text-secondary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.size-14;
+                }
+                
+                HorizontalLayout {
+                    spacing: CosmicSpacing.space-m;
+                    alignment: center;
+                    
+                    CosmicAvatar {
+                        size: AvatarSize.md;
+                        initials: "CL";
+                        fallback-color: #8B7355;
+                        clickable: true;
+                        
+                        clicked => {
+                            debug("Avatar clicked!");
+                        }
+                    }
+                }
+            }
+            
+            // Section: Avatar Groups
+            VerticalLayout {
+                spacing: CosmicSpacing.space-m;
+                
+                Text {
+                    text: "Avatar Groups (Requirement 63.8)";
+                    color: CosmicPalette.text-primary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.size-20;
+                    font-weight: CosmicTypography.weight-semibold;
+                }
+                
+                Text {
+                    text: "Overlapping avatars with -8px margin";
+                    color: CosmicPalette.text-secondary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.size-14;
+                }
+                
+                VerticalLayout {
+                    spacing: CosmicSpacing.space-m;
+                    
+                    // Small group (3 avatars)
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        
+                        Text {
+                            text: "Small Group (3 members)";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                        
+                        CosmicAvatarGroup {
+                            avatars: [
+                                { initials: "AB", fallback-color: #8B7355, status: AvatarStatus.online },
+                                { initials: "CD", fallback-color: #FF6B35, status: AvatarStatus.away },
+                                { initials: "EF", fallback-color: #3498DB, status: AvatarStatus.none },
+                            ];
+                            size: AvatarSize.md;
+                            clickable: true;
+                            
+                            avatar-clicked(index) => {
+                                debug("Avatar clicked: " + index);
+                            }
+                        }
+                    }
+                    
+                    // Large group with overflow (8 avatars, max 5 visible)
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        
+                        Text {
+                            text: "Large Group (8 members, showing 5 + overflow)";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                        
+                        CosmicAvatarGroup {
+                            avatars: [
+                                { initials: "A1", fallback-color: #8B7355, status: AvatarStatus.online },
+                                { initials: "B2", fallback-color: #FF6B35, status: AvatarStatus.away },
+                                { initials: "C3", fallback-color: #3498DB, status: AvatarStatus.busy },
+                                { initials: "D4", fallback-color: #27AE60, status: AvatarStatus.online },
+                                { initials: "E5", fallback-color: #E74C3C, status: AvatarStatus.offline },
+                                { initials: "F6", fallback-color: #F39C12, status: AvatarStatus.none },
+                                { initials: "G7", fallback-color: #9B59B6, status: AvatarStatus.none },
+                                { initials: "H8", fallback-color: #1ABC9C, status: AvatarStatus.none },
+                            ];
+                            size: AvatarSize.md;
+                            max-visible: 5;
+                            clickable: true;
+                            
+                            avatar-clicked(index) => {
+                                if index == -1 {
+                                    debug("Overflow indicator clicked!");
+                                } else {
+                                    debug("Avatar clicked: " + index);
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Square shape group
+                    VerticalLayout {
+                        spacing: CosmicSpacing.space-xs;
+                        
+                        Text {
+                            text: "Square Shape Group";
+                            color: CosmicPalette.text-secondary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.size-12;
+                        }
+                        
+                        CosmicAvatarGroup {
+                            avatars: [
+                                { initials: "SQ", fallback-color: #8B7355, status: AvatarStatus.none },
+                                { initials: "AR", fallback-color: #FF6B35, status: AvatarStatus.none },
+                                { initials: "ES", fallback-color: #3498DB, status: AvatarStatus.none },
+                            ];
+                            size: AvatarSize.md;
+                            shape: AvatarShape.square;
+                        }
+                    }
+                }
+            }
+        }
+    }
+

@@ -1,0 +1,151 @@
+// COSMIC Desktop Alert Component
+// Notification banner with semantic colors, icon, and close button
+// Requirements: 47.1-47.7
+
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+// Alert severity types
+export enum AlertSeverity {
+    warning,      // Warning color background (#F39C12) - Requirement 47.1
+    error,        // Error/danger color
+    success,      // Success color
+    info,         // Info color
+}
+
+// ============================================================================
+// COSMIC ALERT COMPONENT
+// ============================================================================
+
+export component CosmicAlert inherits Rectangle {
+    // ============================================================================
+    // PROPERTIES
+    // ============================================================================
+    
+    // Content properties
+    in property <string> message: "";
+    in property <AlertSeverity> severity: AlertSeverity.warning;
+    
+    // Icon properties (Requirement 47.4)
+    in property <image> icon;
+    in property <bool> show-icon: icon.width > 0;
+    
+    // Dismissible properties (Requirements 47.5, 47.6)
+    in property <bool> dismissible: true;  // Show close button by default
+    
+    // Visibility control
+    in-out property <bool> show: true;
+    
+    // Callbacks
+    callback dismissed();
+    
+    // ============================================================================
+    // INTERNAL STATE
+    // ============================================================================
+    
+    property <bool> close-button-hovered: false;
+    
+    // Computed background color based on severity (Requirement 47.1)
+    property <color> alert-background: {
+        if severity == AlertSeverity.warning {
+            CosmicPalette.warning  // #F39C12
+        } else if severity == AlertSeverity.error {
+            CosmicPalette.error
+        } else if severity == AlertSeverity.success {
+            CosmicPalette.success
+        } else {
+            CosmicPalette.info
+        }
+    };
+    
+    // Text color for sufficient contrast (Requirement 47.3)
+    property <color> alert-text-color: {
+        // Use white text on colored backgrounds for sufficient contrast
+        #FFFFFF
+    };
+    
+    // Icon color matches text color
+    property <color> alert-icon-color: alert-text-color;
+    
+    // ============================================================================
+    // LAYOUT
+    // ============================================================================
+    
+    // Only show if show property is true
+    visible: root.show;
+    
+    // Alert styling
+    background: alert-background;
+    border-radius: CosmicCornerRadii.radius-s;  // 8px
+    
+    // Content layout
+    HorizontalLayout {
+        padding-left: CosmicSpacing.space-s;   // 16px
+        padding-right: CosmicSpacing.space-s;  // 16px
+        padding-top: CosmicSpacing.space-xs;   // 12px
+        padding-bottom: CosmicSpacing.space-xs; // 12px
+        spacing: CosmicSpacing.space-xs;  // 12px spacing between elements
+        
+        // Icon section (Requirement 47.4)
+        if show-icon: Rectangle {
+            width: 16px;
+            height: 16px;
+            
+            Image {
+                source: root.icon;
+                width: 16px;  // 16px icon size (Requirement 47.4)
+                height: 16px;
+                colorize: alert-icon-color;
+            }
+        }
+        
+        // Message text
+        Text {
+            text: root.message;
+            color: alert-text-color;  // Sufficient contrast (Requirement 47.3)
+            font-family: CosmicTypography.font-family;
+            font-size: CosmicTypography.body-size;  // 14px
+            font-weight: CosmicTypography.weight-regular;
+            vertical-alignment: center;
+            horizontal-stretch: 1;
+            wrap: word-wrap;
+        }
+        
+        // Close button (Requirements 47.2, 47.5, 47.6)
+        if dismissible: Rectangle {
+            width: 24px;
+            height: 24px;
+            border-radius: CosmicCornerRadii.radius-xs;  // 4px
+            background: close-button-hovered ? #FFFFFF33 : transparent;  // 20% white on hover
+            
+            // Close icon (×)
+            Text {
+                text: "✕";
+                color: alert-text-color;
+                font-size: 16px;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+            
+            close-touch := TouchArea {
+                mouse-cursor: pointer;
+                
+                clicked => {
+                    root.show = false;
+                    root.dismissed();
+                }
+                
+                changed has-hover => {
+                    root.close-button-hovered = self.has-hover;
+                }
+            }
+        }
+    }
+}
+

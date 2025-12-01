@@ -1,0 +1,172 @@
+// Example demonstrating CosmicHeaderBar component usage
+
+import { CosmicHeaderBar, WindowState } from "../ui/components/header-bar.slint";
+import { CosmicPalette } from "../ui/styling/palette.slint";
+import { CosmicButton } from "../ui/components/button.slint";
+
+export component HeaderBarExample inherits Window {
+    title: "COSMIC Header Bar Example";
+    preferred-width: 800px;
+    preferred-height: 600px;
+    background: CosmicPalette.background-base;
+    
+    property <WindowState> current-window-state: WindowState.normal;
+    property <bool> is-focused: true;
+    
+    VerticalLayout {
+        // Example 1: Basic header bar with window controls
+        CosmicHeaderBar {
+            window-state: current-window-state;
+            focused: is-focused;
+            minimize-icon: @image-url("../ui/icons/window-minimize.svg");
+            maximize-icon: @image-url("../ui/icons/window-maximize.svg");
+            restore-icon: @image-url("../ui/icons/window-restore.svg");
+            close-icon: @image-url("../ui/icons/window-close.svg");
+            
+            minimize-clicked => {
+                debug("Minimize clicked");
+            }
+            
+            maximize-clicked => {
+                if current-window-state == WindowState.maximized {
+                    current-window-state = WindowState.normal;
+                    debug("Restore clicked");
+                } else {
+                    current-window-state = WindowState.maximized;
+                    debug("Maximize clicked");
+                }
+            }
+            
+            close-clicked => {
+                debug("Close clicked");
+            }
+            
+            drag-requested => {
+                debug("Drag requested - window should move");
+            }
+        }
+        
+        Rectangle {
+            height: 20px;
+            background: CosmicPalette.background-base;
+        }
+        
+        // Example 2: Header bar with title
+        CosmicHeaderBar {
+            title: "Application Title";
+            window-state: current-window-state;
+            focused: is-focused;
+            minimize-icon: @image-url("../ui/icons/window-minimize.svg");
+            maximize-icon: @image-url("../ui/icons/window-maximize.svg");
+            restore-icon: @image-url("../ui/icons/window-restore.svg");
+            close-icon: @image-url("../ui/icons/window-close.svg");
+            
+            minimize-clicked => {
+                debug("Minimize clicked");
+            }
+            
+            maximize-clicked => {
+                if current-window-state == WindowState.maximized {
+                    current-window-state = WindowState.normal;
+                } else {
+                    current-window-state = WindowState.maximized;
+                }
+            }
+            
+            close-clicked => {
+                debug("Close clicked");
+            }
+            
+            drag-requested => {
+                debug("Drag requested");
+            }
+        }
+        
+        Rectangle {
+            height: 20px;
+            background: CosmicPalette.background-base;
+        }
+        
+        // Example 3: Header bar without controls (custom implementation)
+        CosmicHeaderBar {
+            title: "Custom Header";
+            window-state: current-window-state;
+            focused: is-focused;
+            show-controls: false;
+            minimize-icon: @image-url("../ui/icons/window-minimize.svg");
+            maximize-icon: @image-url("../ui/icons/window-maximize.svg");
+            restore-icon: @image-url("../ui/icons/window-restore.svg");
+            close-icon: @image-url("../ui/icons/window-close.svg");
+            
+            drag-requested => {
+                debug("Drag requested");
+            }
+        }
+        
+        // Content area with controls
+        Rectangle {
+            background: CosmicPalette.background-base;
+            vertical-stretch: 1;
+            
+            VerticalLayout {
+                alignment: center;
+                spacing: 20px;
+                
+                Text {
+                    text: "Header Bar Examples";
+                    color: CosmicPalette.text-primary;
+                    font-size: 24px;
+                    font-weight: 700;
+                    horizontal-alignment: center;
+                }
+                
+                Text {
+                    text: "The header bars above demonstrate:\n• Window control buttons (minimize, maximize/restore, close)\n• Draggable area for window movement\n• Double-click to toggle maximize\n• Focus/unfocus opacity states\n• Title display with centered text\n• Symbolic icons at 16px";
+                    color: CosmicPalette.text-secondary;
+                    horizontal-alignment: center;
+                }
+                
+                HorizontalLayout {
+                    spacing: 12px;
+                    alignment: center;
+                    
+                    CosmicButton {
+                        text: is-focused ? "Unfocus Window" : "Focus Window";
+                        
+                        clicked => {
+                            is-focused = !is-focused;
+                        }
+                    }
+                    
+                    CosmicButton {
+                        text: current-window-state == WindowState.maximized ? 
+                            "Set Normal State" : 
+                            "Set Maximized State";
+                        
+                        clicked => {
+                            if current-window-state == WindowState.maximized {
+                                current-window-state = WindowState.normal;
+                            } else {
+                                current-window-state = WindowState.maximized;
+                            }
+                        }
+                    }
+                }
+                
+                Text {
+                    text: "Current State:";
+                    color: CosmicPalette.text-primary;
+                    font-weight: 600;
+                    horizontal-alignment: center;
+                }
+                
+                Text {
+                    text: "Window: " + (current-window-state == WindowState.maximized ? "Maximized" : "Normal") + 
+                          " | Focus: " + (is-focused ? "Focused" : "Unfocused");
+                    color: CosmicPalette.text-secondary;
+                    horizontal-alignment: center;
+                }
+            }
+        }
+    }
+}

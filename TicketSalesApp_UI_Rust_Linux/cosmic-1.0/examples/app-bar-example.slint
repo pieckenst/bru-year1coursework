@@ -1,0 +1,120 @@
+// Example demonstrating CosmicAppBar component usage
+
+import { CosmicAppBar, AppBarAction } from "../ui/components/app-bar.slint";
+import { CosmicPalette } from "../ui/styling/palette.slint";
+
+export component AppBarExample inherits Window {
+    title: "COSMIC App Bar Example";
+    preferred-width: 800px;
+    preferred-height: 600px;
+    background: CosmicPalette.background-base;
+    
+    VerticalLayout {
+        // Example 1: Basic app bar with title only
+        CosmicAppBar {
+            title: "Basic App Bar";
+        }
+        
+        Rectangle {
+            height: 20px;
+            background: CosmicPalette.background-base;
+        }
+        
+        // Example 2: App bar with action buttons
+        CosmicAppBar {
+            title: "App Bar with Actions";
+            actions: [
+                {
+                    icon: @image-url("../ui/icons/search.svg"),
+                    tooltip: "Search",
+                    enabled: true,
+                },
+                {
+                    icon: @image-url("../ui/icons/settings.svg"),
+                    tooltip: "Settings",
+                    enabled: true,
+                },
+                {
+                    icon: @image-url("../ui/icons/user.svg"),
+                    tooltip: "Profile",
+                    enabled: true,
+                },
+            ];
+            
+            action-clicked(index) => {
+                debug("Action clicked:", index);
+            }
+        }
+        
+        Rectangle {
+            height: 20px;
+            background: CosmicPalette.background-base;
+        }
+        
+        // Example 3: App bar with menu toggle
+        CosmicAppBar {
+            title: "App Bar with Menu";
+            show-menu-toggle: true;
+            menu-icon: @image-url("../ui/icons/menu.svg");
+            actions: [
+                {
+                    icon: @image-url("../ui/icons/notifications.svg"),
+                    tooltip: "Notifications",
+                    enabled: true,
+                },
+            ];
+            
+            menu-toggle-clicked => {
+                debug("Menu toggle clicked");
+            }
+            
+            action-clicked(index) => {
+                debug("Action clicked:", index);
+            }
+        }
+        
+        Rectangle {
+            height: 20px;
+            background: CosmicPalette.background-base;
+        }
+        
+        // Example 4: App bar with disabled actions
+        CosmicAppBar {
+            title: "App Bar with Disabled Actions";
+            actions: [
+                {
+                    icon: @image-url("../ui/icons/save.svg"),
+                    tooltip: "Save",
+                    enabled: true,
+                },
+                {
+                    icon: @image-url("../ui/icons/undo.svg"),
+                    tooltip: "Undo (disabled)",
+                    enabled: false,
+                },
+                {
+                    icon: @image-url("../ui/icons/redo.svg"),
+                    tooltip: "Redo (disabled)",
+                    enabled: false,
+                },
+            ];
+            
+            action-clicked(index) => {
+                debug("Action clicked:", index);
+            }
+        }
+        
+        // Content area
+        Rectangle {
+            background: CosmicPalette.background-base;
+            vertical-stretch: 1;
+            
+            Text {
+                text: "Content Area\n\nThe app bars above demonstrate:\n• Basic title display\n• Action buttons with hover effects\n• Menu toggle button\n• Disabled action states\n• Surface background with minimal elevation";
+                color: CosmicPalette.text-primary;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+        }
+    }
+}

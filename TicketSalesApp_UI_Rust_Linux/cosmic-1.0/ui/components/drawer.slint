@@ -1,0 +1,281 @@
+// COSMIC Desktop Drawer Component
+// Navigation sidebar with icon + text layout
+// Requirements: 11.1-11.7, 17.1-17.5
+
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+
+// Drawer navigation item structure
+export struct DrawerItem {
+    icon: image,
+    label: string,
+    enabled: bool,
+}
+
+// Drawer section structure for grouping items
+export struct DrawerSection {
+    header: string,
+    items: [DrawerItem],
+}
+
+// COSMIC Drawer Component
+// Navigation sidebar with surface-variant background and smooth transitions
+export component CosmicDrawer inherits Rectangle {
+    // ============================================================================
+    // PUBLIC PROPERTIES
+    // ============================================================================
+    
+    // Header text (optional)
+    in property <string> header-text: "";
+    
+    // Navigation items (flat list)
+    in property <[DrawerItem]> items: [];
+    
+    // Sections (grouped items with headers)
+    in property <[DrawerSection]> sections: [];
+    
+    // Selected item index (for flat list)
+    in-out property <int> selected-index: -1;
+    
+    // Selected section and item indices (for sections)
+    in-out property <int> selected-section: -1;
+    in-out property <int> selected-item: -1;
+    
+    // Disabled state
+    in property <bool> disabled: false;
+    
+    // ============================================================================
+    // CALLBACKS
+    // ============================================================================
+    
+    callback item-clicked(int);
+    callback section-item-clicked(int, int);  // section-index, item-index
+    
+    // ============================================================================
+    // STYLING (Requirements 11.1, 17.1)
+    // ============================================================================
+    
+    // Surface-variant background (Requirement 11.1, 17.1)
+    // 2-5% darker in light mode, 2-5% lighter in dark mode
+    background: CosmicPalette.surface-variant;
+    
+    // Full height with smooth transitions (Requirement 17.1)
+    height: 100%;
+    
+    // ============================================================================
+    // LAYOUT
+    // ============================================================================
+    
+    VerticalLayout {
+        padding: CosmicSpacing.space-s;
+        spacing: CosmicSpacing.space-xs;
+        
+        // Header (optional)
+        if root.header-text != "": Rectangle {
+            height: 60px;
+            
+            Text {
+                text: root.header-text;
+                color: CosmicPalette.text-primary;
+                font-family: CosmicTypography.font-family;
+                font-size: CosmicTypography.title4-size;
+                font-weight: CosmicTypography.title4-weight;
+                vertical-alignment: center;
+                padding-left: CosmicSpacing.space-xs;
+            }
+        }
+        
+        // Flat items list (if items are provided)
+        if root.items.length > 0: VerticalLayout {
+            spacing: CosmicSpacing.space-xxxs;
+            
+            for item[index] in root.items: drawer-item := Rectangle {
+                // 44px height with subtle radius (Requirements 11.6, 17.1)
+                height: 44px;
+                border-radius: CosmicCornerRadii.radius-xs;  // 4px for subtle rounding
+                
+                // State-based background (Requirements 11.3, 11.4, 17.1)
+                // Normal: transparent (Requirement 17.1)
+                // Hover: surface 50% opacity (Requirements 11.3, 17.1)
+                // Active: accent 15% opacity (Requirements 11.4, 17.1)
+                background: {
+                    if index == root.selected-index {
+                        // Active state: accent 15% opacity (Requirement 11.4, 17.1)
+                        CosmicPalette.accent-primary.with-alpha(0.15)
+                    } else if item-touch.has-hover && item.enabled {
+                        // Hover state: surface 50% opacity (Requirement 11.3, 17.1)
+                        CosmicPalette.background-surface.with-alpha(0.5)
+                    } else {
+                        // Normal state: transparent (Requirement 17.1)
+                        Colors.transparent
+                    }
+                };
+                
+                // Disabled state
+                opacity: item.enabled ? 1.0 : CosmicPalette.opacity-disabled;
+                
+                // Icon + text layout (Requirements 11.2, 11.7, 17.1)
+                HorizontalLayout {
+                    padding-left: CosmicSpacing.space-s;  // 16px for more generous padding
+                    padding-right: CosmicSpacing.space-s;
+                    spacing: CosmicSpacing.space-xs;  // 12px spacing (Requirement 17.1)
+                    alignment: start;
+                    
+                    // Icon: 24px size for better visibility (Requirements 11.7, 17.1)
+                    Image {
+                        source: item.icon;
+                        width: 24px;
+                        height: 24px;
+                        // Active state: accent color (Requirement 11.4, 17.1)
+                        colorize: index == root.selected-index ? 
+                            CosmicPalette.accent-primary : 
+                            CosmicPalette.text-primary;
+                        vertical-alignment: center;
+                    }
+                    
+                    // Text label
+                    Text {
+                        text: item.label;
+                        // Active state: accent color, medium weight (Requirements 11.4, 17.1)
+                        color: index == root.selected-index ? 
+                            CosmicPalette.accent-primary : 
+                            CosmicPalette.text-primary;
+                        font-family: CosmicTypography.font-family;
+                        font-size: CosmicTypography.body-size;
+                        font-weight: index == root.selected-index ? 
+                            CosmicTypography.weight-medium : 
+                            CosmicTypography.weight-regular;
+                        vertical-alignment: center;
+                        horizontal-stretch: 1;
+                    }
+                }
+                
+                item-touch := TouchArea {
+                    enabled: !root.disabled && item.enabled;
+                    mouse-cursor: item.enabled ? pointer : default;
+                    
+                    clicked => {
+                        if item.enabled {
+                            root.selected-index = index;
+                            root.item-clicked(index);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Sections with headers and dividers (Requirements 11.5, 17.1)
+        if root.sections.length > 0: VerticalLayout {
+            spacing: CosmicSpacing.space-s;
+            
+            for section[section-index] in root.sections: VerticalLayout {
+                spacing: CosmicSpacing.space-xxxs;
+                
+                // Section header (Requirement 11.5, 17.1)
+                if section.header != "": Text {
+                    text: section.header;
+                    color: CosmicPalette.text-secondary;
+                    font-family: CosmicTypography.font-family;
+                    font-size: CosmicTypography.caption-size;  // 12px
+                    font-weight: CosmicTypography.weight-semibold;  // Semibold for headers
+                    padding-left: CosmicSpacing.space-s;  // Match item padding
+                    padding-top: CosmicSpacing.space-xs;
+                    padding-bottom: CosmicSpacing.space-xxs;
+                }
+                
+                // Section items
+                for item[item-index] in section.items: section-item := Rectangle {
+                    // 44px height with subtle radius (Requirements 11.6, 17.1)
+                    height: 44px;
+                    border-radius: CosmicCornerRadii.radius-xs;  // 4px for subtle rounding
+                    
+                    // State-based background (Requirements 11.3, 11.4, 17.1)
+                    background: {
+                        if section-index == root.selected-section && item-index == root.selected-item {
+                            // Active state: accent 15% opacity (Requirement 11.4, 17.1)
+                            CosmicPalette.accent-primary.with-alpha(0.15)
+                        } else if section-item-touch.has-hover && item.enabled {
+                            // Hover state: surface 50% opacity (Requirement 11.3, 17.1)
+                            CosmicPalette.background-surface.with-alpha(0.5)
+                        } else {
+                            // Normal state: transparent (Requirement 17.1)
+                            Colors.transparent
+                        }
+                    };
+                    
+                    // Disabled state
+                    opacity: item.enabled ? 1.0 : CosmicPalette.opacity-disabled;
+                    
+                    // Icon + text layout (Requirements 11.2, 11.7, 17.1)
+                    HorizontalLayout {
+                        padding-left: CosmicSpacing.space-s;  // 16px for more generous padding
+                        padding-right: CosmicSpacing.space-s;
+                        spacing: CosmicSpacing.space-xs;  // 12px spacing (Requirement 17.1)
+                        alignment: start;
+                        
+                        // Icon: 24px size for better visibility (Requirements 11.7, 17.1)
+                        Image {
+                            source: item.icon;
+                            width: 24px;
+                            height: 24px;
+                            // Active state: accent color (Requirement 11.4, 17.1)
+                            colorize: (section-index == root.selected-section && item-index == root.selected-item) ? 
+                                CosmicPalette.accent-primary : 
+                                CosmicPalette.text-primary;
+                            vertical-alignment: center;
+                        }
+                        
+                        // Text label
+                        Text {
+                            text: item.label;
+                            // Active state: accent color, medium weight (Requirements 11.4, 17.1)
+                            color: (section-index == root.selected-section && item-index == root.selected-item) ? 
+                                CosmicPalette.accent-primary : 
+                                CosmicPalette.text-primary;
+                            font-family: CosmicTypography.font-family;
+                            font-size: CosmicTypography.body-size;
+                            font-weight: (section-index == root.selected-section && item-index == root.selected-item) ? 
+                                CosmicTypography.weight-medium : 
+                                CosmicTypography.weight-regular;
+                            vertical-alignment: center;
+                            horizontal-stretch: 1;
+                        }
+                    }
+                    
+                    section-item-touch := TouchArea {
+                        enabled: !root.disabled && item.enabled;
+                        mouse-cursor: item.enabled ? pointer : default;
+                        
+                        clicked => {
+                            if item.enabled {
+                                root.selected-section = section-index;
+                                root.selected-item = item-index;
+                                root.section-item-clicked(section-index, item-index);
+                            }
+                        }
+                    }
+                }
+                
+                // Divider between sections (Requirement 11.5, 17.1)
+                if section-index < root.sections.length - 1: VerticalLayout {
+                    spacing: 0px;
+                    
+                    Rectangle {
+                        height: CosmicSpacing.space-xs;
+                    }
+                    
+                    Rectangle {
+                        height: 1px;
+                        background: CosmicPalette.divider;
+                    }
+                    
+                    Rectangle {
+                        height: CosmicSpacing.space-xs;
+                    }
+                }
+            }
+        }
+    }
+}

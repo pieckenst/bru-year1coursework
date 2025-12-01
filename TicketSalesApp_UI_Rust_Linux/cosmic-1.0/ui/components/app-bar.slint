@@ -1,0 +1,149 @@
+// COSMIC Desktop App Bar Component
+// Requirements: 16.1-16.7
+
+import { CosmicPalette } from "../styling/palette.slint";
+import { CosmicTypography } from "../styling/typography.slint";
+import { CosmicSpacing } from "../styling/spacing.slint";
+import { CosmicCornerRadii } from "../styling/corner-radii.slint";
+import { CosmicElevation } from "../styling/elevation.slint";
+
+// App bar action button structure
+export struct AppBarAction {
+    icon: image,
+    tooltip: string,
+    enabled: bool,
+}
+
+// COSMIC App Bar Component
+// A clean, modern app bar with title and action buttons
+export component CosmicAppBar inherits Rectangle {
+    // ============================================================================
+    // PUBLIC PROPERTIES
+    // ============================================================================
+    
+    // Title text (Requirement 16.2)
+    in property <string> title: "";
+    
+    // Action buttons array
+    in property <[AppBarAction]> actions: [];
+    
+    // Menu toggle icon (Requirement 16.7)
+    in property <image> menu-icon;
+    in property <bool> show-menu-toggle: false;
+    
+    // Disabled state
+    in property <bool> disabled: false;
+    
+    // ============================================================================
+    // CALLBACKS
+    // ============================================================================
+    
+    callback action-clicked(int);
+    callback menu-toggle-clicked();
+    
+    // ============================================================================
+    // STYLING (Requirements 16.1, 16.4, 16.5)
+    // ============================================================================
+    
+    // Surface background with minimal elevation (Requirement 16.1)
+    background: CosmicPalette.background-surface;
+    
+    // Minimal elevation shadow (Requirement 16.4)
+    drop-shadow-offset-y: CosmicElevation.shadow-sm-offset-y;
+    drop-shadow-blur: CosmicElevation.shadow-sm-blur;
+    drop-shadow-color: CosmicElevation.shadow-color-sm;
+    
+    // ============================================================================
+    // LAYOUT
+    // ============================================================================
+    
+    HorizontalLayout {
+        // Padding: 24px horizontal, 16-20px vertical (Requirement 16.5)
+        padding-left: CosmicSpacing.app-bar-padding-horizontal;
+        padding-right: CosmicSpacing.app-bar-padding-horizontal;
+        padding-top: CosmicSpacing.app-bar-padding-vertical;
+        padding-bottom: CosmicSpacing.app-bar-padding-vertical;
+        spacing: CosmicSpacing.space-s;
+        
+        // Menu toggle button (Requirement 16.7)
+        if root.show-menu-toggle: Rectangle {
+            width: 40px;
+            height: 40px;
+            border-radius: CosmicCornerRadii.icon-button-radius;
+            
+            // Hover effect (Requirement 16.6)
+            background: menu-toggle-touch.has-hover ? 
+                CosmicPalette.surface-variant : 
+                Colors.transparent;
+            
+            Image {
+                source: root.menu-icon;
+                width: 20px;
+                height: 20px;
+                colorize: CosmicPalette.text-primary;
+                x: (parent.width - self.width) / 2;
+                y: (parent.height - self.height) / 2;
+            }
+            
+            menu-toggle-touch := TouchArea {
+                enabled: !root.disabled;
+                mouse-cursor: pointer;
+                
+                clicked => {
+                    root.menu-toggle-clicked();
+                }
+            }
+        }
+        
+        // Title (Requirement 16.2)
+        Text {
+            text: root.title;
+            color: CosmicPalette.text-primary;
+            font-family: CosmicTypography.font-family;
+            font-size: CosmicTypography.app-bar-title-size;  // 18-20px
+            font-weight: CosmicTypography.app-bar-title-weight;  // semibold (600)
+            vertical-alignment: center;
+            horizontal-stretch: 1;
+        }
+        
+        // Action buttons (Requirement 16.3)
+        HorizontalLayout {
+            spacing: CosmicSpacing.space-xxs;
+            
+            for action[index] in root.actions: Rectangle {
+                // 40x40px action buttons (Requirement 16.3)
+                width: 40px;
+                height: 40px;
+                border-radius: CosmicCornerRadii.icon-button-radius;  // 8px radius
+                
+                // Hover effect: surface-variant background (Requirement 16.6)
+                background: action-touch.has-hover && action.enabled ? 
+                    CosmicPalette.surface-variant : 
+                    Colors.transparent;
+                
+                // Disabled state
+                opacity: action.enabled ? 1.0 : CosmicPalette.opacity-disabled;
+                
+                Image {
+                    source: action.icon;
+                    width: 20px;
+                    height: 20px;
+                    colorize: CosmicPalette.text-primary;
+                    x: (parent.width - self.width) / 2;
+                    y: (parent.height - self.height) / 2;
+                }
+                
+                action-touch := TouchArea {
+                    enabled: !root.disabled && action.enabled;
+                    mouse-cursor: action.enabled ? pointer : default;
+                    
+                    clicked => {
+                        if action.enabled {
+                            root.action-clicked(index);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

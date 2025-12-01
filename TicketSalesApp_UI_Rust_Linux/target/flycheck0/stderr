@@ -1,3 +1,4 @@
+    Blocking waiting for file lock on build directory
 warning: TicketSalesApp_UI_Rust_Linux@0.1.0: The property 'rotation-angle' has been deprecated. Please use 'transform-rotation' instead
 warning: TicketSalesApp_UI_Rust_Linux@0.1.0:    --> D:\code\bru-year1coursework\TicketSalesApp_UI_Rust_Linux\material-1.0\ui\components\date_picker.slint:300:13
 warning: TicketSalesApp_UI_Rust_Linux@0.1.0:     |
@@ -8,4 +9,4 @@ warning: TicketSalesApp_UI_Rust_Linux@0.1.0:    --> D:\code\bru-year1coursework\
 warning: TicketSalesApp_UI_Rust_Linux@0.1.0:     |
 warning: TicketSalesApp_UI_Rust_Linux@0.1.0: 304 |             animate rotation-angle { duration: 250ms; }
 warning: TicketSalesApp_UI_Rust_Linux@0.1.0:     |                     ^
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.49s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1m 26s
