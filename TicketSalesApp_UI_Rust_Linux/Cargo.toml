@@ -3,15 +3,25 @@ name = "TicketSalesApp_UI_Rust_Linux"
 version = "0.1.0"
 edition = "2024"
 
+[features]
+default = ["slint-ui"]
+slint-ui = ["dep:slint"]
+gpui-ui = ["dep:gpui", "dep:gpui-component"]
+
 [dependencies]
 chrono = { version = "0.4.42", features = ["serde"] }
 reqwest = { version = "0.12.24", features = ["json", "rustls-tls"] }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.145"
-slint = "1.14.1"
+slint = { version = "1.14.1", optional = true }
 log = "0.4.20"
 once_cell = "1.21.3"
 tokio = { version = "1.48.0", features = ["full", "rt-multi-thread"] }
 urlencoding = "2.1"
+
+# GPUI dependencies (optional)
+gpui = { version = "0.2.2", optional = true }
+gpui-component = { version = "0.4.2", optional = true }
+
 [build-dependencies]
-slint-build = "1.12.1"
+slint-build = { version = "1.12.1"}
