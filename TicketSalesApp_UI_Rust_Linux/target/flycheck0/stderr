@@ -18,4 +18,4 @@ warning: TicketSalesApp_UI_Rust_Linux@0.1.0:    --> D:\code\bru-year1coursework\
 warning: TicketSalesApp_UI_Rust_Linux@0.1.0:     |
 warning: TicketSalesApp_UI_Rust_Linux@0.1.0: 175 |             padding: 10px;
 warning: TicketSalesApp_UI_Rust_Linux@0.1.0:     |                      ^
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.78s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.68s
