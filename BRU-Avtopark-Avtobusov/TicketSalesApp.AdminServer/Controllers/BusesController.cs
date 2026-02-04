@@ -1,59 +1,53 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TicketSalesApp.Core.Data;
 using TicketSalesApp.Core.Models;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using Serilog;
+using TicketSalesApp.AdminServer.Configuration;
+using TicketSalesApp.AdminServer.Services.Interfaces;
 
 namespace TicketSalesApp.AdminServer.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize] // Allow all authenticated users to read
-    public class BusesController : ControllerBase
+    public class BusesController : BaseAuthorizedController
     {
         private readonly AppDbContext _context;
 
-        public BusesController(AppDbContext context)
+        public BusesController(
+            AppDbContext context, 
+            ILogger<BusesController> logger,
+            IRoleCacheService roleCacheService) 
+            : base(logger, roleCacheService)
         {
             _context = context;
         }
 
-        private bool IsAdmin()
-        {
-            var authHeader = Request.Headers["Authorization"].ToString();
-            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
-                return false;
-
-            var token = authHeader.Substring("Bearer ".Length);
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var jwtToken = tokenHandler.ReadJwtToken(token);
-            var roleClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "role");
-            return roleClaim?.Value == "1";
-        }
-
         [HttpGet]
+        [Authorize(Policy = AuthorizationPolicies.CanViewDashboard)] // Any authenticated user can view buses
         public async Task<ActionResult<IEnumerable<Avtobus>>> GetBuses()
         {
-            Log.Information("Fetching all buses with their routes and service records");
+            _logger.LogInformation("Fetching all buses with their routes and service records");
             var buses = await _context.Avtobusy
                 .Include(b => b.Routes)
                 .Include(b => b.Obsluzhivanies)
                 .ToListAsync();
             
-            Log.Debug("Retrieved {BusCount} buses", buses.Count);
+            _logger.LogDebug("Retrieved {BusCount} buses", buses.Count);
+            LogAuthorizedAction("view buses", new { Count = buses.Count });
             return buses;
         }
 
         [HttpGet("{id}")]
+        [Authorize(Policy = AuthorizationPolicies.CanViewDashboard)] // Any authenticated user can view a specific bus
         public async Task<ActionResult<Avtobus>> GetBus(long id)
         {
-            Log.Information("Fetching bus with ID {BusId}", id);
+            _logger.LogInformation("Fetching bus with ID {BusId}", id);
             var bus = await _context.Avtobusy
                 .Include(b => b.Routes)
                 .Include(b => b.Obsluzhivanies)
@@ -61,24 +55,26 @@ namespace TicketSalesApp.AdminServer.Controllers
 
             if (bus == null)
             {
-                Log.Warning("Bus with ID {BusId} not found", id);
-                return NotFound();
+                _logger.LogWarning("Bus with ID {BusId} not found", id);
+                return NotFound(new { Message = "Bus not found", Id = id });
             }
 
-            Log.Debug("Successfully retrieved bus with ID {BusId}", id);
+            _logger.LogDebug("Successfully retrieved bus with ID {BusId}", id);
+            LogAuthorizedAction("view bus", new { BusId = id });
             return bus;
         }
 
         [HttpPost]
+        [Authorize(Policy = AuthorizationPolicies.CanManageBuses)] // Requires bus management permission
         public async Task<ActionResult<Avtobus>> CreateBus([FromBody] CreateBusModel model)
         {
-            if (!IsAdmin())
+            if (model == null || string.IsNullOrWhiteSpace(model.Model))
             {
-                Log.Warning("Unauthorized attempt to create bus by non-admin user");
-                return Forbid();
+                _logger.LogWarning("Invalid bus model provided");
+                return BadRequest(new { Message = "Bus model is required" });
             }
 
-            Log.Information("Creating new bus with model {Model}", model.Model);
+            _logger.LogInformation("Creating new bus with model {Model}", model.Model);
             var bus = new Avtobus
             {
                 Model = model.Model
@@ -93,44 +89,43 @@ namespace TicketSalesApp.AdminServer.Controllers
                 .Include(b => b.Obsluzhivanies)
                 .FirstAsync(b => b.BusId == bus.BusId);
 
-            Log.Information("Successfully created bus with ID {BusId}", bus.BusId);
+            LogAuthorizedAction("create bus", new { BusId = bus.BusId, Model = model.Model });
             return CreatedAtAction(nameof(GetBus), new { id = bus.BusId }, bus);
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = AuthorizationPolicies.CanManageBuses)] // Requires bus management permission
         public async Task<IActionResult> UpdateBus(long id, [FromBody] UpdateBusModel model)
         {
-            if (!IsAdmin())
+            if (model == null)
             {
-                Log.Warning("Unauthorized attempt to update bus by non-admin user");
-                return Forbid();
+                return CreateValidationErrorResponse("Update model is required");
             }
 
-            Log.Information("Updating bus with ID {BusId}", id);
+            _logger.LogInformation("Updating bus with ID {BusId}", id);
             var bus = await _context.Avtobusy.FindAsync(id);
             if (bus == null)
             {
-                Log.Warning("Bus with ID {BusId} not found for update", id);
-                return NotFound();
+                return CreateNotFoundResponse("Bus", id);
             }
 
             if (model.Model != null)
             {
-                Log.Debug("Updating bus model from {OldModel} to {NewModel}", bus.Model, model.Model);
+                _logger.LogDebug("Updating bus model from {OldModel} to {NewModel}", bus.Model, model.Model);
                 bus.Model = model.Model;
             }
 
             try
             {
                 await _context.SaveChangesAsync();
-                Log.Information("Successfully updated bus with ID {BusId}", id);
+                LogAuthorizedAction("update bus", new { BusId = id, NewModel = model.Model });
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                Log.Error(ex, "Concurrency error updating bus with ID {BusId}", id);
+                _logger.LogError(ex, "Concurrency error updating bus with ID {BusId}", id);
                 if (!await BusExists(id))
                 {
-                    return NotFound();
+                    return CreateNotFoundResponse("Bus", id);
                 }
                 throw;
             }
@@ -139,35 +134,30 @@ namespace TicketSalesApp.AdminServer.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = AuthorizationPolicies.CanManageBuses)] // Requires bus management permission
         public async Task<IActionResult> DeleteBus(long id)
         {
-            if (!IsAdmin())
-            {
-                Log.Warning("Unauthorized attempt to delete bus by non-admin user");
-                return Forbid();
-            }
-
-            Log.Information("Deleting bus with ID {BusId}", id);
+            _logger.LogInformation("Deleting bus with ID {BusId}", id);
             var bus = await _context.Avtobusy.FindAsync(id);
             if (bus == null)
             {
-                Log.Warning("Bus with ID {BusId} not found for deletion", id);
-                return NotFound();
+                return CreateNotFoundResponse("Bus", id);
             }
 
             _context.Avtobusy.Remove(bus);
             await _context.SaveChangesAsync();
 
-            Log.Information("Successfully deleted bus with ID {BusId}", id);
+            LogAuthorizedAction("delete bus", new { BusId = id });
             return NoContent();
         }
 
         [HttpGet("search")]
+        [Authorize(Policy = AuthorizationPolicies.CanViewDashboard)] // Any authenticated user can search buses
         public async Task<ActionResult<IEnumerable<Avtobus>>> SearchBuses(
             [FromQuery] string? model = null,
             [FromQuery] string? serviceStatus = null)
         {
-            Log.Information("Searching buses with model: {Model}, service status: {ServiceStatus}", 
+            _logger.LogInformation("Searching buses with model: {Model}, service status: {ServiceStatus}", 
                 model ?? "any", serviceStatus ?? "any");
 
             var query = _context.Avtobusy
@@ -177,24 +167,25 @@ namespace TicketSalesApp.AdminServer.Controllers
 
             if (!string.IsNullOrEmpty(model))
             {
-                Log.Debug("Filtering by model containing: {Model}", model);
+                _logger.LogDebug("Filtering by model containing: {Model}", model);
                 query = query.Where(b => b.Model.Contains(model));
             }
 
             if (!string.IsNullOrEmpty(serviceStatus))
             {
-                Log.Debug("Filtering by service status: {ServiceStatus}", serviceStatus);
+                _logger.LogDebug("Filtering by service status: {ServiceStatus}", serviceStatus);
                 query = query.Where(b => b.Obsluzhivanies.Any(m => m.Roadworthiness == serviceStatus));
             }
 
             var results = await query.ToListAsync();
-            Log.Debug("Found {ResultCount} buses matching search criteria", results.Count);
+            _logger.LogDebug("Found {ResultCount} buses matching search criteria", results.Count);
+            LogAuthorizedAction("search buses", new { ResultCount = results.Count, Model = model, ServiceStatus = serviceStatus });
             return results;
         }
 
         private async Task<bool> BusExists(long id)
         {
-            Log.Debug("Checking if bus with ID {BusId} exists", id);
+            _logger.LogDebug("Checking if bus with ID {BusId} exists", id);
             return await _context.Avtobusy.AnyAsync(e => e.BusId == id);
         }
     }

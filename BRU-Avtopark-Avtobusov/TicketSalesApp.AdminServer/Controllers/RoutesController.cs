@@ -1,60 +1,54 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TicketSalesApp.Core.Data;
 using TicketSalesApp.Core.Models;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using Serilog;
+using TicketSalesApp.AdminServer.Configuration;
+using TicketSalesApp.AdminServer.Services.Interfaces;
 
 namespace TicketSalesApp.AdminServer.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize] // Allow all authenticated users to read
-    public class RoutesController : ControllerBase
+    public class RoutesController : BaseAuthorizedController
     {
         private readonly AppDbContext _context;
 
-        public RoutesController(AppDbContext context)
+        public RoutesController(
+            AppDbContext context,
+            ILogger<RoutesController> logger,
+            IRoleCacheService roleCacheService)
+            : base(logger, roleCacheService)
         {
             _context = context;
         }
 
-        private bool IsAdmin()
-        {
-            var authHeader = Request.Headers["Authorization"].ToString();
-            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
-                return false;
-
-            var token = authHeader.Substring("Bearer ".Length);
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var jwtToken = tokenHandler.ReadJwtToken(token);
-            var roleClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "role");
-            return roleClaim?.Value == "1";
-        }
-
         [HttpGet]
+        [Authorize(Policy = AuthorizationPolicies.CanViewDashboard)] // Any authenticated user can view routes
         public async Task<ActionResult<IEnumerable<Marshut>>> GetRoutes()
         {
-            Log.Information("Fetching all routes with their related data");
+            _logger.LogInformation("Fetching all routes with their related data");
             var routes = await _context.Marshuti
                 .Include(r => r.Avtobus)
                 .Include(r => r.Employee)
                 .Include(r => r.Tickets)
                 .ToListAsync();
             
-            Log.Debug("Retrieved {RouteCount} routes", routes.Count);
+            _logger.LogDebug("Retrieved {RouteCount} routes", routes.Count);
+            LogAuthorizedAction("view routes", new { Count = routes.Count });
             return routes;
         }
 
         [HttpGet("{id}")]
+        [Authorize(Policy = AuthorizationPolicies.CanViewDashboard)] // Any authenticated user can view a specific route
         public async Task<ActionResult<Marshut>> GetRoute(long id)
         {
-            Log.Information("Fetching route with ID {RouteId}", id);
+            _logger.LogInformation("Fetching route with ID {RouteId}", id);
             var route = await _context.Marshuti
                 .Include(r => r.Avtobus)
                 .Include(r => r.Employee)
@@ -63,39 +57,49 @@ namespace TicketSalesApp.AdminServer.Controllers
 
             if (route == null)
             {
-                Log.Warning("Route with ID {RouteId} not found", id);
-                return NotFound();
+                _logger.LogWarning("Route with ID {RouteId} not found", id);
+                return NotFound(new { Message = "Route not found", Id = id });
             }
 
-            Log.Debug("Successfully retrieved route with ID {RouteId}", id);
+            _logger.LogDebug("Successfully retrieved route with ID {RouteId}", id);
+            LogAuthorizedAction("view route", new { RouteId = id });
             return route;
         }
 
         [HttpPost]
+        [Authorize(Policy = AuthorizationPolicies.CanManageRoutes)] // Requires route management permission
         public async Task<ActionResult<Marshut>> CreateRoute([FromBody] CreateRouteModel model)
         {
-            if (!IsAdmin())
+            if (model == null)
             {
-                Log.Warning("Unauthorized attempt to create route by non-admin user");
-                return Forbid();
+                _logger.LogWarning("Route model is required");
+                return BadRequest(new { Message = "Route model is required" });
             }
 
-            Log.Information("Creating new route from {StartPoint} to {EndPoint}", model.StartPoint, model.EndPoint);
+            if (string.IsNullOrWhiteSpace(model.StartPoint) || string.IsNullOrWhiteSpace(model.EndPoint))
+            {
+                _logger.LogWarning("Start point and end point are required");
+                return BadRequest(new { Message = "Start point and end point are required" });
+            }
 
+            _logger.LogInformation("Creating new route from {StartPoint} to {EndPoint}", model.StartPoint, model.EndPoint);
+
+            // Validate bus exists
             var bus = await _context.Avtobusy.FindAsync(model.BusId);
             if (bus == null)
             {
-                Log.Warning("Invalid bus ID {BusId} provided for route creation", model.BusId);
-                return BadRequest("Invalid bus ID");
+                _logger.LogWarning("Invalid bus ID {BusId} provided", model.BusId);
+                return BadRequest(new { Message = "Invalid bus ID", BusId = model.BusId });
             }
 
+            // Validate driver exists
             var driver = await _context.Employees.FindAsync(model.DriverId);
             if (driver == null)
             {
-                Log.Warning("Invalid driver ID {DriverId} provided for route creation", model.DriverId);
-                return BadRequest("Invalid driver ID");
+                _logger.LogWarning("Invalid driver ID {DriverId} provided", model.DriverId);
+                return BadRequest(new { Message = "Invalid driver ID", DriverId = model.DriverId });
             }
-
+            
             var route = new Marshut
             {
                 StartPoint = model.StartPoint,
@@ -115,69 +119,73 @@ namespace TicketSalesApp.AdminServer.Controllers
                 .Include(r => r.Tickets)
                 .FirstAsync(r => r.RouteId == route.RouteId);
 
-            Log.Information("Successfully created route with ID {RouteId}", route.RouteId);
+            LogAuthorizedAction("create route", new { RouteId = route.RouteId, StartPoint = model.StartPoint, EndPoint = model.EndPoint });
             return CreatedAtAction(nameof(GetRoute), new { id = route.RouteId }, route);
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = AuthorizationPolicies.CanManageRoutes)] // Requires route management permission
         public async Task<IActionResult> UpdateRoute(long id, [FromBody] UpdateRouteModel model)
         {
-            if (!IsAdmin())
+            if (model == null)
             {
-                Log.Warning("Unauthorized attempt to update route by non-admin user");
-                return Forbid();
+                return CreateValidationErrorResponse("Update model is required");
             }
 
-            Log.Information("Updating route with ID {RouteId}", id);
+            _logger.LogInformation("Updating route with ID {RouteId}", id);
             var route = await _context.Marshuti.FindAsync(id);
             if (route == null)
             {
-                Log.Warning("Route with ID {RouteId} not found for update", id);
-                return NotFound();
+                return CreateNotFoundResponse("Route", id);
             }
 
+            // Validate bus if provided
             if (model.BusId.HasValue)
             {
                 var bus = await _context.Avtobusy.FindAsync(model.BusId.Value);
                 if (bus == null)
                 {
-                    Log.Warning("Invalid bus ID {BusId} provided for route update", model.BusId.Value);
-                    return BadRequest("Invalid bus ID");
+                    return CreateValidationErrorResponse("Invalid bus ID", new { BusId = model.BusId.Value });
                 }
                 route.BusId = model.BusId.Value;
             }
 
+            // Validate driver if provided
             if (model.DriverId.HasValue)
             {
                 var driver = await _context.Employees.FindAsync(model.DriverId.Value);
                 if (driver == null)
                 {
-                    Log.Warning("Invalid driver ID {DriverId} provided for route update", model.DriverId.Value);
-                    return BadRequest("Invalid driver ID");
+                    return CreateValidationErrorResponse("Invalid driver ID", new { DriverId = model.DriverId.Value });
                 }
                 route.DriverId = model.DriverId.Value;
             }
 
+            // Update other fields if provided
             if (model.StartPoint != null)
+            {
                 route.StartPoint = model.StartPoint;
-
+            }
             if (model.EndPoint != null)
+            {
                 route.EndPoint = model.EndPoint;
-
+            }
             if (model.TravelTime != null)
+            {
                 route.TravelTime = model.TravelTime;
+            }
 
             try
             {
                 await _context.SaveChangesAsync();
-                Log.Information("Successfully updated route with ID {RouteId}", id);
+                LogAuthorizedAction("update route", new { RouteId = id });
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                Log.Error(ex, "Concurrency error updating route with ID {RouteId}", id);
+                _logger.LogError(ex, "Concurrency error updating route with ID {RouteId}", id);
                 if (!await RouteExists(id))
                 {
-                    return NotFound();
+                    return CreateNotFoundResponse("Route", id);
                 }
                 throw;
             }
@@ -186,37 +194,32 @@ namespace TicketSalesApp.AdminServer.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = AuthorizationPolicies.CanManageRoutes)] // Requires route management permission
         public async Task<IActionResult> DeleteRoute(long id)
         {
-            if (!IsAdmin())
-            {
-                Log.Warning("Unauthorized attempt to delete route by non-admin user");
-                return Forbid();
-            }
-
-            Log.Information("Deleting route with ID {RouteId}", id);
+            _logger.LogInformation("Deleting route with ID {RouteId}", id);
             var route = await _context.Marshuti.FindAsync(id);
             if (route == null)
             {
-                Log.Warning("Route with ID {RouteId} not found for deletion", id);
-                return NotFound();
+                return CreateNotFoundResponse("Route", id);
             }
 
             _context.Marshuti.Remove(route);
             await _context.SaveChangesAsync();
 
-            Log.Information("Successfully deleted route with ID {RouteId}", id);
+            LogAuthorizedAction("delete route", new { RouteId = id });
             return NoContent();
         }
 
         [HttpGet("search")]
+        [Authorize(Policy = AuthorizationPolicies.CanViewDashboard)] // Any authenticated user can search routes
         public async Task<ActionResult<IEnumerable<Marshut>>> SearchRoutes(
             [FromQuery] string? startPoint = null,
             [FromQuery] string? endPoint = null,
             [FromQuery] string? busModel = null,
             [FromQuery] string? driverName = null)
         {
-            Log.Information("Searching routes with start point: {StartPoint}, end point: {EndPoint}, bus model: {BusModel}, driver name: {DriverName}",
+            _logger.LogInformation("Searching routes with start point: {StartPoint}, end point: {EndPoint}, bus model: {BusModel}, driver name: {DriverName}",
                 startPoint ?? "any", endPoint ?? "any", busModel ?? "any", driverName ?? "any");
 
             var query = _context.Marshuti
@@ -226,25 +229,35 @@ namespace TicketSalesApp.AdminServer.Controllers
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(startPoint))
+            {
                 query = query.Where(r => r.StartPoint.Contains(startPoint));
+            }
 
             if (!string.IsNullOrEmpty(endPoint))
+            {
                 query = query.Where(r => r.EndPoint.Contains(endPoint));
+            }
 
             if (!string.IsNullOrEmpty(busModel))
+            {
                 query = query.Where(r => r.Avtobus.Model.Contains(busModel));
+            }
 
             if (!string.IsNullOrEmpty(driverName))
+            {
                 query = query.Where(r => r.Employee.Name.Contains(driverName) || 
                                        r.Employee.Surname.Contains(driverName));
+            }
 
             var results = await query.ToListAsync();
-            Log.Debug("Found {RouteCount} routes matching search criteria", results.Count);
+            _logger.LogDebug("Found {RouteCount} routes matching search criteria", results.Count);
+            LogAuthorizedAction("search routes", new { ResultCount = results.Count, StartPoint = startPoint, EndPoint = endPoint, BusModel = busModel, DriverName = driverName });
             return results;
         }
 
         private async Task<bool> RouteExists(long id)
         {
+            _logger.LogDebug("Checking if route with ID {RouteId} exists", id);
             return await _context.Marshuti.AnyAsync(e => e.RouteId == id);
         }
     }

@@ -24,6 +24,8 @@
     <Import Project="$(NuGetPackageRoot)microcom.codegenerator.msbuild\0.11.0\buildTransitive\MicroCom.CodeGenerator.MSBuild.props" Condition="Exists('$(NuGetPackageRoot)microcom.codegenerator.msbuild\0.11.0\buildTransitive\MicroCom.CodeGenerator.MSBuild.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgAWSSDK_Core Condition=" '$(PkgAWSSDK_Core)' == '' ">C:\Users\andrej\.nuget\packages\awssdk.core\3.7.100.14</PkgAWSSDK_Core>
+    <PkgAWSSDK_SecurityToken Condition=" '$(PkgAWSSDK_SecurityToken)' == '' ">C:\Users\andrej\.nuget\packages\awssdk.securitytoken\3.7.100.14</PkgAWSSDK_SecurityToken>
     <PkgMicrosoft_CodeAnalysis_Analyzers Condition=" '$(PkgMicrosoft_CodeAnalysis_Analyzers)' == '' ">C:\Users\andrej\.nuget\packages\microsoft.codeanalysis.analyzers\3.3.4</PkgMicrosoft_CodeAnalysis_Analyzers>
     <PkgMicrosoft_EntityFrameworkCore_Tools Condition=" '$(PkgMicrosoft_EntityFrameworkCore_Tools)' == '' ">C:\Users\andrej\.nuget\packages\microsoft.entityframeworkcore.tools\9.0.1</PkgMicrosoft_EntityFrameworkCore_Tools>
     <PkgAvalonia_BuildServices Condition=" '$(PkgAvalonia_BuildServices)' == '' ">C:\Users\andrej\.nuget\packages\avalonia.buildservices\0.0.29</PkgAvalonia_BuildServices>

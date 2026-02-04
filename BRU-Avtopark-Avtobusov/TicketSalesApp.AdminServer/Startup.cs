@@ -6,8 +6,12 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using TicketSalesApp.AdminServer.Security;
+using TicketSalesApp.AdminServer.Authentication;
+using TicketSalesApp.AdminServer.Authorization;
+using TicketSalesApp.AdminServer.Hubs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +30,8 @@ using TicketSalesApp.AdminServer.Configuration;
 using TicketSalesApp.Core.Data;
 using TicketSalesApp.Core.Models;
 using TicketSalesApp.Services.Implementations;
+using TicketSalesApp.AdminServer.Services.Interfaces;
+using TicketSalesApp.AdminServer.Services;
 using TicketSalesApp.Services.Interfaces;
 using App.Metrics;
 using App.Metrics.Formatters.Prometheus;
@@ -34,6 +40,10 @@ using App.Metrics.AspNetCore;
 using App.Metrics.AspNetCore.Endpoints;
 using Prometheus;
 using Serilog;
+using Fido2NetLib;
+using Hangfire;
+using Hangfire.Storage.SQLite;
+using TicketSalesApp.AdminServer.Configuration;
 
 namespace TicketSalesApp.AdminServer
 {
@@ -99,7 +109,7 @@ namespace TicketSalesApp.AdminServer
 
             try
             {
-                // Configure DbContext
+                // Configure primary database (SQL) - keep existing approach
                 var provider = Configuration.GetValue<string>("DatabaseProvider", "SQLite");
                 var dbPath = Path.Combine(AppContext.BaseDirectory, "ticketsales.db");
 
@@ -145,10 +155,15 @@ namespace TicketSalesApp.AdminServer
                     services.AddScoped(sp =>
                         new AppDbContext(sp.GetRequiredService<DbContextOptions<AppDbContext>>(), "SQLServer"));
                 }
+
+                // Add enhanced database services (MongoDB, Redis, Repository pattern)
+                services.AddDatabaseServices(Configuration);
+                
+                _logger.LogInformation("Enhanced database architecture configured successfully with primary SQL database and MongoDB/Redis support");
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex, "Failed to configure database. Application startup will be aborted.");
+                _logger.LogCritical(ex, "Failed to configure enhanced database architecture. Application startup will be aborted.");
                 throw;
             }
 
@@ -162,6 +177,16 @@ namespace TicketSalesApp.AdminServer
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .WithExposedHeaders("Content-Disposition", "Authorization");
+                });
+
+                // Specific CORS policy for SignalR
+                options.AddPolicy("SignalRCors", builder =>
+                {
+                    builder
+                        .WithOrigins("http://localhost:3000", "https://localhost:3001", "http://localhost:5000", "https://localhost:5001")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials(); // Required for SignalR
                 });
             });
 
@@ -203,16 +228,16 @@ namespace TicketSalesApp.AdminServer
                     options.PersistNtlmCredentials=false;
                 });
 
-                // Add our custom authorization handler for Windows Authentication security
+                // Add our custom authorization handlers
                 services.AddSingleton<IAuthorizationHandler, WindowsAuthSecurityHandler>();
+                services.AddScoped<IAuthorizationHandler, DatabaseRoleAuthorizationHandler>();
                 services.AddHttpContextAccessor();
 
                 // Add authorization policies
                 services.AddAuthorization(options =>
                 {
-                    // Existing JWT policy
-                    options.AddPolicy("AdminOnly", policy =>
-                        policy.RequireClaim("role", "1"));
+                    // Configure database-backed authorization policies
+                    TicketSalesApp.AdminServer.Configuration.AuthorizationPolicies.ConfigurePolicies(options);
                         
                     // Windows Authentication policy with enhanced security
                     options.AddPolicy("WindowsAuth", policy =>
@@ -241,6 +266,21 @@ namespace TicketSalesApp.AdminServer
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ITicketSalesService, TicketSalesService>();
             services.AddScoped<IDataService, DataService>();
+            
+            // Register Business Services
+            services.AddScoped<TicketSalesApp.AdminServer.Services.Interfaces.IAuthenticationBusinessService, TicketSalesApp.AdminServer.Services.AuthenticationBusinessService>();
+            services.AddScoped<TicketSalesApp.AdminServer.Services.Interfaces.IWindowsAuthBusinessService, TicketSalesApp.AdminServer.Services.WindowsAuthBusinessService>();
+            
+            // Add memory cache and distributed cache
+            services.AddMemoryCache();
+            services.AddDistributedMemoryCache(); // Required for Fido2 library
+            
+            // Configure Redis for session state and distributed caching
+            ConfigureRedisServices(services);
+            
+            // Configure WebAuthn (FIDO2) services
+            ConfigureWebAuthn(services);
+            
             services.AddHttpContextAccessor();
             // Rate Limiting
             services.Configure<RateLimitOptions>(Configuration.GetSection(RateLimitOptions.RateLimit));
@@ -352,10 +392,28 @@ namespace TicketSalesApp.AdminServer
 
             // Register services
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IRoleCacheService, RoleCacheService>();
+            services.AddScoped<IUserRoleChangeNotificationService, UserRoleChangeNotificationService>();
 
             // Add QR Authentication Service
             services.AddMemoryCache(); // Required for QR login session management
             services.AddScoped<IQRAuthenticationService, QRAuthenticationService>();
+
+            // Configure SignalR with Redis backplane
+            ConfigureSignalR(services);
+
+            // Register notification service
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<INotificationHubContext, TicketSalesApp.AdminServer.Services.SignalRNotificationHubContext>();
+
+            // Configure Hangfire BEFORE Export Services (required for IBackgroundJobClient)
+            ConfigureHangfire(services);
+
+            // Configure Export Services (depends on Hangfire)
+            ConfigureExportServices(services);
+            
+            // Register data synchronization service for SQL-MongoDB sync
+            services.AddScoped<IDataSynchronizationService, DataSynchronizationService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext context)
@@ -411,6 +469,9 @@ namespace TicketSalesApp.AdminServer
 
             app.UseRouting();
 
+            // Add response caching middleware (after routing, before CORS)
+            app.UseMiddleware<TicketSalesApp.AdminServer.Middleware.ResponseCachingMiddleware>();
+
             // Configure CORS after routing but before authentication
             app.UseCors("AllowAll");
 
@@ -429,15 +490,28 @@ namespace TicketSalesApp.AdminServer
                 await next();
             });
 
+            // Add session middleware (must be before authentication)
+            app.UseSession();
+
             app.UseAuthentication();
             app.UseAuthorization();
+
+            // Configure Hangfire Dashboard (after authentication)
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = new[] { new HangfireAuthorizationFilter() }
+            });
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers().RequireCors("AllowAll");
+                
+                // Map SignalR hub with specific CORS policy
+                endpoints.MapHub<NotificationHub>("/hubs/notifications")
+                    .RequireCors("SignalRCors");
             });
 
-            // Initialize database
+            // Initialize database (existing approach) + enhanced services
             try
             {
                 // Ensure database is created and migrations are applied
@@ -460,15 +534,8 @@ namespace TicketSalesApp.AdminServer
                         fs.Close();
                     }
 
-                    // Ensure we have write permissions
-                    try
-                    {
-                        using var test = File.OpenWrite(dbPath);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new InvalidOperationException($"Cannot write to database file at {dbPath}. Please check permissions.", ex);
-                    }
+                    // Note: Permission checks are handled by Entity Framework during initialization
+                    // Attempting to open the file here can cause locking conflicts
                 }
 
                 // Initialize database with retries
@@ -482,6 +549,11 @@ namespace TicketSalesApp.AdminServer
                         try
                         {
                             await DbInitializer.InitializeAsync(context, provider, _logger);
+                            
+                            // Also initialize enhanced database services
+                            await app.ApplicationServices.InitializeDatabasesAsync();
+                            
+                            _logger.LogInformation("Database initialization completed successfully with enhanced services");
                             break; // Success
                         }
                         catch (Exception ex) when (retryCount < maxRetries)
@@ -496,6 +568,251 @@ namespace TicketSalesApp.AdminServer
             catch (Exception ex)
             {
                 _logger.LogCritical(ex, "Failed to initialize database. Application startup will be aborted.");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Configure SignalR with Redis backplane and JWT authentication
+        /// </summary>
+        private void ConfigureSignalR(IServiceCollection services)
+        {
+            try
+            {
+                var signalRSettings = Configuration.GetSection("SignalR");
+                var useRedisBackplane = signalRSettings.GetValue<bool>("UseRedisBackplane", true);
+                var redisConnectionString = signalRSettings.GetValue<string>("RedisConnectionString") 
+                    ?? Configuration.GetConnectionString("Redis");
+
+                var signalRBuilder = services.AddSignalR(options =>
+                {
+                    // Configure SignalR options
+                    options.EnableDetailedErrors = Environment.IsDevelopment() || 
+                        signalRSettings.GetValue<bool>("EnableDetailedErrors", false);
+                    
+                    // Configure timeouts
+                    var clientTimeoutInterval = signalRSettings.GetValue<string>("ClientTimeoutInterval");
+                    if (!string.IsNullOrEmpty(clientTimeoutInterval) && TimeSpan.TryParse(clientTimeoutInterval, out var clientTimeout))
+                    {
+                        options.ClientTimeoutInterval = clientTimeout;
+                    }
+
+                    var keepAliveInterval = signalRSettings.GetValue<string>("KeepAliveInterval");
+                    if (!string.IsNullOrEmpty(keepAliveInterval) && TimeSpan.TryParse(keepAliveInterval, out var keepAlive))
+                    {
+                        options.KeepAliveInterval = keepAlive;
+                    }
+
+                    // Configure maximum message size (default 32KB)
+                    options.MaximumReceiveMessageSize = 32 * 1024; // 32KB
+
+                    _logger.LogInformation("SignalR configured with detailed errors: {DetailedErrors}, " +
+                        "client timeout: {ClientTimeout}, keep alive: {KeepAlive}",
+                        options.EnableDetailedErrors, options.ClientTimeoutInterval, options.KeepAliveInterval);
+                });
+
+                // Configure Redis backplane if enabled
+                if (useRedisBackplane && !string.IsNullOrEmpty(redisConnectionString))
+                {
+                    try
+                    {
+                        signalRBuilder.AddStackExchangeRedis(redisConnectionString, options =>
+                        {
+                            options.Configuration.ChannelPrefix = "TicketSalesApp";
+                            
+                            // Use specific database for SignalR
+                            var redisSettings = Configuration.GetSection("Redis");
+                            var signalRDatabase = redisSettings.GetValue<int>("SignalRDatabase", 3);
+                            options.Configuration.DefaultDatabase = signalRDatabase;
+                        });
+                        
+                        _logger.LogInformation("SignalR configured with Redis backplane at {RedisConnectionString}", 
+                            redisConnectionString);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Failed to configure Redis backplane, falling back to single server mode");
+                        useRedisBackplane = false;
+                    }
+                }
+                else
+                {
+                    _logger.LogInformation("SignalR configured without Redis backplane (single server mode)");
+                }
+
+                // Configure JSON serialization for SignalR
+                signalRBuilder.AddJsonProtocol(options =>
+                {
+                    options.PayloadSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+                    options.PayloadSerializerOptions.WriteIndented = Environment.IsDevelopment();
+                });
+
+                _logger.LogInformation("SignalR configuration completed successfully");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex, "Failed to configure SignalR. Application startup will be aborted.");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Configure WebAuthn (FIDO2) services
+        /// </summary>
+        private void ConfigureWebAuthn(IServiceCollection services)
+        {
+            try
+            {
+                // Configure WebAuthn settings
+                services.Configure<WebAuthnSettings>(Configuration.GetSection(WebAuthnSettings.SectionName));
+                var webAuthnSettings = new WebAuthnSettings();
+                Configuration.GetSection(WebAuthnSettings.SectionName).Bind(webAuthnSettings);
+
+                // Configure FIDO2 library
+                services.AddFido2(options =>
+                {
+                    options.ServerDomain = webAuthnSettings.ServerDomain;
+                    options.ServerName = webAuthnSettings.ServerName;
+                    options.Origins = new HashSet<string>(webAuthnSettings.Origins);
+                    options.TimestampDriftTolerance = webAuthnSettings.TimestampDriftTolerance;
+                    options.ChallengeSize = webAuthnSettings.ChallengeSize;
+                })
+                .AddCachedMetadataService(config =>
+                {
+                    // Configure metadata service for authenticator validation
+                    config.AddFidoMetadataRepository();
+                });
+
+                // Register WebAuthn service
+                services.AddScoped<TicketSalesApp.AdminServer.Services.Interfaces.IWebAuthnService, TicketSalesApp.AdminServer.Services.WebAuthnService>();
+                
+                // Register TOTP service
+                services.AddScoped<TicketSalesApp.AdminServer.Services.Interfaces.ITotpService, TicketSalesApp.AdminServer.Services.TotpService>();
+
+                _logger.LogInformation("WebAuthn configured for domain {ServerDomain} with origins: {Origins}", 
+                    webAuthnSettings.ServerDomain, string.Join(", ", webAuthnSettings.Origins));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex, "Failed to configure WebAuthn. Application startup will be aborted.");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Configure Hangfire for background job processing
+        /// </summary>
+        private void ConfigureHangfire(IServiceCollection services)
+        {
+            try
+            {
+                // Configure Hangfire for background job processing
+                var hangfireConnectionString = Configuration.GetConnectionString("Hangfire") 
+                    ?? Configuration.GetConnectionString("DefaultConnection") 
+                    ?? "Data Source=hangfire.db";
+
+                services.AddHangfire(config =>
+                {
+                    config.UseStorage(new Hangfire.Storage.SQLite.SQLiteStorage(hangfireConnectionString));
+                    config.UseSimpleAssemblyNameTypeSerializer();
+                    config.UseRecommendedSerializerSettings();
+                });
+
+                services.AddHangfireServer(options =>
+                {
+                    options.WorkerCount = System.Environment.ProcessorCount;
+                    options.Queues = new[] { "default", "exports", "notifications" };
+                });
+
+                _logger.LogInformation("Hangfire configured successfully with SQLite storage");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex, "Failed to configure Hangfire. Application startup will be aborted.");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Configure Export Services
+        /// </summary>
+        private void ConfigureExportServices(IServiceCollection services)
+        {
+            try
+            {
+                // Configure Export Options
+                services.Configure<TicketSalesApp.AdminServer.Configuration.ExportOptions>(
+                    Configuration.GetSection(TicketSalesApp.AdminServer.Configuration.ExportOptions.SectionName));
+
+                // Register Export Services
+                services.AddScoped<TicketSalesApp.AdminServer.Services.Interfaces.IExportService, TicketSalesApp.AdminServer.Services.ExportService>();
+                services.AddScoped<TicketSalesApp.AdminServer.Services.Interfaces.IExportDataProvider, TicketSalesApp.AdminServer.Services.ExportDataProvider>();
+                services.AddScoped<TicketSalesApp.AdminServer.Services.Interfaces.IExportFileWriter, TicketSalesApp.AdminServer.Services.ExportFileWriter>();
+                services.AddScoped<TicketSalesApp.AdminServer.Services.Interfaces.IExportProgressTracker, TicketSalesApp.AdminServer.Services.ExportProgressTracker>();
+
+                // Register Export Background Service
+                services.AddScoped<TicketSalesApp.AdminServer.Services.ExportBackgroundService>();
+
+                // Register Export Cleanup Service
+                services.AddHostedService<TicketSalesApp.AdminServer.Services.ExportCleanupService>();
+
+                _logger.LogInformation("Export services configured successfully");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex, "Failed to configure export services. Application startup will be aborted.");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Configure Redis services for session state, caching, and SignalR backplane
+        /// </summary>
+        private void ConfigureRedisServices(IServiceCollection services)
+        {
+            try
+            {
+                var redisSettings = Configuration.GetSection("Redis");
+                var connectionString = redisSettings.GetValue<string>("ConnectionString") 
+                    ?? Configuration.GetConnectionString("Redis") 
+                    ?? "localhost:6379";
+
+                // Configure Redis session state
+                services.AddSession(options =>
+                {
+                    options.IdleTimeout = TimeSpan.FromMinutes(30);
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.IsEssential = true;
+                    options.Cookie.SecurePolicy = Environment.IsDevelopment() 
+                        ? CookieSecurePolicy.SameAsRequest 
+                        : CookieSecurePolicy.Always;
+                });
+
+                // Configure Redis distributed cache for sessions
+                services.AddStackExchangeRedisCache(options =>
+                {
+                    options.Configuration = connectionString;
+                    options.InstanceName = redisSettings.GetValue<string>("InstanceName") ?? "TicketSalesApp";
+                    
+                    // Use specific database for sessions
+                    var sessionDatabase = redisSettings.GetValue<int>("SessionDatabase", 2);
+                    options.ConfigurationOptions = StackExchange.Redis.ConfigurationOptions.Parse(connectionString);
+                    options.ConfigurationOptions.DefaultDatabase = sessionDatabase;
+                });
+
+                // Register response caching services
+                services.AddScoped<IResponseCacheService, ResponseCacheService>();
+                services.AddScoped<ICacheInvalidationService, CacheInvalidationService>();
+                services.AddScoped<ICacheWarmupService, CacheWarmupService>();
+
+                // Register cache warmup background service
+                services.AddHostedService<TicketSalesApp.AdminServer.Services.CacheWarmupBackgroundService>();
+
+                _logger.LogInformation("Redis services configured successfully for session state and caching");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex, "Failed to configure Redis services. Application startup will be aborted.");
                 throw;
             }
         }

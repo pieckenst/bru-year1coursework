@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalR WebSocket Test</title>
+    <script src="https://unpkg.com/@microsoft/signalr@latest/dist/browser/signalr.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-primary { background-color: #007bff; color: white; }
+        .btn-success { background-color: #28a745; color: white; }
+        .btn-danger { background-color: #dc3545; color: white; }
+        #log {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>SignalR WebSocket Test</h1>
+    
+    <div class="status info">
+        <strong>Server:</strong> http://localhost:5000/hubs/notifications
+    </div>
+    
+    <div>
+        <button id="connectBtn" class="btn-primary" onclick="connect()">Connect</button>
+        <button id="disconnectBtn" class="btn-danger" onclick="disconnect()" disabled>Disconnect</button>
+        <button id="testNotificationBtn" class="btn-success" onclick="testNotification()" disabled>Test Notification</button>
+    </div>
+    
+    <h3>Connection Log:</h3>
+    <div id="log"></div>
+    
+    <script>
+        let connection = null;
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logElement = document.getElementById('log');
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️';
+            logElement.textContent += `[${timestamp}] ${prefix} ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+        
+        async function connect() {
+            try {
+                log('Initializing SignalR connection...');
+                
+                connection = new signalR.HubConnectionBuilder()
+                    .withUrl("http://localhost:5000/hubs/notifications", {
+                        skipNegotiation: true,
+                        transport: signalR.HttpTransportType.WebSockets
+                    })
+                    .configureLogging(signalR.LogLevel.Information)
+                    .build();
+
+                // Set up event handlers
+                connection.on("Notification", (notification) => {
+                    log(`Received notification: ${JSON.stringify(notification)}`, 'success');
+                });
+
+                connection.on("DataChange", (change) => {
+                    log(`Received data change: ${JSON.stringify(change)}`, 'success');
+                });
+
+                connection.on("ExportProgress", (progress) => {
+                    log(`Received export progress: ${JSON.stringify(progress)}`, 'success');
+                });
+
+                connection.onclose((error) => {
+                    log(`Connection closed: ${error || 'No error'}`, 'error');
+                    updateButtons(false);
+                });
+
+                connection.onreconnecting((error) => {
+                    log(`Reconnecting: ${error}`, 'info');
+                });
+
+                connection.onreconnected((connectionId) => {
+                    log(`Reconnected with ID: ${connectionId}`, 'success');
+                });
+
+                // Connect
+                await connection.start();
+                log(`Connection established successfully! Connection ID: ${connection.connectionId}`, 'success');
+                updateButtons(true);
+                
+            } catch (error) {
+                log(`Connection failed: ${error.message}`, 'error');
+                updateButtons(false);
+            }
+        }
+        
+        async function disconnect() {
+            if (connection) {
+                try {
+                    await connection.stop();
+                    log('Disconnected successfully', 'success');
+                } catch (error) {
+                    log(`Disconnect error: ${error.message}`, 'error');
+                }
+                updateButtons(false);
+            }
+        }
+        
+        async function testNotification() {
+            if (connection && connection.state === signalR.HubConnectionState.Connected) {
+                try {
+                    // Try to join a test group (this might fail due to authentication)
+                    await connection.invoke("JoinGroup", "TestGroup");
+                    log('Successfully joined TestGroup', 'success');
+                } catch (error) {
+                    log(`Could not join group (expected if authentication required): ${error.message}`, 'info');
+                }
+                
+                try {
+                    // Try to send a test message (this might also fail due to authentication)
+                    await connection.invoke("SendToGroup", "TestGroup", "Test message from client");
+                    log('Successfully sent test message', 'success');
+                } catch (error) {
+                    log(`Could not send message (expected if authentication required): ${error.message}`, 'info');
+                }
+            }
+        }
+        
+        function updateButtons(connected) {
+            document.getElementById('connectBtn').disabled = connected;
+            document.getElementById('disconnectBtn').disabled = !connected;
+            document.getElementById('testNotificationBtn').disabled = !connected;
+        }
+        
+        // Auto-connect on page load
+        window.addEventListener('load', () => {
+            log('Page loaded. Click Connect to test SignalR WebSocket connection.');
+        });
+    </script>
+</body>
+</html>

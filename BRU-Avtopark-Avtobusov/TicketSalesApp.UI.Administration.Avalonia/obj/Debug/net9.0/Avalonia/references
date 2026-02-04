@@ -33,12 +33,17 @@ C:\Users\andrej\.nuget\packages\avalonia.xaml.interactions.draggable\11.1.0.1\li
 C:\Users\andrej\.nuget\packages\avalonia.xaml.interactions.events\11.1.0.1\lib\net8.0\Avalonia.Xaml.Interactions.Events.dll
 C:\Users\andrej\.nuget\packages\avalonia.xaml.interactions.responsive\11.1.0.1\lib\net8.0\Avalonia.Xaml.Interactions.Responsive.dll
 C:\Users\andrej\.nuget\packages\avalonia.xaml.interactivity\11.1.0.1\lib\net8.0\Avalonia.Xaml.Interactivity.dll
+C:\Users\andrej\.nuget\packages\awssdk.core\3.7.100.14\lib\netcoreapp3.1\AWSSDK.Core.dll
+C:\Users\andrej\.nuget\packages\awssdk.securitytoken\3.7.100.14\lib\netcoreapp3.1\AWSSDK.SecurityToken.dll
+C:\Users\andrej\.nuget\packages\azure.core\1.38.0\lib\net6.0\Azure.Core.dll
+C:\Users\andrej\.nuget\packages\azure.identity\1.11.4\lib\netstandard2.0\Azure.Identity.dll
 C:\Users\andrej\.nuget\packages\gircore.cairo-1.0\0.7.0-preview.1\lib\net9.0\cairo-1.0.dll
 C:\Users\andrej\.nuget\packages\classic.avalonia.theme\11.2.0.7\lib\net9.0\Classic.Avalonia.Theme.dll
 C:\Users\andrej\.nuget\packages\classic.commoncontrols.avalonia\11.2.0.7\lib\net9.0\Classic.CommonControls.Avalonia.dll
 C:\Users\andrej\.nuget\packages\communitytoolkit.mvvm\8.4.0\lib\net8.0\CommunityToolkit.Mvvm.dll
 C:\Users\andrej\.nuget\packages\csvhelper\33.0.1\lib\net8.0\CsvHelper.dll
 C:\Users\andrej\.nuget\packages\dialoghost.avalonia\0.8.1\lib\netstandard2.0\DialogHost.Avalonia.dll
+C:\Users\andrej\.nuget\packages\dnsclient\1.6.1\lib\net5.0\DnsClient.dll
 C:\Users\andrej\.nuget\packages\dock.model\11.0.0.5\lib\net8.0\Dock.Model.dll
 C:\Users\andrej\.nuget\packages\dock.model.mvvm\11.0.0.5\lib\net8.0\Dock.Model.Mvvm.dll
 C:\Users\andrej\.nuget\packages\dynamicdata\8.4.1\lib\net8.0\DynamicData.dll
@@ -62,18 +67,27 @@ C:\Users\andrej\.nuget\packages\livechartscore.skiasharpview\2.0.0-rc2\lib\net6.
 C:\Users\andrej\.nuget\packages\material.icons.avalonia\2.1.0\lib\netstandard2.0\Material.Icons.Avalonia.dll
 C:\Users\andrej\.nuget\packages\material.icons\2.1.0\lib\netstandard2.0\Material.Icons.dll
 C:\Users\andrej\.nuget\packages\microcom.runtime\0.11.0\lib\net5.0\MicroCom.Runtime.dll
+C:\Users\andrej\.nuget\packages\microsoft.aspnetcore.authorization\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Authorization.dll
+C:\Users\andrej\.nuget\packages\microsoft.aspnetcore.connections.abstractions\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Connections.Abstractions.dll
 C:\Users\andrej\.nuget\packages\microsoft.aspnetcore.http.abstractions\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Abstractions.dll
 C:\Users\andrej\.nuget\packages\microsoft.aspnetcore.http.features\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Features.dll
+C:\Users\andrej\.nuget\packages\microsoft.aspnetcore.signalr.common\1.1.0\lib\netcoreapp2.2\Microsoft.AspNetCore.SignalR.Common.dll
+C:\Users\andrej\.nuget\packages\microsoft.aspnetcore.signalr.core\1.1.0\lib\netstandard2.0\Microsoft.AspNetCore.SignalR.Core.dll
+C:\Users\andrej\.nuget\packages\microsoft.aspnetcore.signalr.protocols.json\1.1.0\lib\netstandard2.0\Microsoft.AspNetCore.SignalR.Protocols.Json.dll
+C:\Users\andrej\.nuget\packages\microsoft.bcl.asyncinterfaces\7.0.0\lib\netstandard2.1\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\Microsoft.CSharp.dll
+C:\Users\andrej\.nuget\packages\microsoft.data.sqlclient\5.1.6\ref\net6.0\Microsoft.Data.SqlClient.dll
 C:\Users\andrej\.nuget\packages\microsoft.data.sqlite.core\9.0.1\lib\net8.0\Microsoft.Data.Sqlite.dll
 C:\Users\andrej\.nuget\packages\microsoft.entityframeworkcore.abstractions\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
 C:\Users\andrej\.nuget\packages\microsoft.entityframeworkcore\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\andrej\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\andrej\.nuget\packages\microsoft.entityframeworkcore.sqlite.core\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Sqlite.dll
+C:\Users\andrej\.nuget\packages\microsoft.entityframeworkcore.sqlserver\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll
 C:\Users\andrej\.nuget\packages\microsoft.extensions.caching.abstractions\9.0.1\lib\net9.0\Microsoft.Extensions.Caching.Abstractions.dll
 C:\Users\andrej\.nuget\packages\microsoft.extensions.caching.memory\9.0.1\lib\net9.0\Microsoft.Extensions.Caching.Memory.dll
 C:\Users\andrej\.nuget\packages\microsoft.extensions.configuration.abstractions\9.0.1\lib\net9.0\Microsoft.Extensions.Configuration.Abstractions.dll
 C:\Users\andrej\.nuget\packages\microsoft.extensions.configuration.binder\9.0.0\lib\net9.0\Microsoft.Extensions.Configuration.Binder.dll
+C:\Users\andrej\.nuget\packages\microsoft.extensions.configuration\6.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll
 C:\Users\andrej\.nuget\packages\microsoft.extensions.dependencyinjection.abstractions\9.0.1\lib\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\Users\andrej\.nuget\packages\microsoft.extensions.dependencyinjection\9.0.1\lib\net9.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\andrej\.nuget\packages\microsoft.extensions.dependencymodel\9.0.1\lib\net9.0\Microsoft.Extensions.DependencyModel.dll
@@ -81,19 +95,34 @@ C:\Users\andrej\.nuget\packages\microsoft.extensions.logging.abstractions\9.0.1\
 C:\Users\andrej\.nuget\packages\microsoft.extensions.logging\9.0.1\lib\net9.0\Microsoft.Extensions.Logging.dll
 C:\Users\andrej\.nuget\packages\microsoft.extensions.options\9.0.1\lib\net9.0\Microsoft.Extensions.Options.dll
 C:\Users\andrej\.nuget\packages\microsoft.extensions.primitives\9.0.1\lib\net9.0\Microsoft.Extensions.Primitives.dll
+C:\Users\andrej\.nuget\packages\microsoft.identity.client\4.61.3\lib\net6.0\Microsoft.Identity.Client.dll
+C:\Users\andrej\.nuget\packages\microsoft.identity.client.extensions.msal\4.61.3\lib\net6.0\Microsoft.Identity.Client.Extensions.Msal.dll
 C:\Users\andrej\.nuget\packages\microsoft.identitymodel.abstractions\7.4.0\lib\net8.0\Microsoft.IdentityModel.Abstractions.dll
 C:\Users\andrej\.nuget\packages\microsoft.identitymodel.jsonwebtokens\7.4.0\lib\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
 C:\Users\andrej\.nuget\packages\microsoft.identitymodel.logging\7.4.0\lib\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\andrej\.nuget\packages\microsoft.identitymodel.protocols\6.35.0\lib\net6.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\andrej\.nuget\packages\microsoft.identitymodel.protocols.openidconnect\6.35.0\lib\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\andrej\.nuget\packages\microsoft.identitymodel.tokens\7.4.0\lib\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\andrej\.nuget\packages\microsoft.sqlserver.server\1.0.0\lib\netstandard2.0\Microsoft.SqlServer.Server.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\Microsoft.VisualBasic.Core.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\Microsoft.VisualBasic.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\Microsoft.Win32.Primitives.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\Microsoft.Win32.Registry.dll
+C:\Users\andrej\.nuget\packages\mongodb.bson\2.29.0\lib\netstandard2.1\MongoDB.Bson.dll
+C:\Users\andrej\.nuget\packages\mongodb.driver.core\2.29.0\lib\netstandard2.1\MongoDB.Driver.Core.dll
+C:\Users\andrej\.nuget\packages\mongodb.driver.core.extensions.diagnosticsources\1.1.0\lib\netstandard2.0\MongoDB.Driver.Core.Extensions.DiagnosticSources.dll
+C:\Users\andrej\.nuget\packages\mongodb.driver\2.29.0\lib\netstandard2.1\MongoDB.Driver.dll
+C:\Users\andrej\.nuget\packages\mongodb.extensions.context\1.1.0\lib\net6.0\MongoDB.Extensions.Context.dll
+C:\Users\andrej\.nuget\packages\mongodb.libmongocrypt\1.12.0\lib\netstandard2.1\MongoDB.Libmongocrypt.dll
 C:\Users\andrej\.nuget\packages\messagebox.avalonia\3.2.0\lib\netstandard2.0\MsBox.Avalonia.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\mscorlib.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\netstandard.dll
+C:\Users\andrej\.nuget\packages\newtonsoft.json\11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll
+C:\Users\andrej\.nuget\packages\npgsql\9.0.2\lib\net8.0\Npgsql.dll
+C:\Users\andrej\.nuget\packages\npgsql.entityframeworkcore.postgresql\9.0.2\lib\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 C:\Users\andrej\.nuget\packages\gircore.pango-1.0\0.7.0-preview.1\lib\net9.0\Pango-1.0.dll
 C:\Users\andrej\.nuget\packages\gircore.pangocairo-1.0\0.7.0-preview.1\lib\net9.0\PangoCairo-1.0.dll
+C:\Users\andrej\.nuget\packages\pipelines.sockets.unofficial\2.2.8\lib\net5.0\Pipelines.Sockets.Unofficial.dll
 C:\Users\andrej\.nuget\packages\pleasantui.datagrid\5.0.0-alpha2\lib\netstandard2.0\PleasantUI.DataGrid.dll
 C:\Users\andrej\.nuget\packages\pleasantui\5.0.0-alpha2\lib\netstandard2.0\PleasantUI.dll
 C:\Users\andrej\.nuget\packages\qrcoder\1.6.0\lib\net6.0\QRCoder.dll
@@ -110,15 +139,19 @@ C:\Users\andrej\.nuget\packages\serilog.settings.configuration\9.0.1-dev-02317\l
 C:\Users\andrej\.nuget\packages\serilog.sinks.console\6.0.0\lib\net8.0\Serilog.Sinks.Console.dll
 C:\Users\andrej\.nuget\packages\serilog.sinks.debug\3.0.0\lib\net8.0\Serilog.Sinks.Debug.dll
 C:\Users\andrej\.nuget\packages\serilog.sinks.file\6.0.0\lib\net8.0\Serilog.Sinks.File.dll
+C:\Users\andrej\.nuget\packages\sharpcompress\0.30.1\lib\net5.0\SharpCompress.dll
 C:\Users\andrej\.nuget\packages\skiasharp\2.88.9\lib\net6.0\SkiaSharp.dll
 C:\Users\andrej\.nuget\packages\skiasharp.harfbuzz\2.88.6\lib\net6.0\SkiaSharp.HarfBuzz.dll
+C:\Users\andrej\.nuget\packages\snappier\1.0.0\lib\net5.0\Snappier.dll
 C:\Users\andrej\.nuget\packages\splat\15.1.1\lib\net8.0\Splat.dll
 C:\Users\andrej\.nuget\packages\sqlitepclraw.bundle_e_sqlite3\2.1.10\lib\netstandard2.0\SQLitePCLRaw.batteries_v2.dll
 C:\Users\andrej\.nuget\packages\sqlitepclraw.core\2.1.10\lib\netstandard2.0\SQLitePCLRaw.core.dll
 C:\Users\andrej\.nuget\packages\sqlitepclraw.provider.e_sqlite3\2.1.10\lib\net6.0\SQLitePCLRaw.provider.e_sqlite3.dll
+C:\Users\andrej\.nuget\packages\stackexchange.redis\2.8.16\lib\net6.0\StackExchange.Redis.dll
 C:\Users\andrej\.nuget\packages\sukiui\6.0.0\lib\netstandard2.0\SukiUI.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.AppContext.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.Buffers.dll
+C:\Users\andrej\.nuget\packages\system.clientmodel\1.0.0\lib\net6.0\System.ClientModel.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.Collections.Concurrent.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.Collections.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.Collections.Immutable.dll
@@ -176,6 +209,7 @@ C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.Linq.Expressions.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.Linq.Parallel.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.Linq.Queryable.dll
+C:\Users\andrej\.nuget\packages\system.memory.data\1.0.2\lib\netstandard2.0\System.Memory.Data.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.Memory.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.Net.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.Net.Http.dll
@@ -237,6 +271,7 @@ C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.Security.Cryptography.Encoding.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.Security.Cryptography.OpenSsl.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.Security.Cryptography.Primitives.dll
+C:\Users\andrej\.nuget\packages\system.security.cryptography.protecteddata\6.0.0\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.Security.Cryptography.X509Certificates.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.Security.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\System.Security.Principal.dll
@@ -285,3 +320,4 @@ C:\Users\andrej\.nuget\packages\vanara.pinvoke.kernel32\4.1.6\lib\net7.0\Vanara.
 C:\Users\andrej\.nuget\packages\vanara.pinvoke.security\4.1.6\lib\net7.0\Vanara.PInvoke.Security.dll
 C:\Users\andrej\.nuget\packages\vanara.pinvoke.shared\4.1.6\lib\net7.0\Vanara.PInvoke.Shared.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.7\ref\net9.0\WindowsBase.dll
+C:\Users\andrej\.nuget\packages\zstdsharp.port\0.7.3\lib\net7.0\ZstdSharp.dll

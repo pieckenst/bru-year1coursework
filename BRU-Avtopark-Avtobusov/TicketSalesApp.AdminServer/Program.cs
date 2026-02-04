@@ -8,12 +8,13 @@ using System;
 using System.IO;
 using Serilog;
 using Serilog.Events;
+using TicketSalesApp.AdminServer.Configuration;
 
 namespace TicketSalesApp.AdminServer
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
@@ -24,7 +25,6 @@ namespace TicketSalesApp.AdminServer
                     restrictedToMinimumLevel: LogEventLevel.Information)
                 .CreateLogger();
 
-
             var host = CreateHostBuilder(args).Build();
 
             try
@@ -32,13 +32,24 @@ namespace TicketSalesApp.AdminServer
                 Log.Information("Starting web application");
                 var logger = host.Services.GetRequiredService<ILogger<Program>>();
                 logger.LogInformation("Starting web host");
-                host.Run();
+
+                // Initialize databases
+                logger.LogInformation("Initializing databases...");
+                await host.Services.InitializeDatabasesAsync();
+                logger.LogInformation("Database initialization completed");
+
+                await host.RunAsync();
             }
             catch (Exception ex)
             {
+                Log.Fatal(ex, "Application terminated unexpectedly");
                 // If we can't get the logger, fall back to console
                 Console.Error.WriteLine($"Critical error during startup: {ex}");
                 throw;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
             }
         }
 

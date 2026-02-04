@@ -13,20 +13,29 @@ using Serilog;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using TicketSalesApp.AdminServer.Configuration;
+using TicketSalesApp.AdminServer.Services.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace TicketSalesApp.AdminServer.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseAuthorizedController
     {
         private readonly AppDbContext _context;
         private readonly IAuthenticationService _authService;
         private readonly IRoleService _roleService;
         private readonly IConfiguration _configuration;
 
-        public UsersController(AppDbContext context, IAuthenticationService authService, IRoleService roleService, IConfiguration configuration)
+        public UsersController(
+            AppDbContext context, 
+            IAuthenticationService authService, 
+            IRoleService roleService, 
+            IConfiguration configuration,
+            ILogger<UsersController> logger,
+            IRoleCacheService roleCacheService) 
+            : base(logger, roleCacheService)
         {
             _context = context;
             _authService = authService;
@@ -34,28 +43,11 @@ namespace TicketSalesApp.AdminServer.Controllers
             _configuration = configuration;
         }
 
-        private bool IsAdmin()
-        {
-            var authHeader = Request.Headers["Authorization"].ToString();
-            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
-                return false;
-
-            var token = authHeader.Substring("Bearer ".Length);
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var jwtToken = tokenHandler.ReadJwtToken(token);
-            var roleClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "role");
-            return roleClaim?.Value == "1";
-        }
-
         [HttpGet]
+        [Authorize(Policy = AuthorizationPolicies.CanManageUsers)] // Admin-only operation
         public async Task<ActionResult<IEnumerable<object>>> GetUsers()
         {
-            if (!IsAdmin())
-            {
-                Log.Warning("Unauthorized attempt to access users list by non-admin user");
-                return Forbid();
-            }
-            Log.Information("Fetching all users");
+            _logger.LogInformation("Fetching all users");
             
             var users = await _context.Users
                 .Include(u => u.UserRoles)
@@ -79,7 +71,8 @@ namespace TicketSalesApp.AdminServer.Controllers
                 })
                 .ToListAsync();
                 
-            Log.Debug("Retrieved {UserCount} users", users.Count);
+            _logger.LogDebug("Retrieved {UserCount} users", users.Count);
+            LogAuthorizedAction("view users", new { Count = users.Count });
             return Ok(users);
         }
 
@@ -107,14 +100,10 @@ namespace TicketSalesApp.AdminServer.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Policy = AuthorizationPolicies.CanManageUsers)] // Admin-only operation
         public async Task<ActionResult<object>> GetUser(long id)
         {
-            if (!IsAdmin())
-            {
-                Log.Warning("Unauthorized attempt to access user {UserId} by non-admin user", id);
-                return Forbid();
-            }
-            Log.Information("Fetching user with ID {UserId}", id);
+            _logger.LogInformation("Fetching user with ID {UserId}", id);
             
             var user = await _context.Users
                 .Include(u => u.UserRoles)
@@ -140,27 +129,24 @@ namespace TicketSalesApp.AdminServer.Controllers
                 
             if (user == null)
             {
-                Log.Warning("User with ID {UserId} not found", id);
-                return NotFound();
+                _logger.LogWarning("User with ID {UserId} not found", id);
+                return NotFound(new { Message = "User not found", Id = id });
             }
-            Log.Debug("Successfully retrieved user with ID {UserId}", id);
+            
+            _logger.LogDebug("Successfully retrieved user with ID {UserId}", id);
+            LogAuthorizedAction("view user", new { UserId = id });
             return Ok(user);
         }
 
         [HttpPost]
+        [Authorize(Policy = AuthorizationPolicies.CanManageUsers)] // Admin-only operation
         public async Task<ActionResult<User>> CreateUser([FromBody] CreateUserModel model)
         {
-            if (!IsAdmin())
-            {
-                Log.Warning("Unauthorized attempt to create user by non-admin user");
-                return Forbid();
-            }
-
-            Log.Information("Attempting to create new user with login {Login}", model.Login);
+            _logger.LogInformation("Attempting to create new user with login {Login}", model.Login);
             if (await _context.Users.AnyAsync(u => u.Login == model.Login))
             {
-                Log.Warning("User creation failed - login {Login} already exists", model.Login);
-                return BadRequest("Login already exists");
+                _logger.LogWarning("User creation failed - login {Login} already exists", model.Login);
+                return BadRequest(new { Message = "Login already exists" });
             }
 
             var user = new User
@@ -184,8 +170,8 @@ namespace TicketSalesApp.AdminServer.Controllers
             var success = await _authService.RegisterAsync(user.Login, model.Password, user.Role);
             if (!success)
             {
-                Log.Error("Failed to create user with login {Login}", model.Login);
-                return BadRequest("Failed to create user");
+                _logger.LogError("Failed to create user with login {Login}", model.Login);
+                return BadRequest(new { Message = "Failed to create user" });
             }
 
             var createdUser = await _context.Users
@@ -207,41 +193,36 @@ namespace TicketSalesApp.AdminServer.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = AuthorizationPolicies.CanManageUsers)] // Admin-only operation
         public async Task<IActionResult> UpdateUser(long id, [FromBody] UpdateUserModel model)
         {
-            if (!IsAdmin())
-            {
-                Log.Warning("Unauthorized attempt to update user {UserId} by non-admin user", id);
-                return Forbid();
-            }
-
-            Log.Information("Attempting to update user with ID {UserId}", id);
+            _logger.LogInformation("Attempting to update user with ID {UserId}", id);
             var user = await _context.Users.FindAsync(id);
             if (user == null)
             {
-                Log.Warning("User with ID {UserId} not found for update", id);
-                return NotFound();
+                _logger.LogWarning("User with ID {UserId} not found for update", id);
+                return CreateNotFoundResponse("User", id);
             }
 
             if (!string.IsNullOrEmpty(model.Login) && model.Login != user.Login)
             {
                 if (await _context.Users.AnyAsync(u => u.Login == model.Login))
                 {
-                    Log.Warning("Update failed - login {Login} already exists", model.Login);
-                    return BadRequest("Login already exists");
+                    _logger.LogWarning("Update failed - login {Login} already exists", model.Login);
+                    return CreateValidationErrorResponse("Login already exists");
                 }
-                Log.Information("Updating login for user {UserId} to {NewLogin}", id, model.Login);
+                _logger.LogInformation("Updating login for user {UserId} to {NewLogin}", id, model.Login);
                 user.Login = model.Login;
             }
 
             if (!string.IsNullOrEmpty(model.Password))
             {
-                Log.Information("Updating password for user {UserId}", id);
+                _logger.LogInformation("Updating password for user {UserId}", id);
                 var success = await _authService.RegisterAsync(user.Login, model.Password, user.Role);
                 if (!success)
                 {
-                    Log.Error("Failed to update password for user {UserId}", id);
-                    return BadRequest("Failed to update password");
+                    _logger.LogError("Failed to update password for user {UserId}", id);
+                    return CreateValidationErrorResponse("Failed to update password");
                 }
                 var updatedUser = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
                 user.PasswordHash = updatedUser!.PasswordHash;
@@ -249,14 +230,14 @@ namespace TicketSalesApp.AdminServer.Controllers
 
             if (model.Role.HasValue)
             {
-                Log.Information("Updating role for user {UserId} to {NewRole}", id, model.Role.Value);
+                _logger.LogInformation("Updating role for user {UserId} to {NewRole}", id, model.Role.Value);
                 user.Role = model.Role.Value;
             }
 
             // Update new fields
             if (!string.IsNullOrEmpty(model.PhoneNumber))
             {
-                Log.Information("Updating phone number for user {UserId} to {NewPhone}", id, model.PhoneNumber);
+                _logger.LogInformation("Updating phone number for user {UserId} to {NewPhone}", id, model.PhoneNumber);
                 user.PhoneNumber = model.PhoneNumber;
             }
 
@@ -326,31 +307,26 @@ namespace TicketSalesApp.AdminServer.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = AuthorizationPolicies.CanManageUsers)] // Admin-only operation
         public async Task<IActionResult> DeleteUser(long id)
         {
-            if (!IsAdmin())
-            {
-                Log.Warning("Unauthorized attempt to delete user {UserId} by non-admin user", id);
-                return Forbid();
-            }
-
-            Log.Information("Attempting to delete user with ID {UserId}", id);
+            _logger.LogInformation("Attempting to delete user with ID {UserId}", id);
             
             // Get current user ID from token
-            var currentUserId = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value ?? "0");
+            var currentUserId = GetCurrentUserId();
             
             // Prevent deleting yourself
             if (id == currentUserId)
             {
-                Log.Warning("User {UserId} attempted to delete their own account", id);
-                return BadRequest("You cannot delete your own account");
+                _logger.LogWarning("User {UserId} attempted to delete their own account", id);
+                return CreateValidationErrorResponse("You cannot delete your own account");
             }
 
             var user = await _context.Users.FindAsync(id);
             if (user == null)
             {
-                Log.Warning("User with ID {UserId} not found for deletion", id);
-                return NotFound();
+                _logger.LogWarning("User with ID {UserId} not found for deletion", id);
+                return CreateNotFoundResponse("User", id);
             }
 
             // Check if this is the last admin
@@ -371,15 +347,10 @@ namespace TicketSalesApp.AdminServer.Controllers
         }
 
         [HttpGet("{id}/roles")]
+        [Authorize(Policy = AuthorizationPolicies.CanManageUsers)] // Admin-only operation
         public async Task<ActionResult<IEnumerable<Roles>>> GetUserRoles(long id)
         {
-            if (!IsAdmin())
-            {
-                Log.Warning("Unauthorized attempt to access user roles for user {UserId} by non-admin user", id);
-                return Forbid();
-            }
-
-            Log.Information("Fetching roles for user {UserId}", id);
+            _logger.LogInformation("Fetching roles for user {UserId}", id);
             var user = await _context.Users
                 .Include(u => u.UserRoles!)
                 .ThenInclude(ur => ur.Role)
@@ -387,8 +358,8 @@ namespace TicketSalesApp.AdminServer.Controllers
 
             if (user == null)
             {
-                Log.Warning("User {UserId} not found while fetching roles", id);
-                return NotFound();
+                _logger.LogWarning("User {UserId} not found while fetching roles", id);
+                return NotFound(new { Message = "User not found", Id = id });
             }
 
             var roles = user.UserRoles?
@@ -396,20 +367,16 @@ namespace TicketSalesApp.AdminServer.Controllers
                 .Where(r => r != null)
                 .ToList() ?? new List<Roles>();
 
-            Log.Information("Retrieved {RoleCount} roles for user {UserId}", roles.Count, id);
+            _logger.LogInformation("Retrieved {RoleCount} roles for user {UserId}", roles.Count, id);
+            LogAuthorizedAction("view user roles", new { UserId = id, RoleCount = roles.Count });
             return Ok(roles);
         }
 
         [HttpGet("{id}/permissions")]
+        [Authorize(Policy = AuthorizationPolicies.CanManageUsers)] // Admin-only operation
         public async Task<ActionResult<IEnumerable<Permission>>> GetUserPermissions(long id)
         {
-            if (!IsAdmin())
-            {
-                Log.Warning("Unauthorized attempt to access user permissions for user {UserId} by non-admin user", id);
-                return Forbid();
-            }
-
-            Log.Information("Fetching permissions for user {UserId}", id);
+            _logger.LogInformation("Fetching permissions for user {UserId}", id);
             var user = await _context.Users
                 .Include(u => u.UserRoles!)
                 .ThenInclude(ur => ur.Role)
@@ -435,46 +402,38 @@ namespace TicketSalesApp.AdminServer.Controllers
         }
 
         [HttpPost("{id}/roles")]
+        [Authorize(Policy = AuthorizationPolicies.CanManageUsers)] // Admin-only operation
         public async Task<IActionResult> AssignRoleToUser(long id, [FromBody] AssignRoleModel model)
         {
-            if (!IsAdmin())
-            {
-                Log.Warning("Unauthorized attempt to assign role to user {UserId} by non-admin user", id);
-                return Forbid();
-            }
-
-            Log.Information("Assigning role {RoleId} to user {UserId}", model.RoleId, id);
+            _logger.LogInformation("Assigning role {RoleId} to user {UserId}", model.RoleId, id);
             var success = await _roleService.AssignRoleToUserAsync(id, model.RoleId);
             
             if (!success)
             {
-                Log.Warning("Failed to assign role {RoleId} to user {UserId}", model.RoleId, id);
-                return BadRequest("Failed to assign role to user");
+                _logger.LogWarning("Failed to assign role {RoleId} to user {UserId}", model.RoleId, id);
+                return CreateValidationErrorResponse("Failed to assign role to user");
             }
 
-            Log.Information("Successfully assigned role {RoleId} to user {UserId}", model.RoleId, id);
+            _logger.LogInformation("Successfully assigned role {RoleId} to user {UserId}", model.RoleId, id);
+            LogAuthorizedAction("assign role to user", new { UserId = id, RoleId = model.RoleId });
             return NoContent();
         }
 
         [HttpDelete("{id}/roles/{roleId}")]
+        [Authorize(Policy = AuthorizationPolicies.CanManageUsers)] // Admin-only operation
         public async Task<IActionResult> RemoveRoleFromUser(long id, Guid roleId)
         {
-            if (!IsAdmin())
-            {
-                Log.Warning("Unauthorized attempt to remove role from user {UserId} by non-admin user", id);
-                return Forbid();
-            }
-
-            Log.Information("Removing role {RoleId} from user {UserId}", roleId, id);
+            _logger.LogInformation("Removing role {RoleId} from user {UserId}", roleId, id);
             var success = await _roleService.RemoveRoleFromUserAsync(id, roleId);
             
             if (!success)
             {
-                Log.Warning("Failed to remove role {RoleId} from user {UserId}", roleId, id);
-                return BadRequest("Failed to remove role from user");
+                _logger.LogWarning("Failed to remove role {RoleId} from user {UserId}", roleId, id);
+                return CreateValidationErrorResponse("Failed to remove role from user");
             }
 
-            Log.Information("Successfully removed role {RoleId} from user {UserId}", roleId, id);
+            _logger.LogInformation("Successfully removed role {RoleId} from user {UserId}", roleId, id);
+            LogAuthorizedAction("remove role from user", new { UserId = id, RoleId = roleId });
             return NoContent();
         }
 

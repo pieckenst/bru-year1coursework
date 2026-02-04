@@ -39,6 +39,7 @@ namespace TicketSalesApp.Core.Data
             { "UserRoles", typeof(UserRole) },
             { "RolePermissions", typeof(RolePermission) },
             { "RouteSchedules", typeof(RouteSchedules) },
+            { "WebAuthnCredentials", typeof(WebAuthnCredential) },
             // HR Department tables
             { "Departments", typeof(Department) },
             { "EmployeeDocuments", typeof(EmployeeDocument) },

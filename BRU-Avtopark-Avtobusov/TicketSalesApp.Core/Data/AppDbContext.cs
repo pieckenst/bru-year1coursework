@@ -30,6 +30,7 @@ namespace TicketSalesApp.Core.Data
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<RouteSchedules> RouteSchedules { get; set; }
         public DbSet<FormDefinition> FormDefinitions { get; set; }
+        public DbSet<WebAuthnCredential> WebAuthnCredentials { get; set; }
         
         // HR Department DbSets
         public DbSet<Department> Departments { get; set; }
@@ -60,6 +61,30 @@ namespace TicketSalesApp.Core.Data
                     .IsUnique();
                 entity.HasIndex(e => e.Login)
                     .IsUnique();
+            });
+
+            // Configure WebAuthnCredential entity
+            modelBuilder.Entity<WebAuthnCredential>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                
+                entity.Property(e => e.CredentialId)
+                    .IsRequired();
+                    
+                entity.Property(e => e.PublicKey)
+                    .IsRequired();
+                    
+                entity.Property(e => e.UserHandle)
+                    .IsRequired();
+                    
+                entity.HasIndex(e => e.CredentialId)
+                    .IsUnique();
+                    
+                entity.HasOne(c => c.User)
+                    .WithMany()
+                    .HasForeignKey(c => c.UserId)
+                    .HasPrincipalKey(u => u.GuidId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Configure UserRole entity

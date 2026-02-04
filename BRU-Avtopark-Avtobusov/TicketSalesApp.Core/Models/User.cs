@@ -70,5 +70,11 @@ namespace TicketSalesApp.Core.Models
          and be a random server generated pin combined
          with first 3 characters of the Windows username and random number+ string combo 
          */
+
+        // TOTP (Two-Factor Authentication) properties
+        public string? TotpSecret { get; set; }  // Base32 encoded TOTP secret
+        public bool IsTotpEnabled { get; set; } = false;  // Whether TOTP is enabled for this user
+        public DateTime? TotpEnabledAt { get; set; }  // When TOTP was enabled
+        public string? TotpRecoveryCodes { get; set; }  // JSON array of recovery codes (hashed)
     }
 }
