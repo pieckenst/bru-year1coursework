@@ -1,0 +1,99 @@
+<div class="channel-view message-board">
+  <!-- Header: Minimal, mainly for the date look -->
+  <div class="channel-header">
+    <div class="channel-title">
+      <!-- We use JS usually to set this date, hardcoded for now -->
+      <h1>Sat 28/12</h1>
+    </div>
+  </div>
+
+  <div class="channel-content">
+    <!-- Top Action Icons (Circular Buttons) -->
+    <div class="message-actions">
+      <!-- Announcement Icon -->
+      <div class="action-card" title="Announcements" onmouseover="hover()" onclick="select()">
+        <div class="action-icon">📢</div>
+      </div>
+      <!-- Bus Icon -->
+      <div class="action-card" title="Service Updates" onmouseover="hover()" onclick="select()">
+        <div class="action-icon">🚌</div>
+      </div>
+      <!-- Alert Icon -->
+      <div class="action-card" title="Alerts" onmouseover="hover()" onclick="select()">
+        <div class="action-icon">⚠️</div>
+      </div>
+      <!-- Write Icon -->
+      <div class="action-card" title="Feedback" onmouseover="hover()" onclick="select()">
+        <div class="action-icon">✏️</div>
+      </div>
+    </div>
+
+    <!-- The Envelope Grid -->
+    <div class="messages-preview">
+      <div class="message-list">
+        <!-- Item 1: Unread (White Envelope) -->
+        <div class="message-item unread" onmouseover="hover()" onclick="select()">
+          <div class="message-status unread">New</div>
+          <div class="message-info">
+            <div class="message-title">Route 15 Update</div>
+            <div class="message-date">10:30 AM</div>
+          </div>
+        </div>
+        <!-- Item 2: Read (Yellow Memo) -->
+        <div class="message-item" onmouseover="hover()" onclick="select()">
+          <div class="message-status read">Open</div>
+          <div class="message-info">
+            <div class="message-title">Holiday Schedule</div>
+            <div class="message-date">Yesterday</div>
+          </div>
+        </div>
+        <!-- Item 3: Read -->
+        <div class="message-item" onmouseover="hover()" onclick="select()">
+          <div class="message-info">
+            <div class="message-title">Stop Closure</div>
+            <div class="message-date">28/12</div>
+          </div>
+        </div>
+        <!-- Item 4: Read -->
+        <div class="message-item" onmouseover="hover()" onclick="select()">
+          <div class="message-info">
+            <div class="message-title">Payments</div>
+            <div class="message-date">25/12</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-stats">
+      <h3>Message Statistics</h3>
+      <div class="stats-grid">
+        <div class="stat-item" onmouseover="hover()">
+          <div class="stat-number">3</div>
+          <div class="stat-label">Unread Messages</div>
+        </div>
+        <div class="stat-item" onmouseover="hover()">
+          <div class="stat-number">12</div>
+          <div class="stat-label">Total Messages</div>
+        </div>
+        <div class="stat-item" onmouseover="hover()">
+          <div class="stat-number">2</div>
+          <div class="stat-label">Active Alerts</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="coming-soon">
+      <p>🚧 Real-time messaging system coming soon! 🚧</p>
+    </div>
+  </div>
+
+  <!-- Distinct Wii Message Board Footer -->
+  <div class="channel-footer">
+    <!-- Left Button: Back/Calendar -->
+    <div class="back viewchange" data-view="menu" data-transition="fade" onmouseover="hover()" onclick="back()"></div>
+    <!-- Right Button: Create (Visual dummy for aesthetics) -->
+    <div class="footer-right-btn" onmouseover="hover()">
+      <span style="font-size: 3vh;">✉️</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="main-menu">
+  <div class="top-section">
+    <div class="channels" id="dynamic-channels">
+      <!-- Channels will be dynamically loaded here with proper Wii styling -->
+    </div>
+  </div>
+
+  <div class="bottom-section">
+    <div class="bottom-title"></div>
+
+    <div class="left-button-container">
+      <div class="left-button"></div>
+      <div class="wii-button corner-button viewchange" onmouseover="hover()" data-view="settings-main" data-transition="fade"></div>
+    </div>
+
+    <div class="date"></div>
+
+    <div class="right-button-container">
+      <div class="right-button"></div>
+      <div class="mail-button corner-button viewchange" data-view="message-board" data-transition="fade" onmouseover="hover()" onclick="select()"></div>
+    </div>
+  </div>
+</div>
+
+<div class="splash-screen" id="dynamic-splash">
+  <!-- Dynamic splash content will be loaded here -->
+</div>
+
+<div class="splash-bar" id="dynamic-splash-bar">
+  <div class="splash-buttons">
+    <a href="javascript:void(0)" class="btn menu-btn" onmouseover="hover()" onclick="channelManager.returnToMenu()">Wii Menu</a>
+    <a href="javascript:void(0)" class="btn" onmouseover="hover()" onclick="channelManager.startChannel()">Start</a>
+  </div>
+</div>
+
+<div class="border-topleft border"></div>
+<div class="border-topright border"></div>
+<div class="border-bottomleft border"></div>
+<div class="border-bottomright border"></div>
+
+<div class="screen-message">
+  <p>It has been detected that your screen resolution may not be compatible with this project. This project is very experiental and as a result, does not scale to some smaller screens. If you're alright with the layout looking a little off, click anywhere to close this message.</p>
+</div>

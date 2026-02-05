@@ -1,0 +1,339 @@
+/* Dynamic Channel System Styles */
+
+/* Loading state for blank channels */
+.channel-icon.blank.loading {
+  animation: wiiChannelLoading 2s ease-in-out infinite;
+}
+
+@keyframes wiiChannelLoading {
+  0%, 100% { 
+    background-position: 0 0;
+    opacity: 0.7;
+  }
+  50% { 
+    background-position: -10px -10px;
+    opacity: 1;
+  }
+}
+
+/* Remove the old loading-channels style since we use proper Wii grid */
+.loading-channels {
+  display: none;
+}
+
+/* Ensure blank channels maintain proper Wii styling */
+.channel-icon.blank {
+  /* Inherits from existing Wii CSS - don't override */
+}
+
+.channel-icon.blank .hover {
+  /* Inherits from existing Wii CSS - don't override */
+}
+
+/* Dynamic splash screen enhancements */
+.splash-title-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+}
+
+.splash-title {
+  font-family: 'Asap', sans-serif;
+  font-size: 4vh;
+  font-weight: 500;
+  margin: 0 0 1vh 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.splash-subtitle {
+  font-family: 'Asap', sans-serif;
+  font-size: 2.5vh;
+  font-weight: 400;
+  margin: 0;
+  opacity: 0.9;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom splash screen classes */
+.demo-splash {
+  background: linear-gradient(45deg, #ec4899, #8b5cf6);
+}
+
+.custom-animation {
+  animation: customPulse 2s infinite;
+}
+
+@keyframes customPulse {
+  0%, 100% { 
+    background-size: 100% 100%;
+  }
+  50% { 
+    background-size: 110% 110%;
+  }
+}
+
+.custom-splash {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+}
+
+.custom-splash h1 {
+  font-family: 'Asap', sans-serif;
+  font-size: 5vh;
+  margin: 0 0 2vh 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+  animation: bounceIn 1s ease-out;
+}
+
+.custom-splash p {
+  font-family: 'Asap', sans-serif;
+  font-size: 2vh;
+  margin: 0 0 3vh 0;
+  opacity: 0.9;
+  animation: fadeIn 1s ease-out 0.5s both;
+}
+
+.demo-animation {
+  width: 10vh;
+  height: 10vh;
+  background: rgba(255,255,255,0.3);
+  border-radius: 50%;
+  margin: 0 auto;
+  animation: spin 3s linear infinite;
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Custom splash bar styles */
+.custom-buttons {
+  background: rgba(0,0,0,0.8);
+  border-radius: 10px;
+  padding: 1vh;
+}
+
+.demo-btn {
+  background: linear-gradient(45deg, #ec4899, #8b5cf6) !important;
+  border: none !important;
+}
+
+.demo-btn:hover {
+  background: linear-gradient(45deg, #db2777, #7c3aed) !important;
+  transform: scale(1.05);
+}
+
+/* Animation types */
+.channel-splash.zoom-animation .main-menu {
+  animation: zoomOut 0.9s ease-in-out;
+}
+
+.channel-splash.fade-animation .main-menu {
+  animation: fadeOut 0.9s ease-in-out;
+}
+
+.channel-splash.slide-animation .main-menu {
+  animation: slideOut 0.9s ease-in-out;
+}
+
+.channel-splash.bounce-animation .main-menu {
+  animation: bounceOut 1.2s ease-in-out;
+}
+
+@keyframes zoomOut {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes slideOut {
+  0% { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(-100vw); opacity: 0; }
+}
+
+@keyframes bounceOut {
+  0% { transform: scale(1); }
+  20% { transform: scale(1.1); }
+  40% { transform: scale(0.9); }
+  60% { transform: scale(1.05); }
+  80% { transform: scale(0.95); }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+/* Responsive adjustments */
+@media only screen and (max-height: 718px) {
+  .splash-title {
+    font-size: 3vh;
+  }
+  
+  .splash-subtitle {
+    font-size: 2vh;
+  }
+  
+  .custom-splash h1 {
+    font-size: 4vh;
+  }
+  
+  .custom-splash p {
+    font-size: 1.8vh;
+  }
+}
+
+@media only screen and (max-width: 1220px) {
+  .splash-title-container {
+    padding: 0 2vh;
+  }
+  
+  .custom-splash {
+    padding: 0 2vh;
+  }
+}
+
+/* Error states */
+.channel-error {
+  background: #dc2626;
+  color: white;
+  padding: 2vh;
+  border-radius: 10px;
+  text-align: center;
+  font-family: 'Asap', sans-serif;
+}
+
+.channel-error h3 {
+  margin: 0 0 1vh 0;
+  font-size: 2.5vh;
+}
+
+.channel-error p {
+  margin: 0;
+  font-size: 1.8vh;
+  opacity: 0.9;
+}
+
+/* Channel configuration panel (for admin) */
+.channel-config-panel {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 400px;
+  height: 100vh;
+  background: rgba(0,0,0,0.95);
+  color: white;
+  padding: 2vh;
+  box-sizing: border-box;
+  transition: right 0.3s ease;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.channel-config-panel.open {
+  right: 0;
+}
+
+.channel-config-panel h2 {
+  font-family: 'Asap', sans-serif;
+  font-size: 3vh;
+  margin: 0 0 2vh 0;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  padding-bottom: 1vh;
+}
+
+.config-section {
+  margin-bottom: 3vh;
+}
+
+.config-section h3 {
+  font-family: 'Asap', sans-serif;
+  font-size: 2vh;
+  margin: 0 0 1vh 0;
+  color: #60a5fa;
+}
+
+.config-input {
+  width: 100%;
+  padding: 1vh;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 5px;
+  color: white;
+  font-family: 'Asap', sans-serif;
+  margin-bottom: 1vh;
+}
+
+.config-input:focus {
+  outline: none;
+  border-color: #60a5fa;
+  background: rgba(255,255,255,0.15);
+}
+
+.config-button {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 1vh 2vh;
+  border-radius: 5px;
+  font-family: 'Asap', sans-serif;
+  cursor: pointer;
+  margin-right: 1vh;
+  transition: background 0.2s;
+}
+
+.config-button:hover {
+  background: #2563eb;
+}
+
+.config-button.danger {
+  background: #dc2626;
+}
+
+.config-button.danger:hover {
+  background: #b91c1c;
+}

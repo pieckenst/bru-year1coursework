@@ -805,6 +805,9 @@ namespace TicketSalesApp.AdminServer
                 services.AddScoped<ICacheInvalidationService, CacheInvalidationService>();
                 services.AddScoped<ICacheWarmupService, CacheWarmupService>();
 
+                // Register Wii Channel Service
+                services.AddScoped<IWiiChannelService, WiiChannelService>();
+
                 // Register cache warmup background service
                 services.AddHostedService<TicketSalesApp.AdminServer.Services.CacheWarmupBackgroundService>();
 

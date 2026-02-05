@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Wii.JS</title>
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" href="/customerui/assets/css/universal.css">
+    <link rel="stylesheet" href="/customerui/assets/css/menu.css">
+    <link rel="stylesheet" href="/customerui/assets/css/settings.css">
+    <link rel="stylesheet" href="/customerui/assets/css/dynamic-channels.css">
+    <link rel="stylesheet" href="/customerui/assets/css/channel-views.css">
+    <link rel="stylesheet" href="/customerui/assets/css/auth-channel.css">
+    <link href="https://fonts.googleapis.com/css?family=Asap:500" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/customerui/assets/js/imagesloaded.pkgd.min.js"></script>
+    <script src="/customerui/assets/js/channels.js"></script>
+    <script src="/customerui/assets/js/views.js"></script>
+    <script src="/customerui/assets/js/main.js"></script>
+  </head>
+
+  <body>
+    <!-- Wii Boot Sequence -->
+    <div class="wii-boot-sequence" id="wii-boot-sequence">
+      <!-- Wii Logo Screen (White Background) -->
+      <div class="wii-logo-screen" id="wii-logo-screen">
+        <div class="wii-logo">
+          <!-- CSS background approach -->
+          <div class="wii-logo-image"></div>
+          <!-- IMG tag fallback -->
+          <img src="/customerui/assets/images/logo-black.svg" alt="Wii" class="wii-logo-img-fallback">
+        </div>
+      </div>
+      
+      <!-- Health and Safety Screen (Authentic Wii Style) -->
+      <div class="wii-health-safety-screen" id="wii-health-safety-screen">
+        <div class="health-safety-content">
+          
+          <!-- The Icon and Title Header -->
+          <div class="warning-header">
+            <div class="warning-icon">
+              <div class="exclamation">!</div>
+            </div>
+            <div class="warning-title">IMPORTANT INFORMATION</div>
+          </div>
+
+          <!-- The Body Text -->
+          <div class="health-safety-text">
+            <p>BEFORE USING THIS SYSTEM, READ THE OPERATIONS</p>
+            <p>MANUAL FOR THE SYSTEM AND ANY PERIPHERALS FOR</p>
+            <p>IMPORTANT SAFETY AND AUTHORIZATION INFORMATION.</p>
+            <br>
+            <p>THIS SYSTEM IS INTENDED FOR AUTHORIZED PERSONNEL ONLY.</p>
+            <p>ALL TRANSACTIONS ARE LOGGED AND MONITORED.</p>
+            <br>
+            <p>UNAUTHORIZED ACCESS IS STRICTLY PROHIBITED.</p>
+          </div>
+
+          <!-- The "Press A" Footer -->
+          <div class="press-a-container">
+            <span class="text">PRESS</span>
+            <div class="a-button">A</div>
+            <span class="text">TO CONTINUE.</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="app"></div>
+    <div class="black"></div>
+
+    <div class="sfx">
+      <!-- <iframe src="assets/audio/bgmusic.html" allow="autoplay" style="display:none" id="music"></iframe> -->
+      <audio id="startup" src="/customerui/assets/audio/startup.mp3" controls></audio>
+      <audio id="bg-music" src="/customerui/assets/audio/bg-music.mp3" loop controls></audio>
+      <audio id="hover" src="/customerui/assets/audio/button-hover.mp3"></audio>
+      <audio id="select" src="/customerui/assets/audio/button-select.mp3"></audio>
+      <audio id="zip" src="/customerui/assets/audio/zip.mp3"></audio>
+      <audio id="back" src="/customerui/assets/audio/back.mp3"></audio>
+    </div>
+  </body>
+</html>

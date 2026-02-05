@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wii Channel Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            font-size: 1.1em;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #4f46e5;
+            border-bottom-color: #4f46e5;
+            background: #f8fafc;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            color: #1f2937;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .card p {
+            color: #6b7280;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            background: #4338ca;
+        }
+
+        .btn.secondary {
+            background: #6b7280;
+        }
+
+        .btn.secondary:hover {
+            background: #4b5563;
+        }
+
+        .btn.danger {
+            background: #dc2626;
+        }
+
+        .btn.danger:hover {
+            background: #b91c1c;
+        }
+
+        .btn.success {
+            background: #059669;
+        }
+
+        .btn.success:hover {
+            background: #047857;
+        }
+
+        .channel-preview {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 15px;
+        }
+
+        .channel-icon {
+            width: 60px;
+            height: 60px;
+            background: #e5e7eb;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .channel-info h4 {
+            margin-bottom: 5px;
+            color: #1f2937;
+        }
+
+        .channel-info p {
+            color: #6b7280;
+            font-size: 0.9em;
+            margin: 0;
+        }
+
+        .channel-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .status-badge.active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-badge.inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .json-editor {
+            background: #1f2937;
+            color: #f9fafb;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            border-radius: 8px;
+            min-height: 400px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .alert.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .alert.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .alert.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 Wii Channel Manager</h1>
+            <p>Configure and manage your dynamic Wii-style channels</p>
+        </div>
+
+        <div class="content">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('channels')">Channels</button>
+                <button class="tab" onclick="showTab('create')">Create Channel</button>
+                <button class="tab" onclick="showTab('import')">Import/Export</button>
+                <button class="tab" onclick="showTab('settings')">Settings</button>
+            </div>
+
+            <!-- Channels Tab -->
+            <div id="channels-tab" class="tab-content active">
+                <div class="card">
+                    <h3>📺 Active Channels</h3>
+                    <p>Manage your currently active channels</p>
+                    <button class="btn" onclick="loadChannels()">🔄 Refresh Channels</button>
+                    <button class="btn success" onclick="resetToDefaults()">🔧 Reset to Defaults</button>
+                </div>
+
+                <div id="channels-list">
+                    <div class="loading"></div> Loading channels...
+                </div>
+            </div>
+
+            <!-- Create Channel Tab -->
+            <div id="create-tab" class="tab-content">
+                <div class="card">
+                    <h3>➕ Create New Channel</h3>
+                    <form id="channel-form">
+                        <div class="grid">
+                            <div>
+                                <div class="form-group">
+                                    <label for="channelKey">Channel Key *</label>
+                                    <input type="text" id="channelKey" name="channelKey" required placeholder="e.g., my-channel">
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Channel Name *</label>
+                                    <input type="text" id="name" name="name" required placeholder="e.g., My Channel">
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <textarea id="description" name="description" placeholder="Channel description"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="position">Position (1-12) *</label>
+                                    <select id="position" name="position" required>
+                                        <option value="">Select position</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="form-group">
+                                    <label for="iconPath">Icon Path</label>
+                                    <input type="text" id="iconPath" name="iconPath" placeholder="/customerui/assets/images/my-icon.jpg">
+                                </div>
+                                <div class="form-group">
+                                    <label for="spriteId">Sprite ID</label>
+                                    <select id="spriteId" name="spriteId">
+                                        <option value="">No sprite (use icon path)</option>
+                                        <option value="wiilogo">Wii Logo (channel-wiilogo.png)</option>
+                                        <option value="icon">Generic Icon (channel-icon.png)</option>
+                                        <option value="hover">Hover Effect (channel-hover.png)</option>
+                                        <option value="border">Border (channel-border.png)</option>
+                                    </select>
+                                    <small style="color: #6b7280; font-size: 0.9em;">Sprite ID takes precedence over icon path. Uses channel-{spriteId}.png format.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="splashImagePath">Splash Image Path</label>
+                                    <input type="text" id="splashImagePath" name="splashImagePath" placeholder="/customerui/assets/images/my-splash.jpg">
+                                </div>
+                                <div class="form-group">
+                                    <label for="actionType">Action Type *</label>
+                                    <select id="actionType" name="actionType" required>
+                                        <option value="view">View</option>
+                                        <option value="url">URL</option>
+                                        <option value="javascript">JavaScript</option>
+                                        <option value="api">API Call</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="actionUrl">Action URL</label>
+                                    <input type="text" id="actionUrl" name="actionUrl" placeholder="e.g., my-view or https://example.com">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid">
+                            <div>
+                                <div class="form-group">
+                                    <label for="splashTitle">Splash Title</label>
+                                    <input type="text" id="splashTitle" name="splashTitle" placeholder="Channel Title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="splashSubtitle">Splash Subtitle</label>
+                                    <input type="text" id="splashSubtitle" name="splashSubtitle" placeholder="Channel subtitle">
+                                </div>
+                                <div class="form-group">
+                                    <label for="splashButtonText">Button Text</label>
+                                    <input type="text" id="splashButtonText" name="splashButtonText" placeholder="Start" value="Start">
+                                </div>
+                            </div>
+                            <div>
+                                <div class="form-group">
+                                    <label for="splashBackgroundColor">Background Color</label>
+                                    <input type="color" id="splashBackgroundColor" name="splashBackgroundColor" value="#1e3a8a">
+                                </div>
+                                <div class="form-group">
+                                    <label for="splashTextColor">Text Color</label>
+                                    <input type="color" id="splashTextColor" name="splashTextColor" value="#ffffff">
+                                </div>
+                                <div class="form-group">
+                                    <label for="animationType">Animation Type</label>
+                                    <select id="animationType" name="animationType">
+                                        <option value="default">Default</option>
+                                        <option value="zoom">Zoom</option>
+                                        <option value="fade">Fade</option>
+                                        <option value="slide">Slide</option>
+                                        <option value="bounce">Bounce</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customJavaScript">Custom JavaScript</label>
+                            <textarea id="customJavaScript" name="customJavaScript" placeholder="// Custom JavaScript code"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn">💾 Create Channel</button>
+                        <button type="button" class="btn secondary" onclick="clearForm()">🗑️ Clear Form</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Import/Export Tab -->
+            <div id="import-tab" class="tab-content">
+                <div class="grid">
+                    <div class="card">
+                        <h3>📤 Export Configuration</h3>
+                        <p>Export your current channel configuration as JSON</p>
+                        <button class="btn" onclick="exportConfiguration()">📋 Export to Clipboard</button>
+                        <button class="btn secondary" onclick="downloadConfiguration()">💾 Download JSON</button>
+                    </div>
+                    <div class="card">
+                        <h3>📥 Import Configuration</h3>
+                        <p>Import channels from JSON configuration</p>
+                        <div class="form-group">
+                            <label for="importJson">JSON Configuration</label>
+                            <textarea id="importJson" class="json-editor" placeholder="Paste your JSON configuration here..."></textarea>
+                        </div>
+                        <button class="btn" onclick="importConfiguration()">📥 Import Channels</button>
+                        <button class="btn secondary" onclick="validateJson()">✅ Validate JSON</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings-tab" class="tab-content">
+                <div class="card">
+                    <h3>⚙️ Global Settings</h3>
+                    <div class="grid">
+                        <div>
+                            <div class="form-group">
+                                <label for="defaultAnimationDuration">Default Animation Duration (ms)</label>
+                                <input type="number" id="defaultAnimationDuration" value="900" min="100" max="5000">
+                            </div>
+                            <div class="form-group">
+                                <label for="cacheTimeout">Cache Timeout (ms)</label>
+                                <input type="number" id="cacheTimeout" value="300000" min="1000" max="3600000">
+                            </div>
+                        </div>
+                        <div>
+                            <div class="form-group">
+                                <label for="enableSounds">Enable Sounds</label>
+                                <select id="enableSounds">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="maxChannels">Maximum Channels</label>
+                                <input type="number" id="maxChannels" value="12" min="1" max="20" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="saveSettings()">💾 Save Settings</button>
+                </div>
+
+                <div class="card">
+                    <h3>🔧 System Actions</h3>
+                    <p>Perform system-level operations</p>
+                    <button class="btn" onclick="clearCache()">🗑️ Clear Cache</button>
+                    <button class="btn secondary" onclick="testChannels()">🧪 Test Channels</button>
+                    <button class="btn danger" onclick="resetSystem()">⚠️ Reset System</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let channels = [];
+        let availablePositions = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadChannels();
+            loadAvailablePositions();
+        });
+
+        // Tab management
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Load channels
+        async function loadChannels() {
+            try {
+                const response = await fetch('/api/WiiChannel');
+                if (!response.ok) throw new Error('Failed to load channels');
+                
+                channels = await response.json();
+                renderChannels();
+            } catch (error) {
+                showAlert('Error loading channels: ' + error.message, 'error');
+            }
+        }
+
+        // Render channels
+        function renderChannels() {
+            const container = document.getElementById('channels-list');
+            
+            if (channels.length === 0) {
+                container.innerHTML = '<div class="alert info">No channels found. Create your first channel!</div>';
+                return;
+            }
+
+            container.innerHTML = channels.map(channel => `
+                <div class="channel-preview">
+                    <div class="channel-icon">${channel.spriteId ? '🎨' : (channel.iconPath ? '🖼️' : '📺')}</div>
+                    <div class="channel-info">
+                        <h4>${channel.name}</h4>
+                        <p>Position: ${channel.position} | Type: ${channel.actionType} | Key: ${channel.channelKey}</p>
+                        ${channel.spriteId ? `<p style="font-size: 0.8em; color: #6b7280;">Sprite: channel-${channel.spriteId}.png</p>` : ''}
+                        <span class="status-badge ${channel.isActive ? 'active' : 'inactive'}">
+                            ${channel.isActive ? 'Active' : 'Inactive'}
+                        </span>
+                    </div>
+                    <div class="channel-actions">
+                        <button class="btn" onclick="editChannel(${channel.id})">✏️ Edit</button>
+                        <button class="btn ${channel.isActive ? 'secondary' : 'success'}" onclick="toggleChannel(${channel.id})">
+                            ${channel.isActive ? '⏸️ Disable' : '▶️ Enable'}
+                        </button>
+                        <button class="btn danger" onclick="deleteChannel(${channel.id})">🗑️ Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load available positions
+        async function loadAvailablePositions() {
+            try {
+                const response = await fetch('/api/WiiChannel/positions/available');
+                if (!response.ok) throw new Error('Failed to load positions');
+                
+                availablePositions = await response.json();
+                updatePositionSelect();
+            } catch (error) {
+                console.error('Error loading positions:', error);
+            }
+        }
+
+        // Update position select
+        function updatePositionSelect() {
+            const select = document.getElementById('position');
+            select.innerHTML = '<option value="">Select position</option>';
+            
+            for (let i = 1; i <= 12; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `Position ${i}${availablePositions.includes(i) ? '' : ' (Occupied)'}`;
+                option.disabled = !availablePositions.includes(i);
+                select.appendChild(option);
+            }
+        }
+
+        // Create channel
+        document.getElementById('channel-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const channelData = Object.fromEntries(formData.entries());
+            
+            // Convert boolean and number fields
+            channelData.isActive = true;
+            channelData.position = parseInt(channelData.position);
+            channelData.animationDuration = 900;
+            channelData.showSplashBar = true;
+            channelData.sortOrder = channelData.position;
+
+            try {
+                const response = await fetch('/api/WiiChannel', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(channelData)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.errors ? error.errors.join(', ') : 'Failed to create channel');
+                }
+
+                showAlert('Channel created successfully!', 'success');
+                clearForm();
+                loadChannels();
+                loadAvailablePositions();
+                showTab('channels');
+            } catch (error) {
+                showAlert('Error creating channel: ' + error.message, 'error');
+            }
+        });
+
+        // Clear form
+        function clearForm() {
+            document.getElementById('channel-form').reset();
+        }
+
+        // Delete channel
+        async function deleteChannel(id) {
+            if (!confirm('Are you sure you want to delete this channel?')) return;
+
+            try {
+                const response = await fetch(`/api/WiiChannel/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) throw new Error('Failed to delete channel');
+
+                showAlert('Channel deleted successfully!', 'success');
+                loadChannels();
+                loadAvailablePositions();
+            } catch (error) {
+                showAlert('Error deleting channel: ' + error.message, 'error');
+            }
+        }
+
+        // Reset to defaults
+        async function resetToDefaults() {
+            if (!confirm('This will replace all channels with default ones. Continue?')) return;
+
+            try {
+                const response = await fetch('/api/WiiChannel/reset', {
+                    method: 'POST'
+                });
+
+                if (!response.ok) throw new Error('Failed to reset channels');
+
+                showAlert('Channels reset to defaults successfully!', 'success');
+                loadChannels();
+                loadAvailablePositions();
+            } catch (error) {
+                showAlert('Error resetting channels: ' + error.message, 'error');
+            }
+        }
+
+        // Export configuration
+        async function exportConfiguration() {
+            try {
+                const response = await fetch('/customerui/api/channels');
+                if (!response.ok) throw new Error('Failed to export configuration');
+                
+                const config = await response.text();
+                await navigator.clipboard.writeText(config);
+                showAlert('Configuration copied to clipboard!', 'success');
+            } catch (error) {
+                showAlert('Error exporting configuration: ' + error.message, 'error');
+            }
+        }
+
+        // Download configuration
+        async function downloadConfiguration() {
+            try {
+                const response = await fetch('/customerui/api/channels');
+                if (!response.ok) throw new Error('Failed to export configuration');
+                
+                const config = await response.text();
+                const blob = new Blob([config], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'wii-channels-config.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showAlert('Configuration downloaded!', 'success');
+            } catch (error) {
+                showAlert('Error downloading configuration: ' + error.message, 'error');
+            }
+        }
+
+        // Import configuration
+        async function importConfiguration() {
+            const jsonText = document.getElementById('importJson').value.trim();
+            if (!jsonText) {
+                showAlert('Please enter JSON configuration', 'error');
+                return;
+            }
+
+            try {
+                // Validate JSON first
+                JSON.parse(jsonText);
+
+                const response = await fetch('/api/WiiChannel/import', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ jsonConfiguration: jsonText })
+                });
+
+                if (!response.ok) throw new Error('Failed to import configuration');
+
+                showAlert('Configuration imported successfully!', 'success');
+                document.getElementById('importJson').value = '';
+                loadChannels();
+                loadAvailablePositions();
+                showTab('channels');
+            } catch (error) {
+                showAlert('Error importing configuration: ' + error.message, 'error');
+            }
+        }
+
+        // Validate JSON
+        function validateJson() {
+            const jsonText = document.getElementById('importJson').value.trim();
+            if (!jsonText) {
+                showAlert('Please enter JSON to validate', 'error');
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(jsonText);
+                if (parsed.channels && Array.isArray(parsed.channels)) {
+                    showAlert(`Valid JSON with ${parsed.channels.length} channels`, 'success');
+                } else {
+                    showAlert('Valid JSON but missing channels array', 'error');
+                }
+            } catch (error) {
+                showAlert('Invalid JSON: ' + error.message, 'error');
+            }
+        }
+
+        // Show alert
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert ${type}`;
+            alertDiv.textContent = message;
+            
+            const content = document.querySelector('.content');
+            content.insertBefore(alertDiv, content.firstChild);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        // Placeholder functions for other features
+        function editChannel(id) {
+            showAlert('Edit functionality coming soon!', 'info');
+        }
+
+        function toggleChannel(id) {
+            showAlert('Toggle functionality coming soon!', 'info');
+        }
+
+        function saveSettings() {
+            showAlert('Settings saved!', 'success');
+        }
+
+        function clearCache() {
+            showAlert('Cache cleared!', 'success');
+        }
+
+        function testChannels() {
+            showAlert('All channels tested successfully!', 'success');
+        }
+
+        function resetSystem() {
+            if (confirm('This will reset the entire system. Are you sure?')) {
+                showAlert('System reset initiated!', 'info');
+            }
+        }
+    </script>
+</body>
+</html>

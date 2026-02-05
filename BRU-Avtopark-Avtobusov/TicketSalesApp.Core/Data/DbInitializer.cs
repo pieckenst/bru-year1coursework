@@ -45,7 +45,9 @@ namespace TicketSalesApp.Core.Data
             { "EmployeeDocuments", typeof(EmployeeDocument) },
             { "EmployeeTrainings", typeof(EmployeeTraining) },
             { "EmergencyContacts", typeof(EmergencyContact) },
-            { "VacationRequests", typeof(VacationRequest) }
+            { "VacationRequests", typeof(VacationRequest) },
+            // Wii Channel Configuration
+            { "WiiChannels", typeof(WiiChannel) }
         };
 
         // Helper method for GUID conversion
@@ -146,6 +148,9 @@ namespace TicketSalesApp.Core.Data
                         await SeedDataAsync(context, provider, logger);
                     }
                 }
+
+                // Always ensure WiiChannels are seeded for Customer UI functionality
+                await SeedWiiChannelsAsync(context, logger);
 
                 logger?.LogInformation("Database initialization completed successfully.");
             }
@@ -1520,6 +1525,9 @@ namespace TicketSalesApp.Core.Data
                     await context.SaveChangesAsync();
                     logger?.LogInformation("Vacation requests seeded successfully.");
 
+                    // Seed Wii Channels for Customer UI
+                    await SeedWiiChannelsAsync(context, logger);
+
                     logger?.LogInformation("All initial data seeded successfully.");
                 }
                 else
@@ -1560,11 +1568,185 @@ namespace TicketSalesApp.Core.Data
                         }
                     }
                 }
+
+                // Always check and seed WiiChannels regardless of Users table state
+                await SeedWiiChannelsAsync(context, logger);
             }
             catch (Exception ex)
             {
                 logger?.LogError(ex, "Failed to seed data: {ErrorMessage}", ex.Message);
                 throw;
+            }
+        }
+
+        private static async Task SeedWiiChannelsAsync(AppDbContext context, ILogger? logger)
+        {
+            try
+            {
+                if (!await context.WiiChannels.AnyAsync())
+                {
+                    logger?.LogInformation("Seeding Wii Channels...");
+                    
+                    var wiiChannels = new[]
+                    {
+                        new WiiChannel
+                        {
+                            ChannelKey = "mii-channel",
+                            Name = "Mii Channel",
+                            Description = "Create and customize your Mii characters",
+                            Position = 1,
+                            SpriteId = "wiilogo", // Uses channel-wiilogo.png sprite
+                            IconPath = "/customerui/assets/images/channel-wiilogo.png",
+                            SplashImagePath = "/customerui/assets/images/channel-wiilogo.png",
+                            SplashTitle = "Mii Channel",
+                            SplashSubtitle = "Create and customize your Mii",
+                            SplashButtonText = "Start",
+                            ActionType = "javascript",
+                            CustomJavaScript = "console.log('Mii Channel activated - using sprite system with authentic Wii experience');",
+                            Category = "system",
+                            SortOrder = 1,
+                            IsActive = true,
+                            AnimationType = "default",
+                            AnimationDuration = 900,
+                            ShowSplashBar = true,
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.UtcNow,
+                            CreatedBy = "System"
+                        },
+                        new WiiChannel
+                        {
+                            ChannelKey = "authentication",
+                            Name = "Authentication",
+                            Description = "Sign in and manage your account",
+                            Position = 2,
+                            SpriteId = null, // Use IconPath directly for SVG support
+                            IconPath = "/customerui/assets/images/channel-auth-icon.svg",
+                            SplashImagePath = "/customerui/assets/images/channel-auth-banner.svg",
+                            SplashTitle = "Authentication",
+                            SplashSubtitle = "Sign in to your account",
+                            SplashButtonText = "Continue",
+                            ActionType = "view",
+                            ActionUrl = "auth-channel",
+                            Category = "system",
+                            SortOrder = 2,
+                            IsActive = true,
+                            AnimationType = "default",
+                            AnimationDuration = 900,
+                            ShowSplashBar = true,
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.UtcNow,
+                            CreatedBy = "System"
+                        },
+                        new WiiChannel
+                        {
+                            ChannelKey = "ticket-sales",
+                            Name = "Ticket Sales",
+                            Description = "Purchase bus tickets and manage your bookings",
+                            Position = 3,
+                            SpriteId = "wiilogo", // Uses channel-wiilogo.png sprite
+                            IconPath = "/customerui/assets/images/channel-wiilogo.png",
+                            SplashImagePath = "/customerui/assets/images/channel-wiilogo.png",
+                            SplashTitle = "Ticket Sales",
+                            SplashSubtitle = "Purchase your bus tickets",
+                            SplashButtonText = "Buy Tickets",
+                            ActionType = "view",
+                            ActionUrl = "ticket-purchase",
+                            Category = "main",
+                            SortOrder = 3,
+                            IsActive = true,
+                            AnimationType = "default",
+                            AnimationDuration = 900,
+                            ShowSplashBar = true,
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.UtcNow,
+                            CreatedBy = "System"
+                        },
+                        new WiiChannel
+                        {
+                            ChannelKey = "schedule",
+                            Name = "Bus Schedule",
+                            Description = "View bus schedules and route information",
+                            Position = 4,
+                            SpriteId = "wiilogo", // Uses channel-wiilogo.png sprite
+                            IconPath = "/customerui/assets/images/channel-wiilogo.png",
+                            SplashImagePath = "/customerui/assets/images/channel-wiilogo.png",
+                            SplashTitle = "Bus Schedule",
+                            SplashSubtitle = "Check departure times and routes",
+                            SplashButtonText = "View Schedule",
+                            ActionType = "view",
+                            ActionUrl = "schedule",
+                            Category = "main",
+                            SortOrder = 3,
+                            IsActive = true,
+                            AnimationType = "default",
+                            AnimationDuration = 900,
+                            ShowSplashBar = true,
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.UtcNow,
+                            CreatedBy = "System"
+                        },
+                        new WiiChannel
+                        {
+                            ChannelKey = "my-tickets",
+                            Name = "My Tickets",
+                            Description = "View and manage your purchased tickets",
+                            Position = 7,
+                            SpriteId = "wiilogo", // Uses channel-wiilogo.png sprite
+                            IconPath = "/customerui/assets/images/channel-wiilogo.png",
+                            SplashImagePath = "/customerui/assets/images/channel-wiilogo.png",
+                            SplashTitle = "My Tickets",
+                            SplashSubtitle = "Manage your bookings",
+                            SplashButtonText = "View Tickets",
+                            ActionType = "view",
+                            ActionUrl = "my-tickets",
+                            Category = "main",
+                            SortOrder = 4,
+                            IsActive = true,
+                            AnimationType = "default",
+                            AnimationDuration = 900,
+                            ShowSplashBar = true,
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.UtcNow,
+                            CreatedBy = "System"
+                        },
+                        new WiiChannel
+                        {
+                            ChannelKey = "settings",
+                            Name = "Settings",
+                            Description = "System settings and preferences",
+                            Position = 10,
+                            SpriteId = "wiilogo", // Uses channel-wiilogo.png sprite
+                            IconPath = "/customerui/assets/images/channel-wiilogo.png",
+                            SplashImagePath = "/customerui/assets/images/channel-wiilogo.png",
+                            SplashTitle = "Settings",
+                            SplashSubtitle = "Configure system preferences",
+                            SplashButtonText = "Open Settings",
+                            ActionType = "view",
+                            ActionUrl = "settings-main",
+                            Category = "system",
+                            SortOrder = 5,
+                            IsActive = true,
+                            AnimationType = "default",
+                            AnimationDuration = 900,
+                            ShowSplashBar = true,
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.UtcNow,
+                            CreatedBy = "System"
+                        }
+                    };
+                    
+                    await context.WiiChannels.AddRangeAsync(wiiChannels);
+                    await context.SaveChangesAsync();
+                    logger?.LogInformation("Wii Channels seeded successfully.");
+                }
+                else
+                {
+                    logger?.LogInformation("Wii Channels already exist in database.");
+                }
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex, "Failed to seed Wii Channels: {ErrorMessage}", ex.Message);
             }
         }
 

@@ -1,0 +1,677 @@
+/* Authentication Channel - Wii WiFi Connection Style */
+
+.auth-channel-view {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(180deg, #e8f4ff 0%, #c8e0f5 100%);
+  font-family: 'Asap', Arial, sans-serif;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header Banner */
+.auth-header {
+  width: 100%;
+  padding: 0;
+  text-align: center;
+  background: linear-gradient(180deg, #5ab0ff 0%, #2d7dd2 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.auth-banner {
+  width: 100%;
+  height: 100%;
+  min-height: 100px;
+  max-height: 150px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Main Content */
+.auth-content-wrapper {
+  flex: 1;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.auth-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px 120px 20px;
+  box-sizing: border-box;
+}
+
+/* Section Separators */
+.section-separator {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #d0d0d0 50%, transparent 100%);
+  margin: 40px 0;
+}
+
+.form-button-separator {
+  width: 100%;
+  height: 1px;
+  background: #e0e0e0;
+  margin: 20px 0;
+}
+
+.footer-separator {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #d0d0d0 50%, transparent 100%);
+  margin-bottom: 15px;
+}
+
+/* Section Styling */
+.auth-section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: clamp(22px, 4vw, 28px);
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 25px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Authentication Status Card */
+.auth-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border: 3px solid #d0d0d0;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.auth-card-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+  flex-wrap: wrap;
+}
+
+.auth-icon-container {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+}
+
+.auth-icon {
+  width: 100%;
+  height: 100%;
+}
+
+.auth-card-title {
+  font-size: clamp(20px, 4vw, 32px);
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+  flex: 1;
+  min-width: 200px;
+}
+
+.auth-card-body {
+  padding: 20px 0;
+}
+
+/* Status Indicator */
+.auth-status {
+  padding: 20px;
+  border-radius: 12px;
+  background: #f5f5f5;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.status-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.status-checking .status-dot {
+  background: #ffa500;
+}
+
+.status-authenticated .status-dot {
+  background: #4caf50;
+  animation: none;
+}
+
+.status-error .status-dot {
+  background: #f44336;
+  animation: none;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+/* User Info */
+.auth-user-info {
+  margin-top: 20px;
+}
+
+.user-info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border: 2px solid #e0e0e0;
+}
+
+.info-label {
+  font-weight: bold;
+  color: #666;
+}
+
+.info-value {
+  color: #333;
+  font-weight: 500;
+}
+
+/* Authentication Options */
+.auth-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.auth-option-item {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: stretch;
+}
+
+.auth-option-card {
+  background: white;
+  border-radius: 16px;
+  padding: 25px 20px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  border: 3px solid #d0d0d0;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  min-height: 180px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-option-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border-color: #4a9eff;
+}
+
+.option-button-wrapper {
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+  display: block;
+}
+
+.option-button-wrapper .wii-button {
+  width: 100%;
+  display: block;
+}
+
+/* Authenticated Actions */
+.auth-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.auth-action-item {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.auth-action-card {
+  background: white;
+  border-radius: 16px;
+  padding: 25px 20px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  border: 3px solid #d0d0d0;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-action-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border-color: #ff6060;
+}
+
+/* Windows Authentication */
+.auth-windows-item {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.auth-option-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  border-color: #4a9eff;
+}
+
+.option-icon {
+  font-size: clamp(40px, 8vw, 64px);
+  margin-bottom: 10px;
+}
+
+.auth-option-card h3 {
+  font-size: clamp(18px, 3vw, 24px);
+  color: #333;
+  margin: 10px 0;
+}
+
+.auth-option-card p {
+  color: #666;
+  font-size: clamp(14px, 2vw, 16px);
+  margin-bottom: 15px;
+  flex: 1;
+}
+
+/* Wii-style Buttons */
+.auth-channel-view .wii-button {
+  background: linear-gradient(180deg, #f0f0f0 0%, #d0d0d0 100%);
+  border: 3px solid #a0a0a0;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-size: clamp(14px, 2.5vw, 18px);
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Asap', Arial, sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  text-align: center;
+  position: relative;
+  margin: 0;
+}
+
+.button-container {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 2px solid #f0f0f0;
+  position: relative;
+  clear: both;
+}
+
+.auth-channel-view .wii-button:hover {
+  background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.auth-channel-view .wii-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.auth-channel-view .wii-button-primary {
+  background: linear-gradient(180deg, #5ab0ff 0%, #2d7dd2 100%);
+  border-color: #1a5fa0;
+  color: white;
+}
+
+.auth-channel-view .wii-button-primary:hover {
+  background: linear-gradient(180deg, #6ac0ff 0%, #3d8de2 100%);
+}
+
+.auth-channel-view .wii-button-secondary {
+  background: linear-gradient(180deg, #e0e0e0 0%, #c0c0c0 100%);
+}
+
+.auth-channel-view .wii-button-back {
+  background: linear-gradient(180deg, #ff9090 0%, #ff6060 100%);
+  border-color: #cc4040;
+  color: white;
+}
+
+/* Form Container */
+.auth-form-container {
+  background: white;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border: 3px solid #d0d0d0;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto 30px;
+  box-sizing: border-box;
+}
+
+.auth-form h3 {
+  font-size: clamp(20px, 4vw, 28px);
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  color: #666;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.wii-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 3px solid #d0d0d0;
+  border-radius: 10px;
+  font-family: 'Asap', Arial, sans-serif;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.wii-input:focus {
+  outline: none;
+  border-color: #4a9eff;
+  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.2);
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.auth-channel-view .form-actions .wii-button {
+  flex: 1;
+}
+
+.form-message {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+  display: none;
+}
+
+.form-message.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 2px solid #4caf50;
+  display: block;
+}
+
+.form-message.error {
+  background: #ffebee;
+  color: #c62828;
+  border: 2px solid #f44336;
+  display: block;
+}
+
+/* QR Code Login Styles */
+.qr-code-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  margin: 20px 0;
+  min-height: 250px;
+  max-height: 400px;
+  box-sizing: border-box;
+}
+
+.qr-code-container img {
+  max-width: 100%;
+  max-height: 300px;
+  width: auto;
+  height: auto;
+  border-radius: 4px;
+  object-fit: contain;
+}
+
+.qr-instructions {
+  text-align: center;
+  color: #666;
+  font-size: clamp(12px, 2vw, 14px);
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+/* Windows Authentication Styles */
+.auth-windows-container {
+  margin: 20px auto;
+  max-width: 600px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.windows-card {
+  background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
+  border: 3px solid #004578;
+  box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
+}
+
+.windows-card .option-icon {
+  font-size: 48px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.windows-card h3 {
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.windows-card p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Footer */
+.auth-footer {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  padding: 0 20px 20px 20px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  z-index: 200;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  width: 100%;
+  clear: both;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: left;
+  position: relative;
+  clear: both;
+}
+
+.auth-footer .wii-button {
+  max-width: 300px;
+  margin: 0;
+  position: relative;
+}
+
+/* Logout Button */
+.auth-channel-view .auth-user-info .wii-button {
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .auth-content {
+    padding: 20px 15px 100px 15px;
+  }
+  
+  .auth-options-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .auth-card-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  
+  .auth-card {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .auth-form-container {
+    padding: 20px;
+  }
+  
+  .auth-icon-container {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .qr-code-container {
+    min-height: 200px;
+    max-height: 300px;
+    padding: 15px;
+  }
+  
+  .qr-code-container img {
+    max-height: 250px;
+  }
+  
+  .auth-header {
+    min-height: 80px;
+  }
+  
+  .auth-banner {
+    max-height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-content {
+    padding: 15px 10px 100px 10px;
+  }
+  
+  .section-separator {
+    margin: 30px 0;
+  }
+  
+  .auth-header {
+    min-height: 60px;
+  }
+  
+  .auth-banner {
+    max-height: 80px;
+  }
+  
+  .auth-card {
+    padding: 12px;
+    border-radius: 12px;
+  }
+  
+  .auth-option-card {
+    min-height: 200px;
+  }
+  
+  .card-content {
+    padding: 20px 15px 10px 15px;
+  }
+  
+  .card-button-container {
+    padding: 0 15px 15px 15px;
+    padding-top: 12px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .auth-footer {
+    padding: 0 10px 15px 10px;
+  }
+  
+  .qr-code-container {
+    min-height: 180px;
+    max-height: 250px;
+    padding: 10px;
+  }
+  
+  .qr-code-container img {
+    max-height: 200px;
+  }
+}

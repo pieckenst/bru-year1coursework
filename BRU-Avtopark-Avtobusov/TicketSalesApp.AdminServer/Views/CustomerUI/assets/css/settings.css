@@ -1,0 +1,296 @@
+/* settings */
+
+.settings {
+  background-color: black;
+  background-image: url(/customerui/assets/images/settings-main-bg.png);
+  width: 100vw;
+  height: 100vh;
+}
+
+.settings-header {
+  background-color: black;
+  background: url(/customerui/assets/images/settings-topbar.png);
+  height: 16vh;
+  width: 100vw;
+  background-size: 15px 100%;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  top: -16vh;
+  transition: 300ms ease;
+}
+
+.settings-header.animate {
+  top: 0;
+}
+
+.settings-main .settings-header:after {
+  position: absolute;
+  background-image: url(/customerui/assets/images/logo-white.svg);
+  width: 10vh;
+  height: 4.5vh;
+  content: '';
+  background-size: 100% 100%;
+  bottom: 2vh;
+  right: 12vw;
+  display: block;
+}
+
+.settings-footer {
+  background-color: black;
+  background: url(/customerui/assets/images/settings-bottombar.png);
+  height: 21vh;
+  width: 100vw;
+  background-size: 8px 100%;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  bottom: -21vh;
+  transition: 300ms ease;
+}
+
+.settings-footer.animate {
+  bottom: 0;
+}
+
+.settings-navcontainer {
+  position: absolute;
+  /*top: 20%;*/
+  top: -100vh;
+  opacity: 0;
+  margin-left: auto;
+  margin-right: auto;
+  left: calc(50% - 60vh);
+  transition: top 300ms;
+}
+
+.settings-navcontainer.animate {
+  top: 20%;
+  opacity: 1;
+}
+
+.settings-content {
+  height: calc(100vh - 37vh);
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+}
+
+.settings-navbtn {
+  width: 50vh;
+  height: 38vh;
+  background-image: url(/customerui/assets/images/settings-main-nav.png);
+  background-color: initial;
+  background-size: 100% 100%;
+  display: inline-block;
+  position: relative;
+  transition: 300ms;
+}
+
+.settings-navbtn:hover {
+  transform: scale(1.1);
+}
+
+.settings-navbtn.left { margin-right: 10vh; } .settings-navbtn.right { margin-left: 10vh; }
+
+.settings-navbtn span.label {
+  position: absolute;
+  display: block;
+  bottom: 1vh;
+  height: 10vh;
+  line-height: 10vh;
+  color: #909090;
+  font-size: 3.8vh;
+  font-family: 'Asap', sans-serif;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  letter-spacing: -1px;
+}
+
+.settings-navbtn.settings .icon {
+  background-image: url(/customerui/assets/images/settings-icon.png);
+  width: 20vh;
+  height: 20vh;
+  background-size: 100% 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5vh;
+}
+
+.settings-navbtn.info .icon {
+  background-image: url(/customerui/assets/images/info-icon.png);
+  width: 20vh;
+  height: 20vh;
+  background-size: 100% 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5vh;
+}
+
+.settings-footer .back {
+  position: absolute;
+  background-image: url(/customerui/assets/images/settings-back.png);
+  width: 30vh;
+  height: 8vh;
+  content: '';
+  background-size: 100% 100%;
+  top: 6vh;
+  left: 12vw;
+  display: block;
+  transition: 150ms;
+}
+
+.settings-footer .back:hover {
+  transform: scale(1.1);
+}
+
+/* Licenses page styles */
+.settings-licenses .settings-content {
+  padding: 20px;
+  overflow-y: auto;
+  max-height: calc(100vh - 37vh);
+}
+
+.licenses-container {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.licenses-title {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.licenses-title h2 {
+  color: #909090;
+  font-family: 'Asap', sans-serif;
+  font-size: 4vh;
+  font-weight: 500;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.licenses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.license-item {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 20px;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.license-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.license-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.license-header h3 {
+  color: #ffffff;
+  font-family: 'Asap', sans-serif;
+  font-size: 2.5vh;
+  font-weight: 500;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+}
+
+.license-link a {
+  color: #4a9eff;
+  text-decoration: none;
+  font-family: 'Asap', sans-serif;
+  font-size: 1.8vh;
+  padding: 5px 10px;
+  border: 1px solid #4a9eff;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.license-link a:hover {
+  background: #4a9eff;
+  color: white;
+  text-shadow: none;
+}
+
+.license-content {
+  margin-top: 15px;
+}
+
+.license-text {
+  color: #e0e0e0;
+  font-family: 'Asap', sans-serif;
+  font-size: 1.6vh;
+  line-height: 1.5;
+}
+
+.license-text p {
+  margin: 10px 0;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.license-text strong {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+/* Responsive adjustments for licenses */
+@media only screen and (max-height: 718px) {
+  .licenses-title h2 {
+    font-size: 3vh;
+  }
+  
+  .license-header h3 {
+    font-size: 2vh;
+  }
+  
+  .license-text {
+    font-size: 1.4vh;
+  }
+  
+  .license-link a {
+    font-size: 1.5vh;
+  }
+}
+
+@media only screen and (max-width: 1220px) {
+  .licenses-container {
+    max-width: 95%;
+  }
+  
+  .license-item {
+    padding: 15px;
+  }
+  
+  .license-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+/* Animation for licenses container */
+.licenses-container {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+}
+
+.licenses-container.animate {
+  opacity: 1;
+  transform: translateY(0);
+}

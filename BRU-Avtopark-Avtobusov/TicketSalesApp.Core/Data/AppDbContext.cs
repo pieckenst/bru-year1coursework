@@ -38,6 +38,9 @@ namespace TicketSalesApp.Core.Data
         public DbSet<EmployeeTraining> EmployeeTrainings { get; set; }
         public DbSet<EmergencyContact> EmergencyContacts { get; set; }
         public DbSet<VacationRequest> VacationRequests { get; set; }
+        
+        // Wii Channel Configuration
+        public DbSet<WiiChannel> WiiChannels { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -1,0 +1,64 @@
+<div class="channel-view schedule">
+  <div class="channel-header">
+    <div class="channel-title">
+      <h1>Bus Schedule</h1>
+      <p>Check departure times and routes</p>
+    </div>
+  </div>
+
+  <div class="channel-content">
+    <div class="schedule-filters">
+      <div class="filter-card" onmouseover="hover()" onclick="select()">
+        <div class="filter-icon">📍</div>
+        <h3>Select Route</h3>
+        <p>Choose your departure and destination</p>
+      </div>
+      
+      <div class="filter-card" onmouseover="hover()" onclick="select()">
+        <div class="filter-icon">📅</div>
+        <h3>Select Date</h3>
+        <p>Pick your travel date</p>
+      </div>
+      
+      <div class="filter-card" onmouseover="hover()" onclick="select()">
+        <div class="filter-icon">⏰</div>
+        <h3>Time Preferences</h3>
+        <p>Morning, afternoon, or evening</p>
+      </div>
+    </div>
+
+    <div class="schedule-preview">
+      <h3>Today's Schedule Preview</h3>
+      <div class="schedule-list">
+        <div class="schedule-item" onmouseover="hover()" onclick="select()">
+          <div class="time">08:30</div>
+          <div class="route">City Center → Airport</div>
+          <div class="status available">Available</div>
+        </div>
+        <div class="schedule-item" onmouseover="hover()" onclick="select()">
+          <div class="time">09:15</div>
+          <div class="route">Downtown → University</div>
+          <div class="status available">Available</div>
+        </div>
+        <div class="schedule-item" onmouseover="hover()" onclick="select()">
+          <div class="time">10:00</div>
+          <div class="route">Mall → Train Station</div>
+          <div class="status full">Full</div>
+        </div>
+        <div class="schedule-item" onmouseover="hover()" onclick="select()">
+          <div class="time">10:45</div>
+          <div class="route">Airport → City Center</div>
+          <div class="status available">Available</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="coming-soon">
+      <p>🚧 Real-time schedule updates coming soon! 🚧</p>
+    </div>
+  </div>
+
+  <div class="channel-footer">
+    <div class="back viewchange" data-view="menu" data-transition="fade" onmouseover="hover()" onclick="back()">Back</div>
+  </div>
+</div>

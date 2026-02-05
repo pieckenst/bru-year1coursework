@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using TicketSalesApp.Core.Data;
 using Serilog;
 using System.Linq;
+using System.ComponentModel.DataAnnotations;
 
 namespace TicketSalesApp.AdminServer.Controllers.v1
 {
@@ -26,13 +27,16 @@ namespace TicketSalesApp.AdminServer.Controllers.v1
     {
         private readonly TicketSalesApp.AdminServer.Services.Interfaces.IAuthenticationBusinessService _authBusinessService;
         private readonly ILogger<AuthenticationController> _logger;
+        private readonly AppDbContext _context;
 
         public AuthenticationController(
             TicketSalesApp.AdminServer.Services.Interfaces.IAuthenticationBusinessService authBusinessService,
-            ILogger<AuthenticationController> logger)
+            ILogger<AuthenticationController> logger,
+            AppDbContext context)
         {
             _authBusinessService = authBusinessService;
             _logger = logger;
+            _context = context;
         }
 
         /// <summary>
@@ -43,24 +47,165 @@ namespace TicketSalesApp.AdminServer.Controllers.v1
         [AllowAnonymous]
         public async Task<ActionResult<string>> Login([FromBody] LoginModel model)
         {
-            Log.Information("Login attempt started for user {Login}", model.Login);
+            Log.Information("Login attempt started for user {Login} from IP {RemoteIP}", 
+                model.Login, HttpContext.Connection.RemoteIpAddress);
 
+            // Server-side validation
             if (!ModelState.IsValid)
             {
                 Log.Warning("Invalid model state for login request: {ValidationErrors}",
                     ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
-                return BadRequest(ModelState);
+                return BadRequest(new { message = "Invalid request data" });
+            }
+
+            // Validate input
+            if (string.IsNullOrWhiteSpace(model.Login) || string.IsNullOrWhiteSpace(model.Password))
+            {
+                Log.Warning("Login attempt with empty credentials from IP {RemoteIP}", 
+                    HttpContext.Connection.RemoteIpAddress);
+                return BadRequest(new { message = "Username and password are required" });
+            }
+
+            //if (model.Login.Length < 3)
+            //{
+                //Log.Warning("Login attempt with username too short: {Login}", model.Login);
+                //return BadRequest(new { message = "Username must be at least 3 characters" });
+            //}
+
+            //if (model.Password.Length < 6)
+            //{
+                //Log.Warning("Login attempt with password too short for user {Login}", model.Login);
+                //return BadRequest(new { message = "Password must be at least 6 characters" });
+            //}
+
+            // Check for SQL injection attempts or suspicious patterns
+            if (model.Login.Contains("'") || model.Login.Contains("--") || 
+                model.Login.Contains(";") || model.Login.Contains("/*"))
+            {
+                Log.Warning("Suspicious login attempt detected for user {Login} from IP {RemoteIP}", 
+                    model.Login, HttpContext.Connection.RemoteIpAddress);
+                return BadRequest(new { message = "Invalid characters in username" });
             }
 
             var (success, token, message) = await _authBusinessService.AuthenticateUserAsync(model.Login, model.Password);
             if (!success)
             {
-                Log.Warning("Failed login attempt for user {Login}: {Message}", model.Login, message);
-                return Unauthorized(new { message });
+                Log.Warning("Failed login attempt for user {Login} from IP {RemoteIP}: {Message}", 
+                    model.Login, HttpContext.Connection.RemoteIpAddress, message);
+                return Unauthorized(new { message = "Invalid username or password" });
             }
 
-            Log.Information("Successful login for user {Login}", model.Login);
+            Log.Information("Successful login for user {Login} from IP {RemoteIP}", 
+                model.Login, HttpContext.Connection.RemoteIpAddress);
             return Ok(new { token });
+        }
+
+        /// <summary>
+        /// Validate JWT token and return user information
+        /// </summary>
+        [Route("validate")]
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult<object>> ValidateToken()
+        {
+            try
+            {
+                Log.Information("Token validation requested for user {UserName}", User.Identity?.Name);
+
+                // Get user information from claims
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var usernameClaim = User.FindFirst(ClaimTypes.Name)?.Value;
+                var roleClaim = User.FindFirst("role")?.Value;
+
+                if (string.IsNullOrEmpty(userIdClaim) || string.IsNullOrEmpty(usernameClaim))
+                {
+                    Log.Warning("Invalid token claims - missing user identifier or name");
+                    return Unauthorized(new { message = "Invalid token" });
+                }
+
+                // Get full user details from database
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == long.Parse(userIdClaim));
+                if (user == null)
+                {
+                    Log.Warning("User {UserId} not found in database", userIdClaim);
+                    return Unauthorized(new { message = "User not found" });
+                }
+
+                Log.Information("Token validated successfully for user {Login}", user.Login);
+
+                return Ok(new
+                {
+                    isAuthenticated = true,
+                    user = new
+                    {
+                        userId = user.UserId,
+                        login = user.Login,
+                        username = user.Login,
+                        role = user.Role,
+                        email = user.Email,
+                        phoneNumber = user.PhoneNumber,
+                        isWindowsAuth = user.IsWindowsAuth,
+                        createdAt = user.CreatedAt
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Token validation failed");
+                Log.Error(ex, "Token validation failed. Error: {ErrorMessage}", ex.Message);
+                return Unauthorized(new { message = "Token validation failed" });
+            }
+        }
+
+        /// <summary>
+        /// Check if Windows authentication is available on the server
+        /// </summary>
+        [Route("windows-available")]
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult<object> CheckWindowsAuthAvailability()
+        {
+            try
+            {
+                // Check if running on Windows
+                bool isWindows = OperatingSystem.IsWindows();
+                
+                // Check if Windows authentication is configured
+                bool isConfigured = HttpContext.User.Identity?.AuthenticationType == "Negotiate" ||
+                                   HttpContext.User.Identity?.AuthenticationType == "NTLM" ||
+                                   HttpContext.User.Identity?.AuthenticationType == "Windows";
+
+                // Get client platform from User-Agent
+                var userAgent = Request.Headers.UserAgent.ToString().ToLower();
+                bool clientIsWindows = userAgent.Contains("windows") || userAgent.Contains("win64") || userAgent.Contains("win32");
+
+                Log.Information("Windows auth availability check - Server OS: {IsWindows}, Configured: {IsConfigured}, Client: {ClientIsWindows}",
+                    isWindows, isConfigured, clientIsWindows);
+
+                return Ok(new
+                {
+                    serverSupportsWindows = isWindows,
+                    windowsAuthConfigured = isConfigured,
+                    clientIsWindows = clientIsWindows,
+                    available = isWindows && clientIsWindows,
+                    message = isWindows && clientIsWindows 
+                        ? "Windows authentication is available" 
+                        : "Windows authentication is not available on this platform"
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error checking Windows authentication availability");
+                Log.Error(ex, "Error checking Windows authentication availability");
+                return Ok(new
+                {
+                    serverSupportsWindows = false,
+                    windowsAuthConfigured = false,
+                    clientIsWindows = false,
+                    available = false,
+                    message = "Unable to determine Windows authentication availability"
+                });
+            }
         }
 
         /// <summary>
@@ -170,16 +315,38 @@ namespace TicketSalesApp.AdminServer.Controllers.v1
 
     public class LoginModel
     {
+        [Required(ErrorMessage = "Username is required")]
+        
+        [RegularExpression(@"^[a-zA-Z0-9_\-\.@]+$", ErrorMessage = "Username contains invalid characters")]
         public required string Login { get; set; }
+        
+        [Required(ErrorMessage = "Password is required")]
+        
         public required string Password { get; set; }
     }
 
     public class RegisterModel
     {
+        [Required(ErrorMessage = "Username is required")]
+        [MinLength(3, ErrorMessage = "Username must be at least 3 characters")]
+        [MaxLength(50, ErrorMessage = "Username cannot exceed 50 characters")]
+        [RegularExpression(@"^[a-zA-Z0-9_\-\.@]+$", ErrorMessage = "Username contains invalid characters")]
         public required string Login { get; set; }
+        
+        [Required(ErrorMessage = "Password is required")]
+        [MinLength(6, ErrorMessage = "Password must be at least 6 characters")]
+        [MaxLength(100, ErrorMessage = "Password cannot exceed 100 characters")]
         public required string Password { get; set; }
+        
+        [Range(1, 4, ErrorMessage = "Role must be between 1 and 4")]
         public int Role { get; set; }
+        
+        [Phone(ErrorMessage = "Invalid phone number format")]
+        [MaxLength(20, ErrorMessage = "Phone number cannot exceed 20 characters")]
         public string? PhoneNumber { get; set; }
+        
+        [EmailAddress(ErrorMessage = "Invalid email address format")]
+        [MaxLength(100, ErrorMessage = "Email cannot exceed 100 characters")]
         public string? Email { get; set; }
     }
 }

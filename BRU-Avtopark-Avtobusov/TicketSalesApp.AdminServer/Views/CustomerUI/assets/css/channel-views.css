@@ -1,0 +1,1187 @@
+/* =========================================
+   Wii Channel Aesthetics - Enhanced Design
+   ========================================= */
+:root {
+  --wii-blue: #23b2e5;
+  --wii-blue-dark: #0088bd;
+  --wii-gray: #e8e8e8;
+  --wii-text: #444444;
+  --wii-focus: #48cbf7;
+  --wii-shadow: rgba(0, 0, 0, 0.15);
+  --glass-gradient: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 51%, rgba(255,255,255,0.2) 100%);
+  --btn-gradient: linear-gradient(to bottom, #fcfcfc 0%, #e6e6e6 100%);
+}
+
+body {
+  margin: 0;
+  overflow: hidden; /* Typical console feel */
+  background-color: #f1f1f1;
+}
+
+/* Main View Container with "Wii Stripes" Background */
+.channel-view {
+  width: 100%;
+  height: 100vh;
+  /* The iconic subtle diagonal stripe background */
+  background: repeating-linear-gradient(45deg,
+    #ffffff,
+    #ffffff 2px,
+    #f4f4f4 2px,
+    #f4f4f4 4px);
+  font-family: "Arial Rounded MT Bold", "Helvetica Rounded", "Quicksand", 'Asap', Arial, sans-serif;
+  color: var(--wii-text);
+  overflow-y: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollbar styling for that console feel */
+.channel-view::-webkit-scrollbar {
+  width: 12px;
+}
+
+.channel-view::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.05);
+}
+
+.channel-view::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 6px;
+  border: 2px solid #f4f4f4;
+}
+
+/* =========================================
+   Channel Header
+   ========================================= */
+.channel-header {
+  /* Wii Shop Channel Blue Bar Style */
+  background: linear-gradient(180deg, #27aae1 0%, #1c75bc 100%);
+  color: white;
+  padding: 2vh 4vw;
+  text-align: center;
+  box-shadow: 0 4px 6px var(--wii-shadow);
+  border-bottom: 4px solid rgba(255,255,255,0.3);
+  position: relative;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.channel-title h1 {
+  font-size: 4.5vh;
+  font-weight: normal;
+  margin: 0;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+}
+
+.channel-title p {
+  font-size: 2vh;
+  margin: 0.5vh 0 0 0;
+  opacity: 0.9;
+  font-weight: 300;
+}
+
+/* =========================================
+   Content Area
+   ========================================= */
+.channel-content {
+  padding: 4vh 6vw 12vh 6vw; /* Extra bottom padding for footer */
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   Cards & Interactive Elements
+   ========================================= */
+/* Grid Layouts */
+.mii-options,
+.ticket-options,
+.schedule-filters,
+.ticket-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3vh;
+  margin-bottom: 4vh;
+}
+
+/* The "Wii Button" aesthetic */
+.mii-option-card,
+.ticket-option-card,
+.filter-card,
+.action-card {
+  background: #fff;
+  border-radius: 25px; /* High border radius for pill/soft look */
+  padding: 2vh;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+  border: 4px solid transparent; /* Reserve space for hover border */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glass/Gloss Overlay on cards */
+.mii-option-card::before,
+.ticket-option-card::before,
+.filter-card::before,
+.action-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 100%);
+  border-radius: 20px 20px 0 0;
+  pointer-events: none;
+}
+
+/* The Iconic Wii Hover State: Blue Outline + Pulse */
+.mii-option-card:hover,
+.ticket-option-card:hover,
+.filter-card:hover,
+.action-card:hover {
+  transform: scale(1.05);
+  border-color: var(--wii-focus);
+  box-shadow: 0 0 15px rgba(35, 178, 229, 0.4);
+}
+
+.option-icon,
+.filter-icon,
+.action-icon {
+  font-size: 5vh;
+  margin-bottom: 1vh;
+  display: block;
+  /* Slight drop shadow on icons */
+  filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.2));
+}
+
+.mii-option-card h3,
+.ticket-option-card h3,
+.filter-card h3,
+.action-card h3 {
+  font-size: 2.2vh;
+  color: var(--wii-blue-dark);
+  margin: 0.5vh 0;
+}
+
+.mii-option-card p,
+.ticket-option-card p,
+.filter-card p,
+.action-card p {
+  font-size: 1.8vh;
+  margin: 0;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* =========================================
+   Mii Showcase (Bubble Look)
+   ========================================= */
+.mii-showcase {
+  background: white;
+  border-radius: 40px;
+  padding: 3vh;
+  text-align: center;
+  margin-bottom: 4vh;
+  border: 6px solid #dcdcdc; /* Thick gray border typical of Wii menus */
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+}
+
+.mii-avatar-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 20vh;
+}
+
+.mii-icon {
+  font-size: 10vh;
+  margin-bottom: 1vh;
+  color: #555;
+}
+
+.mii-avatar-placeholder p {
+  font-size: 2vh;
+  color: #888;
+  margin: 0;
+}
+
+/* =========================================
+   Lists & Data Tables
+   ========================================= */
+.quick-routes,
+.schedule-preview,
+.tickets-preview {
+  background: rgba(255,255,255,0.8);
+  border-radius: 20px;
+  padding: 3vh;
+  margin-bottom: 3vh;
+  border: 1px solid #ddd;
+}
+
+.quick-routes h3,
+.schedule-preview h3,
+.tickets-preview h3 {
+  font-size: 2.5vh;
+  color: #666;
+  border-bottom: 2px dotted #ccc; /* Dotted lines are very Wii */
+  padding-bottom: 1vh;
+  margin-top: 0;
+}
+
+/* Route List */
+.route-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5vh;
+}
+
+.route-item {
+  background: #fff;
+  margin-bottom: 1vh;
+  border-radius: 50px; /* Pill shape rows */
+  padding: 1.5vh 3vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  transition: transform 0.2s;
+}
+
+.route-item:hover {
+  border: 1px solid var(--wii-blue);
+  background: #f0faff;
+  transform: translateX(10px);
+}
+
+.route-name {
+  font-size: 2vh;
+  font-weight: 500;
+  color: #333;
+}
+
+.route-price {
+  font-size: 2.2vh;
+  font-weight: 600;
+  color: #2c5aa0;
+}
+
+/* Schedule List */
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5vh;
+}
+
+.schedule-item {
+  background: #fff;
+  margin-bottom: 1vh;
+  border-radius: 50px; /* Pill shape rows */
+  padding: 1.5vh 3vh;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  transition: transform 0.2s;
+}
+
+.schedule-item:hover {
+  border: 1px solid var(--wii-blue);
+  background: #f0faff;
+  transform: translateX(10px);
+}
+
+.schedule-item .time {
+  font-size: 2.2vh;
+  font-weight: 600;
+  color: #2c5aa0;
+}
+
+.schedule-item .route {
+  font-size: 2vh;
+  color: #333;
+}
+
+/* Status Bubbles */
+.status, .ticket-status {
+  padding: 0.5vh 2vh;
+  border-radius: 20px;
+  font-size: 1.6vh;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.status.available, .ticket-status.valid {
+  background: #c3e6cb;
+  color: #155724;
+  border: 1px solid #8fd19e;
+}
+
+.status.full, .ticket-status.expired {
+  background: #f5c6cb;
+  color: #721c24;
+  border: 1px solid #f1b0b7;
+}
+
+/* Ticket List */
+.ticket-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5vh;
+}
+
+.ticket-item {
+  background: #fff;
+  margin-bottom: 1vh;
+  border-radius: 50px; /* Pill shape rows */
+  padding: 1.5vh 3vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  transition: transform 0.2s;
+}
+
+.ticket-item:hover {
+  border: 1px solid var(--wii-blue);
+  background: #f0faff;
+  transform: translateX(10px);
+}
+
+.ticket-info {
+  flex: 1;
+}
+
+.ticket-route {
+  font-size: 2.2vh;
+  font-weight: 600;
+  color: #2c5aa0;
+  margin-bottom: 0.5vh;
+}
+
+.ticket-date {
+  font-size: 1.8vh;
+  color: #666;
+  margin-bottom: 0.5vh;
+}
+
+.ticket-id {
+  font-size: 1.6vh;
+  color: #888;
+  font-family: monospace;
+}
+
+.ticket-status {
+  font-size: 1.8vh;
+  font-weight: 500;
+  padding: 1vh 1.5vh;
+  border-radius: 15px;
+}
+
+.ticket-status.valid {
+  background: #d4edda;
+  color: #155724;
+}
+
+.ticket-status.expired {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* =========================================
+   Coming Soon Box
+   ========================================= */
+.coming-soon {
+  background: repeating-linear-gradient(-45deg,
+    #fff3cd,
+    #fff3cd 10px,
+    #ffecb5 10px,
+    #ffecb5 20px);
+  border: 4px solid #ffeeba;
+  border-radius: 20px;
+  padding: 4vh;
+  text-align: center;
+  color: #856404;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+}
+
+.coming-soon p {
+  font-size: 2.2vh;
+  font-weight: 500;
+  color: #856404;
+  margin: 0;
+}
+
+/* =========================================
+   Footer (The "Back" Bar)
+   ========================================= */
+.channel-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #e8e8e8;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  padding: 0 4vw;
+  border-top: 2px solid #fff;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+  z-index: 100;
+}
+
+/* The distinct "Start/Back" pill button style */
+.channel-footer .back {
+  background: radial-gradient(circle at 50% 10%, #ffffff 0%, #dcdcdc 100%);
+  color: #555;
+  padding: 1vh 5vw;
+  border-radius: 30px;
+  font-size: 2.2vh;
+  font-weight: bold;
+  text-decoration: none;
+  border: 3px solid #b0b0b0;
+  box-shadow: 0 3px 0 #999; /* 3D Clicky feel */
+  transition: all 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.channel-footer .back:active {
+  transform: translateY(3px);
+  box-shadow: none;
+}
+
+/* Add a visual arrow to the back button via CSS */
+.channel-footer .back::before {
+  content: "<";
+  font-size: 3vh;
+  line-height: 0;
+  position: relative;
+  top: -2px;
+  font-weight: bold;
+}
+
+/* =========================================
+   Specific Channel Themes (Subtle Tints)
+   ========================================= */
+.mii-channel { 
+  background-color: #f4fff4; 
+}
+
+.ticket-sales { 
+  background-color: #fffaf0; 
+}
+
+.schedule { 
+  background-color: #f8f0ff; 
+}
+
+.my-tickets { 
+  background-color: #f0fcff; 
+}
+
+.message-board {
+  background: radial-gradient(circle at center, #f4f4f4 0%, #e0e0e0 100%);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* =========================================
+   Message Board Specific Styles
+   ========================================= */
+/* Header - Minimalist to match Mailbox Top */
+.channel-view.message-board .channel-header {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  padding: 1vh 4vw;
+  text-align: right;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 20;
+}
+
+.channel-view.message-board .channel-title h1 {
+  font-size: 3vh;
+  color: #888;
+  text-shadow: 1px 1px 0 #fff;
+}
+
+.channel-view.message-board .channel-title p {
+  display: none; /* Hide subtitle for cleaner look */
+}
+
+/* Content - Grid for Envelopes */
+.channel-view.message-board .channel-content {
+  padding: 6vh 4vw 12vh 4vw; /* Reduced top padding */
+  max-width: 100%;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Action Buttons (Top Circular Buttons) */
+.message-actions {
+  display: flex;
+  justify-content: center;
+  gap: 4vh;
+  margin-bottom: 3vh; /* Reduced margin */
+}
+
+.channel-view.message-board .action-card {
+  width: 8vh;
+  height: 8vh;
+  border-radius: 50%; /* Circles */
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid #fff;
+  background: linear-gradient(180deg, #6fdeff 0%, #23b2e5 100%); /* Wii Blue Buttons */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.channel-view.message-board .action-card:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(35, 178, 229, 0.6);
+}
+
+.channel-view.message-board .action-icon {
+  font-size: 4vh;
+  margin: 0;
+  color: white;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+}
+
+.channel-view.message-board .action-card h3,
+.channel-view.message-board .action-card p {
+  display: none; /* Hide text, icon only like Wii UI */
+}
+
+/* Message List as "Envelopes" */
+.message-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2vh; /* Reduced gap */
+  margin-bottom: 2vh; /* Added margin */
+}
+
+.channel-view.message-board .message-item {
+  width: 280px;
+  height: 180px;
+  background: #fffec8; /* Classic Wii Memo Yellow */
+  border-radius: 5px;
+  padding: 0;
+  position: relative;
+  border: 1px solid #dcdca0;
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  display: block; /* Reset flex */
+}
+
+/* Envelope Flap Effect */
+.channel-view.message-board .message-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.03) 50%),
+               linear-gradient(-135deg, transparent 50%, rgba(0,0,0,0.03) 50%);
+  z-index: 1;
+  pointer-events: none;
+  /* Visual line for flap */
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  transform-origin: top;
+}
+
+/* Color variations based on status/type */
+.channel-view.message-board .message-item.unread {
+  background: #fff; /* White envelope for new/unread */
+}
+
+.channel-view.message-board .message-item:hover {
+  transform: scale(1.05) rotate(-2deg); /* Wii "Wiggle" */
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  z-index: 10;
+  border-color: #23b2e5;
+}
+
+.channel-view.message-board .message-info {
+  padding: 3vh 2vh;
+  text-align: center;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.channel-view.message-board .message-title {
+  font-family: 'Asap', sans-serif;
+  color: #555;
+  font-size: 2vh;
+  margin-bottom: 1vh;
+  z-index: 2;
+}
+
+.channel-view.message-board .message-date {
+  font-size: 1.5vh;
+  color: #999;
+}
+
+.channel-view.message-board .message-preview {
+  display: none; /* Hide preview text to look like closed envelope */
+}
+
+.channel-view.message-board .message-status {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 5;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Footer - The "Wii Board" Bottom Bar */
+.channel-view.message-board .channel-footer {
+  height: 10vh; /* Reduced height */
+  background: #dcdcdc; /* Darker gray bar */
+  border-top: 2px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4vw;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Center Wii Logo Watermark */
+.channel-view.message-board .channel-footer::after {
+  content: "Wii";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 5vh;
+  color: #aaa;
+  opacity: 0.6;
+  pointer-events: none;
+  letter-spacing: 2px;
+}
+
+/* Circular Footer Buttons */
+.channel-view.message-board .channel-footer .back {
+  width: 8vh;
+  height: 8vh;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 30% 30%, #fff 0%, #ddd 100%);
+  color: #555;
+  border: 4px solid #e8e8e8;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  position: relative;
+  bottom: 8px; /* Move up by 8px to match main menu positioning */
+}
+
+.channel-view.message-board .channel-footer .back::before {
+  content: "<";
+  font-size: 4vh;
+  top: 0;
+  font-weight: bold;
+}
+
+.channel-view.message-board .channel-footer .back:hover {
+  border-color: #23b2e5;
+  box-shadow: 0 0 10px #23b2e5;
+}
+
+/* Create a "Write Message" button on the right for symmetry */
+.footer-right-btn {
+  width: 8vh;
+  height: 8vh;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 30% 30%, #fff 0%, #ddd 100%);
+  border: 4px solid #e8e8e8;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  cursor: pointer;
+  z-index: 10;
+  position: relative;
+  bottom: 8px; /* Move up by 8px to match main menu positioning */
+}
+
+.footer-right-btn:hover {
+  border-color: #23b2e5;
+  box-shadow: 0 0 10px #23b2e5;
+}
+
+/* Hide elements not needed for this view */
+/* Removed - we want to show stats and coming soon with Wii styling */
+
+/* Wii-style Statistics Section */
+.channel-view.message-board .quick-stats {
+  background: rgba(255,255,255,0.9);
+  border-radius: 15px;
+  padding: 1.5vh; /* Reduced padding */
+  margin: 2vh auto 1.5vh auto; /* Reduced margins */
+  border: 2px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  max-width: 600px;
+}
+
+.channel-view.message-board .quick-stats h3 {
+  font-size: 2.2vh;
+  color: #666;
+  text-align: center;
+  margin: 0 0 2vh 0;
+  font-weight: normal;
+  text-shadow: 1px 1px 0 #fff;
+}
+
+.channel-view.message-board .stats-grid {
+  display: flex;
+  justify-content: center;
+  gap: 3vh;
+  margin-top: 1vh;
+}
+
+.channel-view.message-board .stat-item {
+  width: 10vh;
+  height: 10vh;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #f8f8f8 0%, #e0e0e0 100%);
+  border: 3px solid #ccc;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.channel-view.message-board .stat-item:hover {
+  transform: scale(1.1);
+  border-color: #23b2e5;
+  box-shadow: 0 0 10px rgba(35, 178, 229, 0.4);
+}
+
+.channel-view.message-board .stat-number {
+  font-size: 2.5vh;
+  font-weight: bold;
+  color: #555;
+  margin: 0;
+  text-shadow: 1px 1px 0 #fff;
+}
+
+.channel-view.message-board .stat-label {
+  font-size: 1.2vh;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+  text-align: center;
+  line-height: 1.1;
+}
+
+/* Wii-style Coming Soon Section */
+.channel-view.message-board .coming-soon {
+  background: linear-gradient(180deg, #fff3cd 0%, #ffeaa7 100%);
+  border: 3px solid #f0c14b;
+  border-radius: 15px;
+  padding: 1.5vh; /* Reduced padding */
+  text-align: center;
+  margin: 1.5vh auto 1vh auto; /* Reduced margins */
+  max-width: 500px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.channel-view.message-board .coming-soon::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%);
+  border-radius: 12px 12px 0 0;
+  pointer-events: none;
+}
+
+.channel-view.message-board .coming-soon p {
+  font-size: 2vh;
+  font-weight: 500;
+  color: #856404;
+  margin: 0;
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
+  z-index: 2;
+  position: relative;
+}
+
+/* =========================================
+   Message Board Responsive Design
+   ========================================= */
+
+/* Large screens (desktops) */
+@media only screen and (min-width: 1200px) {
+  .channel-view.message-board .message-item {
+    width: 300px;
+    height: 200px;
+  }
+  
+  .channel-view.message-board .action-card {
+    width: 10vh;
+    height: 10vh;
+  }
+  
+  .channel-view.message-board .action-icon {
+    font-size: 5vh;
+  }
+}
+
+/* Medium screens (tablets landscape) */
+@media only screen and (max-width: 1024px) {
+  .channel-view.message-board .channel-content {
+    padding: 4vh 3vw 10vh 3vw; /* Reduced padding */
+  }
+  
+  .channel-view.message-board .message-item {
+    width: 250px;
+    height: 160px;
+  }
+  
+  .channel-view.message-board .message-title {
+    font-size: 1.8vh;
+  }
+  
+  .channel-view.message-board .message-date {
+    font-size: 1.4vh;
+  }
+  
+  .message-actions {
+    gap: 3vh;
+    margin-bottom: 2vh; /* Reduced margin */
+  }
+  
+  .channel-view.message-board .action-card {
+    width: 7vh;
+    height: 7vh;
+  }
+  
+  .channel-view.message-board .action-icon {
+    font-size: 3.5vh;
+  }
+}
+
+/* Small tablets and large phones */
+@media only screen and (max-width: 768px) {
+  .channel-view.message-board .channel-content {
+    padding: 3vh 2vw 10vh 2vw; /* Reduced padding */
+  }
+  
+  .channel-view.message-board .channel-header {
+    padding: 1vh 2vw;
+  }
+  
+  .channel-view.message-board .channel-title h1 {
+    font-size: 2.5vh;
+  }
+  
+  .message-actions {
+    gap: 2vh;
+    margin-bottom: 2vh; /* Reduced margin */
+  }
+  
+  .channel-view.message-board .action-card {
+    width: 6vh;
+    height: 6vh;
+  }
+  
+  .channel-view.message-board .action-icon {
+    font-size: 3vh;
+  }
+  
+  .message-list {
+    gap: 1.5vh; /* Reduced gap */
+    margin-bottom: 1.5vh;
+  }
+  
+  .channel-view.message-board .message-item {
+    width: 220px;
+    height: 140px;
+  }
+  
+  .channel-view.message-board .message-info {
+    padding: 2vh 1.5vh;
+  }
+  
+  .channel-view.message-board .message-title {
+    font-size: 1.6vh;
+    margin-bottom: 0.5vh;
+  }
+  
+  .channel-view.message-board .message-date {
+    font-size: 1.2vh;
+  }
+  
+  .channel-view.message-board .stats-grid {
+    gap: 2vh;
+  }
+  
+  .channel-view.message-board .stat-item {
+    width: 8vh;
+    height: 8vh;
+  }
+  
+  .channel-view.message-board .stat-number {
+    font-size: 2vh;
+  }
+  
+  .channel-view.message-board .stat-label {
+    font-size: 1vh;
+  }
+  
+  .channel-view.message-board .channel-footer .back,
+  .footer-right-btn {
+    width: 6vh;
+    height: 6vh;
+    bottom: 6px; /* Maintain relative positioning */
+  }
+  
+  .channel-view.message-board .channel-footer .back::before {
+    font-size: 3vh;
+  }
+  
+  .footer-right-btn span {
+    font-size: 2.5vh !important;
+  }
+  
+  .channel-view.message-board .channel-footer {
+    height: 8vh; /* Reduced footer height */
+  }
+}
+
+/* Mobile phones */
+@media only screen and (max-width: 480px) {
+  .channel-view.message-board .channel-content {
+    padding: 3vh 1vw 15vh 1vw;
+  }
+  
+  .channel-view.message-board .channel-header {
+    padding: 1vh 1vw;
+  }
+  
+  .channel-view.message-board .channel-title h1 {
+    font-size: 2vh;
+  }
+  
+  .message-actions {
+    gap: 1.5vh;
+    margin-bottom: 3vh;
+  }
+  
+  .channel-view.message-board .action-card {
+    width: 5vh;
+    height: 5vh;
+  }
+  
+  .channel-view.message-board .action-icon {
+    font-size: 2.5vh;
+  }
+  
+  .message-list {
+    gap: 1.5vh;
+  }
+  
+  .channel-view.message-board .message-item {
+    width: 180px;
+    height: 120px;
+  }
+  
+  .channel-view.message-board .message-info {
+    padding: 1.5vh 1vh;
+  }
+  
+  .channel-view.message-board .message-title {
+    font-size: 1.4vh;
+    margin-bottom: 0.3vh;
+  }
+  
+  .channel-view.message-board .message-date {
+    font-size: 1vh;
+  }
+  
+  .channel-view.message-board .message-status {
+    top: 5px;
+    right: 5px;
+    padding: 0.3vh 1vh;
+    font-size: 1vh;
+  }
+  
+  .channel-view.message-board .quick-stats {
+    padding: 1.5vh;
+    margin: 3vh auto 2vh auto;
+  }
+  
+  .channel-view.message-board .quick-stats h3 {
+    font-size: 1.8vh;
+    margin-bottom: 1.5vh;
+  }
+  
+  .channel-view.message-board .stats-grid {
+    gap: 1.5vh;
+  }
+  
+  .channel-view.message-board .stat-item {
+    width: 6vh;
+    height: 6vh;
+  }
+  
+  .channel-view.message-board .stat-number {
+    font-size: 1.6vh;
+  }
+  
+  .channel-view.message-board .stat-label {
+    font-size: 0.8vh;
+  }
+  
+  .channel-view.message-board .coming-soon {
+    padding: 1.5vh;
+    margin: 2vh auto 1vh auto;
+  }
+  
+  .channel-view.message-board .coming-soon p {
+    font-size: 1.6vh;
+  }
+  
+  .channel-view.message-board .channel-footer {
+    height: 10vh;
+    padding: 0 2vw;
+  }
+  
+  .channel-view.message-board .channel-footer .back,
+  .footer-right-btn {
+    width: 5vh;
+    height: 5vh;
+    bottom: 5px; /* Maintain relative positioning */
+  }
+  
+  .channel-view.message-board .channel-footer .back::before {
+    font-size: 2.5vh;
+  }
+  
+  .footer-right-btn span {
+    font-size: 2vh !important;
+  }
+  
+  .channel-view.message-board .channel-footer::after {
+    font-size: 3vh;
+  }
+}
+
+/* Very small screens */
+@media only screen and (max-width: 320px) {
+  .message-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1vh;
+  }
+  
+  .channel-view.message-board .action-card {
+    width: 4vh;
+    height: 4vh;
+  }
+  
+  .channel-view.message-board .action-icon {
+    font-size: 2vh;
+  }
+  
+  .channel-view.message-board .message-item {
+    width: 160px;
+    height: 100px;
+  }
+  
+  .channel-view.message-board .message-title {
+    font-size: 1.2vh;
+  }
+  
+  .channel-view.message-board .message-date {
+    font-size: 0.9vh;
+  }
+  
+  .channel-view.message-board .stats-grid {
+    flex-wrap: wrap;
+    gap: 1vh;
+  }
+  
+  .channel-view.message-board .stat-item {
+    width: 5vh;
+    height: 5vh;
+  }
+  
+  .channel-view.message-board .stat-number {
+    font-size: 1.4vh;
+  }
+  
+  .channel-view.message-board .stat-label {
+    font-size: 0.7vh;
+  }
+}
+
+/* Responsive adjustments */
+@media only screen and (max-width: 768px) {
+  .channel-header { 
+    padding: 1.5vh 4vw; 
+  }
+  
+  .channel-title h1 { 
+    font-size: 3vh; 
+  }
+  
+  .channel-content { 
+    padding: 2vh 4vw 12vh 4vw; 
+  }
+  
+  .mii-options,
+  .ticket-options,
+  .schedule-filters,
+  .ticket-actions {
+    grid-template-columns: 1fr;
+    gap: 2vh;
+  }
+  
+  .schedule-item {
+    grid-template-columns: 1fr;
+    gap: 1vh;
+    text-align: center;
+  }
+  
+  .ticket-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1vh;
+  }
+  
+  .ticket-status {
+    align-self: flex-end;
+  }
+}

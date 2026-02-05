@@ -1,0 +1,76 @@
+<div class="channel-view my-tickets">
+  <div class="channel-header">
+    <div class="channel-title">
+      <h1>My Tickets</h1>
+      <p>Manage your bookings</p>
+    </div>
+  </div>
+
+  <div class="channel-content">
+    <div class="ticket-actions">
+      <div class="action-card" onmouseover="hover()" onclick="select()">
+        <div class="action-icon">🎫</div>
+        <h3>Active Tickets</h3>
+        <p>View your current valid tickets</p>
+      </div>
+      
+      <div class="action-card" onmouseover="hover()" onclick="select()">
+        <div class="action-icon">📋</div>
+        <h3>Booking History</h3>
+        <p>See all your past bookings</p>
+      </div>
+      
+      <div class="action-card" onmouseover="hover()" onclick="select()">
+        <div class="action-icon">❌</div>
+        <h3>Cancel Ticket</h3>
+        <p>Cancel or modify your booking</p>
+      </div>
+      
+      <div class="action-card" onmouseover="hover()" onclick="select()">
+        <div class="action-icon">📱</div>
+        <h3>Mobile Tickets</h3>
+        <p>Download tickets to your phone</p>
+      </div>
+    </div>
+
+    <div class="tickets-preview">
+      <h3>Your Recent Tickets</h3>
+      <div class="ticket-list">
+        <div class="ticket-item" onmouseover="hover()" onclick="select()">
+          <div class="ticket-info">
+            <div class="ticket-route">City Center → Airport</div>
+            <div class="ticket-date">Today, 2:30 PM</div>
+            <div class="ticket-id">#TK-2024-001</div>
+          </div>
+          <div class="ticket-status valid">Valid</div>
+        </div>
+        
+        <div class="ticket-item" onmouseover="hover()" onclick="select()">
+          <div class="ticket-info">
+            <div class="ticket-route">Downtown → University</div>
+            <div class="ticket-date">Tomorrow, 9:15 AM</div>
+            <div class="ticket-id">#TK-2024-002</div>
+          </div>
+          <div class="ticket-status valid">Valid</div>
+        </div>
+        
+        <div class="ticket-item" onmouseover="hover()" onclick="select()">
+          <div class="ticket-info">
+            <div class="ticket-route">Mall → Train Station</div>
+            <div class="ticket-date">Feb 10, 4:00 PM</div>
+            <div class="ticket-id">#TK-2024-003</div>
+          </div>
+          <div class="ticket-status expired">Expired</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="coming-soon">
+      <p>🚧 Digital ticket management coming soon! 🚧</p>
+    </div>
+  </div>
+
+  <div class="channel-footer">
+    <div class="back viewchange" data-view="menu" data-transition="fade" onmouseover="hover()" onclick="back()">Back</div>
+  </div>
+</div>
