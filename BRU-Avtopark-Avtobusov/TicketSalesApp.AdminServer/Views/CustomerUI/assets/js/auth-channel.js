@@ -7,16 +7,23 @@ const authChannel = {
   init: function() {
     console.log('Initializing authentication channel...');
     
-    // Check Windows authentication availability from server
-    this.checkWindowsAvailability();
-    
-    this.checkAuthStatus();
+    // First, check Windows authentication availability to render UI correctly
+    // Then check auth status to hide/show sections appropriately
+    this.checkWindowsAvailability()
+      .then(() => {
+        // After Windows availability is determined and UI is rendered, check auth status
+        this.checkAuthStatus();
+      })
+      .catch(() => {
+        // Even if Windows check fails, still check auth status
+        this.checkAuthStatus();
+      });
   },
   
   checkWindowsAvailability: function() {
     console.log('Checking Windows authentication availability from server...');
     
-    fetch('/api/v1/auth/windows-available', {
+    return fetch('/api/v1/auth/windows-available', {
       method: 'GET'
     })
     .then(response => response.json())
@@ -34,6 +41,8 @@ const authChannel = {
           console.log('Windows auth not available:', data.message);
         }
       }
+      
+      console.log('Windows availability check complete, UI rendered');
     })
     .catch(error => {
       console.error('Error checking Windows availability:', error);
@@ -43,6 +52,9 @@ const authChannel = {
       if (windowsLoginSection) {
         windowsLoginSection.style.display = this.isWindows ? 'block' : 'none';
       }
+      
+      console.log('Windows availability check failed, used fallback detection');
+      throw error; // Re-throw to allow init() to handle it
     });
   },
   

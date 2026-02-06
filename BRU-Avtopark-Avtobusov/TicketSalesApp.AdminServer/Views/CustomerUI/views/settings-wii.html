@@ -1,0 +1,340 @@
+<div class="settings settings-wii">
+  <div class="settings-header">
+
+  </div>
+
+  <div class="settings-content">
+    <div class="wii-settings-container">
+      <div class="wii-settings-title">
+        <h2>Wii Settings</h2>
+      </div>
+      
+      <div class="wii-settings-grid">
+        
+        <!-- Language Settings -->
+        <div class="wii-setting-card" onclick="wiiSettings.openLanguageSettings()" onmouseover="hover()">
+          <div class="setting-icon language-icon"></div>
+          <h3 class="setting-title">Language</h3>
+          <p class="setting-value" id="current-language">English</p>
+        </div>
+
+        <!-- Audio Settings -->
+        <div class="wii-setting-card" onclick="wiiSettings.openAudioSettings()" onmouseover="hover()">
+          <div class="setting-icon audio-icon"></div>
+          <h3 class="setting-title">Sound</h3>
+          <p class="setting-value" id="current-audio">Stereo</p>
+        </div>
+
+        <!-- Screen Settings -->
+        <div class="wii-setting-card" onclick="wiiSettings.openScreenSettings()" onmouseover="hover()">
+          <div class="setting-icon screen-icon"></div>
+          <h3 class="setting-title">Screen</h3>
+          <p class="setting-value" id="current-screen">16:9 Widescreen</p>
+        </div>
+
+        <!-- Date & Time -->
+        <div class="wii-setting-card" onclick="wiiSettings.openDateTimeSettings()" onmouseover="hover()">
+          <div class="setting-icon datetime-icon"></div>
+          <h3 class="setting-title">Date & Time</h3>
+          <p class="setting-value" id="current-datetime">--:--</p>
+        </div>
+
+        <!-- Internet Settings -->
+        <div class="wii-setting-card" onclick="wiiSettings.openInternetSettings()" onmouseover="hover()">
+          <div class="setting-icon internet-icon"></div>
+          <h3 class="setting-title">Internet</h3>
+          <p class="setting-value" id="current-internet">Connected</p>
+        </div>
+
+        <!-- Parental Controls -->
+        <div class="wii-setting-card" onclick="wiiSettings.openParentalSettings()" onmouseover="hover()">
+          <div class="setting-icon parental-icon"></div>
+          <h3 class="setting-title">Parental Controls</h3>
+          <p class="setting-value">Off</p>
+        </div>
+
+        <!-- Sensor Bar -->
+        <div class="wii-setting-card" onclick="wiiSettings.openSensorSettings()" onmouseover="hover()">
+          <div class="setting-icon sensor-icon"></div>
+          <h3 class="setting-title">Sensor Bar</h3>
+          <p class="setting-value" id="current-sensor">Above TV</p>
+        </div>
+
+        <!-- WiiConnect24 -->
+        <div class="wii-setting-card" onclick="wiiSettings.openWiiConnect24Settings()" onmouseover="hover()">
+          <div class="setting-icon wiiconnect-icon"></div>
+          <h3 class="setting-title">WiiConnect24</h3>
+          <p class="setting-value" id="current-wiiconnect">On</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-footer">
+    <div class="back viewchange" data-view="settings-main" data-transition="fade" onmouseover="hover()" onclick="back()"></div>
+  </div>
+</div>
+
+<!-- Settings Detail Modals -->
+
+<!-- Language Settings Modal -->
+<div class="wii-settings-modal" id="language-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Language Settings</h2>
+      <p class="modal-subtitle">Select your preferred language</p>
+    </div>
+    <div class="modal-body">
+      <div class="settings-list">
+        <div class="settings-list-item" onclick="wiiSettings.setLanguage('en')" data-lang="en">
+          <span class="item-label">English</span>
+          <span class="item-check" id="check-en">✓</span>
+        </div>
+        <div class="settings-list-item" onclick="wiiSettings.setLanguage('ru')" data-lang="ru">
+          <span class="item-label">Русский (Russian)</span>
+          <span class="item-check" id="check-ru"></span>
+        </div>
+        <div class="settings-list-item" onclick="wiiSettings.setLanguage('de')" data-lang="de">
+          <span class="item-label">Deutsch (German)</span>
+          <span class="item-check" id="check-de"></span>
+        </div>
+        <div class="settings-list-item" onclick="wiiSettings.setLanguage('fr')" data-lang="fr">
+          <span class="item-label">Français (French)</span>
+          <span class="item-check" id="check-fr"></span>
+        </div>
+        <div class="settings-list-item" onclick="wiiSettings.setLanguage('es')" data-lang="es">
+          <span class="item-label">Español (Spanish)</span>
+          <span class="item-check" id="check-es"></span>
+        </div>
+        <div class="settings-list-item" onclick="wiiSettings.setLanguage('ja')" data-lang="ja">
+          <span class="item-label">日本語 (Japanese)</span>
+          <span class="item-check" id="check-ja"></span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="wii-btn wii-btn-back" onclick="wiiSettings.closeModal('language-modal')">Back</button>
+    </div>
+  </div>
+</div>
+
+<!-- Audio Settings Modal -->
+<div class="wii-settings-modal" id="audio-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Sound Settings</h2>
+      <p class="modal-subtitle">Configure audio output</p>
+    </div>
+    <div class="modal-body">
+      <div class="settings-list">
+        <div class="settings-list-item" onclick="wiiSettings.setAudio('stereo')" data-audio="stereo">
+          <span class="item-label">Stereo</span>
+          <span class="item-check" id="check-stereo">✓</span>
+        </div>
+        <div class="settings-list-item" onclick="wiiSettings.setAudio('mono')" data-audio="mono">
+          <span class="item-label">Mono</span>
+          <span class="item-check" id="check-mono"></span>
+        </div>
+        <div class="settings-list-item" onclick="wiiSettings.setAudio('surround')" data-audio="surround">
+          <span class="item-label">Surround</span>
+          <span class="item-check" id="check-surround"></span>
+        </div>
+      </div>
+      <div class="settings-slider-group">
+        <label class="slider-label">Master Volume</label>
+        <input type="range" class="wii-slider" id="master-volume" min="0" max="100" value="80" oninput="wiiSettings.updateVolume('master', this.value)">
+        <span class="slider-value" id="master-volume-value">80%</span>
+      </div>
+      <div class="settings-slider-group">
+        <label class="slider-label">Sound Effects</label>
+        <input type="range" class="wii-slider" id="sfx-volume" min="0" max="100" value="70" oninput="wiiSettings.updateVolume('sfx', this.value)">
+        <span class="slider-value" id="sfx-volume-value">70%</span>
+      </div>
+      <div class="settings-slider-group">
+        <label class="slider-label">Music</label>
+        <input type="range" class="wii-slider" id="music-volume" min="0" max="100" value="60" oninput="wiiSettings.updateVolume('music', this.value)">
+        <span class="slider-value" id="music-volume-value">60%</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="wii-btn wii-btn-back" onclick="wiiSettings.closeModal('audio-modal')">Back</button>
+    </div>
+  </div>
+</div>
+
+<!-- Screen Settings Modal -->
+<div class="wii-settings-modal" id="screen-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Screen Settings</h2>
+      <p class="modal-subtitle">Adjust display options</p>
+    </div>
+    <div class="modal-body">
+      <div class="settings-list">
+        <div class="settings-list-item" onclick="wiiSettings.setScreen('16:9')" data-screen="16:9">
+          <span class="item-label">16:9 Widescreen</span>
+          <span class="item-check" id="check-16-9">✓</span>
+        </div>
+        <div class="settings-list-item" onclick="wiiSettings.setScreen('4:3')" data-screen="4:3">
+          <span class="item-label">4:3 Standard</span>
+          <span class="item-check" id="check-4-3"></span>
+        </div>
+      </div>
+      <div class="settings-toggle-group">
+        <label class="toggle-label">Screen Burn-In Reduction</label>
+        <div class="wii-toggle" onclick="wiiSettings.toggleBurnIn()">
+          <div class="toggle-switch" id="burnin-toggle"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="wii-btn wii-btn-back" onclick="wiiSettings.closeModal('screen-modal')">Back</button>
+    </div>
+  </div>
+</div>
+
+<!-- Date & Time Settings Modal -->
+<div class="wii-settings-modal" id="datetime-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Date & Time</h2>
+      <p class="modal-subtitle">Set date and time</p>
+    </div>
+    <div class="modal-body">
+      <div class="datetime-display">
+        <div class="datetime-current" id="datetime-display">
+          <div class="date-part" id="date-display">--/--/----</div>
+          <div class="time-part" id="time-display">--:--:--</div>
+        </div>
+      </div>
+      <div class="settings-toggle-group">
+        <label class="toggle-label">Internet Time Sync</label>
+        <div class="wii-toggle active" onclick="wiiSettings.toggleTimeSync()">
+          <div class="toggle-switch active" id="timesync-toggle"></div>
+        </div>
+      </div>
+      <div class="info-message">
+        <span class="info-icon">ℹ️</span>
+        <span>Time is automatically synchronized via Internet</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="wii-btn wii-btn-back" onclick="wiiSettings.closeModal('datetime-modal')">Back</button>
+    </div>
+  </div>
+</div>
+
+<!-- Internet Settings Modal -->
+<div class="wii-settings-modal" id="internet-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Internet Settings</h2>
+      <p class="modal-subtitle">Network connection status</p>
+    </div>
+    <div class="modal-body">
+      <div class="connection-status">
+        <div class="status-indicator connected" id="internet-status-indicator"></div>
+        <div class="status-text">
+          <h3 id="internet-status-text">Connected</h3>
+          <p id="internet-status-detail">Connection is active</p>
+        </div>
+      </div>
+      <div class="info-message">
+        <span class="info-icon">ℹ️</span>
+        <span>Network configuration is managed automatically</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="wii-btn wii-btn-back" onclick="wiiSettings.closeModal('internet-modal')">Back</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sensor Bar Settings Modal -->
+<div class="wii-settings-modal" id="sensor-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Sensor Bar</h2>
+      <p class="modal-subtitle">Position and sensitivity</p>
+    </div>
+    <div class="modal-body">
+      <div class="settings-list">
+        <div class="settings-list-item" onclick="wiiSettings.setSensor('above')" data-sensor="above">
+          <span class="item-label">Above TV</span>
+          <span class="item-check" id="check-above">✓</span>
+        </div>
+        <div class="settings-list-item" onclick="wiiSettings.setSensor('below')" data-sensor="below">
+          <span class="item-label">Below TV</span>
+          <span class="item-check" id="check-below"></span>
+        </div>
+      </div>
+      <div class="settings-slider-group">
+        <label class="slider-label">Sensor Sensitivity</label>
+        <input type="range" class="wii-slider" id="sensor-sensitivity" min="1" max="5" value="3" oninput="wiiSettings.updateSensitivity(this.value)">
+        <span class="slider-value" id="sensor-sensitivity-value">3</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="wii-btn wii-btn-back" onclick="wiiSettings.closeModal('sensor-modal')">Back</button>
+    </div>
+  </div>
+</div>
+
+<!-- WiiConnect24 Settings Modal -->
+<div class="wii-settings-modal" id="wiiconnect24-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>WiiConnect24</h2>
+      <p class="modal-subtitle">Stay connected even in standby</p>
+    </div>
+    <div class="modal-body">
+      <div class="settings-toggle-group">
+        <label class="toggle-label">WiiConnect24</label>
+        <div class="wii-toggle active" onclick="wiiSettings.toggleWiiConnect24()">
+          <div class="toggle-switch active" id="wiiconnect24-toggle"></div>
+        </div>
+      </div>
+      <div class="info-message">
+        <span class="info-icon">ℹ️</span>
+        <span>Allows receiving updates and messages while in standby mode</span>
+      </div>
+      <div class="settings-toggle-group">
+        <label class="toggle-label">Standby Connection</label>
+        <div class="wii-toggle active" onclick="wiiSettings.toggleStandbyConnection()">
+          <div class="toggle-switch active" id="standby-toggle"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="wii-btn wii-btn-back" onclick="wiiSettings.closeModal('wiiconnect24-modal')">Back</button>
+    </div>
+  </div>
+</div>
+
+<!-- Parental Controls Modal -->
+<div class="wii-settings-modal" id="parental-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Parental Controls</h2>
+      <p class="modal-subtitle">Restrict content and features</p>
+    </div>
+    <div class="modal-body">
+      <div class="settings-toggle-group">
+        <label class="toggle-label">Parental Controls</label>
+        <div class="wii-toggle" onclick="wiiSettings.toggleParentalControls()">
+          <div class="toggle-switch" id="parental-toggle"></div>
+        </div>
+      </div>
+      <div class="info-message">
+        <span class="info-icon">🔒</span>
+        <span>Requires PIN to enable. Contact administrator for setup.</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="wii-btn wii-btn-back" onclick="wiiSettings.closeModal('parental-modal')">Back</button>
+    </div>
+  </div>
+</div>
+
+<script src="/customerui/assets/js/settings-wii.js"></script>

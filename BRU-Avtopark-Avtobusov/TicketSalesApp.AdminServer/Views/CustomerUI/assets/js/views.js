@@ -190,6 +190,20 @@ function loadNormalView(v, t) {
           }, 300);
         }
 
+        if (v === "settings-wii") {
+          // Stop background music when entering wii settings
+          var music = document.getElementById("bg-music");
+          if (music) {
+            music.pause();
+          }
+          
+          setTimeout(function(){
+            $( ".settings-header" ).addClass( "animate" );
+            $( ".settings-footer" ).addClass( "animate" );
+            $( ".wii-settings-container" ).addClass( "animate" );
+          }, 300);
+        }
+
         if (v === "message-board") {
           // Stop background music when entering message board
           var music = document.getElementById("bg-music");
