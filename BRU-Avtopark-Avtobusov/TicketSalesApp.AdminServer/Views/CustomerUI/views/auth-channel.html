@@ -1,45 +1,27 @@
 <div class="auth-channel-view">
-  <!-- Header Banner -->
+  <!-- Header (Wii U Blue Bar - No Banner) -->
   <div class="auth-header">
-    <img src="/customerui/assets/images/channel-auth-banner.svg" alt="Authentication" class="auth-banner">
+    <h1 class="auth-header-title">Nintendo Wi-Fi Connection</h1>
   </div>
 
   <!-- Main Content Area with Scroll -->
   <div class="auth-content-wrapper">
     <div class="auth-content">
       
-      <!-- Authentication Status Section -->
+      <!-- Authentication Status Section (Connection Test Style) -->
       <section class="auth-section auth-status-section">
         <div class="auth-card">
-          <div class="auth-card-header">
-            <div class="auth-icon-container">
-              <img src="/customerui/assets/images/channel-auth-icon.svg" alt="Auth" class="auth-icon">
+          <div class="auth-status-container">
+            <div class="status-icon-wrapper">
+              <span class="status-icon-emoji">ℹ️</span>
             </div>
-            <h2 class="auth-card-title">Authentication Status</h2>
-          </div>
-          
-          <div class="auth-card-body">
-            <!-- Status when checking -->
-            <div class="auth-status" id="auth-status">
-              <div class="status-indicator status-checking">
-                <div class="status-dot"></div>
-                <span>Checking authentication...</span>
-              </div>
-            </div>
-            
-            <!-- User info when authenticated -->
-            <div class="auth-user-info" id="auth-user-info" style="display: none;">
-              <div class="user-info-row">
-                <span class="info-label">Username:</span>
-                <span class="info-value" id="username">-</span>
-              </div>
-              <div class="user-info-row">
-                <span class="info-label">Role:</span>
-                <span class="info-value" id="user-role">-</span>
-              </div>
-              <div class="user-info-row">
-                <span class="info-label">Session:</span>
-                <span class="info-value" id="session-status">-</span>
+            <div class="auth-status-text">
+              <h2>Connection Status</h2>
+              <div id="auth-status-badge" class="status-badge">Checking...</div>
+              <div id="auth-user-details" style="display:none; margin-top:10px; color:#333;">
+                <div style="margin-bottom:5px;">User: <strong id="username-display">Guest</strong></div>
+                <div style="margin-bottom:5px;">Role: <strong id="role-display">-</strong></div>
+                <div>Session: <strong id="session-display">-</strong></div>
               </div>
             </div>
           </div>
@@ -50,63 +32,43 @@
 
       <!-- Authentication Options Section (Hidden when authenticated) -->
       <section class="auth-section auth-options-section" id="auth-options-section">
-        <h2 class="section-title">Choose Authentication Method</h2>
+        <h2 class="section-title">Select Connection Method</h2>
         
-        <div class="auth-options-grid">
+        <div class="auth-options-grid" id="auth-options-grid">
           
           <!-- Sign In Option -->
-          <div class="auth-option-item">
+          <div class="auth-option-item" onclick="authChannel.showLogin()">
             <div class="auth-option-card">
-              <div class="option-icon">🔐</div>
+              <div class="option-icon">🔑</div>
               <h3>Sign In</h3>
-              <p>Access your account</p>
-            </div>
-            <div class="option-button-wrapper">
-              <button class="wii-button wii-button-primary" onclick="authChannel.showLogin()">
-                <span>Sign In</span>
-              </button>
+              <p>Use Network ID</p>
             </div>
           </div>
 
           <!-- QR Code Login Option -->
-          <div class="auth-option-item">
+          <div class="auth-option-item" onclick="authChannel.showQRLogin()">
             <div class="auth-option-card">
               <div class="option-icon">📱</div>
-              <h3>QR Code Login</h3>
-              <p>Scan with mobile device</p>
-            </div>
-            <div class="option-button-wrapper">
-              <button class="wii-button wii-button-primary" onclick="authChannel.showQRLogin()">
-                <span>Show QR Code</span>
-              </button>
+              <h3>Smart Device</h3>
+              <p>Scan QR Code</p>
             </div>
           </div>
 
           <!-- Register Option -->
-          <div class="auth-option-item">
+          <div class="auth-option-item" onclick="authChannel.showRegister()">
             <div class="auth-option-card">
               <div class="option-icon">📝</div>
               <h3>Register</h3>
-              <p>Create new account</p>
-            </div>
-            <div class="option-button-wrapper">
-              <button class="wii-button wii-button-primary" onclick="authChannel.showRegister()">
-                <span>Register</span>
-              </button>
+              <p>Create New ID</p>
             </div>
           </div>
 
           <!-- WebAuthn Option -->
-          <div class="auth-option-item">
+          <div class="auth-option-item" onclick="authChannel.showWebAuthn()">
             <div class="auth-option-card">
               <div class="option-icon">🔑</div>
               <h3>WebAuthn</h3>
-              <p>Passwordless login</p>
-            </div>
-            <div class="option-button-wrapper">
-              <button class="wii-button wii-button-primary" onclick="authChannel.showWebAuthn()">
-                <span>Setup</span>
-              </button>
+              <p>Passwordless Login</p>
             </div>
           </div>
           
@@ -118,100 +80,205 @@
         <div class="section-separator"></div>
         <h2 class="section-title">Windows Authentication</h2>
         
-        <div class="auth-windows-item">
-          <div class="auth-option-card windows-card">
-            <div class="option-icon">🪟</div>
-            <h3>Windows Authentication</h3>
-            <p>Sign in with your Windows account</p>
+        <div class="auth-options-grid">
+          <div class="auth-option-item" onclick="authChannel.doWindowsLogin()">
+            <div class="auth-option-card windows-card">
+              <div class="option-icon">🪟</div>
+              <h3>Windows Auth</h3>
+              <p>Single Sign-On</p>
+            </div>
           </div>
-          <div class="option-button-wrapper">
-            <button class="wii-button wii-button-primary" onclick="authChannel.doWindowsLogin()">
-              <span>Sign In with Windows</span>
-            </button>
-          </div>
-          <div class="form-message" id="windows-message"></div>
         </div>
+        <div class="form-message" id="windows-message" style="max-width:600px; margin:20px auto 0;"></div>
       </section>
 
       <!-- Authenticated Actions Section (shown only when authenticated) -->
-      <section class="auth-section auth-actions-section" id="auth-actions-section" style="display: none;">
+      <section class="auth-section auth-actions-section" id="authenticated-actions" style="display: none;">
         <div class="section-separator"></div>
         <h2 class="section-title">Account Actions</h2>
         
-        <div class="auth-actions-grid">
-          <div class="auth-action-item">
-            <div class="auth-action-card">
-              <div class="option-icon">🚪</div>
-              <h3>Sign Out</h3>
-              <p>End your current session</p>
-            </div>
-            <div class="option-button-wrapper">
-              <button class="wii-button wii-button-secondary" onclick="authChannel.logout()">
-                <span>Sign Out</span>
-              </button>
+        <div class="auth-options-grid">
+          <div class="auth-option-item" onclick="authChannel.logout()">
+            <div class="auth-option-card">
+              <div class="option-icon" style="color:#d9534f;">🚪</div>
+              <h3>Disconnect</h3>
+              <p>Sign out of network</p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Login Form Section (Hidden by default) -->
-      <section class="auth-section auth-form-section" id="login-form-section" style="display: none;">
-        <div class="section-separator"></div>
-        <div class="auth-form-container">
-          <div class="auth-form">
-            <h3>Sign In</h3>
-            <div class="form-group">
-              <label>Username</label>
-              <input type="text" id="login-username" class="wii-input" placeholder="Enter username">
-            </div>
-            <div class="form-group">
-              <label>Password</label>
-              <input type="password" id="login-password" class="wii-input" placeholder="Enter password">
-            </div>
-            <div class="form-button-separator"></div>
-            <div class="form-actions">
-              <button class="wii-button wii-button-primary" onclick="authChannel.doLogin()">
-                <span>Sign In</span>
-              </button>
-              <button class="wii-button wii-button-secondary" onclick="authChannel.hideForm()">
-                <span>Cancel</span>
-              </button>
-            </div>
-            <div class="form-message" id="login-message"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- QR Code Login Section (Hidden by default) -->
-      <section class="auth-section auth-form-section" id="qr-login-form-section" style="display: none;">
-        <div class="section-separator"></div>
-        <div class="auth-form-container">
-          <div class="auth-form">
-            <h3>QR Code Login</h3>
-            <div class="qr-code-container" id="qr-code-display">
-              <!-- QR code will be displayed here -->
-            </div>
-            <p class="qr-instructions" id="qr-message">Scan this QR code with your mobile device to log in</p>
-            <div class="form-button-separator"></div>
-            <div class="form-actions">
-              <button class="wii-button wii-button-secondary" onclick="authChannel.hideQRLogin()">
-                <span>Close</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <!-- Spacer to prevent content from being hidden behind fixed footer -->
+      <div class="footer-spacer"></div>
 
     </div>
   </div>
 
   <!-- Fixed Footer Navigation -->
   <div class="auth-footer">
-    <div class="footer-separator"></div>
-    <div class="footer-content">
-      <button class="wii-button wii-button-back" onclick="channelManager.returnToMenu()">
-        <span>← Back to Menu</span>
-      </button>
+    <button class="wii-button wii-button-back" onclick="channelManager.returnToMenu()">
+      <span>← Back to Menu</span>
+    </button>
+  </div>
+</div>
+
+<!-- ================= MODALS (Wii U Popups) ================= -->
+
+<!-- ================= MODALS (Wii U System Style) ================= -->
+
+<!-- Connection Test Modal (Shows during authentication) -->
+<div class="wii-modal-overlay" id="connection-test-modal">
+  <div class="wii-modal connection-test-modal">
+    <div class="connection-test-container">
+      <!-- Animated Connection Icon -->
+      <div class="connection-icon-wrapper">
+        <div class="connection-icon-outer">
+          <div class="connection-icon-inner">
+            <div class="connection-icon-core"></div>
+          </div>
+        </div>
+        <div class="connection-waves">
+          <div class="wave wave-1"></div>
+          <div class="wave wave-2"></div>
+          <div class="wave wave-3"></div>
+        </div>
+      </div>
+      
+      <!-- Connection Status Text -->
+      <h3 class="connection-title">Nintendo Wi-Fi Connection</h3>
+      <div class="connection-status-text" id="connection-status-text">
+        Establishing connection...
+      </div>
+      
+      <!-- Progress Steps -->
+      <div class="connection-steps">
+        <div class="connection-step" id="step-1">
+          <div class="step-icon">📡</div>
+          <div class="step-text">Connecting to server</div>
+          <div class="step-status">⏳</div>
+        </div>
+        <div class="connection-step" id="step-2">
+          <div class="step-icon">🔐</div>
+          <div class="step-text">Verifying credentials</div>
+          <div class="step-status">⏳</div>
+        </div>
+        <div class="connection-step" id="step-3">
+          <div class="step-icon">✨</div>
+          <div class="step-text">Establishing session</div>
+          <div class="step-status">⏳</div>
+        </div>
+      </div>
+      
+      <!-- Animated Progress Bar -->
+      <div class="connection-progress-bar">
+        <div class="connection-progress-fill" id="connection-progress-fill"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Login Modal -->
+<div class="wii-modal-overlay" id="login-modal">
+  <div class="wii-modal modal-slide-in">
+    <!-- Header Icon -->
+    <div class="modal-header-icon">
+      <div class="icon-circle">👤</div>
+    </div>
+    
+    <h3>Network Sign In</h3>
+    <p style="color:#666; font-size:16px; margin-bottom:20px;">Enter your Network ID credentials</p>
+    
+    <!-- Input Container (Forces Stacking) -->
+    <div class="modal-input-container">
+      <input type="text" id="modal-login-username" class="wii-input" placeholder="Network ID / Username" autocomplete="username">
+      <input type="password" id="modal-login-password" class="wii-input" placeholder="Password" autocomplete="current-password">
+    </div>
+    
+    <div id="modal-login-message" class="form-message"></div>
+    
+    <!-- Button Container -->
+    <div class="modal-actions">
+      <button class="wii-button wii-button-secondary" onclick="authChannel.closeModal('login-modal')">Cancel</button>
+      <button class="wii-button wii-button-primary" onclick="authChannel.doModalLogin()">Connect</button>
+    </div>
+  </div>
+</div>
+
+<!-- QR Modal -->
+<div class="wii-modal-overlay" id="qr-modal">
+  <div class="wii-modal modal-slide-in">
+    <div class="modal-header-icon">
+      <div class="icon-circle">📱</div>
+    </div>
+    <h3>Smart Device Connection</h3>
+    <p style="color:#666; font-size:14px; margin-bottom:15px;">Scan the QR code with your mobile device</p>
+    
+    <div class="qr-modal-container">
+      <div class="qr-code-frame">
+        <div class="qr-corner qr-corner-tl"></div>
+        <div class="qr-corner qr-corner-tr"></div>
+        <div class="qr-corner qr-corner-bl"></div>
+        <div class="qr-corner qr-corner-br"></div>
+        <div id="modal-qr-code-display" class="qr-code-content">
+          <div class="qr-loading">
+            <div class="qr-spinner"></div>
+            <span>Generating QR Code...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <p id="modal-qr-message" class="qr-status-message">Waiting for device scan...</p>
+    
+    <div class="modal-actions">
+      <button class="wii-button wii-button-primary" onclick="authChannel.closeModal('qr-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Register Modal -->
+<div class="wii-modal-overlay" id="register-modal">
+  <div class="wii-modal modal-slide-in">
+    <div class="modal-header-icon">
+      <div class="icon-circle">📝</div>
+    </div>
+    <h3>Create Network ID</h3>
+    <div class="info-box">
+      <div class="info-icon">ℹ️</div>
+      <div class="info-content">
+        <p style="margin:0; color:#666; font-size:14px; line-height:1.6;">
+          Registration is currently managed by system administrators. 
+          Please contact your network administrator to create a new account.
+        </p>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="wii-button wii-button-primary" onclick="authChannel.closeModal('register-modal')">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- WebAuthn Modal -->
+<div class="wii-modal-overlay" id="webauthn-modal">
+  <div class="wii-modal modal-slide-in">
+    <div class="modal-header-icon">
+      <div class="icon-circle">🔑</div>
+    </div>
+    <h3>WebAuthn Security Setup</h3>
+    <div class="info-box">
+      <div class="info-icon">🛡️</div>
+      <div class="info-content">
+        <p style="margin:0 0 10px 0; color:#666; font-size:14px; line-height:1.6;">
+          Configure passwordless authentication using security keys, fingerprints, or facial recognition.
+        </p>
+        <p style="margin:0; color:#888; font-size:13px;">
+          You will be redirected to the WebAuthn management page.
+        </p>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="wii-button wii-button-secondary" onclick="authChannel.closeModal('webauthn-modal')">Cancel</button>
+      <button class="wii-button wii-button-primary" onclick="authChannel.confirmWebAuthn()">Continue</button>
     </div>
   </div>
 </div>

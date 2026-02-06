@@ -36,14 +36,6 @@ namespace TicketSalesApp.AdminServer.Controllers
             _logger.LogInformation("CustomerUI Index requested - User-Agent: {UserAgent}, IP: {RemoteIP}", 
                 Request.Headers.UserAgent.ToString(), HttpContext.Connection.RemoteIpAddress);
 
-            var cacheKey = "customerui_index";
-            if (_memoryCache.TryGetValue(cacheKey, out string cachedContent))
-            {
-                _logger.LogDebug("Serving cached index.html - Cache key: {CacheKey}, Content length: {Length}", 
-                    cacheKey, cachedContent.Length);
-                return Content(cachedContent, "text/html");
-            }
-
             var filePath = Path.Combine(_environment.ContentRootPath, "Views", "CustomerUI", "index.html");
             _logger.LogDebug("Looking for index.html at: {FilePath}", filePath);
             
@@ -54,14 +46,18 @@ namespace TicketSalesApp.AdminServer.Controllers
             }
 
             var content = System.IO.File.ReadAllText(filePath);
+            
+            // Inject version parameters for CSS and JS files based on modification times
+            content = InjectAssetVersions(content);
+            
             var fileInfo = new FileInfo(filePath);
             _logger.LogInformation("Loaded index.html - Size: {Size} bytes, Last modified: {LastModified}", 
                 fileInfo.Length, fileInfo.LastWriteTime);
             
-            _memoryCache.Set(cacheKey, content, TimeSpan.FromMinutes(30));
-            _logger.LogDebug("Cached index.html with key: {CacheKey} for 30 minutes", cacheKey);
-            
-            Response.Headers.CacheControl = "public, max-age=3600";
+            // NUCLEAR OPTION: Disable ALL caching for development
+            Response.Headers.CacheControl = "no-store, no-cache, must-revalidate, max-age=0";
+            Response.Headers.Pragma = "no-cache";
+            Response.Headers.Expires = "0";
             return Content(content, "text/html");
         }
 
@@ -133,7 +129,7 @@ namespace TicketSalesApp.AdminServer.Controllers
             return Content(content, "text/html");
         }
 
-        // Serve CSS files
+        // Serve CSS files with aggressive cache busting - NO CACHING, always fresh
         [HttpGet("assets/css/{fileName}")]
         public IActionResult GetCss(string fileName)
         {
@@ -147,15 +143,6 @@ namespace TicketSalesApp.AdminServer.Controllers
                 return BadRequest("Invalid file name");
             }
 
-            var cacheKey = $"customerui_css_{fileName}";
-            if (_memoryCache.TryGetValue(cacheKey, out string cachedContent))
-            {
-                _logger.LogDebug("Serving cached CSS: {FileName} - Cache key: {CacheKey}, Content length: {Length}", 
-                    fileName, cacheKey, cachedContent.Length);
-                Response.Headers.CacheControl = "public, max-age=86400"; // 24 hours for CSS
-                return Content(cachedContent, "text/css");
-            }
-
             var filePath = Path.Combine(_environment.ContentRootPath, "Views", "CustomerUI", "assets", "css", fileName);
             _logger.LogDebug("Looking for CSS file at: {FilePath}", filePath);
             
@@ -165,19 +152,24 @@ namespace TicketSalesApp.AdminServer.Controllers
                 return NotFound($"CSS file {fileName} not found");
             }
 
-            var content = System.IO.File.ReadAllText(filePath);
             var fileInfo = new FileInfo(filePath);
+            var lastModified = fileInfo.LastWriteTimeUtc;
+            
+            // Read file content fresh every time
+            var content = System.IO.File.ReadAllText(filePath);
             _logger.LogInformation("Loaded CSS file: {FileName} - Size: {Size} bytes, Last modified: {LastModified}", 
                 fileName, fileInfo.Length, fileInfo.LastWriteTime);
             
-            _memoryCache.Set(cacheKey, content, TimeSpan.FromHours(2));
-            _logger.LogDebug("Cached CSS: {FileName} with key: {CacheKey} for 2 hours", fileName, cacheKey);
+            // NUCLEAR OPTION: Disable ALL caching for CSS - always fetch fresh
+            Response.Headers.CacheControl = "no-store, no-cache, must-revalidate, max-age=0";
+            Response.Headers.Pragma = "no-cache";
+            Response.Headers.Expires = "0";
+            Response.Headers.LastModified = lastModified.ToString("R");
             
-            Response.Headers.CacheControl = "public, max-age=86400";
             return Content(content, "text/css");
         }
 
-        // Serve JavaScript files
+        // Serve JavaScript files with aggressive cache busting - NO CACHING, always fresh
         [HttpGet("assets/js/{fileName}")]
         public IActionResult GetJs(string fileName)
         {
@@ -191,15 +183,6 @@ namespace TicketSalesApp.AdminServer.Controllers
                 return BadRequest("Invalid file name");
             }
 
-            var cacheKey = $"customerui_js_{fileName}";
-            if (_memoryCache.TryGetValue(cacheKey, out string cachedContent))
-            {
-                _logger.LogDebug("Serving cached JS: {FileName} - Cache key: {CacheKey}, Content length: {Length}", 
-                    fileName, cacheKey, cachedContent.Length);
-                Response.Headers.CacheControl = "public, max-age=86400"; // 24 hours for JS
-                return Content(cachedContent, "application/javascript");
-            }
-
             var filePath = Path.Combine(_environment.ContentRootPath, "Views", "CustomerUI", "assets", "js", fileName);
             _logger.LogDebug("Looking for JS file at: {FilePath}", filePath);
             
@@ -209,15 +192,20 @@ namespace TicketSalesApp.AdminServer.Controllers
                 return NotFound($"JavaScript file {fileName} not found");
             }
 
-            var content = System.IO.File.ReadAllText(filePath);
             var fileInfo = new FileInfo(filePath);
+            var lastModified = fileInfo.LastWriteTimeUtc;
+            
+            // Read file content fresh every time
+            var content = System.IO.File.ReadAllText(filePath);
             _logger.LogInformation("Loaded JS file: {FileName} - Size: {Size} bytes, Last modified: {LastModified}", 
                 fileName, fileInfo.Length, fileInfo.LastWriteTime);
             
-            _memoryCache.Set(cacheKey, content, TimeSpan.FromHours(2));
-            _logger.LogDebug("Cached JS: {FileName} with key: {CacheKey} for 2 hours", fileName, cacheKey);
+            // NUCLEAR OPTION: Disable ALL caching for JavaScript - always fetch fresh
+            Response.Headers.CacheControl = "no-store, no-cache, must-revalidate, max-age=0";
+            Response.Headers.Pragma = "no-cache";
+            Response.Headers.Expires = "0";
+            Response.Headers.LastModified = lastModified.ToString("R");
             
-            Response.Headers.CacheControl = "public, max-age=86400";
             return Content(content, "application/javascript");
         }
 
@@ -431,6 +419,52 @@ namespace TicketSalesApp.AdminServer.Controllers
 
             var content = System.IO.File.ReadAllText(filePath);
             return Content(content, "text/html");
+        }
+
+        // Helper method to inject version parameters into CSS and JS URLs
+        private string InjectAssetVersions(string htmlContent)
+        {
+            var assetsPath = Path.Combine(_environment.ContentRootPath, "Views", "CustomerUI", "assets");
+            
+            // Process CSS files
+            var cssPath = Path.Combine(assetsPath, "css");
+            if (Directory.Exists(cssPath))
+            {
+                foreach (var cssFile in Directory.GetFiles(cssPath, "*.css"))
+                {
+                    var fileName = Path.GetFileName(cssFile);
+                    var fileInfo = new FileInfo(cssFile);
+                    var version = fileInfo.LastWriteTimeUtc.Ticks.ToString("X");
+                    
+                    // Replace href="/customerui/assets/css/filename.css" with versioned URL
+                    var oldPattern = $"href=\"/customerui/assets/css/{fileName}\"";
+                    var newPattern = $"href=\"/customerui/assets/css/{fileName}?v={version}\"";
+                    htmlContent = htmlContent.Replace(oldPattern, newPattern);
+                    
+                    _logger.LogDebug("Injected version for CSS: {FileName} -> v={Version}", fileName, version);
+                }
+            }
+            
+            // Process JS files
+            var jsPath = Path.Combine(assetsPath, "js");
+            if (Directory.Exists(jsPath))
+            {
+                foreach (var jsFile in Directory.GetFiles(jsPath, "*.js"))
+                {
+                    var fileName = Path.GetFileName(jsFile);
+                    var fileInfo = new FileInfo(jsFile);
+                    var version = fileInfo.LastWriteTimeUtc.Ticks.ToString("X");
+                    
+                    // Replace src="/customerui/assets/js/filename.js" with versioned URL
+                    var oldPattern = $"src=\"/customerui/assets/js/{fileName}\"";
+                    var newPattern = $"src=\"/customerui/assets/js/{fileName}?v={version}\"";
+                    htmlContent = htmlContent.Replace(oldPattern, newPattern);
+                    
+                    _logger.LogDebug("Injected version for JS: {FileName} -> v={Version}", fileName, version);
+                }
+            }
+            
+            return htmlContent;
         }
     }
 }

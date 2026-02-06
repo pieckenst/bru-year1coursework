@@ -1,4 +1,41 @@
-/* Authentication Channel - Wii WiFi Connection Style */
+/* ==========================================================================
+   NINTENDO WII U / WFC AUTHENTICATION CHANNEL STYLESHEET
+   Refined "Frutiger Aero" Aesthetic - High Fidelity Version 2.0
+========================================================================== */
+
+:root {
+  /* --- Brand Colors --- */
+  --wii-blue-primary: #009ac7;
+  --wii-blue-light: #23b2e5;
+  --wii-blue-dark: #005d85;
+  --wii-blue-glow: rgba(0, 154, 199, 0.6);
+  
+  /* --- Backgrounds --- */
+  --wii-space-gradient: radial-gradient(circle at 50% 30%, #0d4680 0%, #06264d 40%, #00091a 100%);
+  --wii-header-gradient: linear-gradient(180deg, #4dbef5 0%, #23b2e5 50%, #0088bd 51%, #0077a8 100%);
+  
+  /* --- Materials --- */
+  --wii-panel-bg: rgba(255, 255, 255, 0.94);
+  --wii-panel-surface: linear-gradient(180deg, #ffffff 0%, #f4f4f4 100%);
+  
+  /* --- Shadows --- */
+  --wii-shadow-floating: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.5) inset;
+  --wii-shadow-button: 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 2px 5px rgba(255,255,255,1);
+  --wii-shadow-inset: inset 0 2px 6px rgba(0,0,0,0.15);
+  
+  /* --- Typography --- */
+  --font-stack: 'Asap', "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
+  --text-main: #333333;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ==========================================================================
+   GLOBAL CONTAINER
+========================================================================== */
 
 .auth-channel-view {
   position: fixed;
@@ -6,672 +43,1135 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(180deg, #e8f4ff 0%, #c8e0f5 100%);
-  font-family: 'Asap', Arial, sans-serif;
-  overflow-x: hidden;
-  overflow-y: auto;
-  box-sizing: border-box;
   z-index: 1000;
+  font-family: var(--font-stack);
+  color: var(--text-main);
+  background: var(--wii-space-gradient);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
-/* Header Banner */
-.auth-header {
+/* Animated Grid Background */
+.auth-channel-view::before {
+  content: "";
+  position: absolute;
+  top: -100%; left: -50%; width: 200%; height: 300%;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  transform: perspective(500px) rotateX(30deg);
+  animation: wiiGridFloat 80s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ==========================================================================
+   HEADER (Wii U Style)
+========================================================================== */
+
+.auth-channel-view .auth-header {
+  position: relative;
   width: 100%;
-  padding: 0;
-  text-align: center;
-  background: linear-gradient(180deg, #5ab0ff 0%, #2d7dd2 100%);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  min-height: 100px;
+  height: 80px;
+  background: var(--wii-header-gradient);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  z-index: 100;
 }
 
-.auth-banner {
-  width: 100%;
-  height: 100%;
-  min-height: 100px;
-  max-height: 150px;
-  object-fit: cover;
-  display: block;
+.auth-channel-view .auth-header::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(255, 255, 255, 0.05) 10px,
+    rgba(255, 255, 255, 0.05) 20px
+  );
+  pointer-events: none;
 }
 
-/* Main Content */
-.auth-content-wrapper {
+.auth-channel-view .auth-header-title {
+  color: white;
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin: 0;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   MAIN CONTENT
+========================================================================== */
+
+.auth-channel-view .auth-content-wrapper {
   flex: 1;
   width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+  margin-bottom: 75px; /* Account for fixed footer height */
 }
 
-.auth-content {
+.auth-channel-view .auth-content {
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 30px 20px 120px 20px;
-  box-sizing: border-box;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-bottom: 40px; /* Just normal spacing at bottom */
 }
 
-/* Section Separators */
-.section-separator {
+/* Separators */
+.auth-channel-view .section-separator {
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, transparent 0%, #d0d0d0 50%, transparent 100%);
-  margin: 40px 0;
-}
-
-.form-button-separator {
-  width: 100%;
-  height: 1px;
-  background: #e0e0e0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
   margin: 20px 0;
 }
 
-.footer-separator {
+/* Footer spacer to prevent clipping */
+.auth-channel-view .footer-spacer {
   width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, #d0d0d0 50%, transparent 100%);
-  margin-bottom: 15px;
-}
-
-/* Section Styling */
-.auth-section {
-  margin-bottom: 20px;
-}
-
-.section-title {
-  font-size: clamp(22px, 4vw, 28px);
-  font-weight: bold;
-  color: #333;
-  text-align: center;
-  margin-bottom: 25px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Authentication Status Card */
-.auth-card {
-  background: white;
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 30px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  border: 3px solid #d0d0d0;
-  box-sizing: border-box;
-  width: 100%;
-}
-
-.auth-card-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid #e0e0e0;
-  flex-wrap: wrap;
-}
-
-.auth-icon-container {
-  width: 60px;
-  height: 60px;
+  height: 100px;
   flex-shrink: 0;
 }
 
-.auth-icon {
+.auth-channel-view .section-title {
   width: 100%;
-  height: 100%;
+  text-align: center;
+  font-size: 26px;
+  color: white;
+  margin-bottom: 25px;
+  text-shadow: 0 0 10px rgba(0, 154, 199, 0.8), 0 2px 4px rgba(0,0,0,0.5);
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.4);
+  padding-bottom: 15px;
 }
 
-.auth-card-title {
-  font-size: clamp(20px, 4vw, 32px);
-  font-weight: bold;
-  color: #333;
-  margin: 0;
+/* ==========================================================================
+   CARDS & PANELS
+========================================================================== */
+
+/* Shared Panel Style */
+.auth-channel-view .auth-card,
+.auth-channel-view .auth-option-card,
+.auth-channel-view .auth-form-container {
+  position: relative;
+  background: var(--wii-panel-surface);
+  border-radius: 35px;
+  padding: 30px;
+  box-shadow: var(--wii-shadow-floating);
+  border: 4px solid white;
+  backdrop-filter: blur(15px);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Inner Highlight */
+.auth-channel-view .auth-card::before,
+.auth-channel-view .auth-option-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 100%);
+  border-radius: 30px 30px 0 0;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Status Section */
+.auth-channel-view .auth-status-container {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.auth-channel-view .status-icon-wrapper {
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, #e1f5fe 0%, #ffffff 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  font-size: 40px;
+  flex-shrink: 0;
+}
+
+.auth-channel-view .status-icon-emoji {
+  font-size: 40px;
+  opacity: 0.8;
+}
+
+.auth-channel-view .auth-status-text {
   flex: 1;
   min-width: 200px;
 }
 
-.auth-card-body {
-  padding: 20px 0;
+.auth-channel-view .auth-status-text h2 {
+  margin: 0 0 10px 0;
+  color: var(--wii-blue-primary);
+  font-size: 24px;
 }
 
-/* Status Indicator */
-.auth-status {
-  padding: 20px;
-  border-radius: 12px;
-  background: #f5f5f5;
-}
-
-.status-indicator {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  font-size: 18px;
-  font-weight: 500;
-}
-
-.status-dot {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  animation: pulse 2s infinite;
-}
-
-.status-checking .status-dot {
-  background: #ffa500;
-}
-
-.status-authenticated .status-dot {
-  background: #4caf50;
-  animation: none;
-}
-
-.status-error .status-dot {
-  background: #f44336;
-  animation: none;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.2); }
-}
-
-/* User Info */
-.auth-user-info {
-  margin-top: 20px;
-}
-
-.user-info-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 20px;
-  background: white;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  border: 2px solid #e0e0e0;
-}
-
-.info-label {
+.auth-channel-view .status-badge {
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 50px;
   font-weight: bold;
+  background: #f0f0f0;
   color: #666;
+  border: 1px solid #ccc;
 }
 
-.info-value {
-  color: #333;
-  font-weight: 500;
+.auth-channel-view .status-badge.authenticated {
+  background: #e8f5e9;
+  color: #1b5e20;
+  border-color: #a5d6a7;
 }
 
-/* Authentication Options */
-.auth-options-grid {
+.auth-channel-view .status-badge.error {
+  background: #ffebee;
+  color: #c62828;
+  border: 2px solid #f44336;
+}
+
+/* Options Grid */
+.auth-channel-view .auth-options-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 30px;
-  width: 100%;
-  box-sizing: border-box;
 }
 
-.auth-option-item {
+.auth-channel-view .auth-option-item {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
   width: 100%;
-  box-sizing: border-box;
-  align-items: stretch;
 }
 
-.auth-option-card {
-  background: white;
-  border-radius: 16px;
-  padding: 25px 20px;
-  text-align: center;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  border: 3px solid #d0d0d0;
-  transition: all 0.3s ease;
-  box-sizing: border-box;
-  min-height: 180px;
+.auth-channel-view .auth-option-card {
+  min-height: 240px;
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-}
-
-.auth-option-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  border-color: #4a9eff;
-}
-
-.option-button-wrapper {
-  width: 100%;
-  padding: 0;
-  box-sizing: border-box;
-  display: block;
-}
-
-.option-button-wrapper .wii-button {
-  width: 100%;
-  display: block;
-}
-
-/* Authenticated Actions */
-.auth-actions-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  box-sizing: border-box;
-}
-
-.auth-action-item {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.auth-action-card {
-  background: white;
-  border-radius: 16px;
-  padding: 25px 20px;
-  text-align: center;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  border: 3px solid #d0d0d0;
-  transition: all 0.3s ease;
-  box-sizing: border-box;
-  min-height: 180px;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
-}
-
-.auth-action-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  border-color: #ff6060;
-}
-
-/* Windows Authentication */
-.auth-windows-item {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  max-width: 600px;
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.auth-option-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
-  border-color: #4a9eff;
-}
-
-.option-icon {
-  font-size: clamp(40px, 8vw, 64px);
-  margin-bottom: 10px;
-}
-
-.auth-option-card h3 {
-  font-size: clamp(18px, 3vw, 24px);
-  color: #333;
-  margin: 10px 0;
-}
-
-.auth-option-card p {
-  color: #666;
-  font-size: clamp(14px, 2vw, 16px);
-  margin-bottom: 15px;
-  flex: 1;
-}
-
-/* Wii-style Buttons */
-.auth-channel-view .wii-button {
-  background: linear-gradient(180deg, #f0f0f0 0%, #d0d0d0 100%);
-  border: 3px solid #a0a0a0;
-  border-radius: 12px;
-  padding: 12px 20px;
-  font-size: clamp(14px, 2.5vw, 18px);
-  font-weight: bold;
-  color: #333;
+  text-align: center;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: 'Asap', Arial, sans-serif;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  box-sizing: border-box;
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: block;
-  text-align: center;
-  position: relative;
+}
+
+.auth-channel-view .auth-option-card:hover {
+  transform: scale(1.05) translateY(-5px);
+  border-color: var(--wii-blue-light);
+  box-shadow: 0 0 25px var(--wii-blue-glow), 0 20px 40px rgba(0,0,0,0.3);
+  background: white;
+  z-index: 5;
+}
+
+.auth-channel-view .option-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+  color: var(--wii-blue-primary);
+  filter: drop-shadow(0 4px 4px rgba(0,0,0,0.15));
+}
+
+.auth-channel-view .auth-option-card h3 {
+  font-size: 22px;
+  color: var(--text-main);
+  margin: 10px 0 5px 0;
+}
+
+.auth-channel-view .auth-option-card p {
+  color: #888;
+  font-size: 14px;
   margin: 0;
 }
 
-.button-container {
-  margin-top: 20px;
-  padding-top: 15px;
-  border-top: 2px solid #f0f0f0;
-  position: relative;
-  clear: both;
+/* Windows Card */
+.auth-channel-view .windows-card {
+  background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
+  border: 4px solid white;
+}
+
+.auth-channel-view .windows-card .option-icon {
+  color: white;
+}
+
+.auth-channel-view .windows-card h3 {
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.auth-channel-view .windows-card p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.auth-channel-view .windows-card:hover {
+  border-color: white;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  background: linear-gradient(135deg, #1084d9 0%, #006bbd 100%);
+}
+
+/* ==========================================================================
+   GLOBAL BUTTON STYLES (The "Pill" System)
+========================================================================== */
+
+/* Base style for ALL buttons outside the specific modal override */
+.auth-channel-view .wii-button {
+  appearance: none;
+  background: linear-gradient(180deg, #ffffff 0%, #f0f0f0 49%, #e0e0e0 50%, #f5f5f5 100%);
+  border: 2px solid #bbbbbb;
+  border-radius: 50px;
+  padding: 12px 35px;
+  font-family: var(--font-stack);
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.1s ease-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 2px 5px white;
+  text-align: center;
+  display: inline-block;
+  min-width: 140px;
+  text-shadow: 0 1px 0 rgba(255,255,255,1);
 }
 
 .auth-channel-view .wii-button:hover {
-  background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 100%);
+  border-color: var(--wii-blue-light);
+  color: var(--wii-blue-primary);
+  box-shadow: 0 0 15px var(--wii-blue-glow), inset 0 0 10px white;
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 .auth-channel-view .wii-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.auth-channel-view .wii-button-primary {
-  background: linear-gradient(180deg, #5ab0ff 0%, #2d7dd2 100%);
-  border-color: #1a5fa0;
-  color: white;
-}
-
-.auth-channel-view .wii-button-primary:hover {
-  background: linear-gradient(180deg, #6ac0ff 0%, #3d8de2 100%);
-}
-
-.auth-channel-view .wii-button-secondary {
-  background: linear-gradient(180deg, #e0e0e0 0%, #c0c0c0 100%);
+  transform: translateY(1px);
+  background: linear-gradient(180deg, #d0d0d0 0%, #e0e0e0 100%);
 }
 
 .auth-channel-view .wii-button-back {
-  background: linear-gradient(180deg, #ff9090 0%, #ff6060 100%);
-  border-color: #cc4040;
-  color: white;
+  background: linear-gradient(180deg, #ffe0e0 0%, #ffaaaa 49%, #ff8888 50%, #ffcccc 100%);
+  border: 2px solid #ff7777;
+  color: #cc0000;
 }
 
-/* Form Container */
-.auth-form-container {
-  background: white;
-  border-radius: 16px;
-  padding: 25px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  border: 3px solid #d0d0d0;
-  max-width: 500px;
-  width: 100%;
-  margin: 0 auto 30px;
-  box-sizing: border-box;
+.auth-channel-view .wii-button-back:hover {
+  background: linear-gradient(180deg, #ffdddd 0%, #ffbbbb 100%);
+  border-color: #ff6666;
+  box-shadow: 0 0 10px rgba(255, 136, 136, 0.5);
 }
 
-.auth-form h3 {
-  font-size: clamp(20px, 4vw, 28px);
-  color: #333;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  font-weight: bold;
-  color: #666;
-  margin-bottom: 8px;
-  font-size: 16px;
-}
-
-.wii-input {
-  width: 100%;
-  padding: 12px 16px;
-  font-size: 16px;
-  border: 3px solid #d0d0d0;
-  border-radius: 10px;
-  font-family: 'Asap', Arial, sans-serif;
-  transition: border-color 0.3s ease;
-  box-sizing: border-box;
-}
-
-.wii-input:focus {
-  outline: none;
-  border-color: #4a9eff;
-  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.2);
-}
-
-.form-actions {
-  display: flex;
-  gap: 15px;
-  margin-top: 30px;
-}
-
-.auth-channel-view .form-actions .wii-button {
-  flex: 1;
-}
-
-.form-message {
-  margin-top: 20px;
-  padding: 15px;
+/* Form Messages */
+.auth-channel-view .form-message {
+  margin-top: 15px;
+  padding: 12px;
   border-radius: 8px;
   text-align: center;
   font-weight: 500;
+  font-size: 14px;
   display: none;
 }
 
-.form-message.success {
+.auth-channel-view .form-message.success {
   background: #e8f5e9;
   color: #2e7d32;
   border: 2px solid #4caf50;
   display: block;
 }
 
-.form-message.error {
+.auth-channel-view .form-message.error {
   background: #ffebee;
   color: #c62828;
   border: 2px solid #f44336;
   display: block;
 }
 
-/* QR Code Login Styles */
-.qr-code-container {
+/* ==========================================================================
+   CRITICAL FIX: WII U SYSTEM MODALS
+   This section isolates modal styles to prevent "Cursed Circle" buttons
+========================================================================== */
+
+/* 1. Modal Overlay */
+.wii-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Darker dim */
+  backdrop-filter: blur(10px); /* Heavy blur */
+  z-index: 9999;
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  margin: 20px 0;
-  min-height: 250px;
-  max-height: 400px;
-  box-sizing: border-box;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
-.qr-code-container img {
-  max-width: 100%;
-  max-height: 300px;
-  width: auto;
-  height: auto;
-  border-radius: 4px;
-  object-fit: contain;
+.wii-modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
 }
 
-.qr-instructions {
+/* 2. Modal Container - Flex Column Layout */
+.wii-modal {
+  position: relative;
+  width: 90%;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 40px; /* Super rounded */
+  padding: 50px 40px 40px 40px;
   text-align: center;
-  color: #666;
-  font-size: clamp(12px, 2vw, 14px);
-  margin: 10px 0;
-  line-height: 1.6;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 0 5px rgba(255,255,255,0.4);
+  border: 4px solid white;
+  transform: scale(0.9);
+  transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  display: flex;
+  flex-direction: column; /* CRITICAL: Stack children vertically */
+  align-items: center;
 }
 
-/* Windows Authentication Styles */
-.auth-windows-container {
-  margin: 20px auto;
-  max-width: 600px;
+.wii-modal-overlay.active .wii-modal {
+  transform: scale(1);
+}
+
+/* Modal Slide-in Animation */
+.modal-slide-in {
+  transform: translateY(-50px) scale(0.9);
+}
+
+.wii-modal-overlay.active .modal-slide-in {
+  transform: translateY(0) scale(1);
+}
+
+/* 3. Modal Header */
+.modal-header-icon {
+  margin-top: -80px; /* Pull icon out of box */
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 10;
+}
+
+.icon-circle {
+  width: 80px; height: 80px;
+  background: linear-gradient(180deg, #23b2e5 0%, #0088bd 100%);
+  border-radius: 50%;
+  border: 4px solid white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  color: white;
+}
+
+.modal-icon {
+  font-size: 50px;
+  color: var(--wii-blue-primary);
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+/* Icon Bounce Animation */
+.modal-icon-bounce {
+  animation: iconBounce 0.6s ease 0.3s;
+}
+
+@keyframes iconBounce {
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-10px); }
+  50% { transform: translateY(0); }
+  75% { transform: translateY(-5px); }
+}
+
+.wii-modal h3 {
+  margin: 10px 0;
+  color: var(--text-main);
+  font-size: 26px;
+  font-weight: 700;
+  font-family: var(--font-stack);
+}
+
+.wii-modal p {
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 20px;
+  font-family: var(--font-stack);
+}
+
+/* 4. Input Container - Isolated Grid Area */
+.modal-input-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 25px; /* Push buttons down */
+  position: relative;
+  z-index: 5;
+}
+
+.wii-modal .wii-input {
+  width: 100%;
+  display: block;
+  padding: 14px 20px;
+  font-size: 18px;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  background: #f5f5f5;
+  color: #333;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+  box-sizing: border-box;
+  text-align: left;
+  font-family: var(--font-stack);
+  transition: border 0.3s;
+}
+
+.wii-modal .wii-input:focus {
+  background: white;
+  border-color: #009ac7;
+  box-shadow: 0 0 0 4px rgba(0, 154, 199, 0.2);
+  outline: none;
+}
+
+/* 5. Button Container - Isolated Grid Area */
+.modal-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 15px;
+  margin-top: auto; /* Push to bottom if needed */
+  position: relative;
+  z-index: 5;
+}
+
+/* 6. MODAL BUTTONS - HIGH SPECIFICITY OVERRIDE */
+/* This block ensures buttons in modals ARE NOT CIRCLES */
+.wii-modal .wii-button {
+  appearance: none;
+  position: static !important; /* Prevent floating */
+  width: auto !important;
+  min-width: 140px;
+  height: 50px !important;
+  padding: 0 30px !important;
+  border-radius: 50px !important; /* Force Pill */
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #ffffff 0%, #eeeeee 100%);
+  border: 2px solid #bbb;
+  font-family: var(--font-stack);
+  font-weight: 700;
+  font-size: 16px;
+  color: #333;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  text-decoration: none;
+  margin: 0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.wii-modal .wii-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Modal Primary Button */
+.wii-modal .wii-button-primary {
+  background: linear-gradient(180deg, #4dbef5 0%, #23b2e5 49%, #0088bd 50%, #0077a8 100%) !important;
+  border: 2px solid #005d85 !important;
+  color: white !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.wii-modal .wii-button-primary:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 15px rgba(35, 178, 229, 0.6);
+  border-color: white !important;
+}
+
+/* Modal Secondary Button */
+.wii-modal .wii-button-secondary {
+  background: linear-gradient(180deg, #fff 0%, #eee 100%) !important;
+  color: #555 !important;
+}
+
+/* Modal-specific form message styling */
+.wii-modal .form-message {
+  margin: 15px 0 0 0;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 14px;
+  display: none;
   width: 100%;
   box-sizing: border-box;
 }
 
-.windows-card {
-  background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
-  border: 3px solid #004578;
-  box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
+.wii-modal .form-message.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 2px solid #4caf50;
+  display: block;
 }
 
-.windows-card .option-icon {
-  font-size: 48px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+.wii-modal .form-message.error {
+  background: #ffebee;
+  color: #c62828;
+  border: 2px solid #f44336;
+  display: block;
 }
 
-.windows-card h3 {
-  color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+/* Info Box for Modals */
+.info-box {
+  background: #f0f8ff;
+  border: 2px solid #b3d9ff;
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px 0;
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  text-align: left;
 }
 
-.windows-card p {
-  color: rgba(255, 255, 255, 0.9);
+.info-icon {
+  font-size: 32px;
+  flex-shrink: 0;
 }
 
-/* Footer */
-.auth-footer {
+.info-content {
+  flex: 1;
+  font-family: var(--font-stack);
+}
+
+.info-content p {
+  font-family: var(--font-stack);
+}
+
+/* ==========================================================================
+   CONNECTION TEST MODAL ANIMATIONS
+========================================================================== */
+
+.connection-test-modal {
+  max-width: 600px;
+  padding: 50px 40px;
+  font-family: var(--font-stack);
+}
+
+.connection-test-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  font-family: var(--font-stack);
+}
+
+.connection-icon-wrapper {
   position: relative;
+  width: 120px; height: 120px;
+  margin-bottom: 10px;
+}
+
+/* Core Orb */
+.connection-icon-outer {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #4dbef5, #0088bd);
+  box-shadow: 0 0 30px rgba(35, 178, 229, 0.6);
+  border: 2px solid white;
+  animation: connectionPulse 2s ease-in-out infinite;
+}
+
+.connection-icon-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5ab0ff 0%, #2d7dd2 100%);
+  animation: connectionRotate 3s linear infinite;
+}
+
+.connection-icon-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+/* Orbiting Satellite */
+.connection-icon-inner {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  animation: wiiOrbit 3s linear infinite;
+}
+
+.connection-icon-inner::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 50%;
+  width: 16px; height: 16px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px white;
+  transform: translateX(-50%);
+}
+
+@keyframes wiiOrbit {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes connectionPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.05); }
+}
+
+@keyframes connectionRotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Waves */
+.connection-waves {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+}
+
+.wave {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border: 3px solid rgba(35, 178, 229, 0.6);
+  border-radius: 50%;
+  opacity: 0;
+  animation: wiiWave 2s ease-out infinite;
+}
+
+.wave-2 { animation-delay: 0.6s; }
+.wave-3 { animation-delay: 1.2s; }
+
+@keyframes wiiWave {
+  0% { width: 100px; height: 100px; opacity: 1; border-width: 3px; }
+  100% { width: 220px; height: 220px; opacity: 0; border-width: 0px; }
+}
+
+/* Connection Status Text */
+.connection-title {
+  font-size: 26px;
+  color: var(--wii-blue-primary);
+  margin: 0;
+  font-weight: bold;
+  font-family: var(--font-stack);
+}
+
+.connection-status-text {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+  animation: textFade 1.5s ease-in-out infinite;
+  font-family: var(--font-stack);
+}
+
+@keyframes textFade {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Connection Steps */
+.connection-steps {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 10px 0;
+}
+
+.connection-step {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 20px;
+  background: #f5f5f5;
+  border-radius: 15px;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s ease;
+  font-family: var(--font-stack);
+}
+
+.connection-step.active {
+  background: #e3f2fd;
+  border-color: var(--wii-blue-primary);
+  box-shadow: 0 0 15px rgba(0, 154, 199, 0.3);
+}
+
+.connection-step.complete {
+  background: #e8f5e9;
+  border-color: #4caf50;
+}
+
+.connection-step.error {
+  background: #ffebee;
+  border-color: #f44336;
+}
+
+.step-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.step-text {
+  flex: 1;
+  text-align: left;
+  font-size: 15px;
+  color: #333;
+  font-weight: 500;
+  font-family: var(--font-stack);
+}
+
+.step-status {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.connection-step.active .step-status {
+  animation: statusSpin 1s linear infinite;
+}
+
+@keyframes statusSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Connection Progress Bar */
+.connection-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.connection-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #23b2e5 0%, #5ab0ff 100%);
+  border-radius: 10px;
+  width: 0%;
+  transition: width 0.5s ease;
+  box-shadow: 0 0 10px rgba(35, 178, 229, 0.5);
+}
+
+/* ==========================================================================
+   QR CODE MODAL
+========================================================================== */
+
+.qr-modal-container {
+  margin: 20px 0;
+}
+
+.qr-code-frame {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.qr-display-frame {
+  background: white;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+  margin: 20px auto;
+  width: 220px; height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.qr-display-inner {
+  width: 100%; height: 100%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Animated Corner Brackets */
+.qr-corner {
+  position: absolute;
+  width: 30px; height: 30px;
+  border: 4px solid var(--wii-blue-light);
+  opacity: 0.8;
+}
+
+.qr-corner-tl { 
+  top: -5px; left: -5px; 
+  border-right: 0; border-bottom: 0; 
+  border-radius: 8px 0 0 0;
+  animation: cornerPulse 2s ease-in-out infinite;
+}
+
+.qr-corner-tr { 
+  top: -5px; right: -5px; 
+  border-left: 0; border-bottom: 0; 
+  border-radius: 0 8px 0 0;
+  animation: cornerPulse 2s ease-in-out infinite 0.5s;
+}
+
+.qr-corner-bl { 
+  bottom: -5px; left: -5px; 
+  border-right: 0; border-top: 0; 
+  border-radius: 0 0 0 8px;
+  animation: cornerPulse 2s ease-in-out infinite 1s;
+}
+
+.qr-corner-br { 
+  bottom: -5px; right: -5px; 
+  border-left: 0; border-top: 0; 
+  border-radius: 0 0 8px 0;
+  animation: cornerPulse 2s ease-in-out infinite 1.5s;
+}
+
+@keyframes cornerPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.1); }
+}
+
+.qr-code-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  border-radius: 8px;
+}
+
+.qr-code-content img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 4px;
+}
+
+/* QR Loading Animation */
+.qr-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  color: #999;
+  font-family: var(--font-stack);
+}
+
+.qr-loading span {
+  font-family: var(--font-stack);
+}
+
+.qr-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #e0e0e0;
+  border-top-color: var(--wii-blue-primary);
+  border-radius: 50%;
+  animation: qrSpin 1s linear infinite;
+}
+
+@keyframes qrSpin {
+  to { transform: rotate(360deg); }
+}
+
+.qr-status-message {
+  color: #666;
+  font-size: 14px;
+  margin: 10px 0 0 0;
+  animation: textFade 1.5s ease-in-out infinite;
+  font-family: var(--font-stack);
+}
+
+/* ==========================================================================
+   FOOTER
+========================================================================== */
+
+.auth-channel-view .auth-footer {
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.98);
-  padding: 0 20px 20px 20px;
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  height: 75px;
+  background: rgba(255, 255, 255, 0.96);
+  display: flex;
+  align-items: center;
+  padding-left: 40px;
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
+  border-top: 1px solid white;
   z-index: 200;
-  box-sizing: border-box;
-  flex-shrink: 0;
-  width: 100%;
-  clear: both;
 }
 
-.footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: left;
-  position: relative;
-  clear: both;
-}
-
-.auth-footer .wii-button {
-  max-width: 300px;
+.auth-channel-view .auth-footer .wii-button {
   margin: 0;
-  position: relative;
 }
 
-/* Logout Button */
-.auth-channel-view .auth-user-info .wii-button {
-  width: 100%;
+/* Animation Keyframes */
+@keyframes wiiGridFloat {
+  0% { transform: perspective(500px) rotateX(30deg) translateY(0); }
+  100% { transform: perspective(500px) rotateX(30deg) translateY(50px); }
 }
 
-/* Responsive */
+@keyframes wiiStarDrift {
+  0% { background-position: 0 0; }
+  100% { background-position: 100px 100px; }
+}
+
+/* ==========================================================================
+   RESPONSIVE
+========================================================================== */
+
 @media (max-width: 768px) {
-  .auth-content {
-    padding: 20px 15px 100px 15px;
+  .auth-channel-view .auth-content-wrapper {
+    margin-bottom: 70px; /* Account for smaller footer on mobile */
   }
   
-  .auth-options-grid {
+  .auth-channel-view .auth-content {
+    padding: 20px 15px 40px 15px;
+  }
+  
+  .auth-channel-view .auth-options-grid {
     grid-template-columns: 1fr;
     gap: 20px;
   }
   
-  .auth-card-header {
-    flex-direction: column;
-    text-align: center;
-    gap: 10px;
-  }
-  
-  .auth-card {
-    padding: 15px;
-    margin-bottom: 20px;
-  }
-  
-  .auth-form-container {
+  .auth-channel-view .auth-card {
     padding: 20px;
   }
   
-  .auth-icon-container {
-    width: 50px;
-    height: 50px;
+  .auth-channel-view .auth-header {
+    height: 70px;
   }
   
-  .qr-code-container {
-    min-height: 200px;
-    max-height: 300px;
-    padding: 15px;
-  }
-  
-  .qr-code-container img {
-    max-height: 250px;
-  }
-  
-  .auth-header {
-    min-height: 80px;
-  }
-  
-  .auth-banner {
-    max-height: 100px;
+  .auth-channel-view .auth-header-title {
+    font-size: 24px;
   }
 }
 
-@media (max-width: 480px) {
-  .auth-content {
-    padding: 15px 10px 100px 10px;
+@media (max-width: 600px) {
+  .wii-modal { 
+    width: 95%; 
+    padding: 40px 20px 30px 20px; 
   }
   
-  .section-separator {
+  .modal-actions { 
+    flex-direction: column; 
+    gap: 10px; 
+  }
+  
+  .modal-actions .wii-button { 
+    width: 100% !important; 
+  }
+  
+  .connection-test-modal {
+    padding: 40px 25px;
+  }
+  
+  .connection-icon-wrapper {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .connection-icon-outer {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .connection-icon-inner {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .connection-icon-core {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .qr-code-frame {
+    width: 240px;
+    height: 240px;
+    padding: 15px;
+  }
+  
+  .connection-step {
+    padding: 12px 15px;
+  }
+  
+  .step-text {
+    font-size: 14px;
+  }
+  
+  .auth-channel-view .auth-content-wrapper {
+    margin-bottom: 70px; /* Account for smaller footer on small mobile */
+  }
+  
+  .auth-channel-view .auth-content {
+    padding: 15px 10px 40px 10px;
+  }
+  
+  .auth-channel-view .section-separator {
     margin: 30px 0;
   }
   
-  .auth-header {
-    min-height: 60px;
+  .auth-channel-view .auth-header {
+    height: 60px;
   }
   
-  .auth-banner {
-    max-height: 80px;
+  .auth-channel-view .auth-header-title {
+    font-size: 22px;
   }
   
-  .auth-card {
-    padding: 12px;
-    border-radius: 12px;
+  .auth-channel-view .auth-card {
+    padding: 15px;
+    border-radius: 25px;
   }
   
-  .auth-option-card {
+  .auth-channel-view .auth-option-card {
     min-height: 200px;
+    padding: 20px;
   }
   
-  .card-content {
-    padding: 20px 15px 10px 15px;
+  .auth-channel-view .auth-footer {
+    padding-left: 15px;
+    height: 70px;
   }
   
-  .card-button-container {
-    padding: 0 15px 15px 15px;
-    padding-top: 12px;
-  }
-  
-  .form-actions {
-    flex-direction: column;
-  }
-  
-  .auth-footer {
-    padding: 0 10px 15px 10px;
-  }
-  
-  .qr-code-container {
-    min-height: 180px;
-    max-height: 250px;
-    padding: 10px;
-  }
-  
-  .qr-code-container img {
-    max-height: 200px;
+  .auth-channel-view .wii-button-back {
+    font-size: 14px;
+    padding: 10px 20px;
   }
 }

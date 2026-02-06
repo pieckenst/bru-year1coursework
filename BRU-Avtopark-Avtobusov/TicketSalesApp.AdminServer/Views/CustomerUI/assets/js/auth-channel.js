@@ -25,10 +25,10 @@ const authChannel = {
       
       this.isWindows = data.available;
       
-      // Show/hide Windows login button based on server response
-      const windowsLoginBtn = document.getElementById('windows-login-btn');
-      if (windowsLoginBtn) {
-        windowsLoginBtn.style.display = this.isWindows ? 'block' : 'none';
+      // Show/hide Windows login section based on server response
+      const windowsLoginSection = document.getElementById('windows-login-section');
+      if (windowsLoginSection) {
+        windowsLoginSection.style.display = this.isWindows ? 'block' : 'none';
         
         if (!this.isWindows && data.message) {
           console.log('Windows auth not available:', data.message);
@@ -39,9 +39,9 @@ const authChannel = {
       console.error('Error checking Windows availability:', error);
       // Default to client-side detection as fallback
       this.isWindows = navigator.platform.toLowerCase().includes('win');
-      const windowsLoginBtn = document.getElementById('windows-login-btn');
-      if (windowsLoginBtn) {
-        windowsLoginBtn.style.display = this.isWindows ? 'block' : 'none';
+      const windowsLoginSection = document.getElementById('windows-login-section');
+      if (windowsLoginSection) {
+        windowsLoginSection.style.display = this.isWindows ? 'block' : 'none';
       }
     });
   },
@@ -81,28 +81,70 @@ const authChannel = {
   },
   
   updateAuthStatus: function(data) {
-    const statusEl = document.getElementById('auth-status');
-    const userInfoEl = document.getElementById('auth-user-info');
+    const statusBadge = document.getElementById('auth-status-badge');
+    const userDetails = document.getElementById('auth-user-details');
     const authOptionsSection = document.getElementById('auth-options-section');
-    const authActionsSection = document.getElementById('auth-actions-section');
+    const authenticatedActions = document.getElementById('authenticated-actions');
     const windowsLoginSection = document.getElementById('windows-login-section');
     
     if (data.isAuthenticated) {
-      this.currentUser = data.user;
+      // The response has nested structure: data.user contains {$id, isAuthenticated, user}
+      // The ACTUAL user data is at data.user.user
+      let userObj = data.user;
       
-      // Update status indicator
-      statusEl.innerHTML = `
-        <div class="status-indicator status-authenticated">
-          <div class="status-dot"></div>
-          <span>Authenticated</span>
-        </div>
-      `;
+      console.log('Raw response data:', data);
+      console.log('Initial user object:', userObj);
+      console.log('User object keys:', userObj ? Object.keys(userObj) : 'null');
       
-      // Show user info
-      document.getElementById('username').textContent = data.user.login || data.user.username || 'N/A';
-      document.getElementById('user-role').textContent = this.getRoleName(data.user.role);
-      document.getElementById('session-status').textContent = 'Active';
-      userInfoEl.style.display = 'block';
+      // Check if userObj has the nested structure with actual user data inside
+      if (userObj && userObj.user && typeof userObj.user === 'object') {
+        console.log('Found nested user object, extracting actual user data');
+        userObj = userObj.user;
+      }
+      
+      this.currentUser = userObj;
+      
+      // Update status badge
+      statusBadge.textContent = 'Authenticated';
+      statusBadge.className = 'status-badge authenticated';
+      
+      if (!userObj) {
+        console.error('User object is null or undefined');
+        document.getElementById('username-display').textContent = 'Error';
+        document.getElementById('role-display').textContent = 'Unknown';
+        document.getElementById('session-display').textContent = 'Active';
+        userDetails.style.display = 'block';
+        return;
+      }
+      
+      // Extract username
+      let username = 'N/A';
+      if (userObj.username && userObj.username.trim() !== '') {
+        username = userObj.username;
+      } else if (userObj.login && userObj.login.trim() !== '') {
+        username = userObj.login;
+      } else if (userObj.userName && userObj.userName.trim() !== '') {
+        username = userObj.userName;
+      }
+      
+      // Extract role - handle 0 (Administrator) correctly
+      let roleId = 4; // Default to User role
+      if (typeof userObj.role === 'number') {
+        roleId = userObj.role;
+      } else if (typeof userObj.roleId === 'number') {
+        roleId = userObj.roleId;
+      }
+      
+      console.log('Extracted username:', username, 'from userObj.username:', userObj.username, 'userObj.login:', userObj.login);
+      console.log('Extracted roleId:', roleId, 'from userObj.role:', userObj.role);
+      
+      // Show user details
+      document.getElementById('username-display').textContent = username;
+      document.getElementById('role-display').textContent = this.getRoleName(roleId);
+      document.getElementById('session-display').textContent = 'Active';
+      userDetails.style.display = 'block';
+      
+      console.log('Displaying user:', username, 'Role:', this.getRoleName(roleId), '(roleId:', roleId, ')');
       
       // Hide authentication options section
       if (authOptionsSection) {
@@ -115,20 +157,16 @@ const authChannel = {
       }
       
       // Show authenticated actions section (Sign Out)
-      if (authActionsSection) {
-        authActionsSection.style.display = 'block';
+      if (authenticatedActions) {
+        authenticatedActions.style.display = 'block';
       }
       
     } else {
-      // Update status indicator
-      statusEl.innerHTML = `
-        <div class="status-indicator status-error">
-          <div class="status-dot"></div>
-          <span>Not Authenticated</span>
-        </div>
-      `;
+      // Update status badge
+      statusBadge.textContent = 'Not Authenticated';
+      statusBadge.className = 'status-badge error';
       
-      userInfoEl.style.display = 'none';
+      userDetails.style.display = 'none';
       
       // Show authentication options section
       if (authOptionsSection) {
@@ -139,14 +177,15 @@ const authChannel = {
       // Don't change windowsLoginSection here, let checkWindowsAvailability handle it
       
       // Hide authenticated actions section
-      if (authActionsSection) {
-        authActionsSection.style.display = 'none';
+      if (authenticatedActions) {
+        authenticatedActions.style.display = 'none';
       }
     }
   },
   
   getRoleName: function(roleId) {
     const roles = {
+      0: 'Administrator',
       1: 'Administrator',
       2: 'Manager',
       3: 'Operator',
@@ -156,8 +195,227 @@ const authChannel = {
   },
   
   showLogin: function() {
-    document.getElementById('login-form-section').style.display = 'block';
-    document.getElementById('login-form-section').scrollIntoView({ behavior: 'smooth' });
+    // Show modal instead of inline form
+    this.openModal('login-modal');
+  },
+  
+  openModal: function(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.classList.add('active');
+      
+      // Special handling for QR modal
+      if (modalId === 'qr-modal') {
+        this.generateModalQRCode();
+      }
+    }
+  },
+  
+  closeModal: function(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.classList.remove('active');
+      
+      // Clear any messages
+      const messageEl = document.getElementById('modal-login-message');
+      if (messageEl) {
+        messageEl.className = 'form-message';
+        messageEl.textContent = '';
+      }
+      
+      // Stop QR polling if closing QR modal
+      if (modalId === 'qr-modal') {
+        this.stopQRPolling();
+      }
+    }
+  },
+  
+  doModalLogin: function() {
+    const username = document.getElementById('modal-login-username').value;
+    const password = document.getElementById('modal-login-password').value;
+    const messageEl = document.getElementById('modal-login-message');
+    
+    // Client-side validation
+    if (!username || !password) {
+      messageEl.className = 'form-message error';
+      messageEl.textContent = 'Please enter both username and password';
+      return;
+    }
+    
+    console.log('Attempting modal login with v1 API...');
+    
+    // Close login modal and show connection test modal
+    this.closeModal('login-modal');
+    this.showConnectionTest();
+    
+    // Simulate connection steps with delays
+    setTimeout(() => this.updateConnectionStep(1, 'active'), 300);
+    
+    fetch('/api/v1/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        login: username,
+        password: password
+      })
+    })
+    .then(response => {
+      // Update progress
+      this.updateConnectionProgress(33);
+      this.updateConnectionStep(1, 'complete');
+      setTimeout(() => this.updateConnectionStep(2, 'active'), 200);
+      
+      if (response.status === 401) {
+        throw new Error('Invalid username or password');
+      }
+      if (response.status === 400) {
+        return response.json().then(data => {
+          throw new Error(data.message || 'Invalid request');
+        });
+      }
+      if (!response.ok) {
+        throw new Error('Login failed. Please try again.');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Modal login successful:', data);
+      
+      // Update progress
+      this.updateConnectionProgress(66);
+      this.updateConnectionStep(2, 'complete');
+      setTimeout(() => this.updateConnectionStep(3, 'active'), 200);
+      
+      // Store JWT token
+      if (data.token) {
+        localStorage.setItem('auth_token', data.token);
+      }
+      
+      // Complete connection
+      setTimeout(() => {
+        this.updateConnectionProgress(100);
+        this.updateConnectionStep(3, 'complete');
+        this.updateConnectionStatus('Connection established successfully!', 'success');
+        
+        // Close connection modal and refresh status
+        setTimeout(() => {
+          this.closeModal('connection-test-modal');
+          this.checkAuthStatus();
+        }, 1500);
+      }, 500);
+    })
+    .catch(error => {
+      console.error('Modal login error:', error);
+      
+      // Show error in connection test
+      this.updateConnectionStatus(error.message || 'Connection failed', 'error');
+      this.updateConnectionStep(2, 'error');
+      
+      // Close connection modal after delay and show error in login modal
+      setTimeout(() => {
+        this.closeModal('connection-test-modal');
+        this.openModal('login-modal');
+        messageEl.className = 'form-message error';
+        messageEl.textContent = error.message || 'Login failed. Please check your credentials.';
+      }, 2000);
+    });
+  },
+  
+  showConnectionTest: function() {
+    this.openModal('connection-test-modal');
+    
+    // Reset connection test state
+    this.updateConnectionProgress(0);
+    this.updateConnectionStatus('Establishing connection...', 'connecting');
+    
+    // Reset all steps
+    for (let i = 1; i <= 3; i++) {
+      const step = document.getElementById(`step-${i}`);
+      if (step) {
+        step.className = 'connection-step';
+        const status = step.querySelector('.step-status');
+        if (status) status.textContent = '⏳';
+      }
+    }
+  },
+  
+  updateConnectionStep: function(stepNumber, state) {
+    const step = document.getElementById(`step-${stepNumber}`);
+    if (!step) return;
+    
+    step.className = `connection-step ${state}`;
+    
+    const statusEl = step.querySelector('.step-status');
+    if (!statusEl) return;
+    
+    switch(state) {
+      case 'active':
+        statusEl.textContent = '🔄';
+        break;
+      case 'complete':
+        statusEl.textContent = '✅';
+        break;
+      case 'error':
+        statusEl.textContent = '❌';
+        break;
+      default:
+        statusEl.textContent = '⏳';
+    }
+  },
+  
+  updateConnectionProgress: function(percent) {
+    const progressFill = document.getElementById('connection-progress-fill');
+    if (progressFill) {
+      progressFill.style.width = percent + '%';
+    }
+  },
+  
+  updateConnectionStatus: function(text, type) {
+    const statusText = document.getElementById('connection-status-text');
+    if (statusText) {
+      statusText.textContent = text;
+      statusText.style.color = type === 'error' ? '#f44336' : (type === 'success' ? '#4caf50' : '#666');
+    }
+  },
+  
+  generateModalQRCode: function() {
+    const qrContainer = document.getElementById('modal-qr-code-display');
+    const qrMessage = document.getElementById('modal-qr-message');
+    
+    qrContainer.innerHTML = '<span style="color:#999;">Generating...</span>';
+    qrMessage.textContent = 'Generating QR code for login...';
+    
+    console.log('Generating direct login QR code for modal...');
+    
+    // Generate a device ID for this session
+    const deviceId = 'desktop_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    fetch(`/api/v1/auth/qr/direct/generate?username=guest&deviceType=desktop`, {
+      method: 'GET'
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to generate QR code');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Modal QR code generated successfully');
+      
+      // Display QR code
+      qrContainer.innerHTML = `<img src="${data.qrCode}" alt="QR Code" style="max-width: 100%; height: auto;" />`;
+      qrMessage.textContent = 'Scan this QR code with your mobile device to log in';
+      
+      // Start polling for login success
+      this.startQRPolling(deviceId);
+    })
+    .catch(error => {
+      console.error('Error generating modal QR code:', error);
+      qrContainer.innerHTML = '<span style="color:#ff4444;">Failed to generate</span>';
+      qrMessage.textContent = 'Error generating QR code. Please try again.';
+    });
   },
   
   hideForm: function() {
@@ -232,19 +490,11 @@ const authChannel = {
   },
   
   showRegister: function() {
-    alert('Registration feature coming soon! Please contact an administrator to create an account.');
+    this.openModal('register-modal');
   },
   
   showQRLogin: function() {
-    const qrFormSection = document.getElementById('qr-login-form-section');
-    if (qrFormSection.style.display === 'none' || !qrFormSection.style.display) {
-      qrFormSection.style.display = 'block';
-      qrForm.scrollIntoView({ behavior: 'smooth' });
-      this.generateQRCode();
-    } else {
-      qrForm.style.display = 'none';
-      this.stopQRPolling();
-    }
+    this.openModal('qr-modal');
   },
   
   generateQRCode: function() {
@@ -338,9 +588,13 @@ const authChannel = {
     
     const messageEl = document.getElementById('windows-message');
     if (messageEl) {
-      messageEl.textContent = 'Authenticating with Windows...';
+      messageEl.textContent = '';
       messageEl.className = 'form-message';
     }
+    
+    // Show connection test modal
+    this.showConnectionTest();
+    setTimeout(() => this.updateConnectionStep(1, 'active'), 300);
     
     // First verify Windows auth is available
     fetch('/api/v1/auth/windows-available', {
@@ -352,6 +606,10 @@ const authChannel = {
         throw new Error(availabilityData.message || 'Windows authentication is not available');
       }
       
+      this.updateConnectionProgress(33);
+      this.updateConnectionStep(1, 'complete');
+      setTimeout(() => this.updateConnectionStep(2, 'active'), 200);
+      
       // Proceed with Windows authentication
       return fetch('/api/v1/auth/windows/windows-login', {
         method: 'GET',
@@ -362,13 +620,15 @@ const authChannel = {
       });
     })
     .then(response => {
+      this.updateConnectionProgress(66);
+      this.updateConnectionStep(2, 'complete');
+      setTimeout(() => this.updateConnectionStep(3, 'active'), 200);
+      
       if (response.status === 401) {
-        // Windows authentication challenge - browser will handle this
         throw new Error('Windows authentication required. Please ensure you are logged into Windows.');
       }
       
       if (response.status === 418) {
-        // Special case: blank password security issue
         return response.json().then(data => {
           throw new Error(data.message || 'Account security issue detected');
         });
@@ -388,21 +648,29 @@ const authChannel = {
         localStorage.setItem('auth_token', data.token);
       }
       
-      if (messageEl) {
-        messageEl.className = 'form-message success';
-        messageEl.textContent = 'Windows authentication successful!';
-      }
+      // Complete connection
+      this.updateConnectionProgress(100);
+      this.updateConnectionStep(3, 'complete');
+      this.updateConnectionStatus('Windows authentication successful!', 'success');
       
       setTimeout(() => {
+        this.closeModal('connection-test-modal');
         this.checkAuthStatus();
       }, 1500);
     })
     .catch(error => {
       console.error('Windows login error:', error);
-      if (messageEl) {
-        messageEl.className = 'form-message error';
-        messageEl.textContent = error.message || 'Windows authentication failed. Please try again.';
-      }
+      
+      this.updateConnectionStatus(error.message || 'Windows authentication failed', 'error');
+      this.updateConnectionStep(1, 'error');
+      
+      setTimeout(() => {
+        this.closeModal('connection-test-modal');
+        if (messageEl) {
+          messageEl.className = 'form-message error';
+          messageEl.textContent = error.message || 'Windows authentication failed. Please try again.';
+        }
+      }, 2000);
     });
   },
   
@@ -415,31 +683,24 @@ const authChannel = {
     // Reset UI
     this.currentUser = null;
     this.checkAuthStatus();
-    
-    // Show login options again
-    document.getElementById('login-card').style.display = 'block';
-    document.getElementById('register-card').style.display = 'block';
-    document.getElementById('qr-login-card').style.display = 'block';
-    
-    const windowsLoginBtn = document.getElementById('windows-login-btn');
-    if (windowsLoginBtn && this.isWindows) {
-      windowsLoginBtn.style.display = 'block';
-    }
   },
   
   showWebAuthn: function() {
+    this.openModal('webauthn-modal');
+  },
+  
+  confirmWebAuthn: function() {
+    this.closeModal('webauthn-modal');
     // Redirect to WebAuthn management page
     window.location.href = '/WebAuthn/manage';
   },
   
   showError: function(message) {
-    const statusEl = document.getElementById('auth-status');
-    statusEl.innerHTML = `
-      <div class="status-indicator status-error">
-        <div class="status-dot"></div>
-        <span>${message}</span>
-      </div>
-    `;
+    const statusBadge = document.getElementById('auth-status-badge');
+    if (statusBadge) {
+      statusBadge.textContent = message;
+      statusBadge.className = 'status-badge error';
+    }
   }
 };
 
