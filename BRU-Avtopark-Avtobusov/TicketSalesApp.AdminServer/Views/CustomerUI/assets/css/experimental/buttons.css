@@ -1,0 +1,153 @@
+/* WebTV HD Button System - Modular CSS */
+/* Extracted and modularized button styles */
+
+/* Base Button Styles */
+button,
+.ButtonBorder {
+	/* Light/Default button - style by pjfrix, modified by SKCro */
+	min-width: 1rem;
+	min-height: 23px;
+	padding: 2px 12px;
+	font-family: var(--standard-font);
+	font-weight: normal;
+	border: 0;
+	border-radius: 8px;
+	font-size: 16pt;
+	background: #afafaf;
+	color: #000;
+	box-shadow:
+		inset 1px 1px 1px .25px #b5b5b5,
+		inset 2px 2px .25px #fff,
+		inset -1px -1px 2px #444444,
+		0 0 1px black,
+		0 0 1px 2px #333333,
+		1px 1px 0 2px #444444,
+		0 0 0 2px #000;
+	cursor: var(--cursor-click);
+}
+
+/* SKCro Theme Button (Blue) */
+body.SKCro button:not(.ButtonBorder2, .ButtonBorder3),
+.blue-button {
+	border: 2px solid #024 !important;
+	border-radius: 8px;
+	background: linear-gradient(#048e, #024e) !important;
+	color: #f0f0f0 !important;
+	text-shadow: 0 -1px #000 !important;
+	box-shadow:
+		inset 2px 2px 2px #fff4,
+		inset -2px -2px 2px #0004,
+		2px 2px 2px #0008 !important;
+}
+
+/* ButtonBorder2 - Service Page Button Style */
+.ButtonBorder2 {
+	padding: 0.4rem 0.8rem;
+	border-image-source: url(../images/ButtonBorder2.svg);
+	border-image-slice: 15 fill;
+	border-image-repeat: stretch;
+	border-style: solid;
+	border-width: 0.3rem;
+	border-radius: 0;
+	margin-left: 0.8rem;
+	float: right;
+	font-size: 16pt;
+	font-family: var(--standard-font);
+	font-weight: normal;
+	background: #222;
+	color: var(--webtv-buttoncolor);
+	text-shadow: 0.15rem 0.15rem 0 #000;
+	box-shadow: 0 0;
+	cursor: var(--cursor-click);
+}
+
+body.SKCro .ButtonBorder2 {
+	border-image-source: url(../images/ButtonBorder2Blue.svg);
+}
+
+/* ButtonBorder3 - Alternate Dialog Button Style */
+.ButtonBorder3 {
+	padding: 0 0.5rem 0.1rem 0.5rem;
+	border-image-source: url(../images/ButtonBorder3.svg);
+	border-image-slice: 5 fill;
+	border-image-repeat: stretch stretch;
+	border-style: solid;
+	border-width: 0.3rem;
+	border-radius: 0;
+	font-size: 14pt;
+	font-family: var(--standard-font);
+	font-weight: bold;
+	background: #0000;
+	color: var(--webtv-green);
+	box-shadow: 0 0;
+}
+
+body.SKCro .ButtonBorder3 {
+	color: #0080ff;
+	text-shadow: 0 -2px #00122288;
+}
+
+/* Button States */
+.clickable {
+	cursor: var(--cursor-click);
+}
+
+.clickable:active,
+button:active,
+.ButtonBorder:active {
+	cursor: var(--cursor-active);
+}
+
+button:disabled,
+.ButtonBorder:disabled {
+	opacity: 0.5;
+	cursor: var(--cursor-no);
+}
+
+/* Submit Button Variant */
+.submit {
+	/* Inherits from button base styles */
+}
+
+/* No Select Class (prevents text selection) */
+.noselect {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+/* Mobile Responsive Button Styles */
+@media (max-width: 760px) {
+	button,
+	.ButtonBorder {
+		font-size: 14pt;
+		padding: 0.3rem 0.5rem;
+	}
+
+	.ButtonBorder2 {
+		font-size: 14pt;
+		padding: 0.3rem 0.6rem;
+		border-width: 0.25rem;
+		margin-left: 0.5rem;
+	}
+
+	.ButtonBorder3 {
+		font-size: 12pt;
+		padding: 0 0.4rem 0.1rem 0.4rem;
+		border-width: 0.25rem;
+	}
+}
+
+/* Print Styles - Simplify buttons for printing */
+@media print {
+	button,
+	.ButtonBorder,
+	.ButtonBorder2,
+	.ButtonBorder3 {
+		color: #111;
+		text-shadow: 0 0;
+		box-shadow: none;
+		border: 1px solid #000;
+	}
+}
