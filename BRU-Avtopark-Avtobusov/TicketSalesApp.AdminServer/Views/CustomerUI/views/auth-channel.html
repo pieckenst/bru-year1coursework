@@ -37,7 +37,7 @@
         <div class="auth-options-grid" id="auth-options-grid">
           
           <!-- Sign In Option -->
-          <div class="auth-option-item" onclick="authChannel.showLogin()">
+          <div class="auth-option-item" onclick="authChannel.showLogin()" onmouseover="authChannel.playSound('button-hover')">
             <div class="auth-option-card">
               <div class="option-icon">🔑</div>
               <h3>Sign In</h3>
@@ -46,7 +46,7 @@
           </div>
 
           <!-- QR Code Login Option -->
-          <div class="auth-option-item" onclick="authChannel.showQRLogin()">
+          <div class="auth-option-item" onclick="authChannel.showQRLogin()" onmouseover="authChannel.playSound('button-hover')">
             <div class="auth-option-card">
               <div class="option-icon">📱</div>
               <h3>Smart Device</h3>
@@ -55,7 +55,7 @@
           </div>
 
           <!-- Register Option -->
-          <div class="auth-option-item" onclick="authChannel.showRegister()">
+          <div class="auth-option-item" onclick="authChannel.showRegister()" onmouseover="authChannel.playSound('button-hover')">
             <div class="auth-option-card">
               <div class="option-icon">📝</div>
               <h3>Register</h3>
@@ -64,7 +64,7 @@
           </div>
 
           <!-- WebAuthn Option -->
-          <div class="auth-option-item" onclick="authChannel.showWebAuthn()">
+          <div class="auth-option-item" onclick="authChannel.showWebAuthn()" onmouseover="authChannel.playSound('button-hover')">
             <div class="auth-option-card">
               <div class="option-icon">🔑</div>
               <h3>WebAuthn</h3>
@@ -81,7 +81,7 @@
         <h2 class="section-title">Windows Authentication</h2>
         
         <div class="auth-options-grid">
-          <div class="auth-option-item" onclick="authChannel.doWindowsLogin()">
+          <div class="auth-option-item" onclick="authChannel.doWindowsLogin()" onmouseover="authChannel.playSound('button-hover')">
             <div class="auth-option-card windows-card">
               <div class="option-icon">🪟</div>
               <h3>Windows Auth</h3>
@@ -98,7 +98,7 @@
         <h2 class="section-title">Account Actions</h2>
         
         <div class="auth-options-grid">
-          <div class="auth-option-item" onclick="authChannel.logout()">
+          <div class="auth-option-item" onclick="authChannel.logout()" onmouseover="authChannel.playSound('button-hover')">
             <div class="auth-option-card">
               <div class="option-icon" style="color:#d9534f;">🚪</div>
               <h3>Disconnect</h3>
@@ -116,7 +116,7 @@
 
   <!-- Fixed Footer Navigation -->
   <div class="auth-footer">
-    <button class="wii-button wii-button-back" onclick="channelManager.returnToMenu()">
+    <button class="wii-button wii-button-back" onclick="channelManager.returnToMenu()" onmouseover="authChannel.playSound('button-hover')">
       <span>← Back to Menu</span>
     </button>
   </div>

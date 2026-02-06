@@ -1277,6 +1277,23 @@ class WiiChannelManager {
             this.log('debug', 'Cleared splash screen content and background');
         }
         
+        // Restart background music when returning to menu
+        const music = document.getElementById('bg-music');
+        if (music) {
+            music.currentTime = 0; // Reset to beginning for smooth restart
+            music.play()
+                .then(() => {
+                    this.log('debug', 'Background music restarted successfully');
+                })
+                .catch(error => {
+                    this.log('warn', 'Could not restart background music', {
+                        error: error.message
+                    });
+                });
+        } else {
+            this.log('warn', 'Background music element not found');
+        }
+        
         // Reset channel manager state
         this.currentChannel = null;
         this.isLoading = false;
@@ -1307,7 +1324,8 @@ class WiiChannelManager {
         this.log('info', 'Successfully initiated return to main menu', {
             stateReset: true,
             currentChannelCleared: true,
-            loadingStatesCleared: true
+            loadingStatesCleared: true,
+            backgroundMusicRestarted: true
         });
     }
 
@@ -1323,7 +1341,7 @@ class WiiChannelManager {
                 userInitiated: true
             });
             
-            this.playSound('select');
+            this.playSound('button-select');
             this.executeChannelAction(this.currentChannel);
         } else {
             this.log('warn', 'No current channel to start - user clicked Start but no channel is active');
@@ -1331,66 +1349,198 @@ class WiiChannelManager {
     }
 
     /**
-     * Play sound effect
+     * Initialize Web Audio API context for WAV support
      */
-    playSound(soundName) {
+    getAudioContext() {
+        if (!this.audioContext) {
+            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            this.audioBuffers = new Map(); // Cache decoded audio buffers
+            this.log('info', 'Web Audio API context initialized', {
+                sampleRate: this.audioContext.sampleRate,
+                state: this.audioContext.state
+            });
+        }
+        return this.audioContext;
+    }
+
+    /**
+     * Load and decode audio file using Web Audio API (supports WAV)
+     */
+    async loadAudioBuffer(soundName, audioPath) {
+        const cacheKey = `${soundName}_${audioPath}`;
+        
+        // Check if already cached
+        if (this.audioBuffers && this.audioBuffers.has(cacheKey)) {
+            this.log('debug', 'Using cached audio buffer', { soundName, audioPath });
+            return this.audioBuffers.get(cacheKey);
+        }
+
+        try {
+            this.log('debug', 'Fetching audio file for Web Audio API', { soundName, audioPath });
+            const response = await fetch(audioPath);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const arrayBuffer = await response.arrayBuffer();
+            this.log('debug', 'Audio file fetched, decoding...', { 
+                soundName, 
+                audioPath,
+                size: arrayBuffer.byteLength 
+            });
+            
+            const audioContext = this.getAudioContext();
+            const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+            
+            this.log('info', 'Audio buffer decoded successfully', {
+                soundName,
+                audioPath,
+                duration: audioBuffer.duration,
+                channels: audioBuffer.numberOfChannels,
+                sampleRate: audioBuffer.sampleRate
+            });
+            
+            // Cache the decoded buffer
+            if (!this.audioBuffers) {
+                this.audioBuffers = new Map();
+            }
+            this.audioBuffers.set(cacheKey, audioBuffer);
+            
+            return audioBuffer;
+        } catch (error) {
+            this.log('error', 'Failed to load/decode audio buffer', {
+                soundName,
+                audioPath,
+                error: error.message
+            });
+            return null;
+        }
+    }
+
+    /**
+     * Play audio buffer using Web Audio API
+     */
+    playAudioBuffer(audioBuffer, soundName) {
+        try {
+            const audioContext = this.getAudioContext();
+            
+            // Resume context if suspended (required for user interaction)
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            
+            const source = audioContext.createBufferSource();
+            source.buffer = audioBuffer;
+            source.connect(audioContext.destination);
+            source.start(0);
+            
+            this.log('debug', 'Playing audio buffer via Web Audio API', {
+                soundName,
+                duration: audioBuffer.duration,
+                contextState: audioContext.state
+            });
+            
+            return true;
+        } catch (error) {
+            this.log('error', 'Failed to play audio buffer', {
+                soundName,
+                error: error.message
+            });
+            return false;
+        }
+    }
+
+    /**
+     * Play sound effect with WAV support via Web Audio API
+     */
+    async playSound(soundName) {
         this.log('debug', 'Playing sound effect', { soundName });
         
-        let audio = document.getElementById(soundName);
+        // Try multiple file extensions: .mp3 first (better browser support), then .wav
+        const extensions = ['.mp3', '.wav'];
         
-        // If audio element doesn't exist, try to create it dynamically
-        if (!audio) {
-            this.log('debug', 'Audio element not found, attempting to create dynamically', { soundName });
+        for (const ext of extensions) {
+            const audioPath = `/customerui/assets/audio/${soundName}${ext}`;
             
-            // Try to load from /customerui/assets/audio/{soundName}.mp3
-            const audioPath = `/customerui/assets/audio/${soundName}.mp3`;
+            this.log('debug', `Attempting to load audio: ${audioPath}`, { 
+                soundName, 
+                extension: ext 
+            });
             
-            audio = document.createElement('audio');
-            audio.id = soundName;
-            audio.src = audioPath;
-            audio.preload = 'auto';
-            
-            // Add to sfx container
-            const sfxContainer = document.querySelector('.sfx');
-            if (sfxContainer) {
-                sfxContainer.appendChild(audio);
-                this.log('debug', 'Created and added audio element dynamically', { 
-                    soundName, 
-                    audioPath,
-                    addedToContainer: true
-                });
+            // For WAV files, use Web Audio API
+            if (ext === '.wav') {
+                try {
+                    const audioBuffer = await this.loadAudioBuffer(soundName, audioPath);
+                    if (audioBuffer) {
+                        const played = this.playAudioBuffer(audioBuffer, soundName);
+                        if (played) {
+                            this.log('info', 'WAV sound played successfully via Web Audio API', {
+                                soundName,
+                                audioPath
+                            });
+                            return; // Success, exit
+                        }
+                    }
+                } catch (error) {
+                    this.log('debug', `WAV playback failed, will try next extension`, {
+                        soundName,
+                        audioPath,
+                        error: error.message
+                    });
+                    continue; // Try next extension
+                }
             } else {
-                // Fallback: add to body
-                document.body.appendChild(audio);
-                this.log('debug', 'Created and added audio element to body (sfx container not found)', { 
-                    soundName, 
-                    audioPath 
-                });
+                // For MP3 files, use standard HTML5 audio (better compatibility)
+                try {
+                    let audio = document.getElementById(`${soundName}_${ext}`);
+                    
+                    if (!audio) {
+                        audio = document.createElement('audio');
+                        audio.id = `${soundName}_${ext}`;
+                        audio.preload = 'auto';
+                        audio.src = audioPath;
+                        
+                        // Add to sfx container or body
+                        const sfxContainer = document.querySelector('.sfx');
+                        if (sfxContainer) {
+                            sfxContainer.appendChild(audio);
+                        } else {
+                            document.body.appendChild(audio);
+                        }
+                        
+                        this.log('debug', 'Created HTML5 audio element', { 
+                            soundName, 
+                            audioPath 
+                        });
+                    }
+                    
+                    // Reset and play
+                    audio.currentTime = 0;
+                    await audio.play();
+                    
+                    this.log('info', 'MP3 sound played successfully via HTML5 audio', {
+                        soundName,
+                        audioPath
+                    });
+                    return; // Success, exit
+                } catch (error) {
+                    this.log('debug', `MP3 playback failed, will try next extension`, {
+                        soundName,
+                        audioPath,
+                        error: error.message
+                    });
+                    continue; // Try next extension
+                }
             }
         }
         
-        if (audio) {
-            // Reset audio to beginning if it's already playing
-            audio.currentTime = 0;
-            
-            audio.play()
-                .then(() => {
-                    this.log('debug', 'Sound played successfully', { soundName });
-                })
-                .catch(error => {
-                    this.log('warn', 'Could not play sound', {
-                        soundName,
-                        error: error.message,
-                        audioSrc: audio.src,
-                        audioReadyState: audio.readyState
-                    });
-                });
-        } else {
-            this.log('error', 'Failed to create or find audio element', { 
-                soundName,
-                availableAudioElements: Array.from(document.querySelectorAll('audio')).map(a => a.id).filter(id => id)
-            });
-        }
+        // If we get here, all attempts failed
+        this.log('warn', 'Failed to play sound with any supported format', {
+            soundName,
+            triedExtensions: extensions,
+            availableAudioElements: Array.from(document.querySelectorAll('audio')).map(a => a.id).filter(id => id)
+        });
     }
 
     /**

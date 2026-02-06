@@ -1,10 +1,21 @@
 // Authentication Channel Manager
-const authChannel = {
-  currentUser: null,
-  isWindows: false,
-  qrCheckInterval: null,
-  
-  init: function() {
+// Use window.authChannel to avoid redeclaration errors on view reload
+if (!window.authChannel) {
+  window.authChannel = {
+    currentUser: null,
+    isWindows: false,
+    qrCheckInterval: null,
+    
+    // Play sound effect using the global channel manager's sound system
+    playSound: function(soundName) {
+      if (window.channelManager && typeof window.channelManager.playSound === 'function') {
+        window.channelManager.playSound(soundName);
+      } else {
+        console.warn('Channel manager sound system not available');
+      }
+    },
+    
+    init: function() {
     console.log('Initializing authentication channel...');
     
     // First, check Windows authentication availability to render UI correctly
@@ -207,6 +218,8 @@ const authChannel = {
   },
   
   showLogin: function() {
+    // Play select sound when opening modal
+    this.playSound('button-select');
     // Show modal instead of inline form
     this.openModal('login-modal');
   },
@@ -224,6 +237,9 @@ const authChannel = {
   },
   
   closeModal: function(modalId) {
+    // Play back sound when closing modal
+    this.playSound('back');
+    
     const modal = document.getElementById(modalId);
     if (modal) {
       modal.classList.remove('active');
@@ -249,12 +265,17 @@ const authChannel = {
     
     // Client-side validation
     if (!username || !password) {
+      // Play error sound for validation failure
+      this.playSound('Error');
       messageEl.className = 'form-message error';
       messageEl.textContent = 'Please enter both username and password';
       return;
     }
     
     console.log('Attempting modal login with v1 API...');
+    
+    // Play select sound for login attempt
+    this.playSound('button-select');
     
     // Close login modal and show connection test modal
     this.closeModal('login-modal');
@@ -295,6 +316,9 @@ const authChannel = {
     .then(data => {
       console.log('Modal login successful:', data);
       
+      // Play notification sound for successful login
+      this.playSound('Notification');
+      
       // Update progress
       this.updateConnectionProgress(66);
       this.updateConnectionStep(2, 'complete');
@@ -320,6 +344,9 @@ const authChannel = {
     })
     .catch(error => {
       console.error('Modal login error:', error);
+      
+      // Play error sound for failed login
+      this.playSound('Error');
       
       // Show error in connection test
       this.updateConnectionStatus(error.message || 'Connection failed', 'error');
@@ -502,10 +529,12 @@ const authChannel = {
   },
   
   showRegister: function() {
+    this.playSound('button-select');
     this.openModal('register-modal');
   },
   
   showQRLogin: function() {
+    this.playSound('button-select');
     this.openModal('qr-modal');
   },
   
@@ -561,6 +590,9 @@ const authChannel = {
         if (data.success && data.token) {
           console.log('QR login successful!');
           
+          // Play notification sound for successful QR login
+          authChannel.playSound('Notification');
+          
           // Store JWT token
           localStorage.setItem('auth_token', data.token);
           
@@ -597,6 +629,9 @@ const authChannel = {
   
   doWindowsLogin: function() {
     console.log('Attempting Windows authentication...');
+    
+    // Play select sound for Windows login attempt
+    this.playSound('button-select');
     
     const messageEl = document.getElementById('windows-message');
     if (messageEl) {
@@ -655,6 +690,9 @@ const authChannel = {
     .then(data => {
       console.log('Windows login successful:', data);
       
+      // Play notification sound for successful Windows login
+      this.playSound('Notification');
+      
       // Store JWT token
       if (data.token) {
         localStorage.setItem('auth_token', data.token);
@@ -673,6 +711,9 @@ const authChannel = {
     .catch(error => {
       console.error('Windows login error:', error);
       
+      // Play error sound for failed Windows login
+      this.playSound('Error');
+      
       this.updateConnectionStatus(error.message || 'Windows authentication failed', 'error');
       this.updateConnectionStep(1, 'error');
       
@@ -689,6 +730,9 @@ const authChannel = {
   logout: function() {
     console.log('Logging out...');
     
+    // Play back sound for logout
+    this.playSound('back');
+    
     // Clear stored token
     localStorage.removeItem('auth_token');
     
@@ -698,10 +742,12 @@ const authChannel = {
   },
   
   showWebAuthn: function() {
+    this.playSound('button-select');
     this.openModal('webauthn-modal');
   },
   
   confirmWebAuthn: function() {
+    this.playSound('button-select');
     this.closeModal('webauthn-modal');
     // Redirect to WebAuthn management page
     window.location.href = '/WebAuthn/manage';
@@ -714,20 +760,17 @@ const authChannel = {
       statusBadge.className = 'status-badge error';
     }
   }
-};
+  };
+}
 
 // Initialize when DOM is ready or if already loaded
-// Use a flag to prevent double initialization
-if (!window.authChannelInitialized) {
-  window.authChannelInitialized = true;
-  
-  if (document.readyState === 'loading') {
-    // Document still loading, wait for DOMContentLoaded
-    document.addEventListener('DOMContentLoaded', function() {
-      authChannel.init();
-    });
-  } else {
-    // Document already loaded (AJAX view load), initialize immediately
-    authChannel.init();
-  }
+// Always reinitialize on view load (handles AJAX navigation)
+if (document.readyState === 'loading') {
+  // Document still loading, wait for DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', function() {
+    window.authChannel.init();
+  });
+} else {
+  // Document already loaded (AJAX view load), initialize immediately
+  window.authChannel.init();
 }
