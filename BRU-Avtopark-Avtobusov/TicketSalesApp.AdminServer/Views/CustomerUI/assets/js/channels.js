@@ -678,10 +678,6 @@ class WiiChannelManager {
         const startTime = performance.now();
         
         try {
-            // Play activation sound
-            this.log('debug', 'Playing activation sound: zip', { channelKey });
-            this.playSound('zip');
-            
             // Find channel data from already loaded channels instead of fetching individually
             this.log('debug', 'Finding channel data from loaded channels...', { channelKey });
             const channel = this.channels.find(c => c.channelKey === channelKey);
@@ -693,6 +689,10 @@ class WiiChannelManager {
                 });
                 return;
             }
+            
+            // AUTHENTIC WII BEHAVIOR: Play 'zip' sound during channel zoom animation
+            this.log('debug', 'Playing zoom animation sound: zip', { channelKey });
+            this.playSound('zip');
             
             this.log('info', 'Channel data found successfully', {
                 channelKey: channel.channelKey,
@@ -1099,7 +1099,7 @@ class WiiChannelManager {
             this.log('debug', 'Added channel-splash class to body', { channelKey: channel.channelKey });
         }
         
-        // Remove splash-switch class after animation
+        // Remove splash-switch class and play channel-specific sound after animation completes
         const animationDuration = channel.animationDuration || this.config.animationDefaults.duration;
         setTimeout(() => {
             if (body) {
@@ -1109,12 +1109,27 @@ class WiiChannelManager {
                     delay: animationDuration
                 });
             }
+            
+            // AUTHENTIC WII BEHAVIOR: Play channel-specific sound AFTER animation completes
+            if (channel.soundEffect) {
+                this.log('debug', `Playing channel-specific splash sound: ${channel.soundEffect}`, { 
+                    channelKey: channel.channelKey,
+                    soundEffect: channel.soundEffect,
+                    playedAfterAnimation: true
+                });
+                this.playSound(channel.soundEffect);
+            } else {
+                this.log('debug', 'No channel-specific sound effect configured', { 
+                    channelKey: channel.channelKey 
+                });
+            }
         }, animationDuration);
 
         this.log('info', 'Channel animation applied successfully', {
             channelKey: channel.channelKey,
             animationDuration: animationDuration,
-            classesAdded: ['channel-splash']
+            classesAdded: ['channel-splash'],
+            willPlaySoundAfter: !!channel.soundEffect
         });
     }
 
@@ -1321,8 +1336,43 @@ class WiiChannelManager {
     playSound(soundName) {
         this.log('debug', 'Playing sound effect', { soundName });
         
-        const audio = document.getElementById(soundName);
+        let audio = document.getElementById(soundName);
+        
+        // If audio element doesn't exist, try to create it dynamically
+        if (!audio) {
+            this.log('debug', 'Audio element not found, attempting to create dynamically', { soundName });
+            
+            // Try to load from /customerui/assets/audio/{soundName}.mp3
+            const audioPath = `/customerui/assets/audio/${soundName}.mp3`;
+            
+            audio = document.createElement('audio');
+            audio.id = soundName;
+            audio.src = audioPath;
+            audio.preload = 'auto';
+            
+            // Add to sfx container
+            const sfxContainer = document.querySelector('.sfx');
+            if (sfxContainer) {
+                sfxContainer.appendChild(audio);
+                this.log('debug', 'Created and added audio element dynamically', { 
+                    soundName, 
+                    audioPath,
+                    addedToContainer: true
+                });
+            } else {
+                // Fallback: add to body
+                document.body.appendChild(audio);
+                this.log('debug', 'Created and added audio element to body (sfx container not found)', { 
+                    soundName, 
+                    audioPath 
+                });
+            }
+        }
+        
         if (audio) {
+            // Reset audio to beginning if it's already playing
+            audio.currentTime = 0;
+            
             audio.play()
                 .then(() => {
                     this.log('debug', 'Sound played successfully', { soundName });
@@ -1330,11 +1380,13 @@ class WiiChannelManager {
                 .catch(error => {
                     this.log('warn', 'Could not play sound', {
                         soundName,
-                        error: error.message
+                        error: error.message,
+                        audioSrc: audio.src,
+                        audioReadyState: audio.readyState
                     });
                 });
         } else {
-            this.log('warn', 'Sound element not found', { 
+            this.log('error', 'Failed to create or find audio element', { 
                 soundName,
                 availableAudioElements: Array.from(document.querySelectorAll('audio')).map(a => a.id).filter(id => id)
             });

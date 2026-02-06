@@ -38,10 +38,29 @@ namespace TicketSalesApp.Services.Implementations
                 _logger.LogInformation("Retrieved {Count} active channels in {QueryTime}ms", 
                     channels.Count(), queryTime.TotalMilliseconds);
                 
+                // Apply default sound effects for specific channels if not already set
                 foreach (var channel in channels)
                 {
-                    _logger.LogDebug("Active channel: {ChannelKey} - Name: {Name}, Position: {Position}, SpriteId: {SpriteId}, IconPath: {IconPath}", 
-                        channel.ChannelKey, channel.Name, channel.Position, channel.SpriteId, channel.IconPath);
+                    // Assign sound effects based on channel key if not already configured
+                    if (string.IsNullOrEmpty(channel.SoundEffect))
+                    {
+                        switch (channel.ChannelKey.ToLower())
+                        {
+                            case "ticket-sales":
+                            case "my-tickets":
+                                channel.SoundEffect = "Eshop";
+                                _logger.LogDebug("Assigned Eshop sound to channel: {ChannelKey}", channel.ChannelKey);
+                                break;
+                            case "mii-channel":
+                                channel.SoundEffect = "Wii_Disc_Channel_Banner";
+                                _logger.LogDebug("Assigned Wii Disc Channel sound to channel: {ChannelKey}", channel.ChannelKey);
+                                break;
+                            // Add more channel-specific sounds here as needed
+                        }
+                    }
+                    
+                    _logger.LogDebug("Active channel: {ChannelKey} - Name: {Name}, Position: {Position}, SpriteId: {SpriteId}, IconPath: {IconPath}, SoundEffect: {SoundEffect}", 
+                        channel.ChannelKey, channel.Name, channel.Position, channel.SpriteId, channel.IconPath, channel.SoundEffect ?? "none");
                 }
                 
                 return channels;
