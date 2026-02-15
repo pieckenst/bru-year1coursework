@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperNova.Desktop", "SuperN
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperNova.Runtime", "SuperNova.Runtime\SuperNova.Runtime.csproj", "{C16F9768-2D5F-B38D-4635-10BB39496463}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "dynamic_forms_frontend_bru_avtopark", "Dynamic_Forms_Frontend_BRU_Avtopark\dynamic_forms_frontend_bru_avtopark.esproj", "{B4CBA9E5-4699-4E98-E9FF-EE24F77A0DB0}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "dynamic_forms_frontend_bru_avtopark", "dynamic_forms_frontend_bru_avtopark\dynamic_forms_frontend_bru_avtopark.esproj", "{B4CBA9E5-4699-4E98-E9FF-EE24F77A0DB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
