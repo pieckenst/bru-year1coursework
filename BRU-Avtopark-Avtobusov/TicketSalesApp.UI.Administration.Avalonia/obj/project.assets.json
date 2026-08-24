@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "targets": {
     "net9.0": {
       "Avalonia/11.2.3": {
@@ -10561,26 +10561,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\andrej\\.nuget\\packages\\": {},
-    "C:\\Program Files\\DevExpress 24.2\\Components\\Offline Packages": {},
-    "E:\\sdk\\NuGetPackages": {}
+    "C:\\Users\\rsncra\\.nuget\\packages\\": {},
+    "E:\\sdkss\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj",
+      "projectUniqueName": "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj",
       "projectName": "TicketSalesApp.UI.Administration.Avalonia",
-      "projectPath": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj",
-      "packagesPath": "C:\\Users\\andrej\\.nuget\\packages\\",
-      "outputPath": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\obj\\",
+      "projectPath": "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\TicketSalesApp.UI.Administration.Avalonia.csproj",
+      "packagesPath": "C:\\Users\\rsncra\\.nuget\\packages\\",
+      "outputPath": "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.UI.Administration.Avalonia\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files\\DevExpress 24.2\\Components\\Offline Packages",
-        "E:\\sdk\\NuGetPackages"
+        "E:\\sdkss\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\andrej\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 24.2.config",
+        "C:\\Users\\rsncra\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -10589,19 +10586,19 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\DevExpress 24.2\\Components\\System\\Components\\Packages": {},
         "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net9.0": {
+          "framework": "net9.0",
           "targetAlias": "net9.0",
           "projectReferences": {
-            "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj": {
-              "projectPath": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj"
+            "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj": {
+              "projectPath": "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj"
             },
-            "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj": {
-              "projectPath": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj"
+            "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj": {
+              "projectPath": "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj"
             }
           }
         }
@@ -10616,10 +10613,11 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "10.0.300"
     },
     "frameworks": {
       "net9.0": {
+        "framework": "net9.0",
         "targetAlias": "net9.0",
         "dependencies": {
           "Avalonia": {
@@ -10781,7 +10779,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.303/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json"
       }
     }
   },

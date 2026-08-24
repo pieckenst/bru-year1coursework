@@ -1,1 +1,2 @@
 D:\code\bru-year1coursework\BRU-Avtopark-Avtobusov\Dynamic_Forms_Frontend_BRU_Avtopark\obj\Debug\dynamic_forms_frontend_bru_avtopark.esproj.CoreCompileInputs.cache
+E:\code\bru-year1coursework\BRU-Avtopark-Avtobusov\Dynamic_Forms_Frontend_BRU_Avtopark\obj\Debug\dynamic_forms_frontend_bru_avtopark.esproj.CoreCompileInputs.cache

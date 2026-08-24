@@ -25,7 +25,8 @@ public partial class ExpressionExecutor : VB6Visitor<Task<object?>>
 
     public async Task<Vb6Value?> EvaluateFunction(string name, List<Vb6Value> args)
     {
-        return await interpreter.BuiltIns.EvaluateBuiltInFunction(name, args);
+        return new Vb6Value();
+        //return await interpreter.BuiltIns.EvaluateBuiltInFunction(name, args);
     }
 
     public async Task<(Vb6Value, Vb6Value)> GetTwoValues(VB6Parser.ValueStmtContext[] context)
@@ -220,10 +221,10 @@ public partial class ExpressionExecutor : VB6Visitor<Task<object?>>
 
             if (!interpreter.ExecutionContext.TryGetVariable(env, identifier, out var variable))
             {
-                if (interpreter.BuiltIns.TryGetBuiltInConstant(identifier, out var builtInConst))
-                    return builtInConst;
-                else
-                    throw new VBVariableNotDefinedException(identifier);
+               // if (interpreter.BuiltIns.TryGetBuiltInConstant(identifier, out var builtInConst))
+                //    return builtInConst;
+                //else
+                   // throw new VBVariableNotDefinedException(identifier);
             }
 
             return variable;
@@ -580,7 +581,8 @@ public partial class ExpressionExecutor : VB6Visitor<Task<object?>>
     public override async Task<object?> VisitVsMid(VB6Parser.VsMidContext context)
     {
         var args = await EvaluateCallArgs(context.midStmt().argsCall());
-        return await interpreter.BuiltIns.EvaluateBuiltInFunction("Mid", args);
+        return new object();
+     //   return await interpreter.BuiltIns.EvaluateBuiltInFunction("Mid", args);
     }
 
     private static int Eqv(int expression1, int expression2) => ~(expression1 ^ expression2);

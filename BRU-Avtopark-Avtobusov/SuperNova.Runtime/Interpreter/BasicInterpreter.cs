@@ -30,7 +30,7 @@ public partial class BasicInterpreter : IAntlrErrorListener<IToken>, IAntlrError
         string code)
     {
         ExecutionContext = executionContext;
-        BuiltIns = new VB6BuiltIns(stdLib);
+        BuiltIns = new  VB6BuiltIns();
         this.stdLib = stdLib;
         this.rootEnv = rootEnv;
         this.code = code;
@@ -71,10 +71,10 @@ public partial class BasicInterpreter : IAntlrErrorListener<IToken>, IAntlrError
             var statementExecutor = new StatementExecutor(this, env);
             await statementExecutor.Execute(body);
         }
-        else if (await BuiltIns.EvaluateBuiltInFunction(name, args ?? []) is { } result)
-        {
-
-        }
+       // else if (await BuiltIns.EvaluateBuiltInFunction(name, args ?? []) is { } result)
+       // {
+//
+       // }
         else if (!ignoreMissing)
             throw new VBCompileErrorException("Sub or Function not defined (" + name + ')');
     }

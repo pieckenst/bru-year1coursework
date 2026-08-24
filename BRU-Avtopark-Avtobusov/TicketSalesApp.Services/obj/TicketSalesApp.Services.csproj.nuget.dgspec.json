@@ -1,25 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj": {}
+    "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj": {}
   },
   "projects": {
-    "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj": {
+    "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj",
+        "projectUniqueName": "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj",
         "projectName": "TicketSalesApp.Core",
-        "projectPath": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj",
-        "packagesPath": "C:\\Users\\andrej\\.nuget\\packages\\",
-        "outputPath": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\obj\\",
+        "projectPath": "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj",
+        "packagesPath": "C:\\Users\\rsncra\\.nuget\\packages\\",
+        "outputPath": "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\DevExpress 24.2\\Components\\Offline Packages",
-          "E:\\sdk\\NuGetPackages"
+          "E:\\sdkss\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\andrej\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 24.2.config",
+          "C:\\Users\\rsncra\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -28,12 +26,12 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\DevExpress 24.2\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
+            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {}
           }
@@ -48,10 +46,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.300"
       },
       "frameworks": {
         "net9.0": {
+          "framework": "net9.0",
           "targetAlias": "net9.0",
           "dependencies": {
             "GirCore.Adw-1": {
@@ -161,26 +160,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj": {
+    "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj",
+        "projectUniqueName": "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj",
         "projectName": "TicketSalesApp.Services",
-        "projectPath": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj",
-        "packagesPath": "C:\\Users\\andrej\\.nuget\\packages\\",
-        "outputPath": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\obj\\",
+        "projectPath": "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\TicketSalesApp.Services.csproj",
+        "packagesPath": "C:\\Users\\rsncra\\.nuget\\packages\\",
+        "outputPath": "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Services\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\DevExpress 24.2\\Components\\Offline Packages",
-          "E:\\sdk\\NuGetPackages"
+          "E:\\sdkss\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\andrej\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 24.2.config",
+          "C:\\Users\\rsncra\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -189,16 +186,16 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\DevExpress 24.2\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
+            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {
-              "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj": {
-                "projectPath": "D:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj"
+              "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj": {
+                "projectPath": "E:\\code\\bru-year1coursework\\BRU-Avtopark-Avtobusov\\TicketSalesApp.Core\\TicketSalesApp.Core.csproj"
               }
             }
           }
@@ -213,10 +210,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.300"
       },
       "frameworks": {
         "net9.0": {
+          "framework": "net9.0",
           "targetAlias": "net9.0",
           "dependencies": {
             "CsvHelper": {
@@ -290,7 +288,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

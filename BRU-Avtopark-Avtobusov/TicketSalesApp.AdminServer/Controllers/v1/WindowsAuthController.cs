@@ -73,6 +73,28 @@ namespace TicketSalesApp.AdminServer.Controllers.v1
 
                 Console.WriteLine($"[WindowsLogin] Authentication successful for user: {user.Login}");
                 
+                // Extract Windows authentication protocol information
+                var authInfo = new
+                {
+                    AuthenticationType = wi.AuthenticationType,
+                    IsAuthenticated = wi.IsAuthenticated,
+                    IsGuest = wi.IsGuest,
+                    IsSystem = wi.IsSystem,
+                    IsAnonymous = wi.IsAnonymous,
+                    UserSid = wi.User?.ToString(),
+                    OwnerSid = wi.Owner?.ToString(),
+                    ImpersonationLevel = wi.ImpersonationLevel.ToString(),
+                    Token = wi.Token.ToString(),
+                    Groups = wi.Groups?.Select(g => g.ToString()).ToArray()
+                };
+
+                // Extract HTTP authentication headers
+                var authHeaders = new
+                {
+                    Authorization = HttpContext.Request.Headers["Authorization"].ToString(),
+                    WwwAuthenticate = HttpContext.Request.Headers["Www-Authenticate"].ToString()
+                };
+
                 var response = new
                 {
                     token,
@@ -84,10 +106,19 @@ namespace TicketSalesApp.AdminServer.Controllers.v1
                         user.Role,
                         IsWindowsAuth = true,
                         DoesWindowsAccountNeedLinking = user.DoesWindowsAccountNeedLinking
+                    },
+                    windowsAuth = new
+                    {
+                        protocol = authInfo.AuthenticationType,
+                        isNtlm = authInfo.AuthenticationType?.Equals("NTLM", StringComparison.OrdinalIgnoreCase) ?? false,
+                        isNegotiate = authInfo.AuthenticationType?.Equals("Negotiate", StringComparison.OrdinalIgnoreCase) ?? false,
+                        isKerberos = authInfo.AuthenticationType?.Equals("Kerberos", StringComparison.OrdinalIgnoreCase) ?? false,
+                        authenticationDetails = authInfo,
+                        httpHeaders = authHeaders
                     }
                 };
 
-                Console.WriteLine($"[WindowsLogin] Returning successful authentication response");
+                Console.WriteLine($"[WindowsLogin] Returning successful authentication response with protocol info: {authInfo.AuthenticationType}");
                 return Ok(response);
             }
             catch (Exception ex)

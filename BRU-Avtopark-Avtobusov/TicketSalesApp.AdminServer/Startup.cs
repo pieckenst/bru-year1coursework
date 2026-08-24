@@ -502,6 +502,9 @@ namespace TicketSalesApp.AdminServer
                 Authorization = new[] { new HangfireAuthorizationFilter() }
             });
 
+            // Configure recurring background jobs
+            ScheduledJobsConfiguration.ConfigureRecurringJobs();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers().RequireCors("AllowAll");
@@ -706,6 +709,10 @@ namespace TicketSalesApp.AdminServer
         {
             try
             {
+                // Configure Hangfire settings
+                var hangfireSettings = new HangfireSettings();
+                Configuration.GetSection(HangfireSettings.SectionName).Bind(hangfireSettings);
+
                 // Configure Hangfire for background job processing
                 var hangfireConnectionString = Configuration.GetConnectionString("Hangfire") 
                     ?? Configuration.GetConnectionString("DefaultConnection") 
@@ -720,11 +727,24 @@ namespace TicketSalesApp.AdminServer
 
                 services.AddHangfireServer(options =>
                 {
-                    options.WorkerCount = System.Environment.ProcessorCount;
-                    options.Queues = new[] { "default", "exports", "notifications" };
+                    options.WorkerCount = hangfireSettings.WorkerCount > 0 
+                        ? hangfireSettings.WorkerCount 
+                        : System.Environment.ProcessorCount;
+                    options.Queues = hangfireSettings.Queues ?? new[] { "default", "exports", "notifications", "maintenance" };
+                    
+                    // Configure retry policies
+                    options.ServerTimeout = TimeSpan.FromMinutes(5);
+                    options.SchedulePollingInterval = TimeSpan.FromSeconds(15);
+                    options.HeartbeatInterval = TimeSpan.FromSeconds(30);
+                    options.ServerCheckInterval = TimeSpan.FromMinutes(1);
                 });
 
-                _logger.LogInformation("Hangfire configured successfully with SQLite storage");
+                // Register background job services
+                services.AddScoped<NotificationBackgroundService>();
+                services.AddScoped<MaintenanceBackgroundService>();
+
+                _logger.LogInformation("Hangfire configured successfully with SQLite storage and {WorkerCount} workers", 
+                    hangfireSettings.WorkerCount > 0 ? hangfireSettings.WorkerCount : System.Environment.ProcessorCount);
             }
             catch (Exception ex)
             {
