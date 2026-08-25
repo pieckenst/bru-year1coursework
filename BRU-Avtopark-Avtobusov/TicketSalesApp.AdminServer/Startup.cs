@@ -221,16 +221,56 @@ namespace TicketSalesApp.AdminServer
                         RoleClaimType = "role"
                     };
                 })
-                // Add Windows Authentication (Negotiate) with custom logging handler
+
+
                 .AddNegotiate(options =>
+                {
+                    // Require either Kerberos or NTLM with enhanced security
+                    options.PersistKerberosCredentials = false;
+                    options.PersistNtlmCredentials = false;
+                    options.Events = new NegotiateEvents
+                    {
+                        OnAuthenticationFailed = context =>
+                        {
+                            var ex = context.Exception;
+
+                            Console.WriteLine("===== NEGOTIATE AUTH FAILURE =====");
+                            Console.WriteLine($"Type: {ex.GetType().FullName}");
+                            Console.WriteLine($"Message: {ex.Message}");
+                            Console.WriteLine($"Inner: {ex.InnerException?.GetType().FullName}");
+                            Console.WriteLine($"Inner message: {ex.InnerException?.Message}");
+                            Console.WriteLine(ex.ToString());
+                            Console.WriteLine("==================================");
+
+                            return Task.CompletedTask;
+                        }
+                    };
+                })
+
+                // Add Windows Authentication (Negotiate)
+                .AddNegotiate("Windows",options =>
                 {
                     // Require either Kerberos or NTLM with enhanced security
                     options.PersistKerberosCredentials=false;
                     options.PersistNtlmCredentials=false;
-                });
+                    options.Events = new NegotiateEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                var ex = context.Exception;
 
-                // Replace default NegotiateHandler with custom logging handler
-                services.Replace(ServiceDescriptor.Transient<Microsoft.AspNetCore.Authentication.Negotiate.NegotiateHandler, TicketSalesApp.AdminServer.Authentication.WindowsAuthLoggingHandler>());
+                Console.WriteLine("===== NEGOTIATE AUTH FAILURE =====");
+                Console.WriteLine($"Type: {ex.GetType().FullName}");
+                Console.WriteLine($"Message: {ex.Message}");
+                Console.WriteLine($"Inner: {ex.InnerException?.GetType().FullName}");
+                Console.WriteLine($"Inner message: {ex.InnerException?.Message}");
+                Console.WriteLine(ex.ToString());
+                Console.WriteLine("==================================");
+
+                return Task.CompletedTask;
+            }
+        };
+                });
 
                 // Add our custom authorization handlers
                 services.AddSingleton<IAuthorizationHandler, WindowsAuthSecurityHandler>();
@@ -496,6 +536,9 @@ namespace TicketSalesApp.AdminServer
 
             // Add session middleware (must be before authentication)
             app.UseSession();
+
+            // Add Windows authentication logging middleware (before authentication)
+            app.UseMiddleware<TicketSalesApp.AdminServer.Authentication.WindowsAuthLoggingMiddleware>();
 
             app.UseAuthentication();
             app.UseAuthorization();
