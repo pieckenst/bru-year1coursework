@@ -14,6 +14,7 @@ using TicketSalesApp.AdminServer.Authorization;
 using TicketSalesApp.AdminServer.Hubs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -221,12 +222,15 @@ namespace TicketSalesApp.AdminServer
                     };
                 })
                 // Add Windows Authentication (Negotiate) with custom logging handler
-                .AddScheme<Microsoft.AspNetCore.Authentication.Negotiate.NegotiateOptions, TicketSalesApp.AdminServer.Authentication.WindowsAuthLoggingHandler>("Windows", options =>
+                .AddNegotiate(options =>
                 {
                     // Require either Kerberos or NTLM with enhanced security
                     options.PersistKerberosCredentials=false;
                     options.PersistNtlmCredentials=false;
                 });
+
+                // Replace default NegotiateHandler with custom logging handler
+                services.Replace(ServiceDescriptor.Transient<Microsoft.AspNetCore.Authentication.Negotiate.NegotiateHandler, TicketSalesApp.AdminServer.Authentication.WindowsAuthLoggingHandler>());
 
                 // Add our custom authorization handlers
                 services.AddSingleton<IAuthorizationHandler, WindowsAuthSecurityHandler>();

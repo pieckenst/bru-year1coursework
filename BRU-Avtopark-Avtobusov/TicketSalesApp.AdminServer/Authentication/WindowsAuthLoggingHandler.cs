@@ -2,17 +2,19 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
-using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace TicketSalesApp.AdminServer.Authentication;
 
 /// <summary>
-/// Custom Windows authentication handler that logs NTLM/Negotiate Type 1, 2, 3 challenges
+/// Custom NegotiateHandler that logs NTLM/Negotiate Type 1, 2, 3 challenges during Windows authentication
 /// </summary>
-public class WindowsAuthLoggingHandler : NegotiateHandler
+public sealed class WindowsAuthLoggingHandler : NegotiateHandler
 {
     private readonly ILogger<WindowsAuthLoggingHandler> _logger;
 
@@ -31,7 +33,8 @@ public class WindowsAuthLoggingHandler : NegotiateHandler
         
         if (!string.IsNullOrEmpty(authHeader))
         {
-            _logger.LogInformation("[WindowsAuth] Authorization header present: {Header}", authHeader.Substring(0, Math.Min(50, authHeader.Length)));
+            _logger.LogInformation("[WindowsAuthHandler] Authorization header present: {Header}", 
+                authHeader.Substring(0, Math.Min(50, authHeader.Length)));
             
             // Parse NTLM/Negotiate tokens
             if (authHeader.StartsWith("NTLM ", StringComparison.OrdinalIgnoreCase))
@@ -39,7 +42,7 @@ public class WindowsAuthLoggingHandler : NegotiateHandler
                 var ntlmToken = authHeader.Substring(5).Trim();
                 var messageType = GetNtlmMessageType(ntlmToken);
                 
-                _logger.LogInformation("[WindowsAuth] NTLM {MessageType} message detected - Token length: {TokenLength}", 
+                _logger.LogInformation("[WindowsAuthHandler] NTLM {MessageType} message detected - Token length: {TokenLength}", 
                     messageType, ntlmToken.Length);
                 
                 // Store authentication flow info in HttpContext
@@ -56,7 +59,7 @@ public class WindowsAuthLoggingHandler : NegotiateHandler
                 var negotiateToken = authHeader.Substring(9).Trim();
                 var messageType = GetNegotiateMessageType(negotiateToken);
                 
-                _logger.LogInformation("[WindowsAuth] Negotiate {MessageType} message detected - Token length: {TokenLength}", 
+                _logger.LogInformation("[WindowsAuthHandler] Negotiate {MessageType} message detected - Token length: {TokenLength}", 
                     messageType, negotiateToken.Length);
                 
                 // Store authentication flow info in HttpContext
@@ -71,7 +74,7 @@ public class WindowsAuthLoggingHandler : NegotiateHandler
         }
         else
         {
-            _logger.LogInformation("[WindowsAuth] No Authorization header - initial challenge expected");
+            _logger.LogInformation("[WindowsAuthHandler] No Authorization header - initial challenge expected");
             Context.Items["WindowsAuthFlow"] = new WindowsAuthFlowInfo
             {
                 Protocol = "Initial",
@@ -85,7 +88,7 @@ public class WindowsAuthLoggingHandler : NegotiateHandler
         
         if (result.Succeeded && result.Principal != null)
         {
-            _logger.LogInformation("[WindowsAuth] Authentication succeeded for user: {User}", 
+            _logger.LogInformation("[WindowsAuthHandler] Authentication succeeded for user: {User}", 
                 result.Principal.Identity?.Name);
             
             // Update flow info with success
@@ -98,7 +101,13 @@ public class WindowsAuthLoggingHandler : NegotiateHandler
         }
         else if (result.Failure != null)
         {
-            _logger.LogWarning("[WindowsAuth] Authentication failed: {Error}", result.Failure.Message);
+            _logger.LogWarning("[WindowsAuthHandler] Authentication failed: {Error}", result.Failure.Message);
+            
+            // Update flow info with failure
+            if (Context.Items["WindowsAuthFlow"] is WindowsAuthFlowInfo flowInfo)
+            {
+                flowInfo.AuthenticationSucceeded = false;
+            }
         }
         
         return result;
@@ -106,20 +115,25 @@ public class WindowsAuthLoggingHandler : NegotiateHandler
 
     protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
     {
-        _logger.LogInformation("[WindowsAuth] Sending challenge response");
+        _logger.LogInformation("[WindowsAuthHandler] Sending challenge response");
         
-        // Log WWW-Authenticate header that will be sent
-        Context.Response.OnStarting(() =>
-        {
-            var wwwAuthenticate = Context.Response.Headers["Www-Authenticate"].ToString();
-            if (!string.IsNullOrEmpty(wwwAuthenticate))
-            {
-                _logger.LogInformation("[WindowsAuth] WWW-Authenticate header: {Header}", wwwAuthenticate);
-            }
-            return Task.CompletedTask;
-        });
-
         await base.HandleChallengeAsync(properties);
+        
+        // Log WWW-Authenticate header after base handler sets it
+        var wwwAuthenticate = Response.Headers["Www-Authenticate"].ToString();
+        if (!string.IsNullOrEmpty(wwwAuthenticate))
+        {
+            _logger.LogInformation("[WindowsAuthHandler] WWW-Authenticate header: {Header}", wwwAuthenticate);
+            
+            // Try to parse the challenge token
+            if (wwwAuthenticate.StartsWith("Negotiate ", StringComparison.OrdinalIgnoreCase))
+            {
+                var challengeToken = wwwAuthenticate.Substring(9).Trim();
+                var messageType = GetNtlmMessageType(challengeToken);
+                _logger.LogInformation("[WindowsAuthHandler] Server challenge - {MessageType} - Token length: {TokenLength}", 
+                    messageType, challengeToken.Length);
+            }
+        }
     }
 
     private string GetNtlmMessageType(string token)
