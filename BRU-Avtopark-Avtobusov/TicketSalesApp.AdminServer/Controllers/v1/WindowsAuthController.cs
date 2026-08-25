@@ -95,6 +95,14 @@ namespace TicketSalesApp.AdminServer.Controllers.v1
                     WwwAuthenticate = HttpContext.Request.Headers["Www-Authenticate"].ToString()
                 };
 
+                // Extract authentication flow information from custom handler
+                TicketSalesApp.AdminServer.Authentication.WindowsAuthFlowInfo flowInfo = null;
+                if (HttpContext.Items.TryGetValue("WindowsAuthFlow", out var flowInfoObj) && flowInfoObj is TicketSalesApp.AdminServer.Authentication.WindowsAuthFlowInfo)
+                {
+                    flowInfo = (TicketSalesApp.AdminServer.Authentication.WindowsAuthFlowInfo)flowInfoObj;
+                    Console.WriteLine($"[WindowsLogin] Auth flow info: Protocol={flowInfo.Protocol}, MessageType={flowInfo.MessageType}");
+                }
+
                 var response = new
                 {
                     token,
@@ -114,7 +122,17 @@ namespace TicketSalesApp.AdminServer.Controllers.v1
                         isNegotiate = authInfo.AuthenticationType?.Equals("Negotiate", StringComparison.OrdinalIgnoreCase) ?? false,
                         isKerberos = authInfo.AuthenticationType?.Equals("Kerberos", StringComparison.OrdinalIgnoreCase) ?? false,
                         authenticationDetails = authInfo,
-                        httpHeaders = authHeaders
+                        httpHeaders = authHeaders,
+                        authenticationFlow = flowInfo != null ? new
+                        {
+                            protocol = flowInfo.Protocol,
+                            messageType = flowInfo.MessageType,
+                            token = flowInfo.Token,
+                            timestamp = flowInfo.Timestamp,
+                            authenticationSucceeded = flowInfo.AuthenticationSucceeded,
+                            authenticatedUser = flowInfo.AuthenticatedUser,
+                            authenticationType = flowInfo.AuthenticationType
+                        } : null
                     }
                 };
 

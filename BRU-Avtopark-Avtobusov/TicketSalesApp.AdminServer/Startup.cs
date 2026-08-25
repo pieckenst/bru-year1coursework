@@ -220,8 +220,8 @@ namespace TicketSalesApp.AdminServer
                         RoleClaimType = "role"
                     };
                 })
-                // Add Windows Authentication (Negotiate)
-                .AddNegotiate("Windows", options =>
+                // Add Windows Authentication (Negotiate) with custom logging handler
+                .AddScheme<Microsoft.AspNetCore.Authentication.Negotiate.NegotiateOptions, TicketSalesApp.AdminServer.Authentication.WindowsAuthLoggingHandler>("Windows", options =>
                 {
                     // Require either Kerberos or NTLM with enhanced security
                     options.PersistKerberosCredentials=false;
